@@ -14,6 +14,8 @@ async function request(endpoint, options = {}) {
     config.body = JSON.stringify(options.body);
   }
 
+
+
   const response = await fetch(`${API_BASE}${endpoint}`, config);
 
   if (response.status === 204) {
