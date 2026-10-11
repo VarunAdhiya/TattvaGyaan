@@ -4,7 +4,7 @@ export declare const createReadingPlanSchema: z.ZodObject<{
     title: z.ZodString;
     targetDays: z.ZodNumber;
     minutesPerDay: z.ZodOptional<z.ZodNumber>;
-    startDate: z.ZodOptional<z.ZodString>;
+    startDate: z.ZodOptional<z.ZodUnion<[z.ZodLiteral<"">, z.ZodString]>>;
 }, "strip", z.ZodTypeAny, {
     title: string;
     editionId: string;

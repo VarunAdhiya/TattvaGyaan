@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import {
   ChevronLeft,
@@ -12,12 +12,12 @@ import {
   List,
   Sparkles,
   Bookmark,
-  Highlighter,
   MessageSquare,
-  Volume2,
   Maximize2,
   Minimize2,
-  X
+  X,
+  Trash2,
+  Check
 } from 'lucide-react';
 import { api } from '../api/client';
 
@@ -37,6 +37,9 @@ export default function Reader3D({
   const [lineHeight, setLineHeight] = useState(1.8);
   const [showTOC, setShowTOC] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [showBookmarksDrawer, setShowBookmarksDrawer] = useState(false);
+  const [showNotesDrawer, setShowNotesDrawer] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedPassage, setSelectedPassage] = useState(null);
@@ -45,6 +48,13 @@ export default function Reader3D({
   const [userHighlights, setUserHighlights] = useState([]);
   const [noteContent, setNoteContent] = useState('');
   const [showNoteModal, setShowNoteModal] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [bookSize, setBookSize] = useState('medium'); // small, medium, large
+
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(''), 3000);
+  };
 
   // Two-page spread (left + right) on wide screens; single page on mobile
   const [isWideScreen, setIsWideScreen] = useState(
@@ -169,10 +179,45 @@ export default function Reader3D({
   };
 
   const goToPage = (pageIdx) => {
-    if (flipBookRef.current && flipBookRef.current.pageFlip()) {
-      flipBookRef.current.pageFlip().flip(pageIdx);
-    }
+    if (pageIdx === undefined || pageIdx === null) return;
+    const target = Math.max(0, Math.min(pageIdx, totalPages - 1));
+    setCurrentPage(target);
     setShowTOC(false);
+    setShowSearch(false);
+    setShowBookmarksDrawer(false);
+    setShowNotesDrawer(false);
+
+    if (flipBookRef.current) {
+      try {
+        const pageFlip = flipBookRef.current.pageFlip();
+        if (pageFlip) {
+          if (typeof pageFlip.turnToPage === 'function') {
+            pageFlip.turnToPage(target);
+          } else if (typeof pageFlip.flip === 'function') {
+            pageFlip.flip(target);
+          }
+        }
+      } catch (err) {
+        console.error('Error navigating to page:', err);
+      }
+    }
+  };
+
+  const findPageForPassage = (passageId) => {
+    if (!passageId || !pages.length) return -1;
+    return pages.findIndex((p) => p.type === 'content' && p.passages?.some((pas) => pas.id === passageId));
+  };
+
+  const handleJumpToPassage = (passageId, passageObj = null) => {
+    const pageIdx = findPageForPassage(passageId);
+    if (pageIdx !== -1) {
+      goToPage(pageIdx);
+      if (passageObj) {
+        setSelectedPassage(passageObj);
+      }
+    } else {
+      showToast('Passage is in another section or not loaded in current view');
+    }
   };
 
   // Search inside scripture
@@ -192,6 +237,7 @@ export default function Reader3D({
               reference: p.reference,
               text: p.text,
               sectionTitle: page.sectionTitle,
+              passage: p,
             });
           }
         });
@@ -201,7 +247,46 @@ export default function Reader3D({
     setSearchResults(results);
   };
 
-  // Keyboard navigation
+  // Fullscreen functionality
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => {
+        setIsFullScreen(true);
+      }).catch(err => {
+        console.error('Failed to enter fullscreen:', err);
+      });
+    } else {
+      document.exitFullscreen().then(() => {
+        setIsFullScreen(false);
+      }).catch(err => {
+        console.error('Failed to exit fullscreen:', err);
+      });
+    }
+  };
+
+  // Listen for fullscreen changes
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullScreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
+  // Book size configurations
+  const sizeConfigs = {
+    small: { width: 500, height: 650 },
+    medium: { width: 650, height: 850 },
+    large: { width: 800, height: 1000 }
+  };
+
+  const currentSizeConfig = sizeConfigs[bookSize];
+
+  // Prevent text selection from triggering page turns
+  const handleMouseDown = (e) => {
+    e.stopPropagation();
+  };
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowRight') {
@@ -214,13 +299,32 @@ export default function Reader3D({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const handleAddBookmark = async (passage) => {
+  // Toggle bookmark (add if not present, delete if already present)
+  const handleToggleBookmark = async (passage) => {
     try {
-      const res = await api.addBookmark(passage.id, `Bookmark: ${passage.reference}`);
-      setUserBookmarks((prev) => [...prev, res.bookmark]);
-      alert(`Bookmarked ${passage.reference}`);
+      const existing = userBookmarks.find((b) => b.passageId === passage.id);
+      if (existing) {
+        await api.removeBookmark(existing.id);
+        setUserBookmarks((prev) => prev.filter((b) => b.id !== existing.id));
+        showToast(`Removed bookmark for ${passage.reference}`);
+      } else {
+        const res = await api.addBookmark(passage.id, `Bookmark: ${passage.reference}`);
+        setUserBookmarks((prev) => [...prev, { ...res.bookmark, passage }]);
+        showToast(`Bookmarked ${passage.reference}`);
+      }
     } catch (err) {
-      alert(err.message);
+      showToast(err.message || 'Bookmark action failed');
+    }
+  };
+
+  const handleDeleteBookmark = async (bookmarkId, e) => {
+    e?.stopPropagation();
+    try {
+      await api.removeBookmark(bookmarkId);
+      setUserBookmarks((prev) => prev.filter((b) => b.id !== bookmarkId));
+      showToast('Bookmark removed');
+    } catch (err) {
+      showToast(err.message || 'Failed to remove bookmark');
     }
   };
 
@@ -228,12 +332,23 @@ export default function Reader3D({
     if (!selectedPassage || !noteContent.trim()) return;
     try {
       const res = await api.addNote(selectedPassage.id, noteContent);
-      setUserNotes((prev) => [...prev, res.note]);
+      setUserNotes((prev) => [...prev, { ...res.note, passage: selectedPassage }]);
       setNoteContent('');
       setShowNoteModal(false);
-      alert('Note saved!');
+      showToast('Note saved successfully');
     } catch (err) {
-      alert(err.message);
+      showToast(err.message || 'Failed to save note');
+    }
+  };
+
+  const handleDeleteNote = async (noteId, e) => {
+    e?.stopPropagation();
+    try {
+      await api.removeNote(noteId);
+      setUserNotes((prev) => prev.filter((n) => n.id !== noteId));
+      showToast('Note deleted');
+    } catch (err) {
+      showToast(err.message || 'Failed to delete note');
     }
   };
 
@@ -246,7 +361,7 @@ export default function Reader3D({
     }`}>
       {/* Top Controls Toolbar */}
       <header className="sticky top-0 z-30 px-4 py-3 border-b flex items-center justify-between backdrop-blur-md bg-opacity-90 border-stone-300/30">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={() => setShowTOC(!showTOC)}
             className="p-2 rounded-lg hover:bg-black/10 transition flex items-center gap-1.5 text-xs font-semibold"
@@ -263,6 +378,44 @@ export default function Reader3D({
           >
             <Search className="w-4 h-4" />
             <span className="hidden sm:inline">Search</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setShowBookmarksDrawer(!showBookmarksDrawer);
+              setShowNotesDrawer(false);
+              setShowTOC(false);
+              setShowSearch(false);
+            }}
+            className="p-2 rounded-lg hover:bg-black/10 transition flex items-center gap-1.5 text-xs font-semibold relative"
+            title="View All Bookmarks"
+          >
+            <Bookmark className={`w-4 h-4 ${userBookmarks.length > 0 ? 'fill-amber-700 text-amber-700' : ''}`} />
+            <span className="hidden sm:inline">Bookmarks</span>
+            {userBookmarks.length > 0 && (
+              <span className="px-1.5 py-0.5 bg-amber-800 text-amber-50 rounded-full text-[10px] font-bold">
+                {userBookmarks.length}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => {
+              setShowNotesDrawer(!showNotesDrawer);
+              setShowBookmarksDrawer(false);
+              setShowTOC(false);
+              setShowSearch(false);
+            }}
+            className="p-2 rounded-lg hover:bg-black/10 transition flex items-center gap-1.5 text-xs font-semibold relative"
+            title="View All Notes"
+          >
+            <MessageSquare className="w-4 h-4" />
+            <span className="hidden sm:inline">Notes</span>
+            {userNotes.length > 0 && (
+              <span className="px-1.5 py-0.5 bg-amber-800 text-amber-50 rounded-full text-[10px] font-bold">
+                {userNotes.length}
+              </span>
+            )}
           </button>
         </div>
 
@@ -303,6 +456,29 @@ export default function Reader3D({
             </button>
           </div>
 
+          {/* Book Size Controls */}
+          <div className="hidden sm:flex items-center gap-1 bg-black/5 rounded-lg px-2 py-1 text-xs">
+            <BookOpen className="w-3.5 h-3.5 opacity-60" />
+            <button
+              onClick={() => setBookSize('small')}
+              className={`px-1.5 font-bold hover:bg-black/10 rounded ${bookSize === 'small' ? 'bg-white shadow-xs' : ''}`}
+            >
+              S
+            </button>
+            <button
+              onClick={() => setBookSize('medium')}
+              className={`px-1.5 font-bold hover:bg-black/10 rounded ${bookSize === 'medium' ? 'bg-white shadow-xs' : ''}`}
+            >
+              M
+            </button>
+            <button
+              onClick={() => setBookSize('large')}
+              className={`px-1.5 font-bold hover:bg-black/10 rounded ${bookSize === 'large' ? 'bg-white shadow-xs' : ''}`}
+            >
+              L
+            </button>
+          </div>
+
           {/* Font Controls */}
           <div className="hidden sm:flex items-center gap-1 bg-black/5 rounded-lg px-2 py-1 text-xs">
             <Type className="w-3.5 h-3.5 opacity-60" />
@@ -310,6 +486,15 @@ export default function Reader3D({
             <span className="text-[10px] px-1 font-mono">{fontSize}px</span>
             <button onClick={() => setFontSize(Math.min(28, fontSize + 2))} className="px-1.5 font-bold hover:bg-black/10 rounded">A+</button>
           </div>
+
+          {/* Fullscreen Button */}
+          <button
+            onClick={toggleFullScreen}
+            className="p-2 rounded-lg hover:bg-black/10 transition"
+            title={isFullScreen ? "Exit fullscreen" : "Enter fullscreen"}
+          >
+            {isFullScreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+          </button>
         </div>
       </header>
 
@@ -319,23 +504,34 @@ export default function Reader3D({
           <div className="relative shadow-2xl rounded-sm">
             {/* HTMLFlipBook 3D Component */}
             <HTMLFlipBook
-              width={500}
-              height={680}
+              width={currentSizeConfig.width}
+              height={currentSizeConfig.height}
               size="stretch"
-              minWidth={320}
-              maxWidth={600}
-              minHeight={450}
-              maxHeight={800}
-              maxShadowOpacity={0.5}
+              minWidth={isFullScreen ? 600 : 350}
+              maxWidth={isFullScreen ? 1200 : 900}
+              minHeight={isFullScreen ? 700 : 500}
+              maxHeight={isFullScreen ? 1400 : 1000}
+              maxShadowOpacity={0.6}
               showCover={true}
               mobileScrollSupport={true}
+              clickEventForward={true}
+              useMouseEvents={true}
+              swipeDistance={30}
               onFlip={onPage}
               ref={flipBookRef}
-              className="reader-book mx-auto"
-              style={{ margin: '0 auto' }}
+              className="reader-book mx-auto shadow-2xl"
+              style={{
+                margin: '0 auto',
+                filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))'
+              }}
             >
               {pages.map((page, idx) => (
-                <div key={idx} className="page border border-amber-900/10 p-6 sm:p-10 flex flex-col justify-between select-text overflow-y-auto">
+                <div
+                  key={idx}
+                  className="page border border-amber-900/10 p-6 sm:p-10 flex flex-col justify-between select-text overflow-y-auto"
+                  onMouseDown={handleMouseDown}
+                  style={{ userSelect: 'text' }}
+                >
                   {/* Cover Page */}
                   {page.type === 'cover' && (
                     <div className="h-full flex flex-col items-center justify-center text-center p-6 bg-gradient-to-b from-amber-900/5 to-amber-900/10 rounded-sm border border-amber-900/20">
@@ -404,59 +600,98 @@ export default function Reader3D({
 
                       {/* Passages List */}
                       <div className="space-y-6 flex-1 overflow-y-auto pr-1">
-                        {page.passages.map((p) => (
-                          <div
-                            key={p.id}
-                            className={`group relative p-3 rounded-lg border transition-all ${
-                              selectedPassage?.id === p.id
-                                ? 'bg-amber-100/50 border-amber-400'
-                                : 'border-transparent hover:border-amber-900/20 hover:bg-amber-900/5'
-                            }`}
-                          >
-                            {/* Verse Reference */}
-                            <div className="flex items-center justify-between mb-1 text-xs font-sans text-amber-900/70 font-semibold">
-                              <span>{p.reference}</span>
+                        {page.passages.map((p) => {
+                          const isBookmarked = userBookmarks.some((b) => b.passageId === p.id);
+                          const passageNotes = userNotes.filter((n) => n.passageId === p.id);
+                          const isSelected = selectedPassage?.id === p.id;
 
-                              {/* Passage Context Menu Actions */}
-                              <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
-                                <button
-                                  onClick={() => handleAddBookmark(p)}
-                                  className="p-1 hover:text-amber-950 transition"
-                                  title="Bookmark verse"
-                                >
-                                  <Bookmark className="w-3.5 h-3.5" />
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    setSelectedPassage(p);
-                                    setShowNoteModal(true);
-                                  }}
-                                  className="p-1 hover:text-amber-950 transition"
-                                  title="Add private note"
-                                >
-                                  <MessageSquare className="w-3.5 h-3.5" />
-                                </button>
-                                {onAskAI && (
+                          return (
+                            <div
+                              key={p.id}
+                              className={`group relative p-3 rounded-lg border transition-all ${
+                                isSelected
+                                  ? 'bg-amber-100/70 border-amber-500 ring-2 ring-amber-400/40 shadow-xs'
+                                  : isBookmarked
+                                  ? 'bg-amber-50/60 border-amber-300'
+                                  : 'border-transparent hover:border-amber-900/20 hover:bg-amber-900/5'
+                              }`}
+                            >
+                              {/* Verse Reference & Actions */}
+                              <div className="flex items-center justify-between mb-1.5 text-xs font-sans text-amber-900/70 font-semibold">
+                                <div className="flex items-center gap-2">
+                                  <span>{p.reference}</span>
+                                  {isBookmarked && (
+                                    <span className="text-[10px] text-amber-700 bg-amber-100 px-1.5 py-0.2 rounded font-sans flex items-center gap-0.5">
+                                      <Bookmark className="w-2.5 h-2.5 fill-amber-700 text-amber-700" />
+                                      Bookmarked
+                                    </span>
+                                  )}
+                                  {passageNotes.length > 0 && (
+                                    <span className="text-[10px] text-amber-800 bg-amber-200/60 px-1.5 py-0.2 rounded font-sans flex items-center gap-0.5">
+                                      <MessageSquare className="w-2.5 h-2.5" />
+                                      {passageNotes.length} Note{passageNotes.length > 1 ? 's' : ''}
+                                    </span>
+                                  )}
+                                </div>
+
+                                {/* Passage Context Menu Actions */}
+                                <div className="opacity-80 sm:opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
                                   <button
-                                    onClick={() => onAskAI(p)}
-                                    className="px-2 py-0.5 bg-amber-800 text-amber-50 rounded text-[10px] font-sans font-semibold flex items-center gap-1 shadow-xs hover:bg-amber-900 transition"
+                                    onClick={() => handleToggleBookmark(p)}
+                                    className="p-1 hover:text-amber-950 transition"
+                                    title={isBookmarked ? 'Remove bookmark' : 'Bookmark verse'}
                                   >
-                                    <Sparkles className="w-3 h-3" />
-                                    <span>Ask AI</span>
+                                    <Bookmark
+                                      className={`w-3.5 h-3.5 ${
+                                        isBookmarked ? 'fill-amber-700 text-amber-700' : 'text-stone-500'
+                                      }`}
+                                    />
                                   </button>
-                                )}
+                                  <button
+                                    onClick={() => {
+                                      setSelectedPassage(p);
+                                      // If existing note, pre-fill
+                                      const existingNote = passageNotes[0];
+                                      setNoteContent(existingNote?.content || '');
+                                      setShowNoteModal(true);
+                                    }}
+                                    className="p-1 hover:text-amber-950 transition"
+                                    title="Add or view private note"
+                                  >
+                                    <MessageSquare
+                                      className={`w-3.5 h-3.5 ${
+                                        passageNotes.length > 0 ? 'text-amber-800' : 'text-stone-500'
+                                      }`}
+                                    />
+                                  </button>
+                                  {onAskAI && (
+                                    <button
+                                      onClick={() => onAskAI(p)}
+                                      className="px-2 py-0.5 bg-amber-800 text-amber-50 rounded text-[10px] font-sans font-semibold flex items-center gap-1 shadow-xs hover:bg-amber-900 transition"
+                                    >
+                                      <Sparkles className="w-3 h-3" />
+                                      <span>Ask AI</span>
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Original Text */}
+                              <div
+                                style={{ fontSize: `${fontSize}px`, lineHeight }}
+                                className={`scripture-text select-text cursor-text ${
+                                  isRTL ? 'font-arabic text-right' : ''
+                                } ${isIndic ? 'font-sanskrit text-stone-900 font-medium' : ''}`}
+                                onMouseDown={(e) => e.stopPropagation()}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                onTouchStart={(e) => e.stopPropagation()}
+                                onSelectStart={(e) => e.stopPropagation()}
+                              >
+                                {p.text}
                               </div>
                             </div>
-
-                            {/* Original Text */}
-                            <div
-                              style={{ fontSize: `${fontSize}px`, lineHeight }}
-                              className={`scripture-text ${isRTL ? 'font-arabic text-right' : ''} ${isIndic ? 'font-sanskrit text-stone-900 font-medium' : ''}`}
-                            >
-                              {p.text}
-                            </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
 
                       {/* Page Footer */}
@@ -579,7 +814,7 @@ export default function Reader3D({
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white text-stone-900 rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <h3 className="font-serif text-lg font-bold text-stone-900 mb-2">
-              Add Note for {selectedPassage.reference}
+              Note for {selectedPassage.reference}
             </h3>
             <p className="text-xs text-stone-600 font-serif italic mb-4 p-2 bg-stone-100 rounded">
               "{selectedPassage.text}"
@@ -606,6 +841,154 @@ export default function Reader3D({
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Bookmarks Drawer */}
+      {showBookmarksDrawer && (
+        <div className="fixed inset-y-0 right-0 z-50 w-80 sm:w-96 bg-stone-900 text-stone-100 shadow-2xl p-6 flex flex-col animate-in slide-in-from-right duration-300">
+          <div className="flex items-center justify-between pb-4 border-b border-stone-700">
+            <div className="flex items-center gap-2">
+              <Bookmark className="w-5 h-5 text-amber-400 fill-amber-400" />
+              <h3 className="font-serif text-lg font-bold text-amber-200">
+                Bookmarked Paragraphs ({userBookmarks.length})
+              </h3>
+            </div>
+            <button onClick={() => setShowBookmarksDrawer(false)} className="p-1 hover:text-white">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto py-4 space-y-3">
+            {userBookmarks.length > 0 ? (
+              userBookmarks.map((bm) => {
+                const passage = bm.passage || {};
+                return (
+                  <div
+                    key={bm.id}
+                    onClick={() => handleJumpToPassage(bm.passageId, passage)}
+                    className="p-3 bg-stone-800/80 hover:bg-stone-800 border border-stone-700 rounded-xl cursor-pointer transition group"
+                  >
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-xs font-bold font-sans text-amber-400">
+                        {passage.reference || bm.label || 'Verse'}
+                      </span>
+                      <button
+                        onClick={(e) => handleDeleteBookmark(bm.id, e)}
+                        className="p-1 text-stone-500 hover:text-rose-400 transition"
+                        title="Remove Bookmark"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                    {passage.text && (
+                      <p className="text-xs text-stone-300 font-serif line-clamp-3 leading-relaxed">
+                        "{passage.text}"
+                      </p>
+                    )}
+                    <div className="mt-2 text-[10px] text-amber-500/80 font-sans flex items-center justify-between">
+                      <span>Click to view in book →</span>
+                      {bm.createdAt && (
+                        <span className="text-stone-500">
+                          {new Date(bm.createdAt).toLocaleDateString()}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="text-center py-12 text-stone-400 text-xs font-serif">
+                <Bookmark className="w-8 h-8 text-stone-600 mx-auto mb-2" />
+                <p>No bookmarked paragraphs yet.</p>
+                <p className="text-[11px] text-stone-500 mt-1">
+                  Hover over any verse in the book and click the bookmark icon.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Notes Drawer */}
+      {showNotesDrawer && (
+        <div className="fixed inset-y-0 right-0 z-50 w-80 sm:w-96 bg-stone-900 text-stone-100 shadow-2xl p-6 flex flex-col animate-in slide-in-from-right duration-300">
+          <div className="flex items-center justify-between pb-4 border-b border-stone-700">
+            <div className="flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-amber-400" />
+              <h3 className="font-serif text-lg font-bold text-amber-200">
+                All Notes ({userNotes.length})
+              </h3>
+            </div>
+            <button onClick={() => setShowNotesDrawer(false)} className="p-1 hover:text-white">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto py-4 space-y-3">
+            {userNotes.length > 0 ? (
+              userNotes.map((note) => {
+                const passage = note.passage || {};
+                return (
+                  <div
+                    key={note.id}
+                    onClick={() => {
+                      handleJumpToPassage(note.passageId, passage);
+                      setNoteContent(note.content);
+                      setShowNoteModal(true);
+                      setShowNotesDrawer(false);
+                    }}
+                    className="p-3 bg-stone-800/80 hover:bg-stone-800 border border-stone-700 rounded-xl cursor-pointer transition group"
+                  >
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-xs font-bold font-sans text-amber-400">
+                        {passage.reference || 'Verse'}
+                      </span>
+                      <button
+                        onClick={(e) => handleDeleteNote(note.id, e)}
+                        className="p-1 text-stone-500 hover:text-rose-400 transition"
+                        title="Delete Note"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                    <p className="text-xs text-amber-100 font-sans bg-stone-900/60 p-2 rounded-lg border border-stone-700/50 mb-2 leading-relaxed whitespace-pre-wrap">
+                      {note.content}
+                    </p>
+                    {passage.text && (
+                      <p className="text-[11px] text-stone-400 font-serif line-clamp-2 italic">
+                        "{passage.text}"
+                      </p>
+                    )}
+                    <div className="mt-2 text-[10px] text-amber-500/80 font-sans flex items-center justify-between">
+                      <span>Jump to verse & edit note →</span>
+                      {note.createdAt && (
+                        <span className="text-stone-500">
+                          {new Date(note.createdAt).toLocaleDateString()}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="text-center py-12 text-stone-400 text-xs font-serif">
+                <MessageSquare className="w-8 h-8 text-stone-600 mx-auto mb-2" />
+                <p>No notes written yet.</p>
+                <p className="text-[11px] text-stone-500 mt-1">
+                  Hover over any verse and click the note icon to add your reflection.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Floating Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-14 left-1/2 -translate-x-1/2 z-50 bg-stone-900 text-amber-200 border border-amber-800/60 px-4 py-2 rounded-full text-xs font-sans shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <Check className="w-3.5 h-3.5 text-emerald-400" />
+          <span>{toastMessage}</span>
         </div>
       )}
     </div>

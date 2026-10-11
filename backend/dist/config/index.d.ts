@@ -20,6 +20,10 @@ export declare const config: {
         windowMs: number;
         max: number;
     };
+    authRateLimit: {
+        windowMs: number;
+        max: number;
+    };
     aiRateLimit: {
         windowMs: number;
         max: number;

@@ -1,4 +1,6 @@
 export declare class ReadingPlanService {
+    private calculateReadingMetrics;
+    private generateAIOptimizedPlan;
     createPlan(userId: string, data: {
         editionId: string;
         title: string;
@@ -31,6 +33,36 @@ export declare class ReadingPlanService {
     }>;
     getUserPlans(userId: string): Promise<any[]>;
     getPlan(planId: string, userId: string): Promise<{
+        edition: ({
+            scripture: {
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+                slug: string;
+                description: string | null;
+                title: string;
+                religionId: string;
+                originalLang: string;
+                summary: string | null;
+                themes: string[];
+                estimatedReadTime: number | null;
+                availabilityStatus: string;
+            };
+        } & {
+            id: string;
+            createdAt: Date;
+            scriptureId: string;
+            title: string;
+            language: string;
+            script: string | null;
+            translator: string | null;
+            editor: string | null;
+            source: string | null;
+            license: string | null;
+            provenance: string | null;
+            isOriginal: boolean;
+            textDirection: string;
+        }) | null;
         completionPercentage: number;
         items: {
             id: string;

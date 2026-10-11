@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
 import { BookOpen, ArrowLeft, Clock, Globe, Calendar, AlertCircle } from 'lucide-react';
+import CreateReadingPlanModal from '../components/CreateReadingPlanModal';
 
 export default function ScriptureDetail() {
   const { scriptureId } = useParams();
@@ -11,6 +12,7 @@ export default function ScriptureDetail() {
   const [selectedEdition, setSelectedEdition] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showPlanModal, setShowPlanModal] = useState(false);
 
   useEffect(() => {
     async function loadScripture() {
@@ -206,7 +208,10 @@ export default function ScriptureDetail() {
                     Start Reading
                   </button>
 
-                  <button className="w-full px-4 py-3 border border-stone-300 text-stone-700 rounded-lg font-medium hover:bg-stone-50 transition">
+                  <button
+                    onClick={() => setShowPlanModal(true)}
+                    className="w-full px-4 py-3 border border-stone-300 text-stone-700 rounded-lg font-medium hover:bg-stone-50 transition"
+                  >
                     Create Reading Plan
                   </button>
                 </>
@@ -227,6 +232,21 @@ export default function ScriptureDetail() {
           </div>
         </div>
       </div>
+
+      {/* Create Reading Plan Modal */}
+      {showPlanModal && (
+        <CreateReadingPlanModal
+          isOpen={showPlanModal}
+          onClose={() => setShowPlanModal(false)}
+          onCreated={() => {
+            setShowPlanModal(false);
+            navigate('/reading-plans');
+          }}
+          initialReligionId={scripture.religionId}
+          initialEditionId={selectedEdition?.id || ''}
+          initialTitle={`Read ${scripture.title}`}
+        />
+      )}
     </div>
   );
 }

@@ -7,6 +7,7 @@ import ScriptureDetail from './pages/ScriptureDetail';
 import ReaderPage from './pages/ReaderPage';
 import ReadingPlansPage from './pages/ReadingPlansPage';
 import PlanDetailPage from './pages/PlanDetailPage';
+import ProfilePage from './pages/ProfilePage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import { AuthProvider } from './context/AuthContext';
@@ -28,6 +29,7 @@ function App() {
               <Route path="/reader/:scriptureId/:editionId" element={<ProtectedRoute><ReaderPage /></ProtectedRoute>} />
               <Route path="/reading-plans" element={<ProtectedRoute><ReadingPlansPage /></ProtectedRoute>} />
               <Route path="/reading-plan/:planId" element={<ProtectedRoute><PlanDetailPage /></ProtectedRoute>} />
+              <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
             </Routes>
           </main>
           <Footer />

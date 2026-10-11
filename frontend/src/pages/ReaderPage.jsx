@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import { useParams } from 'react-router-dom';
 import Reader3D from '../components/Reader3D';
 import AIAssistantDrawer from '../components/AIAssistantDrawer';
 import { api } from '../api/client';

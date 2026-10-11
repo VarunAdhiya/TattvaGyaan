@@ -21,10 +21,14 @@ export const config = {
   },
   rateLimit: {
     windowMs: 15 * 60 * 1000,
-    max: 100,
+    max: process.env.NODE_ENV === 'production' ? 100 : 1000,
+  },
+  authRateLimit: {
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: process.env.NODE_ENV === 'production' ? 50 : 500, // higher limit in dev
   },
   aiRateLimit: {
     windowMs: 60 * 1000,
-    max: 10,
+    max: process.env.NODE_ENV === 'production' ? 10 : 60,
   },
 };

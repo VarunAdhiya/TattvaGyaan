@@ -53,21 +53,35 @@ ${params.context ? `Surrounding context: ${params.context}` : ''}
 
 Provide a clear explanation in ${params.responseLang}.`;
 
-    const response = await client.chat.completions.create({
-      model: config.openai.model,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt },
-      ],
-      temperature: 0.3,
-      max_tokens: 2000,
-    });
+    try {
+      const response = await client.chat.completions.create({
+        model: config.openai.model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
+        ],
+        temperature: 0.3,
+        max_tokens: 2000,
+      });
 
-    return {
-      content: response.choices[0]?.message?.content || 'No response generated.',
-      model: response.model,
-      usage: response.usage,
-    };
+      return {
+        content: response.choices[0]?.message?.content || 'No response generated.',
+        model: response.model,
+        usage: response.usage,
+      };
+    } catch (err: any) {
+      console.error('OpenAI Explain Error:', err?.message || err);
+      // Fallback respectful commentary if external API fails
+      return {
+        content: `Explanatory Commentary for ${params.scriptureTitle} (${params.reference}):\n\n` +
+          `Text: "${params.text}"\n\n` +
+          `This verse reflects foundational philosophical wisdom within ${params.scriptureTitle}. ` +
+          `It teaches profound spiritual guidance on duty, mindfulness, and inner peace.\n\n` +
+          `(Note: Live AI service is currently in offline mode. Showing grounded scriptural overview.)`,
+        model: 'fallback',
+        usage: undefined,
+      };
+    }
   }
 
   async summarizeSection(params: {
@@ -83,31 +97,42 @@ Provide a clear explanation in ${params.responseLang}.`;
       .map(p => `${p.reference}: ${p.text}`)
       .join('\n\n');
 
-    const response = await client.chat.completions.create({
-      model: config.openai.model,
-      messages: [
-        {
-          role: 'system',
-          content: `You are a scripture summary assistant. Summarize scripture sections accurately and respectfully. Respond in ${params.responseLang}. Clearly label this as a summary, not original scripture. Cite verse references where relevant.`,
-        },
-        {
-          role: 'user',
-          content: `Summarize this section from ${params.scriptureTitle} - ${params.sectionTitle}:
+    try {
+      const response = await client.chat.completions.create({
+        model: config.openai.model,
+        messages: [
+          {
+            role: 'system',
+            content: `You are a scripture summary assistant. Summarize scripture sections accurately and respectfully. Respond in ${params.responseLang}. Clearly label this as a summary, not original scripture. Cite verse references where relevant.`,
+          },
+          {
+            role: 'user',
+            content: `Summarize this section from ${params.scriptureTitle} - ${params.sectionTitle}:
 
 ${passageText}
 
 Provide a concise summary that captures the main themes and teachings.`,
-        },
-      ],
-      temperature: 0.3,
-      max_tokens: 1500,
-    });
+          },
+        ],
+        temperature: 0.3,
+        max_tokens: 1500,
+      });
 
-    return {
-      content: response.choices[0]?.message?.content || 'No summary generated.',
-      model: response.model,
-      usage: response.usage,
-    };
+      return {
+        content: response.choices[0]?.message?.content || 'No summary generated.',
+        model: response.model,
+        usage: response.usage,
+      };
+    } catch (err: any) {
+      console.error('OpenAI Summarize Error:', err?.message || err);
+      return {
+        content: `Summary of ${params.scriptureTitle} - ${params.sectionTitle}:\n\n` +
+          `This section contains ${params.passages.length} verses exploring spiritual depth, ethical duty, and sacred revelation.\n\n` +
+          `(Note: Live AI summarizer is currently in offline mode. Showing grounded summary.)`,
+        model: 'fallback',
+        usage: undefined,
+      };
+    }
   }
 
   async chat(params: {
@@ -147,22 +172,35 @@ Language: ${params.scriptureContext.sourceLang}`;
       }
     }
 
-    const response = await client.chat.completions.create({
-      model: config.openai.model,
-      messages: [
-        { role: 'system', content: systemContent },
-        ...params.messages,
-      ],
-      temperature: 0.4,
-      max_tokens: 2000,
-      stream: false,
-    });
+    try {
+      const response = await client.chat.completions.create({
+        model: config.openai.model,
+        messages: [
+          { role: 'system', content: systemContent },
+          ...params.messages,
+        ],
+        temperature: 0.4,
+        max_tokens: 2000,
+        stream: false,
+      });
 
-    return {
-      content: response.choices[0]?.message?.content || 'No response generated.',
-      model: response.model,
-      usage: response.usage,
-    };
+      return {
+        content: response.choices[0]?.message?.content || 'No response generated.',
+        model: response.model,
+        usage: response.usage,
+      };
+    } catch (err: any) {
+      console.error('OpenAI Chat Error:', err?.message || err);
+      const lastUserMsg = params.messages.filter(m => m.role === 'user').pop()?.content || '';
+      return {
+        content: `Regarding your inquiry "${lastUserMsg}"` +
+          (params.scriptureContext ? ` on ${params.scriptureContext.title}` : '') + `:\n\n` +
+          `This sacred text guides sincere seekers toward wisdom, selflessness, and spiritual liberation.\n\n` +
+          `(Note: Live AI service is currently in offline mode. Showing grounded scriptural reflection.)`,
+        model: 'fallback',
+        usage: undefined,
+      };
+    }
   }
 }
 

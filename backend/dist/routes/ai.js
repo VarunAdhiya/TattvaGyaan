@@ -13,12 +13,13 @@ const config_1 = require("../config");
 const aiLimiter = (0, express_rate_limit_1.default)({
     windowMs: config_1.config.aiRateLimit.windowMs,
     max: config_1.config.aiRateLimit.max,
+    skip: (req) => config_1.config.nodeEnv !== 'production' || req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1',
     message: { error: 'Too many AI requests. Please try again later.' },
 });
 const router = (0, express_1.Router)();
 router.use(auth_1.requireAuth);
 router.use(aiLimiter);
-router.post('/explain', (0, validate_1.validate)(aiSchema_1.askQuestionSchema), aiController_1.aiController.explain);
+router.post('/explain', (0, validate_1.validate)(aiSchema_1.explainSchema), aiController_1.aiController.explain);
 router.post('/summarize', (0, validate_1.validate)(aiSchema_1.summarizeSchema), aiController_1.aiController.summarize);
 router.post('/chat', (0, validate_1.validate)(aiSchema_1.askQuestionSchema), aiController_1.aiController.chat);
 router.get('/conversations', aiController_1.aiController.getConversations);

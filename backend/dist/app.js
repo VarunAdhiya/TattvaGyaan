@@ -31,11 +31,29 @@ app.use((0, cors_1.default)({
     origin: config_1.config.cors.origin,
     credentials: true,
 }));
-// Rate limiting
-app.use((0, express_rate_limit_1.default)({
+// General rate limiting
+const generalLimiter = (0, express_rate_limit_1.default)({
     windowMs: config_1.config.rateLimit.windowMs,
     max: config_1.config.rateLimit.max,
-}));
+    skip: (req) => config_1.config.nodeEnv !== 'production' || req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1',
+});
+// Auth-specific rate limiting (more generous for login attempts)
+const authLimiter = (0, express_rate_limit_1.default)({
+    windowMs: config_1.config.authRateLimit.windowMs,
+    max: config_1.config.authRateLimit.max,
+    skip: (req) => config_1.config.nodeEnv !== 'production' || req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1',
+    message: {
+        error: 'Too many authentication attempts. Please try again later.',
+        retryAfter: Math.ceil(config_1.config.authRateLimit.windowMs / 1000)
+    }
+});
+// Apply general rate limiting to all routes except auth
+app.use('/api', (req, res, next) => {
+    if (req.path.startsWith('/auth')) {
+        return next(); // Skip general limiter for auth routes
+    }
+    return generalLimiter(req, res, next);
+});
 // Body parsing
 app.use(express_1.default.json({ limit: '10mb' }));
 app.use((0, cookie_parser_1.default)());
@@ -59,7 +77,7 @@ app.use((0, express_session_1.default)({
     },
 }));
 // Routes
-app.use('/api/auth', auth_1.default);
+app.use('/api/auth', authLimiter, auth_1.default); // Apply auth rate limiter to auth routes
 app.use('/api/religions', religions_1.default);
 app.use('/api/scriptures', scriptures_1.default);
 app.use('/api/scripture-editions', editions_1.default);

@@ -339,6 +339,12 @@ export default function AIAssistantDrawer({
                   <div className="whitespace-pre-wrap">{msg.content}</div>
                 </div>
               ))}
+              {loading && activeTab === 'chat' && (
+                <div className="bg-stone-800 text-amber-300 border border-stone-700 mr-auto p-3 rounded-xl text-xs flex items-center gap-2">
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin text-amber-400" />
+                  <span>Thinking & searching sacred scriptures...</span>
+                </div>
+              )}
               <div ref={chatEndRef} />
             </div>
 

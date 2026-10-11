@@ -121,7 +121,7 @@ export default function PlanDetailPage() {
 
       {/* Daily Items */}
       <div className="space-y-3">
-        {plan.items.map((item, idx) => (
+        {plan.items.map((item) => (
           <div
             key={item.id}
             className={`p-4 rounded-lg border-2 transition ${
@@ -145,15 +145,26 @@ export default function PlanDetailPage() {
                   )}
                 </div>
               </div>
-              <button
-                onClick={() => handleToggleItem(item.id, item.completed)}
-                disabled={completingItems[item.id]}
-                className={`px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2 ${
-                  item.completed
-                    ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                    : 'bg-amber-700 text-amber-50 hover:bg-amber-800'
-                } disabled:opacity-50`}
-              >
+              <div className="flex items-center gap-2">
+                {plan.edition && (
+                  <button
+                    onClick={() => navigate(`/reader/${plan.edition.scriptureId}/${plan.editionId}`)}
+                    className="px-3 py-2 border border-stone-300 text-stone-700 hover:bg-stone-50 rounded-lg text-sm font-medium transition flex items-center gap-1.5"
+                    title="Open in Reader"
+                  >
+                    <BookOpen className="w-4 h-4 text-amber-800" />
+                    <span>Read</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => handleToggleItem(item.id, item.completed)}
+                  disabled={completingItems[item.id]}
+                  className={`px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2 ${
+                    item.completed
+                      ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+                      : 'bg-amber-700 text-amber-50 hover:bg-amber-800'
+                  } disabled:opacity-50 text-sm`}
+                >
                 {completingItems[item.id] ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
@@ -162,7 +173,8 @@ export default function PlanDetailPage() {
                     {item.completed ? 'Undo' : 'Mark Done'}
                   </>
                 )}
-              </button>
+                </button>
+              </div>
             </div>
           </div>
         ))}
