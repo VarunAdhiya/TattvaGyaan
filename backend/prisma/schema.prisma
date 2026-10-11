@@ -1,0 +1,252 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  username       String    @unique
+  passwordHash   String    @map("password_hash")
+  displayName    String?   @map("display_name")
+  preferredLang  String    @default("en") @map("preferred_lang")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  readingProgress   ReadingProgress[]
+  readingPlans      ReadingPlan[]
+  bookmarks         Bookmark[]
+  highlights        Highlight[]
+  notes             Note[]
+  chatConversations ChatConversation[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime @map("expires_at")
+
+  @@map("sessions")
+}
+
+model Religion {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  iconUrl     String?  @map("icon_url")
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  scriptures Scripture[]
+
+  @@map("religions")
+}
+
+model Scripture {
+  id                 String   @id @default(uuid())
+  religionId         String   @map("religion_id")
+  title              String
+  slug               String   @unique
+  originalLang       String   @map("original_lang")
+  description        String?
+  summary            String?
+  themes             String[]
+  estimatedReadTime  Int?     @map("estimated_read_time")
+  availabilityStatus String   @default("metadata_only") @map("availability_status")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  religion Religion           @relation(fields: [religionId], references: [id])
+  editions ScriptureEdition[]
+
+  @@map("scriptures")
+}
+
+model ScriptureEdition {
+  id            String   @id @default(uuid())
+  scriptureId   String   @map("scripture_id")
+  title         String
+  language      String
+  script        String?
+  translator    String?
+  editor        String?
+  source        String?
+  license       String?
+  provenance    String?
+  isOriginal    Boolean  @default(false) @map("is_original")
+  textDirection String   @default("ltr") @map("text_direction")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  scripture Scripture          @relation(fields: [scriptureId], references: [id])
+  sections  ScriptureSection[]
+
+  @@map("scripture_editions")
+}
+
+model ScriptureSection {
+  id        String   @id @default(uuid())
+  editionId String   @map("edition_id")
+  parentId  String?  @map("parent_id")
+  title     String
+  slug      String
+  level     Int      @default(0)
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  edition  ScriptureEdition   @relation(fields: [editionId], references: [id])
+  parent   ScriptureSection?  @relation("SectionHierarchy", fields: [parentId], references: [id])
+  children ScriptureSection[] @relation("SectionHierarchy")
+  passages ScripturePassage[]
+
+  @@unique([editionId, slug])
+  @@map("scripture_sections")
+}
+
+model ScripturePassage {
+  id        String   @id @default(uuid())
+  sectionId String   @map("section_id")
+  reference String
+  text      String
+  wordCount Int      @default(0) @map("word_count")
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  section    ScriptureSection @relation(fields: [sectionId], references: [id])
+  bookmarks  Bookmark[]
+  highlights Highlight[]
+  notes      Note[]
+
+  @@index([sectionId, sortOrder])
+  @@map("scripture_passages")
+}
+
+model ReadingProgress {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  editionId  String   @map("edition_id")
+  sectionId  String?  @map("section_id")
+  passageId  String?  @map("passage_id")
+  pageIndex  Int      @default(0) @map("page_index")
+  percentage Float    @default(0)
+  lastReadAt DateTime @default(now()) @map("last_read_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, editionId])
+  @@map("reading_progress")
+}
+
+model ReadingPlan {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  editionId     String   @map("edition_id")
+  title         String
+  targetDays    Int      @map("target_days")
+  startDate     DateTime @map("start_date")
+  endDate       DateTime @map("end_date")
+  minutesPerDay Int?     @map("minutes_per_day")
+  status        String   @default("active")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  user  User              @relation(fields: [userId], references: [id])
+  items ReadingPlanItem[]
+
+  @@map("reading_plans")
+}
+
+model ReadingPlanItem {
+  id          String    @id @default(uuid())
+  planId      String    @map("plan_id")
+  dayNumber   Int       @map("day_number")
+  sectionId   String    @map("section_id")
+  passageIds  String[]  @map("passage_ids")
+  completed   Boolean   @default(false)
+  completedAt DateTime? @map("completed_at")
+  sortOrder   Int       @default(0) @map("sort_order")
+
+  plan ReadingPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@map("reading_plan_items")
+}
+
+model Bookmark {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  passageId String   @map("passage_id")
+  label     String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user    User             @relation(fields: [userId], references: [id])
+  passage ScripturePassage @relation(fields: [passageId], references: [id])
+
+  @@unique([userId, passageId])
+  @@map("bookmarks")
+}
+
+model Highlight {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  passageId   String   @map("passage_id")
+  startOffset Int      @map("start_offset")
+  endOffset   Int      @map("end_offset")
+  color       String   @default("#FBBF24")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user    User             @relation(fields: [userId], references: [id])
+  passage ScripturePassage @relation(fields: [passageId], references: [id])
+
+  @@map("highlights")
+}
+
+model Note {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  passageId String   @map("passage_id")
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user    User             @relation(fields: [userId], references: [id])
+  passage ScripturePassage @relation(fields: [passageId], references: [id])
+
+  @@map("notes")
+}
+
+model ChatConversation {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  editionId String?  @map("edition_id")
+  title     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user     User          @relation(fields: [userId], references: [id])
+  messages ChatMessage[]
+
+  @@map("chat_conversations")
+}
+
+model ChatMessage {
+  id             String   @id @default(uuid())
+  conversationId String   @map("conversation_id")
+  role           String
+  content        String
+  passageRef     String?  @map("passage_ref")
+  language       String?
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  conversation ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@map("chat_messages")
+}

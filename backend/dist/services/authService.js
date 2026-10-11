@@ -1,0 +1,96 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.authService = exports.AuthService = void 0;
+const argon2_1 = __importDefault(require("argon2"));
+const prisma_1 = __importDefault(require("../lib/prisma"));
+const errorHandler_1 = require("../middleware/errorHandler");
+class AuthService {
+    async register(data) {
+        const existing = await prisma_1.default.user.findFirst({
+            where: {
+                OR: [{ email: data.email }, { username: data.username }],
+            },
+        });
+        if (existing) {
+            throw new errorHandler_1.AppError(existing.email === data.email ? 'Email already registered' : 'Username already taken', 409);
+        }
+        const passwordHash = await argon2_1.default.hash(data.password, {
+            type: argon2_1.default.argon2id,
+            memoryCost: 65536,
+            timeCost: 3,
+            parallelism: 4,
+        });
+        const user = await prisma_1.default.user.create({
+            data: {
+                email: data.email,
+                username: data.username,
+                passwordHash,
+                displayName: data.displayName || data.username,
+                preferredLang: data.preferredLang || 'en',
+            },
+            select: {
+                id: true,
+                email: true,
+                username: true,
+                displayName: true,
+                preferredLang: true,
+                createdAt: true,
+            },
+        });
+        return user;
+    }
+    async login(email, password) {
+        const user = await prisma_1.default.user.findUnique({ where: { email } });
+        if (!user) {
+            throw new errorHandler_1.AppError('Invalid email or password', 401);
+        }
+        const valid = await argon2_1.default.verify(user.passwordHash, password);
+        if (!valid) {
+            throw new errorHandler_1.AppError('Invalid email or password', 401);
+        }
+        return {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            displayName: user.displayName,
+            preferredLang: user.preferredLang,
+            createdAt: user.createdAt,
+        };
+    }
+    async getProfile(userId) {
+        const user = await prisma_1.default.user.findUnique({
+            where: { id: userId },
+            select: {
+                id: true,
+                email: true,
+                username: true,
+                displayName: true,
+                preferredLang: true,
+                createdAt: true,
+            },
+        });
+        if (!user)
+            throw new errorHandler_1.AppError('User not found', 404);
+        return user;
+    }
+    async updateProfile(userId, data) {
+        return prisma_1.default.user.update({
+            where: { id: userId },
+            data,
+            select: {
+                id: true,
+                email: true,
+                username: true,
+                displayName: true,
+                preferredLang: true,
+                createdAt: true,
+            },
+        });
+    }
+}
+exports.AuthService = AuthService;
+exports.authService = new AuthService();
+//# sourceMappingURL=authService.js.map

@@ -1,0 +1,2 @@
+# Please keep the connection string secret. Adjust the SQLite connection string in `.env` to point to a different file than the app.
+provider = "postgresql"

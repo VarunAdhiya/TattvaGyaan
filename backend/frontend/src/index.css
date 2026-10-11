@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-main: #fcfbf9;
+    --text-main: #1c1917;
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.theme-light {
+  --reader-bg: #fbf9f5;
+  --reader-paper: #ffffff;
+  --reader-text: #292524;
+}
+
+.theme-sepia {
+  --reader-bg: #f4ecd8;
+  --reader-paper: #fbf0d9;
+  --reader-text: #432818;
+}
+
+.theme-dark {
+  --reader-bg: #121316;
+  --reader-paper: #1c1e24;
+  --reader-text: #e2e8f0;
+}
