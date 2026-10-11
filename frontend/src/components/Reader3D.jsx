@@ -46,6 +46,17 @@ export default function Reader3D({
   const [noteContent, setNoteContent] = useState('');
   const [showNoteModal, setShowNoteModal] = useState(false);
 
+  // Two-page spread (left + right) on wide screens; single page on mobile
+  const [isWideScreen, setIsWideScreen] = useState(
+    typeof window !== 'undefined' ? window.innerWidth >= 1024 : true
+  );
+
+  useEffect(() => {
+    const handleResize = () => setIsWideScreen(window.innerWidth >= 1024);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Flatten all sections and passages into paginated pages
   // Each page will contain 1-3 passages depending on length
   const [pages, setPages] = useState([]);
@@ -65,20 +76,22 @@ export default function Reader3D({
       provenance: edition.provenance,
     });
 
-    // Page 1: Table of Contents
+    // Page 1: Table of Contents (indices filled in after content pages are built).
+    // Inserted up front so content-page indices already account for it.
+    const tocItems = sections.map((sec) => ({
+      id: sec.id,
+      title: sec.title,
+      slug: sec.slug,
+      pageIndex: 0, // placeholder — computed below
+    }));
     computedPages.push({
       type: 'toc',
       title: 'Table of Contents',
-      items: sections.map((sec, idx) => ({
-        id: sec.id,
-        title: sec.title,
-        slug: sec.slug,
-        pageIndex: idx * 2 + 2, // approximate
-      })),
+      items: tocItems,
     });
 
-    // Content Pages
-    let currentPassages = [];
+    // Content Pages — track the real page index where each section starts
+    const sectionStartPages = new Map();
     let currentSectionTitle = '';
     let currentSectionId = '';
 
@@ -90,7 +103,12 @@ export default function Reader3D({
         return;
       }
 
-      // Group 2-3 passages per page for optimal reader spread
+      const sectionStartPage = computedPages.length;
+      if (!sectionStartPages.has(sec.id)) {
+        sectionStartPages.set(sec.id, sectionStartPage);
+      }
+
+      // Group 2 passages per page for optimal reader spread
       for (let i = 0; i < sec.passages.length; i += 2) {
         const passageGroup = sec.passages.slice(i, i + 2);
         computedPages.push({
@@ -100,6 +118,11 @@ export default function Reader3D({
           passages: passageGroup,
         });
       }
+    });
+
+    // Now that content pages exist, point each TOC entry at its section's first page
+    tocItems.forEach((item) => {
+      item.pageIndex = sectionStartPages.get(item.id) ?? computedPages.length - 1;
     });
 
     setPages(computedPages);
@@ -488,16 +511,19 @@ export default function Reader3D({
             </button>
           </div>
           <div className="flex-1 overflow-y-auto py-4 space-y-2 font-serif">
-            {sections.map((sec, idx) => (
-              <button
-                key={sec.id}
-                onClick={() => goToPage(idx * 2 + 2)}
-                className="w-full text-left p-2.5 rounded-lg hover:bg-stone-800 text-sm border-b border-stone-800/50 transition flex items-center justify-between"
-              >
-                <span>{sec.title}</span>
-                <span className="text-xs text-stone-500 font-mono">p. {idx * 2 + 3}</span>
-              </button>
-            ))}
+            {pages
+              .filter((p) => p.type === 'toc')
+              .flatMap((p) => p.items)
+              .map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => goToPage(item.pageIndex)}
+                  className="w-full text-left p-2.5 rounded-lg hover:bg-stone-800 text-sm border-b border-stone-800/50 transition flex items-center justify-between"
+                >
+                  <span>{item.title}</span>
+                  <span className="text-xs text-stone-500 font-mono">p. {item.pageIndex + 1}</span>
+                </button>
+              ))}
           </div>
         </div>
       )}

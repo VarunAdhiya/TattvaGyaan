@@ -5,7 +5,9 @@ export const createReadingPlanSchema = z.object({
   title: z.string().min(1).max(200),
   targetDays: z.number().int().min(1).max(365),
   minutesPerDay: z.number().int().min(1).max(480).optional(),
-  startDate: z.string().datetime().optional(),
+  startDate: z
+    .union([z.literal(''), z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date (expected YYYY-MM-DD)')])
+    .optional(),
 });
 
 export const updateReadingPlanSchema = z.object({
