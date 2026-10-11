@@ -3,16 +3,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.readingPlanController = exports.ReadingPlanController = void 0;
 const readingPlanService_1 = require("../services/readingPlanService");
 class ReadingPlanController {
-    async create(req, res, next) {
+    async createPlan(req, res, next) {
         try {
-            const plan = await readingPlanService_1.readingPlanService.createPlan(req.userId, req.body);
+            const { editionId, title, targetDays, startDate, minutesPerDay } = req.body;
+            const plan = await readingPlanService_1.readingPlanService.createPlan(req.userId, {
+                editionId,
+                title,
+                targetDays,
+                startDate,
+                minutesPerDay,
+            });
             res.status(201).json({ plan });
         }
         catch (err) {
             next(err);
         }
     }
-    async getAll(req, res, next) {
+    async getUserPlans(req, res, next) {
         try {
             const plans = await readingPlanService_1.readingPlanService.getUserPlans(req.userId);
             res.json({ plans });
@@ -21,7 +28,7 @@ class ReadingPlanController {
             next(err);
         }
     }
-    async getOne(req, res, next) {
+    async getPlan(req, res, next) {
         try {
             const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
             const plan = await readingPlanService_1.readingPlanService.getPlan(id, req.userId);
@@ -31,31 +38,33 @@ class ReadingPlanController {
             next(err);
         }
     }
-    async update(req, res, next) {
+    async updatePlan(req, res, next) {
         try {
             const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-            const plan = await readingPlanService_1.readingPlanService.updatePlan(id, req.userId, req.body);
+            const { status, targetDays } = req.body;
+            const plan = await readingPlanService_1.readingPlanService.updatePlan(id, req.userId, { status, targetDays });
             res.json({ plan });
         }
         catch (err) {
             next(err);
         }
     }
-    async delete(req, res, next) {
+    async completePlanItem(req, res, next) {
         try {
-            const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-            await readingPlanService_1.readingPlanService.deletePlan(id, req.userId);
-            res.status(204).send();
+            const id = Array.isArray(req.params.itemId) ? req.params.itemId[0] : req.params.itemId;
+            const { completed } = req.body;
+            const item = await readingPlanService_1.readingPlanService.completePlanItem(id, req.userId, completed);
+            res.json({ item });
         }
         catch (err) {
             next(err);
         }
     }
-    async completeItem(req, res, next) {
+    async deletePlan(req, res, next) {
         try {
-            const itemId = Array.isArray(req.params.itemId) ? req.params.itemId[0] : req.params.itemId;
-            const item = await readingPlanService_1.readingPlanService.completePlanItem(itemId, req.userId, req.body.completed);
-            res.json({ item });
+            const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+            await readingPlanService_1.readingPlanService.deletePlan(id, req.userId);
+            res.status(204).send();
         }
         catch (err) {
             next(err);

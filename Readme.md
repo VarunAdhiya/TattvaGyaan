@@ -1,6 +1,7 @@
 Build an AI-Powered Multilingual Religious Scripture Library
 Act as a senior full-stack engineer, software architect, and UI/UX designer. Build a production-oriented MVP for a web application that allows users to read religious scriptures in their original languages, experience a realistic 3D book-reading interface, create personalized reading plans, and use OpenAI to understand scripture passages in their preferred language.
-Do not build just a landing page or static prototype. Implement the actual frontend, backend, database, authentication, scripture retrieval, reading progress, reading plans, and AI integration.
+Do not build just a landing page or static pro
+totype. Implement the actual frontend, backend, database, authentication, scripture retrieval, reading progress, reading plans, and AI integration.
 1. Technology Stack
 Use this exact technology stack:
 Frontend

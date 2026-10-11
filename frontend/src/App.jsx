@@ -5,6 +5,8 @@ import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
 import ScriptureDetail from './pages/ScriptureDetail';
 import ReaderPage from './pages/ReaderPage';
+import ReadingPlansPage from './pages/ReadingPlansPage';
+import PlanDetailPage from './pages/PlanDetailPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import { AuthProvider } from './context/AuthContext';
@@ -24,6 +26,8 @@ function App() {
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/scripture/:scriptureId" element={<ProtectedRoute><ScriptureDetail /></ProtectedRoute>} />
               <Route path="/reader/:scriptureId/:editionId" element={<ProtectedRoute><ReaderPage /></ProtectedRoute>} />
+              <Route path="/reading-plans" element={<ProtectedRoute><ReadingPlansPage /></ProtectedRoute>} />
+              <Route path="/reading-plan/:planId" element={<ProtectedRoute><PlanDetailPage /></ProtectedRoute>} />
             </Routes>
           </main>
           <Footer />

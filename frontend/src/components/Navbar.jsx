@@ -61,7 +61,7 @@ export default function Navbar({ onSearch }) {
                   <Compass className="w-4 h-4" />
                   <span>Library</span>
                 </Link>
-                <Link to="/plans" className={`flex items-center gap-1.5 hover:text-amber-800 transition ${location.pathname === '/plans' ? 'text-amber-900 font-semibold' : ''}`}>
+                <Link to="/reading-plans" className={`flex items-center gap-1.5 hover:text-amber-800 transition ${location.pathname === '/reading-plans' ? 'text-amber-900 font-semibold' : ''}`}>
                   <BookMarked className="w-4 h-4" />
                   <span>Reading Plans</span>
                 </Link>
@@ -124,7 +124,7 @@ export default function Navbar({ onSearch }) {
               <Link to="/dashboard" onClick={() => setMenuOpen(false)} className="block py-2 text-stone-800 font-medium">
                 Library Dashboard
               </Link>
-              <Link to="/plans" onClick={() => setMenuOpen(false)} className="block py-2 text-stone-800 font-medium">
+              <Link to="/reading-plans" onClick={() => setMenuOpen(false)} className="block py-2 text-stone-800 font-medium">
                 Reading Plans
               </Link>
               <Link to="/profile" onClick={() => setMenuOpen(false)} className="block py-2 text-stone-800 font-medium">

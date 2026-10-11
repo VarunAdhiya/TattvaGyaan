@@ -1,12 +1,11 @@
-import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../middleware/auth';
+import { Request, Response, NextFunction } from 'express';
 export declare class ReadingPlanController {
-    create(req: AuthRequest, res: Response, next: NextFunction): Promise<void>;
-    getAll(req: AuthRequest, res: Response, next: NextFunction): Promise<void>;
-    getOne(req: AuthRequest, res: Response, next: NextFunction): Promise<void>;
-    update(req: AuthRequest, res: Response, next: NextFunction): Promise<void>;
-    delete(req: AuthRequest, res: Response, next: NextFunction): Promise<void>;
-    completeItem(req: AuthRequest, res: Response, next: NextFunction): Promise<void>;
+    createPlan(req: Request, res: Response, next: NextFunction): Promise<void>;
+    getUserPlans(req: Request, res: Response, next: NextFunction): Promise<void>;
+    getPlan(req: Request, res: Response, next: NextFunction): Promise<void>;
+    updatePlan(req: Request, res: Response, next: NextFunction): Promise<void>;
+    completePlanItem(req: Request, res: Response, next: NextFunction): Promise<void>;
+    deletePlan(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
 export declare const readingPlanController: ReadingPlanController;
 //# sourceMappingURL=readingPlanController.d.ts.map
