@@ -1,5 +1,10 @@
 import dotenv from 'dotenv';
-dotenv.config();
+import path from 'path';
+
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+
+const defaultGeminiTimeoutMs = 90000;
+const geminiTimeoutMs = Number(process.env.GEMINI_TIMEOUT_MS || defaultGeminiTimeoutMs);
 
 export const config = {
   port: parseInt(process.env.PORT || '3001', 10),
@@ -11,10 +16,10 @@ export const config = {
     secret: process.env.SESSION_SECRET || 'dev-secret-change-in-production-tattvagyaan',
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   },
-  openai: {
-    apiKey: process.env.OPENAI_API_KEY || '',
-    model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
-    embeddingModel: process.env.OPENAI_EMBEDDING_MODEL || 'text-embedding-3-small',
+  gemini: {
+    apiKey: (process.env.GEMINI_API_KEY || process.env.gemini_api_key || '').trim(),
+    model: (process.env.GEMINI_MODEL || process.env.gemini_model || '').trim().replace(/^models\//, '') || 'gemini-3.1-flash-lite',
+    timeoutMs: Number.isInteger(geminiTimeoutMs) && geminiTimeoutMs > 0 && geminiTimeoutMs <= 4294967295 ? geminiTimeoutMs : defaultGeminiTimeoutMs,
   },
   cors: {
     origin: process.env.CORS_ORIGIN || 'http://localhost:5173',

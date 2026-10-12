@@ -31,7 +31,7 @@ export default function AIAssistantDrawer({
   selectedPassage,
   sectionToSummarize,
 }) {
-  const [activeTab, setActiveTab] = useState('explain'); // 'explain', 'chat', 'summarize'
+  const [activeTab, setActiveTab] = useState(sectionToSummarize ? 'summarize' : 'explain');
   const [responseLang, setResponseLang] = useState('en');
   const [style, setStyle] = useState('simple'); // 'simple', 'detailed', 'scholarly'
   const [question, setQuestion] = useState('');
@@ -40,6 +40,7 @@ export default function AIAssistantDrawer({
   const [summary, setSummary] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
   const [copied, setCopied] = useState(false);
+  const [conversationId, setConversationId] = useState(null);
   const chatEndRef = useRef(null);
 
   // Auto scroll chat
@@ -71,6 +72,7 @@ export default function AIAssistantDrawer({
     try {
       const res = await api.explainPassage({
         passageId: selectedPassage.id,
+        selectedText: selectedPassage.selectedText,
         responseLang,
         style,
         question: question.trim() || undefined,
@@ -116,9 +118,13 @@ export default function AIAssistantDrawer({
         question: userQ,
         editionId: edition?.id,
         passageId: selectedPassage?.id,
+        selectedText: selectedPassage?.selectedText,
+        sectionId: sectionToSummarize?.id || selectedPassage?.sectionId,
+        conversationId: conversationId || undefined,
         responseLang,
       });
 
+      setConversationId(res.conversationId);
       setChatMessages((prev) => [
         ...prev,
         { role: 'assistant', content: res.content },
@@ -151,7 +157,7 @@ export default function AIAssistantDrawer({
           </div>
           <div>
             <h3 className="font-serif font-bold text-amber-200 text-base">Scripture AI Assistant</h3>
-            <span className="text-[10px] text-stone-400 block font-sans">Powered by OpenAI & RAG</span>
+            <span className="text-[10px] text-stone-400 block font-sans">Powered by Gemini & RAG</span>
           </div>
         </div>
 

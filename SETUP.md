@@ -77,6 +77,26 @@ npm run dev
 
 The app will be available at `http://localhost:5173`
 
+## Gemini AI Setup
+
+Use Node.js 18 or later for the backend's built-in HTTP client. The frontend has its own Node.js requirements.
+
+Create an API key in [Google AI Studio](https://aistudio.google.com/apikey) and set these variables in `backend/.env`:
+
+```dotenv
+GEMINI_API_KEY="your-gemini-api-key"
+GEMINI_MODEL="gemini-3.1-flash-lite"
+GEMINI_TIMEOUT_MS=90000
+```
+
+`GEMINI_MODEL` and `GEMINI_TIMEOUT_MS` are optional and default to the values above. Lowercase `gemini_api_key` and `gemini_model` are also accepted. OpenAI settings are no longer used. Keep the key on the backend; never put it in frontend environment variables.
+
+Restart `npm run dev` after changing `.env`. For the compiled server, run `npm run build`, then `npm start`. Chat, passage explanations, and section summaries use the [Gemini generateContent API](https://ai.google.dev/api/generate-content) and preserve the existing `{ content, model, usage }` response format. Retrieval continues to use the existing database search; no embedding API is required.
+
+The default model is [Gemini 3.1 Flash-Lite](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-lite), designed for low latency. Set `GEMINI_MODEL` to override it. Requests allow up to 90 seconds by default. Gemini 3 text models use the [low thinking level](https://ai.google.dev/gemini-api/docs/generate-content/thinking#thinking-levels) to reduce response latency. If an existing `.env` sets `GEMINI_TIMEOUT_MS=30000`, update it to `90000` and restart the backend.
+
+API failures are returned as errors instead of canned scripture replies. For repeated timeouts, increase `GEMINI_TIMEOUT_MS` and check the backend's connection to Google. For quota errors, check your Gemini project limits. For authentication or model errors, check the key's permissions and choose a model available to your project through `GEMINI_MODEL`.
+
 ## Verify Setup
 
 1. Navigate to `http://localhost:5173/register`

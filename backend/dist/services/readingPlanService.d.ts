@@ -1,6 +1,4 @@
 export declare class ReadingPlanService {
-    private calculateReadingMetrics;
-    private generateAIOptimizedPlan;
     createPlan(userId: string, data: {
         editionId: string;
         title: string;
@@ -16,6 +14,8 @@ export declare class ReadingPlanService {
             passageIds: string[];
             completed: boolean;
             completedAt: Date | null;
+            estimatedMinutes: number | null;
+            rationale: string | null;
             planId: string;
         }[];
     } & {
@@ -30,6 +30,7 @@ export declare class ReadingPlanService {
         startDate: Date;
         endDate: Date;
         minutesPerDay: number | null;
+        analysis: import("@prisma/client/runtime/library").JsonValue | null;
     }>;
     getUserPlans(userId: string): Promise<any[]>;
     getPlan(planId: string, userId: string): Promise<{
@@ -72,6 +73,8 @@ export declare class ReadingPlanService {
             passageIds: string[];
             completed: boolean;
             completedAt: Date | null;
+            estimatedMinutes: number | null;
+            rationale: string | null;
             planId: string;
         }[];
         id: string;
@@ -85,6 +88,7 @@ export declare class ReadingPlanService {
         startDate: Date;
         endDate: Date;
         minutesPerDay: number | null;
+        analysis: import("@prisma/client/runtime/library").JsonValue | null;
     }>;
     completePlanItem(itemId: string, userId: string, completed: boolean): Promise<{
         id: string;
@@ -94,6 +98,8 @@ export declare class ReadingPlanService {
         passageIds: string[];
         completed: boolean;
         completedAt: Date | null;
+        estimatedMinutes: number | null;
+        rationale: string | null;
         planId: string;
     }>;
     updatePlan(planId: string, userId: string, data: {
@@ -111,6 +117,7 @@ export declare class ReadingPlanService {
         startDate: Date;
         endDate: Date;
         minutesPerDay: number | null;
+        analysis: import("@prisma/client/runtime/library").JsonValue | null;
     }>;
     deletePlan(planId: string, userId: string): Promise<void>;
 }

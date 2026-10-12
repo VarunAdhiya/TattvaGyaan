@@ -1,6 +1,32 @@
-import OpenAI from 'openai';
+type ChatMessage = {
+    role: 'user' | 'assistant';
+    content: string;
+};
 export declare class AIService {
-    private getClient;
+    private generate;
+    analyzeReadingPace(params: {
+        title: string;
+        language: string;
+        targetDays: number;
+        minutesPerDay?: number;
+        groups: {
+            id: number;
+            titles: string[];
+            wordCount: number;
+            passageCount: number;
+            samples: string[];
+        }[];
+    }): Promise<{
+        model: string;
+        summary: string;
+        wordsPerMinute: number;
+        reflectionPercent: number;
+        groups: {
+            id: number;
+            difficulty: number;
+            reason: string;
+        }[];
+    }>;
     explainPassage(params: {
         text: string;
         reference: string;
@@ -13,7 +39,11 @@ export declare class AIService {
     }): Promise<{
         content: string;
         model: string;
-        usage: OpenAI.Completions.CompletionUsage | undefined;
+        usage: {
+            prompt_tokens: number;
+            completion_tokens: number;
+            total_tokens: number;
+        } | undefined;
     }>;
     summarizeSection(params: {
         passages: {
@@ -27,13 +57,14 @@ export declare class AIService {
     }): Promise<{
         content: string;
         model: string;
-        usage: OpenAI.Completions.CompletionUsage | undefined;
+        usage: {
+            prompt_tokens: number;
+            completion_tokens: number;
+            total_tokens: number;
+        } | undefined;
     }>;
     chat(params: {
-        messages: {
-            role: 'user' | 'assistant';
-            content: string;
-        }[];
+        messages: ChatMessage[];
         scriptureContext?: {
             title: string;
             edition: string;
@@ -46,8 +77,13 @@ export declare class AIService {
     }): Promise<{
         content: string;
         model: string;
-        usage: OpenAI.Completions.CompletionUsage | undefined;
+        usage: {
+            prompt_tokens: number;
+            completion_tokens: number;
+            total_tokens: number;
+        } | undefined;
     }>;
 }
 export declare const aiService: AIService;
+export {};
 //# sourceMappingURL=aiService.d.ts.map

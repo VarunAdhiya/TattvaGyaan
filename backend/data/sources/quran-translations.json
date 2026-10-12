@@ -1,0 +1,2631 @@
+{
+  "count": 130,
+  "editions": [
+    {
+      "path": "/translations/en-rwwad/",
+      "edition": "english_rwwad",
+      "language": "english",
+      "code": "en",
+      "direction": "ltr",
+      "author": "English Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/english_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.19",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/en-rwwad/quran.json",
+        "chapters": "/translations/en-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/en-saheeh/",
+      "edition": "english_saheeh",
+      "language": "english",
+      "code": "en",
+      "direction": "ltr",
+      "author": "English Translation - Noor International Center",
+      "source": "https://quranenc.com/en/browse/english_saheeh/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/en-saheeh/quran.json",
+        "chapters": "/translations/en-saheeh/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/en-hilali-khan/",
+      "edition": "english_hilali_khan",
+      "language": "english",
+      "code": "en",
+      "direction": "ltr",
+      "author": "English Translation - Hilali and Khan",
+      "source": "https://quranenc.com/en/browse/english_hilali_khan/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/en-hilali-khan/quran.json",
+        "chapters": "/translations/en-hilali-khan/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/fr-rashid/",
+      "edition": "french_rashid",
+      "language": "french",
+      "code": "fr",
+      "direction": "ltr",
+      "author": "French Translation - Rachid Maach",
+      "source": "https://quranenc.com/en/browse/french_rashid/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.3",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/fr-rashid/quran.json",
+        "chapters": "/translations/fr-rashid/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/fr-montada/",
+      "edition": "french_montada",
+      "language": "french",
+      "code": "fr",
+      "direction": "ltr",
+      "author": "French translation - Noor International Center",
+      "source": "https://quranenc.com/en/browse/french_montada/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/fr-montada/quran.json",
+        "chapters": "/translations/fr-montada/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/es-garcia/",
+      "edition": "spanish_garcia",
+      "language": "spanish",
+      "code": "es",
+      "direction": "ltr",
+      "author": "Spanish Translation - Isa Garcia",
+      "source": "https://quranenc.com/en/browse/spanish_garcia/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/es-garcia/quran.json",
+        "chapters": "/translations/es-garcia/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/es-montada-eu/",
+      "edition": "spanish_montada_eu",
+      "language": "spanish",
+      "code": "es",
+      "direction": "ltr",
+      "author": "Spanish Translation - Noor International Center",
+      "source": "https://quranenc.com/en/browse/spanish_montada_eu/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/es-montada-eu/quran.json",
+        "chapters": "/translations/es-montada-eu/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/es-montada-latin/",
+      "edition": "spanish_montada_latin",
+      "language": "spanish",
+      "code": "es",
+      "direction": "ltr",
+      "author": "Spanish Translation (Latin American) - issued by Noor International",
+      "source": "https://quranenc.com/en/browse/spanish_montada_latin/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/es-montada-latin/quran.json",
+        "chapters": "/translations/es-montada-latin/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/pt-nasr/",
+      "edition": "portuguese_nasr",
+      "language": "portuguese",
+      "code": "pt",
+      "direction": "ltr",
+      "author": "Portuguese Translation - Helmi Nasr",
+      "source": "https://quranenc.com/en/browse/portuguese_nasr/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.4.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/pt-nasr/quran.json",
+        "chapters": "/translations/pt-nasr/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/de-rwwad/",
+      "edition": "german_rwwad",
+      "language": "german",
+      "code": "de",
+      "direction": "ltr",
+      "author": "German Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/german_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.15",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/de-rwwad/quran.json",
+        "chapters": "/translations/de-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/de-bubenheim/",
+      "edition": "german_bubenheim",
+      "language": "german",
+      "code": "de",
+      "direction": "ltr",
+      "author": "German Translation - Frank Bubenheim",
+      "source": "https://quranenc.com/en/browse/german_bubenheim/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.4",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/de-bubenheim/quran.json",
+        "chapters": "/translations/de-bubenheim/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ro-project/",
+      "edition": "romanian_project",
+      "language": "romanian",
+      "code": "ro",
+      "direction": "ltr",
+      "author": "Romanian Translation - Islam4ro.com",
+      "source": "https://quranenc.com/en/browse/romanian_project/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.4",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ro-project/quran.json",
+        "chapters": "/translations/ro-project/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/nl-center/",
+      "edition": "dutch_center",
+      "language": "dutch",
+      "code": "nl",
+      "direction": "ltr",
+      "author": "Dutch Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/dutch_center/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "2.0.10",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/nl-center/quran.json",
+        "chapters": "/translations/nl-center/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/sv-rwwad/",
+      "edition": "swedish_rwwad",
+      "language": "swedish",
+      "code": "sv",
+      "direction": "ltr",
+      "author": "Swedish Translation - Rowad Translation",
+      "source": "https://quranenc.com/en/browse/swedish_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/sv-rwwad/quran.json",
+        "chapters": "/translations/sv-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/tr-rwwad/",
+      "edition": "turkish_rwwad",
+      "language": "turkish",
+      "code": "tr",
+      "direction": "ltr",
+      "author": "Turkish Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/turkish_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.4",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/tr-rwwad/quran.json",
+        "chapters": "/translations/tr-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/tr-shaban/",
+      "edition": "turkish_shaban",
+      "language": "turkish",
+      "code": "tr",
+      "direction": "ltr",
+      "author": "Turkish Translation - Shaaban British",
+      "source": "https://quranenc.com/en/browse/turkish_shaban/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/tr-shaban/quran.json",
+        "chapters": "/translations/tr-shaban/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/tr-shahin/",
+      "edition": "turkish_shahin",
+      "language": "turkish",
+      "code": "tr",
+      "direction": "ltr",
+      "author": "Turkish Translation - Dr. Ali Ozek and others",
+      "source": "https://quranenc.com/en/browse/turkish_shahin/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/tr-shahin/quran.json",
+        "chapters": "/translations/tr-shahin/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/az-musayev/",
+      "edition": "azeri_musayev",
+      "language": "azeri",
+      "code": "az",
+      "direction": "ltr",
+      "author": "Azerbaijani Translation - Ali Khan Musayev",
+      "source": "https://quranenc.com/en/browse/azeri_musayev/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.4",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/az-musayev/quran.json",
+        "chapters": "/translations/az-musayev/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/mk-group/",
+      "edition": "macedonian_group",
+      "language": "macedonian",
+      "code": "mk",
+      "direction": "ltr",
+      "author": "Macedonian Translation - a group of Macedonian scholars",
+      "source": "https://quranenc.com/en/browse/macedonian_group/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/mk-group/quran.json",
+        "chapters": "/translations/mk-group/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/sq-rwwad/",
+      "edition": "albanian_rwwad",
+      "language": "albanian",
+      "code": "sq",
+      "direction": "ltr",
+      "author": "Albanian Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/albanian_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.5",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/sq-rwwad/quran.json",
+        "chapters": "/translations/sq-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/sq-nahi/",
+      "edition": "albanian_nahi",
+      "language": "albanian",
+      "code": "sq",
+      "direction": "ltr",
+      "author": "Albanian Translation - Hassan Nahi",
+      "source": "https://quranenc.com/en/browse/albanian_nahi/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/sq-nahi/quran.json",
+        "chapters": "/translations/sq-nahi/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/bs-rwwad/",
+      "edition": "bosnian_rwwad",
+      "language": "bosnian",
+      "code": "bs",
+      "direction": "ltr",
+      "author": "Bosnian Translation - Rowwad Translation Centre",
+      "source": "https://quranenc.com/en/browse/bosnian_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "2.0.4",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/bs-rwwad/quran.json",
+        "chapters": "/translations/bs-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/bs-mihanovich/",
+      "edition": "bosnian_mihanovich",
+      "language": "bosnian",
+      "code": "bs",
+      "direction": "ltr",
+      "author": "Bosnian Translation - Muhammad Mahanovic",
+      "source": "https://quranenc.com/en/browse/bosnian_mihanovich/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/bs-mihanovich/quran.json",
+        "chapters": "/translations/bs-mihanovich/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/sr-rwwad/",
+      "edition": "serbian_rwwad",
+      "language": "serbian",
+      "code": "sr",
+      "direction": "ltr",
+      "author": "Serbian Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/serbian_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.4",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/sr-rwwad/quran.json",
+        "chapters": "/translations/sr-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/hr-rwwad/",
+      "edition": "croatian_rwwad",
+      "language": "croatian",
+      "code": "hr",
+      "direction": "ltr",
+      "author": "Croatian Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/croatian_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/hr-rwwad/quran.json",
+        "chapters": "/translations/hr-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/lt-rwwad/",
+      "edition": "lithuanian_rwwad",
+      "language": "lithuanian",
+      "code": "lt",
+      "direction": "ltr",
+      "author": "Lithuanian Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/lithuanian_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.8",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/lt-rwwad/quran.json",
+        "chapters": "/translations/lt-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/uz-rwwad/",
+      "edition": "uzbek_rwwad",
+      "language": "uzbek",
+      "code": "uz",
+      "direction": "ltr",
+      "author": "Uzbek Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/uzbek_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.4",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/uz-rwwad/quran.json",
+        "chapters": "/translations/uz-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/uz-mansour/",
+      "edition": "uzbek_mansour",
+      "language": "uzbek",
+      "code": "uz",
+      "direction": "ltr",
+      "author": "Uzbek Translation - Alaauddin Mansour",
+      "source": "https://quranenc.com/en/browse/uzbek_mansour/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/uz-mansour/quran.json",
+        "chapters": "/translations/uz-mansour/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/tg-arifi/",
+      "edition": "tajik_arifi",
+      "language": "tajik",
+      "code": "tg",
+      "direction": "ltr",
+      "author": "Tajiki Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/tajik_arifi/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/tg-arifi/quran.json",
+        "chapters": "/translations/tg-arifi/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ky-hakimov/",
+      "edition": "kyrgyz_hakimov",
+      "language": "kyrgyz",
+      "code": "ky",
+      "direction": "ltr",
+      "author": "Kyrgyz Translation - Shamsuddin Hakimov",
+      "source": "https://quranenc.com/en/browse/kyrgyz_hakimov/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ky-hakimov/quran.json",
+        "chapters": "/translations/ky-hakimov/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/id-sabiq/",
+      "edition": "indonesian_sabiq",
+      "language": "indonesian",
+      "code": "id",
+      "direction": "ltr",
+      "author": "Indonesian Translation - Sabiq Company",
+      "source": "https://quranenc.com/en/browse/indonesian_sabiq/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.3",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/id-sabiq/quran.json",
+        "chapters": "/translations/id-sabiq/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/id-affairs/",
+      "edition": "indonesian_affairs",
+      "language": "indonesian",
+      "code": "id",
+      "direction": "ltr",
+      "author": "Indonesian Translation - Ministry of Religious Affairs",
+      "source": "https://quranenc.com/en/browse/indonesian_affairs/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/id-affairs/quran.json",
+        "chapters": "/translations/id-affairs/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/id-complex/",
+      "edition": "indonesian_complex",
+      "language": "indonesian",
+      "code": "id",
+      "direction": "ltr",
+      "author": "Indonesian Translation - The Complex",
+      "source": "https://quranenc.com/en/browse/indonesian_complex/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/id-complex/quran.json",
+        "chapters": "/translations/id-complex/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/tl-rwwad/",
+      "edition": "tagalog_rwwad",
+      "language": "tagalog",
+      "code": "tl",
+      "direction": "ltr",
+      "author": "Filipino Translation (Tagalog) - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/tagalog_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.4",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/tl-rwwad/quran.json",
+        "chapters": "/translations/tl-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ceb-rwwad/",
+      "edition": "bisayan_rwwad",
+      "language": "bisayan",
+      "code": "ceb",
+      "direction": "ltr",
+      "author": "Filipino Translation (Bisayan) - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/bisayan_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.3",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ceb-rwwad/quran.json",
+        "chapters": "/translations/ceb-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/mdh-rwwad/",
+      "edition": "maguindanao_rwwad",
+      "language": "maguindanao",
+      "code": "mdh",
+      "direction": "ltr",
+      "author": "Filipino Translation (Maguindanaon) - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/maguindanao_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.4",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/mdh-rwwad/quran.json",
+        "chapters": "/translations/mdh-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/zh-suliman/",
+      "edition": "chinese_suliman",
+      "language": "chinese",
+      "code": "zh",
+      "direction": "ltr",
+      "author": "Chinese Translation - Muhammad Suleiman",
+      "source": "https://quranenc.com/en/browse/chinese_suliman/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.8",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/zh-suliman/quran.json",
+        "chapters": "/translations/zh-suliman/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/zh-makin/",
+      "edition": "chinese_makin",
+      "language": "chinese",
+      "code": "zh",
+      "direction": "ltr",
+      "author": "Chinese Translation - Muhammad Makeen",
+      "source": "https://quranenc.com/en/browse/chinese_makin/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/zh-makin/quran.json",
+        "chapters": "/translations/zh-makin/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ug-saleh/",
+      "edition": "uyghur_saleh",
+      "language": "uyghur",
+      "code": "ug",
+      "direction": "rtl",
+      "author": "Uyghur Translation - Muhammad Saleh",
+      "source": "https://quranenc.com/en/browse/uyghur_saleh/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ug-saleh/quran.json",
+        "chapters": "/translations/ug-saleh/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ja-saeedsato/",
+      "edition": "japanese_saeedsato",
+      "language": "japanese",
+      "code": "ja",
+      "direction": "ltr",
+      "author": "Japanese Translation - Saeed Sato",
+      "source": "https://quranenc.com/en/browse/japanese_saeedsato/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.13",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ja-saeedsato/quran.json",
+        "chapters": "/translations/ja-saeedsato/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/vi-rwwad/",
+      "edition": "vietnamese_rwwad",
+      "language": "vietnamese",
+      "code": "vi",
+      "direction": "ltr",
+      "author": "Vietnamese Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/vietnamese_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.9",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/vi-rwwad/quran.json",
+        "chapters": "/translations/vi-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/th-rwwad/",
+      "edition": "thai_rwwad",
+      "language": "thai",
+      "code": "th",
+      "direction": "ltr",
+      "author": "Thai Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/thai_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/th-rwwad/quran.json",
+        "chapters": "/translations/th-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/km-rwwad/",
+      "edition": "khmer_rwwad",
+      "language": "khmer",
+      "code": "km",
+      "direction": "ltr",
+      "author": "Khmer Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/khmer_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.4",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/km-rwwad/quran.json",
+        "chapters": "/translations/km-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/km-cambodia/",
+      "edition": "khmer_cambodia",
+      "language": "khmer",
+      "code": "km",
+      "direction": "ltr",
+      "author": "Khmer Translation - Islamic Community Development Association",
+      "source": "https://quranenc.com/en/browse/khmer_cambodia/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/km-cambodia/quran.json",
+        "chapters": "/translations/km-cambodia/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/fa-ih/",
+      "edition": "persian_ih",
+      "language": "persian",
+      "code": "fa",
+      "direction": "rtl",
+      "author": "Persian Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/persian_ih/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.3",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/fa-ih/quran.json",
+        "chapters": "/translations/fa-ih/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ku-bamoki/",
+      "edition": "kurdish_bamoki",
+      "language": "kurdish",
+      "code": "ku",
+      "direction": "rtl",
+      "author": "Kurdish Translation - Muhammad Salih Bamoki",
+      "source": "https://quranenc.com/en/browse/kurdish_bamoki/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ku-bamoki/quran.json",
+        "chapters": "/translations/ku-bamoki/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ps-rwwad/",
+      "edition": "pashto_rwwad",
+      "language": "pashto",
+      "code": "ps",
+      "direction": "rtl",
+      "author": "Pashto Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/pashto_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ps-rwwad/quran.json",
+        "chapters": "/translations/ps-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ur-junagarhi/",
+      "edition": "urdu_junagarhi",
+      "language": "urdu",
+      "code": "ur",
+      "direction": "rtl",
+      "author": "Urdu Translation - Muhammad Junagarhi",
+      "source": "https://quranenc.com/en/browse/urdu_junagarhi/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.3",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ur-junagarhi/quran.json",
+        "chapters": "/translations/ur-junagarhi/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/hi-omari/",
+      "edition": "hindi_omari",
+      "language": "hindi",
+      "code": "hi",
+      "direction": "ltr",
+      "author": "Hindi Translation - Azizul Haq Al-Omari",
+      "source": "https://quranenc.com/en/browse/hindi_omari/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.5",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/hi-omari/quran.json",
+        "chapters": "/translations/hi-omari/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/te-muhammad/",
+      "edition": "telugu_muhammad",
+      "language": "telugu",
+      "code": "te",
+      "direction": "ltr",
+      "author": "Telugu Translation - Abdurrahim ibn Muhammad",
+      "source": "https://quranenc.com/en/browse/telugu_muhammad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.7",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/te-muhammad/quran.json",
+        "chapters": "/translations/te-muhammad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/gu-omari/",
+      "edition": "gujarati_omari",
+      "language": "gujarati",
+      "code": "gu",
+      "direction": "ltr",
+      "author": "Gujarati Translation - Rabella Al-Omari",
+      "source": "https://quranenc.com/en/browse/gujarati_omari/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.3",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/gu-omari/quran.json",
+        "chapters": "/translations/gu-omari/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ml-kunhi/",
+      "edition": "malayalam_kunhi",
+      "language": "malayalam",
+      "code": "ml",
+      "direction": "ltr",
+      "author": "Malayalam Translation - Abdul Hamid Haidar and Kunhi Muhammad",
+      "source": "https://quranenc.com/en/browse/malayalam_kunhi/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.3",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ml-kunhi/quran.json",
+        "chapters": "/translations/ml-kunhi/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/kn-hamza/",
+      "edition": "kannada_hamza",
+      "language": "kannada",
+      "code": "kn",
+      "direction": "ltr",
+      "author": "Kannada Translation - Hamza Butur",
+      "source": "https://quranenc.com/en/browse/kannada_hamza/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.3",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/kn-hamza/quran.json",
+        "chapters": "/translations/kn-hamza/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/as-rafeeq/",
+      "edition": "assamese_rafeeq",
+      "language": "assamese",
+      "code": "as",
+      "direction": "ltr",
+      "author": "Assamese Translation - Rafiqul Islam Habibur-Rahman",
+      "source": "https://quranenc.com/en/browse/assamese_rafeeq/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.5",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/as-rafeeq/quran.json",
+        "chapters": "/translations/as-rafeeq/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/pa-arif/",
+      "edition": "punjabi_arif",
+      "language": "punjabi",
+      "code": "pa",
+      "direction": "ltr",
+      "author": "Punjabi Translation - Arif Haleem",
+      "source": "https://quranenc.com/en/browse/punjabi_arif/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/pa-arif/quran.json",
+        "chapters": "/translations/pa-arif/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ta-omar-brief/",
+      "edition": "tamil_omar_brief",
+      "language": "tamil",
+      "code": "ta",
+      "direction": "ltr",
+      "author": "Tamil Translation - Omar Sharif - Abridged Version",
+      "source": "https://quranenc.com/en/browse/tamil_omar_brief/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ta-omar-brief/quran.json",
+        "chapters": "/translations/ta-omar-brief/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ta-omar/",
+      "edition": "tamil_omar",
+      "language": "tamil",
+      "code": "ta",
+      "direction": "ltr",
+      "author": "Tamil Translation - Omar Sharif",
+      "source": "https://quranenc.com/en/browse/tamil_omar/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.3",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ta-omar/quran.json",
+        "chapters": "/translations/ta-omar/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ta-baqavi/",
+      "edition": "tamil_baqavi",
+      "language": "tamil",
+      "code": "ta",
+      "direction": "ltr",
+      "author": "Tamil Translation - Abdulhamid Baqawi",
+      "source": "https://quranenc.com/en/browse/tamil_baqavi/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ta-baqavi/quran.json",
+        "chapters": "/translations/ta-baqavi/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/si-mahir/",
+      "edition": "sinhalese_mahir",
+      "language": "sinhalese",
+      "code": "si",
+      "direction": "ltr",
+      "author": "Sinhalese Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/sinhalese_mahir/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.6",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/si-mahir/quran.json",
+        "chapters": "/translations/si-mahir/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/sw-rwwad/",
+      "edition": "swahili_rwwad",
+      "language": "swahili",
+      "code": "sw",
+      "direction": "ltr",
+      "author": "Swahili Translation - Rowad Translation Center",
+      "source": "https://quranenc.com/en/browse/swahili_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.5",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/sw-rwwad/quran.json",
+        "chapters": "/translations/sw-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/sw-barawani/",
+      "edition": "swahili_barawani",
+      "language": "swahili",
+      "code": "sw",
+      "direction": "ltr",
+      "author": "Swahili Translation - Ali Mohsin Al-Barwani",
+      "source": "https://quranenc.com/en/browse/swahili_barawani/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/sw-barawani/quran.json",
+        "chapters": "/translations/sw-barawani/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/so-yacob/",
+      "edition": "somali_yacob",
+      "language": "somali",
+      "code": "so",
+      "direction": "ltr",
+      "author": "Somali Translation - Abdullah Hasan Yaqoub",
+      "source": "https://quranenc.com/en/browse/somali_yacob/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.26",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/so-yacob/quran.json",
+        "chapters": "/translations/so-yacob/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/am-zain/",
+      "edition": "amharic_zain",
+      "language": "amharic",
+      "code": "am",
+      "direction": "ltr",
+      "author": "Amharic Translation - Africa Academy",
+      "source": "https://quranenc.com/en/browse/amharic_zain/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/am-zain/quran.json",
+        "chapters": "/translations/am-zain/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/am-sadiq/",
+      "edition": "amharic_sadiq",
+      "language": "amharic",
+      "code": "am",
+      "direction": "ltr",
+      "author": "Amharic Translation - Muhammad Sadiq",
+      "source": "https://quranenc.com/en/browse/amharic_sadiq/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/am-sadiq/quran.json",
+        "chapters": "/translations/am-sadiq/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/yo-mikail/",
+      "edition": "yoruba_mikail",
+      "language": "yoruba",
+      "code": "yo",
+      "direction": "ltr",
+      "author": "Yoruba Translation - Abu Rahimah Mikael",
+      "source": "https://quranenc.com/en/browse/yoruba_mikail/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.9",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/yo-mikail/quran.json",
+        "chapters": "/translations/yo-mikail/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ha-gummi/",
+      "edition": "hausa_gummi",
+      "language": "hausa",
+      "code": "ha",
+      "direction": "ltr",
+      "author": "Hausa Translation - Abu Bakr Jumi",
+      "source": "https://quranenc.com/en/browse/hausa_gummi/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.2.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ha-gummi/quran.json",
+        "chapters": "/translations/ha-gummi/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/om-ababor/",
+      "edition": "oromo_ababor",
+      "language": "oromo",
+      "code": "om",
+      "direction": "ltr",
+      "author": "Oromo Translation - Gali Ababor",
+      "source": "https://quranenc.com/en/browse/oromo_ababor/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.3",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/om-ababor/quran.json",
+        "chapters": "/translations/om-ababor/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/aa-hamza/",
+      "edition": "afar_hamza",
+      "language": "afar",
+      "code": "aa",
+      "direction": "ltr",
+      "author": "Afar Translation - Mahmoud Abdulqader Hamza",
+      "source": "https://quranenc.com/en/browse/afar_hamza/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/aa-hamza/quran.json",
+        "chapters": "/translations/aa-hamza/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/nqo-dayyan/",
+      "edition": "ankobambara_dayyan",
+      "language": "ankobambara",
+      "code": "nqo",
+      "direction": "rtl",
+      "author": "N'ko Translation - Baba Mamadi",
+      "source": "https://quranenc.com/en/browse/ankobambara_dayyan/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.5",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/nqo-dayyan/quran.json",
+        "chapters": "/translations/nqo-dayyan/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/rw-assoc/",
+      "edition": "kinyarwanda_assoc",
+      "language": "kinyarwanda",
+      "code": "rw",
+      "direction": "ltr",
+      "author": "Kinyarwanda Translation - Rwanda Muslim Association",
+      "source": "https://quranenc.com/en/browse/kinyarwanda_assoc/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.5",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/rw-assoc/quran.json",
+        "chapters": "/translations/rw-assoc/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/rn-gehiti/",
+      "edition": "ikirundi_gehiti",
+      "language": "ikirundi",
+      "code": "rn",
+      "direction": "ltr",
+      "author": "Kirundi Translation - Yusuf Gahiti",
+      "source": "https://quranenc.com/en/browse/ikirundi_gehiti/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.4",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/rn-gehiti/quran.json",
+        "chapters": "/translations/rn-gehiti/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/mos-rwwad/",
+      "edition": "moore_rwwad",
+      "language": "moore",
+      "code": "mos",
+      "direction": "ltr",
+      "author": "Moore Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/moore_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/mos-rwwad/quran.json",
+        "chapters": "/translations/mos-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ak-harun/",
+      "edition": "asante_harun",
+      "language": "asante",
+      "code": "ak",
+      "direction": "ltr",
+      "author": "Akan Translation (Asante) - Harun Ismail",
+      "source": "https://quranenc.com/en/browse/asante_harun/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.3",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ak-harun/quran.json",
+        "chapters": "/translations/ak-harun/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ff-rwwad/",
+      "edition": "fulani_rwwad",
+      "language": "fulani",
+      "code": "ff",
+      "direction": "ltr",
+      "author": "Fulani Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/fulani_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ff-rwwad/quran.json",
+        "chapters": "/translations/ff-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ln-zakaria/",
+      "edition": "lingala_zakaria",
+      "language": "lingala",
+      "code": "ln",
+      "direction": "ltr",
+      "author": "Lingala Translation - Mohammed Balangogo",
+      "source": "https://quranenc.com/en/browse/lingala_zakaria/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ln-zakaria/quran.json",
+        "chapters": "/translations/ln-zakaria/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/bn-zakaria/",
+      "edition": "bengali_zakaria",
+      "language": "bengali",
+      "code": "bn",
+      "direction": "ltr",
+      "author": "Bengali Translation - Abu Bakr Zakaria",
+      "source": "https://quranenc.com/en/browse/bengali_zakaria/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/bn-zakaria/quran.json",
+        "chapters": "/translations/bn-zakaria/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/bn-rwwad/",
+      "edition": "bengali_rwwad",
+      "language": "bengali",
+      "code": "bn",
+      "direction": "ltr",
+      "author": "Bengali Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/bengali_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.1.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/bn-rwwad/quran.json",
+        "chapters": "/translations/bn-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ms-basumayyah/",
+      "edition": "malay_basumayyah",
+      "language": "malay",
+      "code": "ms",
+      "direction": "ltr",
+      "author": "Malay Translation - Abdullah Basumayyah",
+      "source": "https://quranenc.com/en/browse/malay_basumayyah/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ms-basumayyah/quran.json",
+        "chapters": "/translations/ms-basumayyah/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ru-rwwad/",
+      "edition": "russian_rwwad",
+      "language": "russian",
+      "code": "ru",
+      "direction": "ltr",
+      "author": "Russian Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/russian_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ru-rwwad/quran.json",
+        "chapters": "/translations/ru-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ko-hamid/",
+      "edition": "korean_hamid",
+      "language": "korean",
+      "code": "ko",
+      "direction": "ltr",
+      "author": "Korean Translation - Hamid Choi",
+      "source": "https://quranenc.com/en/browse/korean_hamid/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.4",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ko-hamid/quran.json",
+        "chapters": "/translations/ko-hamid/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/it-rwwad/",
+      "edition": "italian_rwwad",
+      "language": "italian",
+      "code": "it",
+      "direction": "ltr",
+      "author": "Italian Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/italian_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/it-rwwad/quran.json",
+        "chapters": "/translations/it-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/uk-yakubovych/",
+      "edition": "ukrainian_yakubovych",
+      "language": "ukrainian",
+      "code": "uk",
+      "direction": "ltr",
+      "author": "Ukrainian Translation - Mikhailo Yakubovych",
+      "source": "https://quranenc.com/en/browse/ukrainian_yakubovych/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/uk-yakubovych/quran.json",
+        "chapters": "/translations/uk-yakubovych/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/nqo-foudi/",
+      "edition": "ankobambara_foudi",
+      "language": "ankobambara",
+      "code": "nqo",
+      "direction": "rtl",
+      "author": "N'ko Translation - Sulaiman Kante",
+      "source": "https://quranenc.com/en/browse/ankobambara_foudi/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/nqo-foudi/quran.json",
+        "chapters": "/translations/nqo-foudi/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/be-krivtsov/",
+      "edition": "belarusian_krivtsov",
+      "language": "belarusian",
+      "code": "be",
+      "direction": "ltr",
+      "author": "Belarusian Translation - Krivtsov",
+      "source": "https://quranenc.com/en/browse/belarusian_krivtsov/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/be-krivtsov/quran.json",
+        "chapters": "/translations/be-krivtsov/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/bs-korkut/",
+      "edition": "bosnian_korkut",
+      "language": "bosnian",
+      "code": "bs",
+      "direction": "ltr",
+      "author": "Bosnian Translation - Besim Korkut",
+      "source": "https://quranenc.com/en/browse/bosnian_korkut/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/bs-korkut/quran.json",
+        "chapters": "/translations/bs-korkut/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/bg-translation/",
+      "edition": "bulgarian_translation",
+      "language": "bulgarian",
+      "code": "bg",
+      "direction": "ltr",
+      "author": "Bulgarian Translation",
+      "source": "https://quranenc.com/en/browse/bulgarian_translation/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/bg-translation/quran.json",
+        "chapters": "/translations/bg-translation/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ny-betala/",
+      "edition": "chichewa_betala",
+      "language": "chichewa",
+      "code": "ny",
+      "direction": "ltr",
+      "author": "Chichewa Translation - Khalid Ibrahim Batyala",
+      "source": "https://quranenc.com/en/browse/chichewa_betala/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ny-betala/quran.json",
+        "chapters": "/translations/ny-betala/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/zh-mayolong/",
+      "edition": "chinese_mayolong",
+      "language": "chinese",
+      "code": "zh",
+      "direction": "ltr",
+      "author": "Chinese Translation - Basair",
+      "source": "https://quranenc.com/en/browse/chinese_mayolong/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/zh-mayolong/quran.json",
+        "chapters": "/translations/zh-mayolong/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/zh-suliman-modern/",
+      "edition": "chinese_suliman_modern",
+      "language": "chinese",
+      "code": "zh",
+      "direction": "ltr",
+      "author": "Chinese Translation - Muhammad Suliman - modern Chinese",
+      "source": "https://quranenc.com/en/browse/chinese_suliman_modern/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/zh-suliman-modern/quran.json",
+        "chapters": "/translations/zh-suliman-modern/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/dag-ghatubo/",
+      "edition": "dagbani_ghatubo",
+      "language": "dagbani",
+      "code": "dag",
+      "direction": "ltr",
+      "author": "Dagbani Translation - Muhammad Baba Ghutubo",
+      "source": "https://quranenc.com/en/browse/dagbani_ghatubo/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/dag-ghatubo/quran.json",
+        "chapters": "/translations/dag-ghatubo/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/prs-badkhashani/",
+      "edition": "dari_badkhashani",
+      "language": "dari",
+      "code": "prs",
+      "direction": "rtl",
+      "author": "Dari Translation - Muhammad Anwar Badakhshani",
+      "source": "https://quranenc.com/en/browse/dari_badkhashani/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/prs-badkhashani/quran.json",
+        "chapters": "/translations/prs-badkhashani/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/fr-hameedullah/",
+      "edition": "french_hameedullah",
+      "language": "french",
+      "code": "fr",
+      "direction": "ltr",
+      "author": "French Translation - Muhammad Hamidullah",
+      "source": "https://quranenc.com/en/browse/french_hameedullah/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/fr-hameedullah/quran.json",
+        "chapters": "/translations/fr-hameedullah/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ka-rwwad/",
+      "edition": "georgian_rwwad",
+      "language": "georgian",
+      "code": "ka",
+      "direction": "ltr",
+      "author": "Georgian Translation",
+      "source": "https://quranenc.com/en/browse/georgian_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.7",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ka-rwwad/quran.json",
+        "chapters": "/translations/ka-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/de-aburida/",
+      "edition": "german_aburida",
+      "language": "german",
+      "code": "de",
+      "direction": "ltr",
+      "author": "German Translation - Abu Rida",
+      "source": "https://quranenc.com/en/browse/german_aburida/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/de-aburida/quran.json",
+        "chapters": "/translations/de-aburida/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/el-rwwad/",
+      "edition": "greek_rwwad",
+      "language": "greek",
+      "code": "el",
+      "direction": "ltr",
+      "author": "Greek Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/greek_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/el-rwwad/quran.json",
+        "chapters": "/translations/el-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/he-darussalam/",
+      "edition": "hebrew_darussalam",
+      "language": "hebrew",
+      "code": "he",
+      "direction": "rtl",
+      "author": "Hebrew Translation - Darussalam Association",
+      "source": "https://quranenc.com/en/browse/hebrew_darussalam/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.3",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/he-darussalam/quran.json",
+        "chapters": "/translations/he-darussalam/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ilp-sarro/",
+      "edition": "iranun_sarro",
+      "language": "iranun",
+      "code": "ilp",
+      "direction": "ltr",
+      "author": "Filipino Translation (Iranun)",
+      "source": "https://quranenc.com/en/browse/iranun_sarro/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ilp-sarro/quran.json",
+        "chapters": "/translations/ilp-sarro/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/kn-bashir/",
+      "edition": "kannada_bashir",
+      "language": "kannada",
+      "code": "kn",
+      "direction": "ltr",
+      "author": "Kannada language - Shaykh Bashir Misuri",
+      "source": "https://quranenc.com/en/browse/kannada_bashir/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/kn-bashir/quran.json",
+        "chapters": "/translations/kn-bashir/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/kk-altai/",
+      "edition": "kazakh_altai",
+      "language": "kazakh",
+      "code": "kk",
+      "direction": "ltr",
+      "author": "Kazakh Translation - Khalifa Altai",
+      "source": "https://quranenc.com/en/browse/kazakh_altai/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/kk-altai/quran.json",
+        "chapters": "/translations/kk-altai/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ku-salahuddin/",
+      "edition": "kurdish_salahuddin",
+      "language": "kurdish",
+      "code": "ku",
+      "direction": "rtl",
+      "author": "Kurdish Translation - Salahuddin",
+      "source": "https://quranenc.com/en/browse/kurdish_salahuddin/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ku-salahuddin/quran.json",
+        "chapters": "/translations/ku-salahuddin/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/kmr-ismail/",
+      "edition": "kurmanji_ismail",
+      "language": "kurmanji",
+      "code": "kmr",
+      "direction": "rtl",
+      "author": "Kurdish (Kurmanji) Translation - Ismail Sageri",
+      "source": "https://quranenc.com/en/browse/kurmanji_ismail/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/kmr-ismail/quran.json",
+        "chapters": "/translations/kmr-ismail/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/lg-foundation/",
+      "edition": "luganda_foundation",
+      "language": "luganda",
+      "code": "lg",
+      "direction": "ltr",
+      "author": "Luganda Translation - African Development Foundation",
+      "source": "https://quranenc.com/en/browse/luganda_foundation/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/lg-foundation/quran.json",
+        "chapters": "/translations/lg-foundation/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/luy-center/",
+      "edition": "luhya_center",
+      "language": "luhya",
+      "code": "luy",
+      "direction": "ltr",
+      "author": "Luhya Translation - International Association for Science and Culture",
+      "source": "https://quranenc.com/en/browse/luhya_center/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.3",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/luy-center/quran.json",
+        "chapters": "/translations/luy-center/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/mg-rwwad/",
+      "edition": "malagasy_rwwad",
+      "language": "malagasy",
+      "code": "mg",
+      "direction": "ltr",
+      "author": "Malagasy Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/malagasy_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/mg-rwwad/quran.json",
+        "chapters": "/translations/mg-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/mr-ansari/",
+      "edition": "marathi_ansari",
+      "language": "marathi",
+      "code": "mr",
+      "direction": "ltr",
+      "author": "Marathi Translation - Muhammad Shafee‘ Ansari",
+      "source": "https://quranenc.com/en/browse/marathi_ansari/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/mr-ansari/quran.json",
+        "chapters": "/translations/mr-ansari/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ne-central/",
+      "edition": "nepali_central",
+      "language": "nepali",
+      "code": "ne",
+      "direction": "ltr",
+      "author": "Nepali Translation - Ahlul-Hadith Association",
+      "source": "https://quranenc.com/en/browse/nepali_central/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.3",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ne-central/quran.json",
+        "chapters": "/translations/ne-central/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/om-rwwad/",
+      "edition": "oromo_rwwad",
+      "language": "oromo",
+      "code": "om",
+      "direction": "ltr",
+      "author": "Oromo Translation - Rowwad Translation Center",
+      "source": "https://quranenc.com/en/browse/oromo_rwwad/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/om-rwwad/quran.json",
+        "chapters": "/translations/om-rwwad/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ps-sarfaraz/",
+      "edition": "pashto_sarfaraz",
+      "language": "pashto",
+      "code": "ps",
+      "direction": "rtl",
+      "author": "Pashto Translation - Maulawi Janbaz Sarfaraz",
+      "source": "https://quranenc.com/en/browse/pashto_sarfaraz/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ps-sarfaraz/quran.json",
+        "chapters": "/translations/ps-sarfaraz/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ps-zakaria/",
+      "edition": "pashto_zakaria",
+      "language": "pashto",
+      "code": "ps",
+      "direction": "rtl",
+      "author": "Pashto Translation - Abu Zakaria",
+      "source": "https://quranenc.com/en/browse/pashto_zakaria/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ps-zakaria/quran.json",
+        "chapters": "/translations/ps-zakaria/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ru-aboadel/",
+      "edition": "russian_aboadel",
+      "language": "russian",
+      "code": "ru",
+      "direction": "ltr",
+      "author": "Russian Translation - Abu Adel",
+      "source": "https://quranenc.com/en/browse/russian_aboadel/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ru-aboadel/quran.json",
+        "chapters": "/translations/ru-aboadel/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/sn-institute/",
+      "edition": "shona_institute",
+      "language": "shona",
+      "code": "sn",
+      "direction": "ltr",
+      "author": "Shona Translation - Dar al-Ilm Institute",
+      "source": "https://quranenc.com/en/browse/shona_institute/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/sn-institute/quran.json",
+        "chapters": "/translations/sn-institute/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/sw-abubakr/",
+      "edition": "swahili_abubakr",
+      "language": "swahili",
+      "code": "sw",
+      "direction": "ltr",
+      "author": "Swahili Translation - Abdullah Muhammad and Nasser Khamis",
+      "source": "https://quranenc.com/en/browse/swahili_abubakr/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/sw-abubakr/quran.json",
+        "chapters": "/translations/sw-abubakr/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/tg-khawaja/",
+      "edition": "tajik_khawaja",
+      "language": "tajik",
+      "code": "tg",
+      "direction": "ltr",
+      "author": "Tajiki Translation - Khoja Mirov Khoja Mir",
+      "source": "https://quranenc.com/en/browse/tajik_khawaja/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.2",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/tg-khawaja/quran.json",
+        "chapters": "/translations/tg-khawaja/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/th-complex/",
+      "edition": "thai_complex",
+      "language": "thai",
+      "code": "th",
+      "direction": "ltr",
+      "author": "Thai Translation - A group of seekers of knowledge",
+      "source": "https://quranenc.com/en/browse/thai_complex/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/th-complex/quran.json",
+        "chapters": "/translations/th-complex/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/uz-sadiq/",
+      "edition": "uzbek_sadiq",
+      "language": "uzbek",
+      "code": "uz",
+      "direction": "ltr",
+      "author": "Uzbek Translation - Muhammad Sadiq",
+      "source": "https://quranenc.com/en/browse/uzbek_sadiq/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/uz-sadiq/quran.json",
+        "chapters": "/translations/uz-sadiq/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/vi-hassan/",
+      "edition": "vietnamese_hassan",
+      "language": "vietnamese",
+      "code": "vi",
+      "direction": "ltr",
+      "author": "Vietnamese Translation - Hasan Abdulkarim",
+      "source": "https://quranenc.com/en/browse/vietnamese_hassan/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.1",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/vi-hassan/quran.json",
+        "chapters": "/translations/vi-hassan/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/yao-silika/",
+      "edition": "yaw_silika",
+      "language": "yaw",
+      "code": "yao",
+      "direction": "ltr",
+      "author": "Yaw Translation - Muhammad ibn Abdulhamid Silika",
+      "source": "https://quranenc.com/en/browse/yaw_silika/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.3",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/yao-silika/quran.json",
+        "chapters": "/translations/yao-silika/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/zu-adel/",
+      "edition": "zulu_adel",
+      "language": "zulu",
+      "code": "zu",
+      "direction": "ltr",
+      "author": "Zulu Translation - Adel Jaafar Moltsho",
+      "source": "https://quranenc.com/en/browse/zulu_adel/",
+      "license": {
+        "status": "granted",
+        "text": "QuranEnc.com permits download and re-publication of translation contents on 7 conditions: no modification/addition/deletion; credit the publisher and QuranEnc.com; state the version number; keep the transcript information; report notes back; keep up to date with the latest version; no inappropriate advertising.",
+        "url": "https://quranenc.com/en/home/api"
+      },
+      "version": "1.0.0",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/zu-adel/quran.json",
+        "chapters": "/translations/zu-adel/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/en-itani/",
+      "edition": "english_itani",
+      "language": "english",
+      "code": "en",
+      "direction": "ltr",
+      "author": "Talal Itani",
+      "source": "https://www.clearquran.com/downloads/quran-verse-by-verse-text.zip",
+      "license": {
+        "status": "granted",
+        "text": "CC BY-ND 4.0. Free to use, share and distribute including in commercial projects, no permission required. Keep the files unmodified and credit the work as 'Translation by Talal Itani, ClearQuran.com'.",
+        "url": "https://blog.clearquran.com/download"
+      },
+      "version": "n/a",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/en-itani/quran.json",
+        "chapters": "/translations/en-itani/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/en-itani-allah/",
+      "edition": "english_itani_allah",
+      "language": "english",
+      "code": "en",
+      "direction": "ltr",
+      "author": "Talal Itani",
+      "source": "https://www.clearquran.com/downloads/quran-in-english-clearquran-verse-by-verse-txt-edition-allah.zip",
+      "license": {
+        "status": "granted",
+        "text": "CC BY-ND 4.0. Free to use, share and distribute including in commercial projects, no permission required. Keep the files unmodified and credit the work as 'Translation by Talal Itani, ClearQuran.com'.",
+        "url": "https://blog.clearquran.com/download"
+      },
+      "version": "n/a",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/en-itani-allah/quran.json",
+        "chapters": "/translations/en-itani-allah/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/en-pickthall/",
+      "edition": "english_pickthall",
+      "language": "english",
+      "code": "en",
+      "direction": "ltr",
+      "author": "Marmaduke Pickthall (1930)",
+      "source": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/eng-mohammedmarmadu.json",
+      "license": {
+        "status": "granted",
+        "text": "Public domain. Marmaduke Pickthall, The Meaning of the Glorious Koran, 1930. Author died 1936, so out of copyright in life+70 jurisdictions since 2007 and in the US since 1 January 2026.",
+        "url": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/eng-mohammedmarmadu.json"
+      },
+      "version": "n/a",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/en-pickthall/quran.json",
+        "chapters": "/translations/en-pickthall/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/en-yusuf-ali/",
+      "edition": "english_yusuf_ali",
+      "language": "english",
+      "code": "en",
+      "direction": "ltr",
+      "author": "Abdullah Yusuf Ali (1934)",
+      "source": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/eng-abdullahyusufal.json",
+      "license": {
+        "status": "granted",
+        "text": "Public domain. Abdullah Yusuf Ali, The Holy Qur'an, 1934. Author died 1953, so out of copyright in life+70 jurisdictions since 2024.",
+        "url": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/eng-abdullahyusufal.json"
+      },
+      "version": "n/a",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/en-yusuf-ali/quran.json",
+        "chapters": "/translations/en-yusuf-ali/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/en-palmer/",
+      "edition": "english_palmer",
+      "language": "english",
+      "code": "en",
+      "direction": "ltr",
+      "author": "E. H. Palmer (1880)",
+      "source": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/eng-edwardhenrypalm.json",
+      "license": {
+        "status": "granted",
+        "text": "Public domain. E. H. Palmer, Sacred Books of the East, 1880. Author died 1882, so out of copyright in life+70 jurisdictions and in the US.",
+        "url": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/eng-edwardhenrypalm.json"
+      },
+      "version": "n/a",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/en-palmer/quran.json",
+        "chapters": "/translations/en-palmer/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/en-sale/",
+      "edition": "english_sale",
+      "language": "english",
+      "code": "en",
+      "direction": "ltr",
+      "author": "George Sale (1734)",
+      "source": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/eng-georgesale.json",
+      "license": {
+        "status": "granted",
+        "text": "Public domain. George Sale, first published 1734. Author died 1736, so out of copyright in life+70 jurisdictions and in the US.",
+        "url": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/eng-georgesale.json"
+      },
+      "version": "n/a",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/en-sale/quran.json",
+        "chapters": "/translations/en-sale/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ru-sablukov/",
+      "edition": "russian_sablukov",
+      "language": "russian",
+      "code": "ru",
+      "direction": "ltr",
+      "author": "Gordy Semyonovich Sablukov (1878)",
+      "source": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/rus-gordysemyonovic.json",
+      "license": {
+        "status": "granted",
+        "text": "Public domain. Gordy Semyonovich Sablukov, 1878 -- the first Russian translation of the Quran. Author died 1880, so out of copyright in life+70 jurisdictions and in the US.",
+        "url": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/rus-gordysemyonovic.json"
+      },
+      "version": "n/a",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ru-sablukov/quran.json",
+        "chapters": "/translations/ru-sablukov/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ru-krachkovsky/",
+      "edition": "russian_krachkovsky",
+      "language": "russian",
+      "code": "ru",
+      "direction": "ltr",
+      "author": "Ignaty Yulianovich Krachkovsky (1963)",
+      "source": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/rus-ignatyyulianovi.json",
+      "license": {
+        "status": "granted",
+        "text": "Public domain. Ignaty Yulianovich Krachkovsky, 1963 (posthumous). Author died 1951, so out of copyright in life+70 jurisdictions since 2022.",
+        "url": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/rus-ignatyyulianovi.json"
+      },
+      "version": "n/a",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ru-krachkovsky/quran.json",
+        "chapters": "/translations/ru-krachkovsky/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/en-rodwell/",
+      "edition": "english_rodwell",
+      "language": "english",
+      "code": "en",
+      "direction": "ltr",
+      "author": "J. M. Rodwell (1861)",
+      "source": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/eng-johnmedowsrodwe.json",
+      "license": {
+        "status": "granted",
+        "text": "Public domain. J. M. Rodwell, The Koran, 1861. Translator died 1900 (https://en.wikipedia.org/wiki/John_Medows_Rodwell), so out of copyright in life+70 jurisdictions and in the US. The snapshot is fawazahmed0's verse-aligned copy of the text.",
+        "url": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/eng-johnmedowsrodwe.json"
+      },
+      "version": "n/a",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/en-rodwell/quran.json",
+        "chapters": "/translations/en-rodwell/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ur-kanzuliman/",
+      "edition": "urdu_kanzuliman",
+      "language": "urdu",
+      "code": "ur",
+      "direction": "rtl",
+      "author": "Ahmed Raza Khan, Kanzul Iman (1911)",
+      "source": "https://tanzil.net/trans/ur.kanzuliman",
+      "license": {
+        "status": "granted",
+        "text": "Public domain. Ahmed Raza Khan, Kanzul Iman, 1911. Translator died 1921 (https://en.wikipedia.org/wiki/Ahmed_Raza_Khan_Barelvi), so out of copyright in life+70 jurisdictions (since 1992) and in the US. The snapshot is Tanzil's copy of the text, `ur.kanzuliman`, last updated 2011-03-17.",
+        "url": "https://tanzil.net/trans/ur.kanzuliman"
+      },
+      "version": "n/a",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ur-kanzuliman/quran.json",
+        "chapters": "/translations/ur-kanzuliman/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/ur-mahmudulhasan/",
+      "edition": "urdu_mahmudulhasan",
+      "language": "urdu",
+      "code": "ur",
+      "direction": "rtl",
+      "author": "Mahmud ul Hasan (1909)",
+      "source": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/urd-mahmoodulhassan.json",
+      "license": {
+        "status": "granted",
+        "text": "Public domain. Mahmud ul Hasan (Shaykh al-Hind), Urdu translation, 1909. Translator died 1920 (https://en.wikipedia.org/wiki/Mahmud_Hasan_Deobandi), so out of copyright in life+70 jurisdictions (since 1991) and in the US. The snapshot is fawazahmed0's copy, taken from dailyayat.com; its dangling `[n]` footnote markers, whose notes are not part of the text, are removed on import.",
+        "url": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/urd-mahmoodulhassan.json"
+      },
+      "version": "n/a",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/ur-mahmudulhasan/quran.json",
+        "chapters": "/translations/ur-mahmudulhasan/chapters/{1-114}.json"
+      }
+    },
+    {
+      "path": "/translations/nl-keyzer/",
+      "edition": "dutch_keyzer",
+      "language": "dutch",
+      "code": "nl",
+      "direction": "ltr",
+      "author": "Salomo Keyzer (1860)",
+      "source": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/nld-salomokeyzer.json",
+      "license": {
+        "status": "granted",
+        "text": "Public domain. Salomo Keyzer, Dutch translation of the Koran, 1860. Translator died 1868 (https://nl.wikipedia.org/wiki/Salomo_Keyzer), so out of copyright in life+70 jurisdictions and in the US. The snapshot is fawazahmed0's copy of Tanzil's `nl.keyzer`; the chapter-opening letters it lost are restored from Project Gutenberg #19786.",
+        "url": "https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/nld-salomokeyzer.json"
+      },
+      "version": "n/a",
+      "chapters": 114,
+      "files": {
+        "quran": "/translations/nl-keyzer/quran.json",
+        "chapters": "/translations/nl-keyzer/chapters/{1-114}.json"
+      }
+    }
+  ],
+  "withheld": [
+    {
+      "edition": "korean_rwwad",
+      "author": "Korean Translation - Rowwad Translation Center",
+      "status": "granted",
+      "license_url": "https://quranenc.com/en/home/api",
+      "availability": "withheld",
+      "reason": "Official v1.0.11 archive has 1,955 empty translation rows in surahs 14-35; retained for review, not published as a complete translation."
+    },
+    {
+      "edition": "circassian_rwwad",
+      "author": "Circassian Translation - Rowwad Translation Center",
+      "status": "granted",
+      "license_url": "https://quranenc.com/en/home/api",
+      "availability": "withheld",
+      "reason": "Official v1.0.1 archive has 1,000 empty translation rows; retained for review, not published as a complete translation."
+    },
+    {
+      "edition": "english_waleed",
+      "author": "English Translation - Dr. Waleed Bleyhesh Al-Amri (in progress)",
+      "status": "granted",
+      "license_url": "https://quranenc.com/en/home/api",
+      "availability": "withheld",
+      "reason": "Official v1.0.2 archive has 3,753 empty translation rows; retained for review, not published as a complete translation."
+    }
+  ]
+}

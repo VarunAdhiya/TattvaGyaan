@@ -81,6 +81,8 @@ model ScriptureEdition {
   source        String?
   license       String?
   provenance    String?
+  contentStatus String @default("unverified") @map("content_status")
+  expectedPassages Int? @map("expected_passages")
   isOriginal    Boolean  @default(false) @map("is_original")
   textDirection String   @default("ltr") @map("text_direction")
   createdAt     DateTime @default(now()) @map("created_at")
@@ -115,6 +117,7 @@ model ScripturePassage {
   sectionId String   @map("section_id")
   reference String
   text      String
+  sourceNotes String? @map("source_notes")
   wordCount Int      @default(0) @map("word_count")
   sortOrder Int      @default(0) @map("sort_order")
   createdAt DateTime @default(now()) @map("created_at")
@@ -156,6 +159,7 @@ model ReadingPlan {
   endDate       DateTime @map("end_date")
   minutesPerDay Int?     @map("minutes_per_day")
   status        String   @default("active")
+  analysis      Json?
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
@@ -174,6 +178,8 @@ model ReadingPlanItem {
   completed   Boolean   @default(false)
   completedAt DateTime? @map("completed_at")
   sortOrder   Int       @default(0) @map("sort_order")
+  estimatedMinutes Int? @map("estimated_minutes")
+  rationale   String?
 
   plan ReadingPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
 

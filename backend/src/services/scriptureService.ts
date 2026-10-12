@@ -47,7 +47,8 @@ export class ScriptureService {
         include: {
           religion: { select: { id: true, name: true, slug: true } },
           editions: {
-            select: { id: true, title: true, language: true, isOriginal: true, textDirection: true },
+            orderBy: [{ contentStatus: 'asc' }, { isOriginal: 'desc' }],
+            select: { id: true, title: true, language: true, isOriginal: true, textDirection: true, contentStatus: true, expectedPassages: true },
           },
         },
         orderBy: { title: 'asc' },
@@ -74,6 +75,7 @@ export class ScriptureService {
       include: {
         religion: true,
         editions: {
+          orderBy: [{ contentStatus: 'asc' }, { isOriginal: 'desc' }],
           include: {
             _count: { select: { sections: true } },
           },

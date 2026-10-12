@@ -197,9 +197,16 @@ export default function ScriptureDetail() {
                           {edition.language}
                           {edition.isOriginal && ' • Original'}
                         </div>
+                        <div className="text-xs mt-1 text-amber-800">
+                          {edition.contentStatus === 'complete' ? `Complete · ${edition.expectedPassages} passages` : 'Partial sample — completeness unverified'}
+                        </div>
                       </button>
                     ))}
                   </div>
+
+                  {selectedEdition?.source && /^https?:\/\//.test(selectedEdition.source) && (
+                    <p className="text-xs text-stone-600 mb-4"><a className="underline" href={selectedEdition.source} target="_blank" rel="noreferrer">Source and attribution</a>{selectedEdition.translator ? ` · ${selectedEdition.translator}` : ''}</p>
+                  )}
 
                   <button
                     onClick={startReading}

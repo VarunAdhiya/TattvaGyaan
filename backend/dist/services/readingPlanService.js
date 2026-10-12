@@ -6,70 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.readingPlanService = exports.ReadingPlanService = void 0;
 const prisma_1 = __importDefault(require("../lib/prisma"));
 const errorHandler_1 = require("../middleware/errorHandler");
+const aiService_1 = require("./aiService");
+const readingPlanSchedule_1 = require("./readingPlanSchedule");
 class ReadingPlanService {
-    calculateReadingMetrics(sections) {
-        let totalWords = 0;
-        let totalPassages = 0;
-        sections.forEach(section => {
-            section.passages.forEach((passage) => {
-                totalWords += passage.wordCount || 0;
-                totalPassages++;
-            });
-        });
-        return { totalWords, totalPassages };
-    }
-    async generateAIOptimizedPlan(sections, targetDays, minutesPerDay) {
-        const { totalWords, totalPassages } = this.calculateReadingMetrics(sections);
-        const averageReadingSpeed = 200; // words per minute
-        const totalEstimatedMinutes = totalWords / averageReadingSpeed;
-        // Calculate ideal distribution
-        const minutesPerDayTarget = minutesPerDay || (totalEstimatedMinutes / targetDays);
-        const wordsPerDay = minutesPerDayTarget * averageReadingSpeed;
-        // AI-enhanced section grouping
-        const sectionGroups = [];
-        let currentGroup = [];
-        let currentWordCount = 0;
-        for (const section of sections) {
-            const sectionWords = section.passages.reduce((sum, p) => sum + (p.wordCount || 0), 0);
-            // If adding this section would exceed daily target, start new group
-            if (currentWordCount > 0 && currentWordCount + sectionWords > wordsPerDay * 1.2) {
-                sectionGroups.push([...currentGroup]);
-                currentGroup = [section];
-                currentWordCount = sectionWords;
-            }
-            else {
-                currentGroup.push(section);
-                currentWordCount += sectionWords;
-            }
-        }
-        // Add the last group
-        if (currentGroup.length > 0) {
-            sectionGroups.push(currentGroup);
-        }
-        // If we have more groups than target days, combine smaller groups
-        while (sectionGroups.length > targetDays && sectionGroups.length > 1) {
-            // Find two smallest groups to combine
-            let minIndex = 0;
-            let minWords = this.calculateReadingMetrics(sectionGroups[0]).totalWords;
-            for (let i = 1; i < sectionGroups.length; i++) {
-                const words = this.calculateReadingMetrics(sectionGroups[i]).totalWords;
-                if (words < minWords) {
-                    minWords = words;
-                    minIndex = i;
-                }
-            }
-            // Combine with next group if possible
-            if (minIndex < sectionGroups.length - 1) {
-                sectionGroups[minIndex] = [...sectionGroups[minIndex], ...sectionGroups[minIndex + 1]];
-                sectionGroups.splice(minIndex + 1, 1);
-            }
-            else if (minIndex > 0) {
-                sectionGroups[minIndex - 1] = [...sectionGroups[minIndex - 1], ...sectionGroups[minIndex]];
-                sectionGroups.splice(minIndex, 1);
-            }
-        }
-        return sectionGroups;
-    }
     async createPlan(userId, data) {
         const edition = await prisma_1.default.scriptureEdition.findUnique({
             where: { id: data.editionId },
@@ -80,7 +19,7 @@ class ReadingPlanService {
                     include: {
                         passages: {
                             orderBy: { sortOrder: 'asc' },
-                            select: { id: true, wordCount: true, reference: true, sectionId: true },
+                            select: { id: true, text: true, wordCount: true, reference: true, sectionId: true },
                         },
                     },
                 },
@@ -88,57 +27,44 @@ class ReadingPlanService {
         });
         if (!edition)
             throw new errorHandler_1.AppError('Edition not found', 404);
-        const sections = edition.sections;
+        const sections = edition.sections.filter(section => section.passages.length > 0);
         if (sections.length === 0)
             throw new errorHandler_1.AppError('No content available for this edition', 400);
-        // Collect all passages in sequential order across sections
-        const allPassages = [];
-        sections.forEach(sec => {
-            sec.passages.forEach(p => {
-                allPassages.push({
-                    id: p.id,
-                    sectionId: sec.id,
-                    wordCount: p.wordCount || 30, // fallback estimate
-                    reference: p.reference,
-                });
+        const wordCount = (passage) => passage.wordCount || Math.max(1, passage.text.trim().split(/\s+/u).length);
+        // Keep analysis bounded even for large collections while sampling throughout every group.
+        const groupSize = Math.ceil(sections.length / 24);
+        const groups = [];
+        const groupForSection = new Map();
+        for (let i = 0; i < sections.length; i += groupSize) {
+            const groupSections = sections.slice(i, i + groupSize);
+            const passages = groupSections.flatMap(section => section.passages);
+            const id = groups.length;
+            groupSections.forEach(section => groupForSection.set(section.id, id));
+            groups.push({
+                id, titles: groupSections.map(section => section.title),
+                passageCount: passages.length, wordCount: passages.reduce((sum, passage) => sum + wordCount(passage), 0),
+                samples: [...new Set([0, Math.floor(passages.length / 2), passages.length - 1])].map(index => `${passages[index].reference}: ${passages[index].text.slice(0, 700)}`),
             });
-        });
-        if (allPassages.length === 0) {
-            throw new errorHandler_1.AppError('No passages found for this scripture edition', 400);
         }
-        const targetDays = Math.max(1, Math.min(data.targetDays, 365));
+        const analysis = await aiService_1.aiService.analyzeReadingPace({
+            title: edition.scripture.title, language: edition.language,
+            targetDays: data.targetDays, minutesPerDay: data.minutesPerDay, groups,
+        });
+        const allPassages = sections.flatMap(section => {
+            const pace = analysis.groups.find(group => group.id === groupForSection.get(section.id));
+            return section.passages.map(passage => ({
+                ...passage,
+                estimatedMinutes: wordCount(passage) / analysis.wordsPerMinute * pace.difficulty * (1 + analysis.reflectionPercent / 100),
+                reason: pace.reason,
+            }));
+        });
+        const totalEstimatedMinutes = allPassages.reduce((sum, passage) => sum + passage.estimatedMinutes, 0);
+        const targetDays = Math.min(data.targetDays, allPassages.length);
         const startDate = data.startDate ? new Date(data.startDate) : new Date();
         const endDate = new Date(startDate);
         endDate.setDate(endDate.getDate() + targetDays - 1);
-        const totalWords = allPassages.reduce((sum, p) => sum + p.wordCount, 0);
-        const avgWordsPerMinute = 150; // respectful contemplative scripture reading speed
-        const totalEstimatedMinutes = Math.ceil(totalWords / avgWordsPerMinute);
-        const estimatedMinutesPerDay = data.minutesPerDay || Math.max(10, Math.ceil(totalEstimatedMinutes / targetDays));
-        // Distribute passages proportionally across targetDays
-        const totalPassages = allPassages.length;
-        const items = [];
-        // Smart chunking: distribute total passages smoothly over targetDays
-        let currentPassageIndex = 0;
-        for (let day = 1; day <= targetDays; day++) {
-            // Calculate how many passages should be finished by end of this day
-            const targetCumulativePassages = Math.round((day / targetDays) * totalPassages);
-            const dayPassages = allPassages.slice(currentPassageIndex, targetCumulativePassages);
-            if (dayPassages.length > 0) {
-                // Group by section or use the primary section of this chunk
-                const primarySectionId = dayPassages[0].sectionId;
-                items.push({
-                    dayNumber: day,
-                    sectionId: primarySectionId,
-                    passageIds: dayPassages.map(p => p.id),
-                });
-                currentPassageIndex = targetCumulativePassages;
-            }
-        }
-        // Edge case: if any remaining passages, add to the last day
-        if (currentPassageIndex < totalPassages && items.length > 0) {
-            const remaining = allPassages.slice(currentPassageIndex);
-            items[items.length - 1].passageIds.push(...remaining.map(p => p.id));
-        }
+        const items = (0, readingPlanSchedule_1.distributeReading)(allPassages, targetDays);
+        const estimatedMinutesPerDay = Math.max(1, Math.ceil(totalEstimatedMinutes / targetDays));
         const plan = await prisma_1.default.readingPlan.create({
             data: {
                 userId,
@@ -148,11 +74,16 @@ class ReadingPlanService {
                 startDate,
                 endDate,
                 minutesPerDay: estimatedMinutesPerDay,
+                analysis: { ...analysis, requestedDays: data.targetDays, requestedMinutesPerDay: data.minutesPerDay ?? null,
+                    suggestedDays: data.minutesPerDay ? Math.ceil(totalEstimatedMinutes / data.minutesPerDay) : targetDays,
+                    basis: 'AI estimates from text samples, passage word counts, difficulty, and reflection time. Passage order is preserved.' },
                 items: {
                     create: items.map((item, idx) => ({
                         dayNumber: item.dayNumber,
                         sectionId: item.sectionId,
                         passageIds: item.passageIds,
+                        estimatedMinutes: item.estimatedMinutes,
+                        rationale: item.rationale,
                         sortOrder: idx,
                     })),
                 },

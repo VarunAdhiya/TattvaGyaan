@@ -1,4 +1,6 @@
 Build an AI-Powered Multilingual Religious Scripture Library
+The current backend uses Google Gemini for chat, passage explanations, and summaries. Configure `GEMINI_API_KEY` and optionally `GEMINI_MODEL` in `backend/.env`; see [Gemini setup](SETUP.md#gemini-ai-setup). The original requirements below describe the earlier OpenAI implementation.
+
 Act as a senior full-stack engineer, software architect, and UI/UX designer. Build a production-oriented MVP for a web application that allows users to read religious scriptures in their original languages, experience a realistic 3D book-reading interface, create personalized reading plans, and use OpenAI to understand scripture passages in their preferred language.
 Do not build just a landing page or static pro
 totype. Implement the actual frontend, backend, database, authentication, scripture retrieval, reading progress, reading plans, and AI integration.

@@ -8,10 +8,10 @@ export declare const config: {
         secret: string;
         maxAge: number;
     };
-    openai: {
+    gemini: {
         apiKey: string;
         model: string;
-        embeddingModel: string;
+        timeoutMs: number;
     };
     cors: {
         origin: string;

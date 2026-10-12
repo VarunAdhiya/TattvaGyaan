@@ -58,11 +58,22 @@
 }
 
 /* Page flip library tweaks */
-.stPage {
+.reader-paper {
   background-color: var(--reader-paper) !important;
+  color: var(--reader-text);
   box-shadow: 0 4px 12px var(--paper-shadow);
   border-radius: 2px;
 }
+
+.reader-shell { min-height: calc(100dvh - 64px); }
+.reader-stage { background: radial-gradient(ellipse at center, transparent 20%, #0000000c 100%); }
+.reader-binding {
+  box-shadow: 0 22px 38px -18px #1c191770, 0 6px 0 -1px #d8cbb5, 0 9px 0 -2px #b3a084;
+}
+.reader-paper.--left { background-image: linear-gradient(to right, transparent 92%, #00000018); }
+.reader-paper.--right { background-image: linear-gradient(to right, #00000018, transparent 8%); }
+.reader-paper .scripture-text { color: var(--reader-text); }
+.reader-paper .scripture-text { user-select: text; -webkit-user-select: text; }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {

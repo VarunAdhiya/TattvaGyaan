@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import HTMLFlipBook from 'react-pageflip';
+import { useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
   ChevronRight,
@@ -17,6 +18,7 @@ import {
   Minimize2,
   X,
   Trash2,
+  Pencil,
   Check
 } from 'lucide-react';
 import { api } from '../api/client';
@@ -24,17 +26,18 @@ import { api } from '../api/client';
 export default function Reader3D({
   edition,
   sections,
-  initialPageIndex = 0,
+  initialPageIndex = 1,
+  initialPassageId,
   onProgressUpdate,
   onAskAI,
   onSummarize,
 }) {
   const flipBookRef = useRef(null);
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(initialPageIndex);
-  const [totalPages, setTotalPages] = useState(0);
   const [theme, setTheme] = useState('light'); // light, sepia, dark
   const [fontSize, setFontSize] = useState(18); // px
-  const [lineHeight, setLineHeight] = useState(1.8);
+  const lineHeight = 1.8;
   const [showTOC, setShowTOC] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showBookmarksDrawer, setShowBookmarksDrawer] = useState(false);
@@ -48,8 +51,10 @@ export default function Reader3D({
   const [userHighlights, setUserHighlights] = useState([]);
   const [noteContent, setNoteContent] = useState('');
   const [showNoteModal, setShowNoteModal] = useState(false);
+  const [editingNoteId, setEditingNoteId] = useState(null);
+  const [savingNote, setSavingNote] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [bookSize, setBookSize] = useState('medium'); // small, medium, large
+  const [bookSize, setBookSize] = useState('large'); // small, medium, large
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -57,22 +62,19 @@ export default function Reader3D({
   };
 
   // Two-page spread (left + right) on wide screens; single page on mobile
-  const [isWideScreen, setIsWideScreen] = useState(
-    typeof window !== 'undefined' ? window.innerWidth >= 1024 : true
-  );
+  const [viewport, setViewport] = useState(() => ({ width: window.innerWidth, height: window.innerHeight }));
+  const isWideScreen = viewport.width >= 900;
 
   useEffect(() => {
-    const handleResize = () => setIsWideScreen(window.innerWidth >= 1024);
+    const handleResize = () => setViewport({ width: window.innerWidth, height: window.innerHeight });
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   // Flatten all sections and passages into paginated pages
   // Each page will contain 1-3 passages depending on length
-  const [pages, setPages] = useState([]);
-
-  useEffect(() => {
-    if (!sections || sections.length === 0) return;
+  const pages = useMemo(() => {
+    if (!sections || sections.length === 0) return [];
 
     const computedPages = [];
 
@@ -135,9 +137,9 @@ export default function Reader3D({
       item.pageIndex = sectionStartPages.get(item.id) ?? computedPages.length - 1;
     });
 
-    setPages(computedPages);
-    setTotalPages(computedPages.length);
+    return computedPages;
   }, [sections, edition]);
+  const totalPages = pages.length;
 
   // Load user bookmarks & notes
   useEffect(() => {
@@ -215,12 +217,21 @@ export default function Reader3D({
       if (passageObj) {
         setSelectedPassage(passageObj);
       }
+    } else if (passageObj?.section?.edition) {
+      const targetEdition = passageObj.section.edition;
+      navigate(`/reader/${targetEdition.scriptureId}/${targetEdition.id}?passage=${encodeURIComponent(passageId)}`);
     } else {
       showToast('Passage is in another section or not loaded in current view');
     }
   };
 
   // Search inside scripture
+  useEffect(() => {
+    if (!selectedPassage) return;
+    const timer = setTimeout(() => document.getElementById(`passage-${selectedPassage.id}`)?.scrollIntoView({ block: 'nearest' }), 100);
+    return () => clearTimeout(timer);
+  }, [selectedPassage]);
+
   const handleSearch = (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
@@ -329,15 +340,21 @@ export default function Reader3D({
   };
 
   const handleSaveNote = async () => {
-    if (!selectedPassage || !noteContent.trim()) return;
+    if (!selectedPassage || !noteContent.trim() || savingNote) return;
+    setSavingNote(true);
     try {
-      const res = await api.addNote(selectedPassage.id, noteContent);
-      setUserNotes((prev) => [...prev, { ...res.note, passage: selectedPassage }]);
+      const res = editingNoteId ? await api.updateNote(editingNoteId, noteContent.trim()) : await api.addNote(selectedPassage.id, noteContent.trim());
+      setUserNotes((prev) => editingNoteId
+        ? prev.map(note => note.id === editingNoteId ? { ...note, ...res.note } : note)
+        : [...prev, { ...res.note, passage: selectedPassage }]);
       setNoteContent('');
       setShowNoteModal(false);
+      setEditingNoteId(null);
       showToast('Note saved successfully');
     } catch (err) {
       showToast(err.message || 'Failed to save note');
+    } finally {
+      setSavingNote(false);
     }
   };
 
@@ -356,11 +373,11 @@ export default function Reader3D({
   const isIndic = ['sa', 'hi', 'mr', 'pa', 'pra', 'san'].includes(edition.language.toLowerCase()) || edition.script === 'devanagari';
 
   return (
-    <div className={`min-h-screen flex flex-col transition-colors duration-300 ${
+    <div className={`reader-shell flex flex-col transition-colors duration-300 ${
       theme === 'dark' ? 'theme-dark bg-zinc-950 text-zinc-100' : theme === 'sepia' ? 'theme-sepia bg-[#f4ecd8] text-[#432818]' : 'theme-light bg-stone-100 text-stone-900'
     }`}>
       {/* Top Controls Toolbar */}
-      <header className="sticky top-0 z-30 px-4 py-3 border-b flex items-center justify-between backdrop-blur-md bg-opacity-90 border-stone-300/30">
+      <header className="z-30 px-3 py-2 border-b flex flex-wrap gap-2 items-center justify-between backdrop-blur-md border-stone-300/30">
         <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={() => setShowTOC(!showTOC)}
@@ -499,18 +516,21 @@ export default function Reader3D({
       </header>
 
       {/* Main Reading View Area */}
-      <main className="flex-1 flex items-center justify-center p-4 sm:p-8 relative overflow-hidden">
+      <main className="reader-stage flex-1 min-h-0 flex items-center justify-center px-3 py-5 sm:px-6 relative">
         {pages.length > 0 ? (
-          <div className="relative shadow-2xl rounded-sm">
+          <div className="reader-binding relative w-full rounded-sm" style={{ maxWidth: currentSizeConfig.width * (isWideScreen ? 2 : 1) }}>
             {/* HTMLFlipBook 3D Component */}
             <HTMLFlipBook
+              key={`${bookSize}-${isWideScreen}`}
+              startPage={Math.min(currentPage, totalPages - 1)}
               width={currentSizeConfig.width}
               height={currentSizeConfig.height}
               size="stretch"
-              minWidth={isFullScreen ? 600 : 350}
-              maxWidth={isFullScreen ? 1200 : 900}
-              minHeight={isFullScreen ? 700 : 500}
-              maxHeight={isFullScreen ? 1400 : 1000}
+              minWidth={250}
+              maxWidth={currentSizeConfig.width}
+              minHeight={320}
+              maxHeight={Math.max(320, viewport.height - (isFullScreen ? 130 : 220))}
+              usePortrait={!isWideScreen}
               maxShadowOpacity={0.6}
               showCover={true}
               mobileScrollSupport={true}
@@ -518,8 +538,13 @@ export default function Reader3D({
               useMouseEvents={true}
               swipeDistance={30}
               onFlip={onPage}
+              onInit={() => {
+                const passagePage = findPageForPassage(initialPassageId);
+                goToPage(passagePage >= 0 ? passagePage : initialPageIndex);
+                if (passagePage >= 0) setSelectedPassage(pages[passagePage].passages.find(passage => passage.id === initialPassageId));
+              }}
               ref={flipBookRef}
-              className="reader-book mx-auto shadow-2xl"
+              className="reader-book mx-auto"
               style={{
                 margin: '0 auto',
                 filter: 'drop-shadow(0 25px 25px rgb(0 0 0 / 0.15))'
@@ -528,7 +553,7 @@ export default function Reader3D({
               {pages.map((page, idx) => (
                 <div
                   key={idx}
-                  className="page border border-amber-900/10 p-6 sm:p-10 flex flex-col justify-between select-text overflow-y-auto"
+                  className="page reader-paper border border-amber-900/10 p-4 sm:p-7 flex flex-col justify-between select-text overflow-y-auto"
                   onMouseDown={handleMouseDown}
                   style={{ userSelect: 'text' }}
                 >
@@ -543,7 +568,7 @@ export default function Reader3D({
                       </h1>
                       <div className="w-12 h-0.5 bg-amber-900/40 my-4" />
                       <p className="text-sm font-sans uppercase tracking-widest text-amber-900/70 font-semibold">
-                        Original Language Edition: {page.language}
+                        {edition.isOriginal ? 'Original language' : 'Translation'}: {page.language}
                       </p>
                       {page.translator && (
                         <p className="text-xs text-amber-900/60 mt-2 font-serif italic">
@@ -551,8 +576,10 @@ export default function Reader3D({
                         </p>
                       )}
                       <p className="text-[10px] text-amber-900/40 mt-8 max-w-xs leading-relaxed font-sans">
-                        Provenance: {page.provenance || 'Verified Sacred Text Repository'}
+                        Provenance: {page.provenance || 'Source details not supplied'}
                       </p>
+                      {edition.source && /^https?:\/\//.test(edition.source) && <a href={edition.source} target="_blank" rel="noreferrer" className="underline text-xs mt-3">Source text and license</a>}
+                      {page.license && <p className="text-[10px] mt-3 whitespace-pre-wrap">{page.license}</p>}
                     </div>
                   )}
 
@@ -608,6 +635,7 @@ export default function Reader3D({
                           return (
                             <div
                               key={p.id}
+                              id={`passage-${p.id}`}
                               className={`group relative p-3 rounded-lg border transition-all ${
                                 isSelected
                                   ? 'bg-amber-100/70 border-amber-500 ring-2 ring-amber-400/40 shadow-xs'
@@ -652,6 +680,7 @@ export default function Reader3D({
                                       setSelectedPassage(p);
                                       // If existing note, pre-fill
                                       const existingNote = passageNotes[0];
+                                      setEditingNoteId(existingNote?.id || null);
                                       setNoteContent(existingNote?.content || '');
                                       setShowNoteModal(true);
                                     }}
@@ -689,6 +718,7 @@ export default function Reader3D({
                               >
                                 {p.text}
                               </div>
+                              {p.sourceNotes && <details className="mt-3 text-xs"><summary className="cursor-pointer">Translator’s notes</summary><p dir="auto" className="whitespace-pre-wrap mt-2">{p.sourceNotes}</p></details>}
                             </div>
                           );
                         })}
@@ -712,7 +742,7 @@ export default function Reader3D({
       </main>
 
       {/* Reader Bottom Navigation Bar */}
-      <footer className="sticky bottom-0 z-30 px-4 py-2 border-t flex items-center justify-between backdrop-blur-md bg-opacity-90 border-stone-300/30 text-xs font-sans">
+      <footer className="z-30 px-4 py-3 border-t flex items-center justify-between backdrop-blur-md border-stone-300/30 text-xs font-sans">
         <button
           onClick={() => flipBookRef.current?.pageFlip()?.flipPrev()}
           disabled={currentPage === 0}
@@ -728,7 +758,7 @@ export default function Reader3D({
 
         <button
           onClick={() => flipBookRef.current?.pageFlip()?.flipNext()}
-          disabled={currentPage >= totalPages - 1}
+          disabled={currentPage + (isWideScreen && currentPage > 0 ? 1 : 0) >= totalPages - 1}
           className="px-3 py-1.5 rounded-lg bg-black/5 hover:bg-black/10 disabled:opacity-40 transition flex items-center gap-1 font-semibold"
         >
           <span>Next</span>
@@ -835,9 +865,10 @@ export default function Reader3D({
               </button>
               <button
                 onClick={handleSaveNote}
+                disabled={savingNote || !noteContent.trim()}
                 className="px-4 py-2 text-xs font-semibold bg-amber-800 text-amber-50 rounded-lg hover:bg-amber-900"
               >
-                Save Note
+                {savingNote ? 'Saving...' : 'Save Note'}
               </button>
             </div>
           </div>
@@ -932,18 +963,23 @@ export default function Reader3D({
                 return (
                   <div
                     key={note.id}
-                    onClick={() => {
-                      handleJumpToPassage(note.passageId, passage);
-                      setNoteContent(note.content);
-                      setShowNoteModal(true);
-                      setShowNotesDrawer(false);
-                    }}
+                    onClick={() => handleJumpToPassage(note.passageId, passage)}
+                    role="link"
+                    tabIndex={0}
+                    onKeyDown={event => { if (event.key === 'Enter' && event.target === event.currentTarget) handleJumpToPassage(note.passageId, passage); }}
                     className="p-3 bg-stone-800/80 hover:bg-stone-800 border border-stone-700 rounded-xl cursor-pointer transition group"
                   >
                     <div className="flex items-center justify-between mb-1.5">
                       <span className="text-xs font-bold font-sans text-amber-400">
                         {passage.reference || 'Verse'}
                       </span>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setSelectedPassage(passage); setEditingNoteId(note.id); setNoteContent(note.content); setShowNoteModal(true); setShowNotesDrawer(false); }}
+                        className="p-1 ml-auto mr-2 text-stone-400 hover:text-amber-300 transition"
+                        title="Edit Note"
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                      </button>
                       <button
                         onClick={(e) => handleDeleteNote(note.id, e)}
                         className="p-1 text-stone-500 hover:text-rose-400 transition"
@@ -961,7 +997,7 @@ export default function Reader3D({
                       </p>
                     )}
                     <div className="mt-2 text-[10px] text-amber-500/80 font-sans flex items-center justify-between">
-                      <span>Jump to verse & edit note →</span>
+                      <span>Go to passage →</span>
                       {note.createdAt && (
                         <span className="text-stone-500">
                           {new Date(note.createdAt).toLocaleDateString()}

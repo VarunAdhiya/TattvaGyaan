@@ -16,6 +16,7 @@ export class AIController {
       if (passageId) {
         const context = await ragService.getContextForPassage(passageId);
         if (!context) throw new AppError('Passage not found', 404);
+        if (selectedText && !context.target.text.includes(selectedText)) throw new AppError('Selected text must belong to the selected passage', 400);
 
         passageData = {
           text: selectedText || context.target.text,
@@ -73,7 +74,7 @@ export class AIController {
       const section = await prisma.scriptureSection.findUnique({
         where: { id: sectionId },
         include: {
-          passages: { orderBy: { sortOrder: 'asc' }, take: 50 },
+          passages: { orderBy: { sortOrder: 'asc' } },
           edition: {
             include: { scripture: true },
           },
@@ -81,6 +82,8 @@ export class AIController {
       });
 
       if (!section) throw new AppError('Section not found', 404);
+      if (section.editionId !== editionId) throw new AppError('Section does not belong to this edition', 400);
+      if (!section.passages.length) throw new AppError('No source passages are available for this section', 400);
 
       const result = await aiService.summarizeSection({
         passages: section.passages.map((p: any) => ({
@@ -101,7 +104,7 @@ export class AIController {
 
   async chat(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const { question, conversationId, editionId, passageId, selectedText, responseLang } = req.body;
+      const { question, conversationId, editionId, sectionId, passageId, selectedText, responseLang } = req.body;
 
       let conversation;
       let messages: { role: 'user' | 'assistant'; content: string }[] = [];
@@ -110,14 +113,15 @@ export class AIController {
         conversation = await prisma.chatConversation.findUnique({
           where: { id: conversationId },
           include: {
-            messages: { orderBy: { createdAt: 'asc' }, take: 20 },
+            messages: { orderBy: { createdAt: 'desc' }, take: 20 },
           },
         });
         if (conversation && conversation.userId !== req.userId) {
           throw new AppError('Access denied', 403);
         }
         if (conversation) {
-          messages = conversation.messages.map((m: any) => ({
+          if (conversation.editionId !== editionId) throw new AppError('Conversation belongs to another edition', 400);
+          messages = conversation.messages.reverse().map((m: any) => ({
             role: m.role as 'user' | 'assistant',
             content: m.content,
           }));
@@ -155,18 +159,35 @@ export class AIController {
               include: { section: true },
             });
             if (passage) {
+              if (passage.section.editionId !== editionId || (sectionId && passage.sectionId !== sectionId)) {
+                throw new AppError('Passage does not belong to the selected section and edition', 400);
+              }
+              if (selectedText && !passage.text.includes(selectedText)) throw new AppError('Selected text must belong to the selected passage', 400);
               scriptureContext = {
                 ...scriptureContext,
                 section: passage.section.title,
                 passageText: selectedText || passage.text,
                 passageRef: passage.reference,
               };
-            }
+            } else throw new AppError('Passage not found', 404);
+          } else if (sectionId) {
+            const section = await prisma.scriptureSection.findUnique({
+              where: { id: sectionId }, include: { passages: { orderBy: { sortOrder: 'asc' } } },
+            });
+            if (!section) throw new AppError('Section not found', 404);
+            if (section.editionId !== editionId) throw new AppError('Section does not belong to this edition', 400);
+            if (!section.passages.length) throw new AppError('No source passages are available for this section', 400);
+            scriptureContext = {
+              ...scriptureContext,
+              section: section.title,
+              passageText: section.passages.map(passage => `${passage.reference}: ${passage.text}`).join('\n'),
+              passageRef: `Selected section: ${section.title}`,
+            };
           }
-        }
+        } else throw new AppError('Edition not found', 404);
       }
 
-      if (!passageId && editionId) {
+      if (!passageId && !sectionId && editionId) {
         const relevant = await ragService.retrieveForQuestion(question, editionId);
         if (relevant.length > 0 && scriptureContext) {
           scriptureContext = {
