@@ -3,6 +3,14 @@ export declare const config: {
     nodeEnv: string;
     database: {
         url: string;
+        prismaUrl: string;
+        connectionLimit: number;
+        sessionPool: {
+            connectionString: string;
+            max: number;
+            connectionTimeoutMillis: number;
+            idleTimeoutMillis: number;
+        };
     };
     session: {
         secret: string;
@@ -15,18 +23,6 @@ export declare const config: {
     };
     cors: {
         origin: string;
-    };
-    rateLimit: {
-        windowMs: number;
-        max: number;
-    };
-    authRateLimit: {
-        windowMs: number;
-        max: number;
-    };
-    aiRateLimit: {
-        windowMs: number;
-        max: number;
     };
 };
 //# sourceMappingURL=index.d.ts.map

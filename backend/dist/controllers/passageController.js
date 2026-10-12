@@ -3,6 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.passageController = exports.PassageController = void 0;
 const scriptureService_1 = require("../services/scriptureService");
 class PassageController {
+    async getPosition(req, res, next) {
+        try {
+            const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+            res.json(await scriptureService_1.scriptureService.getPassagePosition(id));
+        }
+        catch (err) {
+            next(err);
+        }
+    }
     async getBySection(req, res, next) {
         try {
             const sectionId = Array.isArray(req.params.sectionId) ? req.params.sectionId[0] : req.params.sectionId;

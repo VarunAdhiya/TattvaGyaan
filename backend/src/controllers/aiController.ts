@@ -4,6 +4,7 @@ import { ragService } from '../services/ragService';
 import { AuthRequest } from '../middleware/auth';
 import prisma from '../lib/prisma';
 import { AppError } from '../middleware/errorHandler';
+import { createHash } from 'node:crypto';
 
 export class AIController {
   async explain(req: AuthRequest, res: Response, next: NextFunction) {
@@ -105,6 +106,10 @@ export class AIController {
   async chat(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { question, conversationId, editionId, sectionId, passageId, selectedText, responseLang } = req.body;
+      if ((sectionId || passageId) && !editionId) throw new AppError('Edition is required for selected text', 400);
+      if (selectedText && !passageId) throw new AppError('Select a passage before sending selected text', 400);
+      if (editionId && !sectionId && !passageId) throw new AppError('Select a passage or section before asking about this book', 400);
+      const contextKey = createHash('sha256').update(JSON.stringify([editionId, sectionId, passageId, selectedText])).digest('hex');
 
       let conversation;
       let messages: { role: 'user' | 'assistant'; content: string }[] = [];
@@ -121,21 +126,11 @@ export class AIController {
         }
         if (conversation) {
           if (conversation.editionId !== editionId) throw new AppError('Conversation belongs to another edition', 400);
-          messages = conversation.messages.reverse().map((m: any) => ({
+          messages = conversation.messages.reverse().filter(message => message.passageRef === contextKey).map((m: any) => ({
             role: m.role as 'user' | 'assistant',
             content: m.content,
           }));
         }
-      }
-
-      if (!conversation) {
-        conversation = await prisma.chatConversation.create({
-          data: {
-            userId: req.userId!,
-            editionId,
-            title: question.substring(0, 100),
-          },
-        });
       }
 
       messages.push({ role: 'user', content: question });
@@ -187,24 +182,17 @@ export class AIController {
         } else throw new AppError('Edition not found', 404);
       }
 
-      if (!passageId && !sectionId && editionId) {
-        const relevant = await ragService.retrieveForQuestion(question, editionId);
-        if (relevant.length > 0 && scriptureContext) {
-          scriptureContext = {
-            ...scriptureContext,
-            passageText: relevant
-              .map((r: any) => `${r.reference}: ${r.text}`)
-              .join('\n'),
-            passageRef: 'Retrieved passages',
-          };
-        }
-      }
-
       const result = await aiService.chat({
         messages,
         scriptureContext,
         responseLang: responseLang || 'en',
       });
+
+      if (!conversation) {
+        conversation = await prisma.chatConversation.create({
+          data: { userId: req.userId!, editionId, title: question.substring(0, 100) },
+        });
+      }
 
       await prisma.chatMessage.createMany({
         data: [
@@ -212,13 +200,14 @@ export class AIController {
             conversationId: conversation.id,
             role: 'user',
             content: question,
-            passageRef: passageId,
+            passageRef: contextKey,
             language: responseLang,
           },
           {
             conversationId: conversation.id,
             role: 'assistant',
             content: result.content,
+            passageRef: contextKey,
             language: responseLang,
           },
         ],

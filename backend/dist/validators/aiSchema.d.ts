@@ -57,18 +57,15 @@ export declare const askQuestionSchema: z.ZodObject<{
 }>;
 export declare const summarizeSchema: z.ZodObject<{
     editionId: z.ZodString;
-    sectionId: z.ZodOptional<z.ZodString>;
-    passageIds: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    sectionId: z.ZodString;
     responseLang: z.ZodDefault<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     editionId: string;
+    sectionId: string;
     responseLang: string;
-    sectionId?: string | undefined;
-    passageIds?: string[] | undefined;
 }, {
     editionId: string;
-    sectionId?: string | undefined;
-    passageIds?: string[] | undefined;
+    sectionId: string;
     responseLang?: string | undefined;
 }>;
 //# sourceMappingURL=aiSchema.d.ts.map

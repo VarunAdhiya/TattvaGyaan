@@ -49,3 +49,26 @@ test('sections from a different edition cannot be summarized or used in chat', a
     assert.equal(generated, null);
   }
 });
+
+test('edition-only chat cannot fall back to a whole-book summary', async () => {
+  const result = await invoke('chat', { editionId: 'edition', question: 'Summarize this' });
+  assert.equal(result.error.statusCode, 400);
+  assert.equal(generated, null);
+});
+
+test('selected text requires a passage and selected sections require an edition', async () => {
+  for (const body of [{ selectedText: 'test' }, { sectionId: 'section' }]) {
+    const result = await invoke('chat', { ...body, question: 'Summarize' });
+    assert.equal(result.error.statusCode, 400);
+    assert.equal(generated, null);
+  }
+});
+
+test('history from a different selection cannot expand the current context', async () => {
+  replace(prisma.chatConversation, 'findUnique', async () => ({ id: 'conversation', userId: 'user', editionId: 'edition', messages: [
+    { role: 'assistant', content: 'Unrelated whole-book overview', passageRef: 'other-selection' },
+  ] }));
+  const result = await invoke('chat', { editionId: 'edition', sectionId: 'section', conversationId: 'conversation', question: 'Summarize' });
+  assert.equal(result.error, undefined);
+  assert.deepEqual(generated.messages, [{ role: 'user', content: 'Summarize' }]);
+});

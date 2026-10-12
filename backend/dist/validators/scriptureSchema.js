@@ -9,7 +9,7 @@ exports.paginationSchema = zod_1.z.object({
 exports.scriptureFilterSchema = zod_1.z.object({
     religionId: zod_1.z.string().uuid().optional(),
     language: zod_1.z.string().optional(),
-    search: zod_1.z.string().optional(),
+    search: zod_1.z.string().trim().max(200).optional(),
     page: zod_1.z.coerce.number().int().min(1).default(1),
     limit: zod_1.z.coerce.number().int().min(1).max(100).default(20),
 });

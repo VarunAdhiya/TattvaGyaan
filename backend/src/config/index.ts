@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
+import { createDatabaseConfig } from './database';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
@@ -9,9 +10,7 @@ const geminiTimeoutMs = Number(process.env.GEMINI_TIMEOUT_MS || defaultGeminiTim
 export const config = {
   port: parseInt(process.env.PORT || '3001', 10),
   nodeEnv: process.env.NODE_ENV || 'development',
-  database: {
-    url: process.env.DATABASE_URL || '',
-  },
+  database: createDatabaseConfig(process.env),
   session: {
     secret: process.env.SESSION_SECRET || 'dev-secret-change-in-production-tattvagyaan',
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
@@ -23,17 +22,5 @@ export const config = {
   },
   cors: {
     origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
-  },
-  rateLimit: {
-    windowMs: 15 * 60 * 1000,
-    max: process.env.NODE_ENV === 'production' ? 100 : 1000,
-  },
-  authRateLimit: {
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: process.env.NODE_ENV === 'production' ? 50 : 500, // higher limit in dev
-  },
-  aiRateLimit: {
-    windowMs: 60 * 1000,
-    max: process.env.NODE_ENV === 'production' ? 10 : 60,
   },
 };

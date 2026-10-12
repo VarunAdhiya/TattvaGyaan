@@ -41,3 +41,9 @@ Thumbs.db
 # Temp files
 *.tmp
 .claude/
+
+# Local database recovery snapshots and validation artifacts
+backend/backups/
+frontend/test-results/
+frontend/playwright-report/
+scripts/apply-issue-*.cjs

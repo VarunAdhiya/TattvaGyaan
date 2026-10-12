@@ -46,6 +46,7 @@ export declare class ReadingPlanService {
                 originalLang: string;
                 summary: string | null;
                 themes: string[];
+                searchText: string;
                 estimatedReadTime: number | null;
                 availabilityStatus: string;
             };
@@ -61,6 +62,8 @@ export declare class ReadingPlanService {
             source: string | null;
             license: string | null;
             provenance: string | null;
+            contentStatus: string;
+            expectedPassages: number | null;
             isOriginal: boolean;
             textDirection: string;
         }) | null;

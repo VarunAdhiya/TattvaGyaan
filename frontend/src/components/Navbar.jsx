@@ -16,7 +16,7 @@ export default function Navbar({ onSearch }) {
       if (onSearch) {
         onSearch(searchQuery);
       } else {
-        navigate(`/dashboard?search=${encodeURIComponent(searchQuery)}`);
+        navigate(`/dashboard?search=${encodeURIComponent(searchQuery.trim())}`);
       }
     }
   };
@@ -37,17 +37,18 @@ export default function Navbar({ onSearch }) {
             </div>
             <div>
               <span className="font-serif text-xl font-bold text-amber-950 tracking-wide block">TattvaGyaan</span>
-              <span className="text-[10px] uppercase tracking-widest text-amber-700 -mt-1 block font-sans">Multilingual Scriptures</span>
+              <span className="text-[10px] uppercase tracking-widest text-amber-700 -mt-1 block font-sans">Hindi Scripture Library</span>
             </div>
           </Link>
 
           {/* Quick Search - only shown when logged in */}
-          {user && (
+          {user && !location.pathname.startsWith('/reader/') && (
             <form onSubmit={handleSearchSubmit} className="hidden md:flex items-center flex-1 max-w-md mx-8 relative">
               <Search className="w-4 h-4 absolute left-3 text-stone-400" />
               <input
                 type="text"
-                placeholder="Search scriptures, verses, themes..."
+                aria-label="Search library"
+                placeholder="Search books and scriptures..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-4 py-1.5 text-sm bg-stone-100/80 border border-stone-200 rounded-full focus:outline-none focus:ring-2 focus:ring-amber-600 focus:bg-white transition-all placeholder:text-stone-400"
@@ -110,7 +111,7 @@ export default function Navbar({ onSearch }) {
       {/* Mobile Drawer */}
       {menuOpen && (
         <div className="md:hidden border-t border-amber-200/60 bg-amber-50 px-4 py-4 space-y-3">
-          {user && (
+          {user && !location.pathname.startsWith('/reader/') && (
             <form onSubmit={handleSearchSubmit} className="relative mb-3">
               <Search className="w-4 h-4 absolute left-3 top-2.5 text-stone-400" />
               <input

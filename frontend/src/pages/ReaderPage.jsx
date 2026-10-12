@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import Reader3D from '../components/Reader3D';
 import AIAssistantDrawer from '../components/AIAssistantDrawer';
@@ -12,6 +12,8 @@ export default function ReaderPage() {
   const [sections, setSections] = useState([]);
   const [progress, setProgress] = useState(null);
   const [error, setError] = useState(null);
+  const [saveError, setSaveError] = useState('');
+  const progressQueue = React.useRef(Promise.resolve());
   const [aiDrawerOpen, setAiDrawerOpen] = useState(false);
   const [aiContext, setAiContext] = useState({
     selectedPassage: null,
@@ -43,24 +45,21 @@ export default function ReaderPage() {
     return () => { cancelled = true; };
   }, [editionId]);
 
-  const handleUpdateProgress = async (progressData) => {
-    try {
-      await api.updateProgress({
-        editionId,
-        ...progressData,
-      });
-    } catch (err) {
-      console.error('Failed to save progress', err);
-    }
-  };
+  const handleUpdateProgress = useCallback((progressData) => {
+    // Serialize saves so a slower, older request cannot replace newer progress.
+    progressQueue.current = progressQueue.current.then(() => api.updateProgress({ editionId, ...progressData }))
+      .then(() => setSaveError(''))
+      .catch(() => setSaveError('Reading position could not be saved. It will retry when you turn a page.'));
+  }, [editionId]);
 
   const handleAskAI = (passage) => {
-    setAiContext({ selectedPassage: passage, sectionToSummarize: null });
+    const section = sections.find(item => item.id === passage.sectionId);
+    setAiContext({ selectedPassage: passage, sectionToSummarize: section ? { id: section.id, title: section.title } : null });
     setAiDrawerOpen(true);
   };
 
   const handleSummarize = (sectionId) => {
-    setAiContext({ selectedPassage: null, sectionToSummarize: { id: sectionId } });
+    setAiContext({ selectedPassage: null, sectionToSummarize: { id: sectionId, title: sections.find(item => item.id === sectionId)?.title } });
     setAiDrawerOpen(true);
   };
 
@@ -71,6 +70,7 @@ export default function ReaderPage() {
 
   return (
     <div className="flex flex-col">
+      {saveError && <p role="alert" className="p-3 text-sm text-amber-900 bg-amber-50">{saveError}</p>}
       <Reader3D
         key={`${editionId}-${searchParams.get('passage') || ''}-${searchParams.get('page') || ''}`}
         edition={edition}

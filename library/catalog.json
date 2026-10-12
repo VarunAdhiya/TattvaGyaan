@@ -1,0 +1,108 @@
+{
+  "religion": {
+    "name": "Hinduism",
+    "slug": "hinduism",
+    "description": "हिन्दू धर्म के ग्रन्थों का हिन्दी पुस्तकालय।",
+    "sortOrder": 1
+  },
+  "language": "hi",
+  "scriptures": [
+    {
+      "slug": "mahabharata",
+      "title": "महाभारत",
+      "aliases": [
+        "Mahabharata",
+        "Mahabharat"
+      ],
+      "originalLang": "Sanskrit",
+      "description": "महाभारत का हिन्दी संस्करण। प्रमाणित पाठ उपलब्ध होने पर अध्याय यहाँ पढ़े जा सकेंगे।",
+      "themes": [
+        "धर्म",
+        "इतिहास"
+      ]
+    },
+    {
+      "slug": "bhagavad-gita",
+      "title": "श्रीमद्भगवद्गीता",
+      "aliases": [
+        "Bhagavad Gita",
+        "Bhagwadgeeta",
+        "Bhagavadgeeta",
+        "Bhagwad Geeta",
+        "Geeta",
+        "Gita",
+        "भगवद्गीता",
+        "भगवद गीता",
+        "गीता"
+      ],
+      "originalLang": "Sanskrit",
+      "description": "श्रीकृष्ण और अर्जुन के संवाद का हिन्दी अनुवाद।",
+      "themes": [
+        "धर्म",
+        "योग",
+        "भक्ति",
+        "कर्म"
+      ]
+    },
+    {
+      "slug": "ramayana",
+      "title": "रामायण",
+      "aliases": [
+        "Ramayana",
+        "Ramayan"
+      ],
+      "originalLang": "Sanskrit",
+      "description": "रामायण का हिन्दी संस्करण। प्रमाणित पाठ उपलब्ध होने पर अध्याय यहाँ पढ़े जा सकेंगे।",
+      "themes": [
+        "धर्म",
+        "कर्तव्य"
+      ]
+    },
+    {
+      "slug": "upanishads",
+      "title": "उपनिषद्",
+      "aliases": [
+        "Upanishads",
+        "Upanishad",
+        "उपनिषद",
+        "उपनिषदों"
+      ],
+      "originalLang": "Sanskrit",
+      "description": "उपनिषदों का हिन्दी संग्रह। उपलब्ध पाठ की पूर्णता प्रत्येक संस्करण में दी गई है।",
+      "themes": [
+        "आत्मा",
+        "ब्रह्म"
+      ]
+    },
+    {
+      "slug": "vedas",
+      "title": "वेद",
+      "aliases": [
+        "Vedas",
+        "Veda",
+        "वेदों"
+      ],
+      "originalLang": "Sanskrit",
+      "description": "वेदों का हिन्दी संग्रह। प्रमाणित पाठ उपलब्ध होने पर अध्याय यहाँ पढ़े जा सकेंगे।",
+      "themes": [
+        "ज्ञान",
+        "परम्परा"
+      ]
+    },
+    {
+      "slug": "manusmriti",
+      "title": "मनुस्मृति",
+      "aliases": [
+        "Manusmriti",
+        "Manu Smriti",
+        "Manusmruti"
+      ],
+      "originalLang": "Sanskrit",
+      "description": "मनुस्मृति का हिन्दी संस्करण। प्रमाणित पाठ उपलब्ध होने पर अध्याय यहाँ पढ़े जा सकेंगे।",
+      "themes": [
+        "धर्म",
+        "इतिहास"
+      ]
+    }
+  ]
+}

@@ -13,6 +13,7 @@ export declare class RAGService {
                     originalLang: string;
                     summary: string | null;
                     themes: string[];
+                    searchText: string;
                     estimatedReadTime: number | null;
                     availabilityStatus: string;
                 };
@@ -28,6 +29,8 @@ export declare class RAGService {
                 source: string | null;
                 license: string | null;
                 provenance: string | null;
+                contentStatus: string;
+                expectedPassages: number | null;
                 isOriginal: boolean;
                 textDirection: string;
             };
@@ -48,6 +51,7 @@ export declare class RAGService {
         sectionId: string;
         reference: string;
         text: string;
+        sourceNotes: string | null;
         wordCount: number;
     })[]>;
     getContextForPassage(passageId: string, contextSize?: number): Promise<{
@@ -69,6 +73,7 @@ export declare class RAGService {
             sectionId: string;
             reference: string;
             text: string;
+            sourceNotes: string | null;
             wordCount: number;
         };
         context: {
@@ -78,6 +83,7 @@ export declare class RAGService {
             sectionId: string;
             reference: string;
             text: string;
+            sourceNotes: string | null;
             wordCount: number;
         }[];
         section: {

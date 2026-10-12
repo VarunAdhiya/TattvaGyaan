@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, CheckCircle2, Clock, Globe, ArrowRight } from 'lucide-react';
+import { CheckCircle2, Clock, Globe, ArrowRight } from 'lucide-react';
 
 export default function ScriptureCard({ scripture }) {
   const isComplete = scripture.availabilityStatus === 'complete';

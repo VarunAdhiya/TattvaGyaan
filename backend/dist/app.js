@@ -3,13 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.sessionStore = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const express_session_1 = __importDefault(require("express-session"));
 const connect_pg_simple_1 = __importDefault(require("connect-pg-simple"));
-const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const config_1 = require("./config");
 const errorHandler_1 = require("./middleware/errorHandler");
 const auth_1 = __importDefault(require("./routes/auth"));
@@ -31,40 +31,18 @@ app.use((0, cors_1.default)({
     origin: config_1.config.cors.origin,
     credentials: true,
 }));
-// General rate limiting
-const generalLimiter = (0, express_rate_limit_1.default)({
-    windowMs: config_1.config.rateLimit.windowMs,
-    max: config_1.config.rateLimit.max,
-    skip: (req) => config_1.config.nodeEnv !== 'production' || req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1',
-});
-// Auth-specific rate limiting (more generous for login attempts)
-const authLimiter = (0, express_rate_limit_1.default)({
-    windowMs: config_1.config.authRateLimit.windowMs,
-    max: config_1.config.authRateLimit.max,
-    skip: (req) => config_1.config.nodeEnv !== 'production' || req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1',
-    message: {
-        error: 'Too many authentication attempts. Please try again later.',
-        retryAfter: Math.ceil(config_1.config.authRateLimit.windowMs / 1000)
-    }
-});
-// Apply general rate limiting to all routes except auth
-app.use('/api', (req, res, next) => {
-    if (req.path.startsWith('/auth')) {
-        return next(); // Skip general limiter for auth routes
-    }
-    return generalLimiter(req, res, next);
-});
 // Body parsing
 app.use(express_1.default.json({ limit: '10mb' }));
 app.use((0, cookie_parser_1.default)());
 // Session
 const PgSession = (0, connect_pg_simple_1.default)(express_session_1.default);
+exports.sessionStore = config_1.config.database.url ? new PgSession({
+    conObject: config_1.config.database.sessionPool,
+    tableName: 'sessions',
+    createTableIfMissing: true,
+}) : undefined;
 app.use((0, express_session_1.default)({
-    store: config_1.config.database.url ? new PgSession({
-        conString: config_1.config.database.url,
-        tableName: 'sessions',
-        createTableIfMissing: true,
-    }) : undefined,
+    store: exports.sessionStore,
     secret: config_1.config.session.secret,
     resave: false,
     saveUninitialized: false,
@@ -77,7 +55,7 @@ app.use((0, express_session_1.default)({
     },
 }));
 // Routes
-app.use('/api/auth', authLimiter, auth_1.default); // Apply auth rate limiter to auth routes
+app.use('/api/auth', auth_1.default);
 app.use('/api/religions', religions_1.default);
 app.use('/api/scriptures', scriptures_1.default);
 app.use('/api/scripture-editions', editions_1.default);

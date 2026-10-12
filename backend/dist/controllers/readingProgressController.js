@@ -45,8 +45,8 @@ class ReadingProgressController {
                     },
                 },
                 update: {
-                    sectionId,
-                    passageId,
+                    sectionId: sectionId || null,
+                    passageId: passageId || null,
                     pageIndex,
                     percentage,
                     lastReadAt: new Date(),

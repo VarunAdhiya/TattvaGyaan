@@ -40,10 +40,9 @@ class ScriptureService {
             where.editions = { some: { language: filters.language } };
         }
         if (filters.search) {
-            where.OR = [
-                { title: { contains: filters.search, mode: 'insensitive' } },
-                { description: { contains: filters.search, mode: 'insensitive' } },
-            ];
+            where.AND = filters.search.normalize('NFC').trim().split(/\s+/u).map(term => ({
+                searchText: { contains: term, mode: 'insensitive' },
+            }));
         }
         const [scriptures, total] = await Promise.all([
             prisma_1.default.scripture.findMany({
@@ -51,7 +50,8 @@ class ScriptureService {
                 include: {
                     religion: { select: { id: true, name: true, slug: true } },
                     editions: {
-                        select: { id: true, title: true, language: true, isOriginal: true, textDirection: true },
+                        orderBy: [{ contentStatus: 'asc' }, { isOriginal: 'desc' }],
+                        select: { id: true, title: true, language: true, isOriginal: true, textDirection: true, contentStatus: true, expectedPassages: true },
                     },
                 },
                 orderBy: { title: 'asc' },
@@ -76,6 +76,7 @@ class ScriptureService {
             include: {
                 religion: true,
                 editions: {
+                    orderBy: [{ contentStatus: 'asc' }, { isOriginal: 'desc' }],
                     include: {
                         _count: { select: { sections: true } },
                     },
@@ -120,7 +121,7 @@ class ScriptureService {
         const [passages, total] = await Promise.all([
             prisma_1.default.scripturePassage.findMany({
                 where: { sectionId },
-                orderBy: { sortOrder: 'asc' },
+                orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
                 skip: (page - 1) * limit,
                 take: limit,
             }),
@@ -154,21 +155,37 @@ class ScriptureService {
             where: { scriptureId },
             orderBy: { isOriginal: 'desc' },
         });
-        if (editions.length === 0)
-            throw new errorHandler_1.AppError('No editions found for this scripture', 404);
         return editions;
     }
     async getPassagesForReader(editionId) {
+        const edition = await prisma_1.default.scriptureEdition.findUnique({ where: { id: editionId }, select: { id: true } });
+        if (!edition)
+            throw new errorHandler_1.AppError('Edition not found', 404);
         const sections = await prisma_1.default.scriptureSection.findMany({
             where: { editionId },
-            orderBy: { sortOrder: 'asc' },
-            include: {
-                passages: {
-                    orderBy: { sortOrder: 'asc' },
-                },
-            },
+            orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+            select: { id: true, title: true, slug: true, parentId: true, _count: { select: { passages: true } } },
         });
         return sections;
+    }
+    async getPassagePosition(id) {
+        const passage = await prisma_1.default.scripturePassage.findUnique({ where: { id }, include: { section: { select: { editionId: true } } } });
+        if (!passage)
+            throw new errorHandler_1.AppError('Passage not found', 404);
+        const [sections, preceding] = await Promise.all([
+            this.getPassagesForReader(passage.section.editionId),
+            prisma_1.default.scripturePassage.count({ where: { sectionId: passage.sectionId, OR: [
+                        { sortOrder: { lt: passage.sortOrder } },
+                        { sortOrder: passage.sortOrder, id: { lt: passage.id } },
+                    ] } }),
+        ]);
+        let pageIndex = 2; // Cover and contents precede stable, two-passage reading pages.
+        for (const section of sections) {
+            if (section.id === passage.sectionId)
+                break;
+            pageIndex += Math.ceil(section._count.passages / 2);
+        }
+        return { editionId: passage.section.editionId, pageIndex: pageIndex + Math.floor(preceding / 2) };
     }
 }
 exports.ScriptureService = ScriptureService;

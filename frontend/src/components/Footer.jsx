@@ -1,7 +1,8 @@
 import React from 'react';
-import { BookOpen, Heart } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 
 export default function Footer() {
+  const [year] = React.useState(() => new Date().getFullYear());
   return (
     <footer className="bg-amber-950 text-amber-100/80 border-t border-amber-900/40 py-10 px-4 mt-auto font-sans">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -13,19 +14,16 @@ export default function Footer() {
             <span className="font-serif text-lg font-bold text-amber-50">TattvaGyaan</span>
           </div>
           <p className="text-xs text-amber-200/70 leading-relaxed">
-            A digital library preserving original-language religious scriptures across six ancient traditions: Hinduism, Islam, Buddhism, Sikhism, Jainism, and Christianity.
+            A Hindi scripture library with attributed editions, personal notes, and explanations grounded in the text you select.
           </p>
         </div>
 
         <div>
-          <h4 className="font-serif font-semibold text-amber-100 mb-3 text-sm">Six Traditions</h4>
+          <h4 className="font-serif font-semibold text-amber-100 mb-3 text-sm">Your Library</h4>
           <ul className="text-xs space-y-1.5 text-amber-200/70">
-            <li>Hinduism (Sanskrit)</li>
-            <li>Islam (Classical Arabic)</li>
-            <li>Buddhism (Pali & Sanskrit)</li>
-            <li>Sikhism (Gurmukhi)</li>
-            <li>Jainism (Prakrit & Sanskrit)</li>
-            <li>Christianity (Hebrew, Greek, Aramaic)</li>
+            <li>Hindi editions</li>
+            <li>Source and translation credits</li>
+            <li>Clear content availability</li>
           </ul>
         </div>
 
@@ -33,17 +31,17 @@ export default function Footer() {
           <h4 className="font-serif font-semibold text-amber-100 mb-3 text-sm">Features</h4>
           <ul className="text-xs space-y-1.5 text-amber-200/70">
             <li>Realistic 3D Book Reader</li>
-            <li>Multilingual OpenAI Assistant</li>
+            <li>AI Passage Explanations</li>
             <li>Personalized Reading Plans</li>
-            <li>Unicode & Script Shaping</li>
-            <li>RAG Scripture Explanations</li>
+            <li>Private Notes and Bookmarks</li>
+            <li>Direct Page Navigation</li>
           </ul>
         </div>
 
         <div>
           <h4 className="font-serif font-semibold text-amber-100 mb-3 text-sm">Ethical Guidelines</h4>
           <p className="text-xs text-amber-200/70 leading-relaxed">
-            Original texts are verified and source-grounded. AI content is clearly demarcated as explanatory material.
+            Each edition shows its source and verification status. AI explanations are separate from scripture text.
           </p>
           <div className="mt-4 text-[11px] text-amber-300/50 flex items-center gap-1">
             Built with respect for all spiritual traditions.
@@ -52,7 +50,7 @@ export default function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto border-t border-amber-900/40 mt-8 pt-6 text-center text-xs text-amber-300/50">
-        &copy; {new Date().getFullYear()} TattvaGyaan Digital Scripture Library. All rights reserved.
+        &copy; {year} TattvaGyaan Digital Scripture Library. All rights reserved.
       </div>
     </footer>
   );

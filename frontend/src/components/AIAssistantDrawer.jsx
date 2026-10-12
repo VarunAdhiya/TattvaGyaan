@@ -7,9 +7,7 @@ import {
   Copy,
   Check,
   RefreshCw,
-  BookOpen,
   HelpCircle,
-  MessageSquare,
   AlertCircle
 } from 'lucide-react';
 import { api } from '../api/client';
@@ -31,11 +29,11 @@ export default function AIAssistantDrawer({
   selectedPassage,
   sectionToSummarize,
 }) {
-  const [activeTab, setActiveTab] = useState(sectionToSummarize ? 'summarize' : 'explain');
-  const [responseLang, setResponseLang] = useState('en');
+  const [activeTab, setActiveTab] = useState(selectedPassage ? 'explain' : 'summarize');
+  const [responseLang, setResponseLang] = useState('hi');
   const [style, setStyle] = useState('simple'); // 'simple', 'detailed', 'scholarly'
   const [question, setQuestion] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [explanation, setExplanation] = useState(null);
   const [summary, setSummary] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
@@ -48,21 +46,19 @@ export default function AIAssistantDrawer({
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages]);
 
-  // When selectedPassage changes, trigger initial explanation
+  // A new selection mounts a new drawer. Cancel obsolete requests on close/change.
   useEffect(() => {
-    if (selectedPassage && isOpen) {
-      setActiveTab('explain');
-      handleExplainPassage();
-    }
-  }, [selectedPassage, isOpen]);
-
-  // When sectionToSummarize changes
-  useEffect(() => {
-    if (sectionToSummarize && isOpen) {
-      setActiveTab('summarize');
-      handleSummarizeSection();
-    }
-  }, [sectionToSummarize, isOpen]);
+    if (!isOpen) return;
+    const controller = new AbortController();
+    const request = selectedPassage
+      ? api.explainPassage({ passageId: selectedPassage.id, selectedText: selectedPassage.selectedText, responseLang: 'hi', style: 'simple' }, controller.signal)
+      : api.summarizeSection({ editionId: edition.id, sectionId: sectionToSummarize?.id, responseLang: 'hi' }, controller.signal);
+    const setResult = selectedPassage ? setExplanation : setSummary;
+    request.then(result => { if (!controller.signal.aborted) setResult(result.content); })
+      .catch(error => { if (!controller.signal.aborted) setResult('Error: ' + error.message); })
+      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    return () => controller.abort();
+  }, [selectedPassage, sectionToSummarize, isOpen, edition.id]);
 
   const handleExplainPassage = async () => {
     if (!selectedPassage) return;
@@ -106,7 +102,7 @@ export default function AIAssistantDrawer({
 
   const handleSendChatMessage = async (e) => {
     e?.preventDefault();
-    if (!question.trim()) return;
+    if (!question.trim() || loading) return;
 
     const userQ = question;
     setQuestion('');
@@ -148,7 +144,7 @@ export default function AIAssistantDrawer({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-y-0 right-0 z-50 w-full sm:w-[480px] bg-stone-900 text-stone-100 shadow-2xl flex flex-col font-sans border-l border-amber-900/30 animate-in slide-in-from-right duration-300">
+    <div data-ai-drawer role="dialog" aria-label="Scripture AI assistant" className="fixed inset-y-0 right-0 z-50 w-full sm:w-[480px] bg-stone-900 text-stone-100 shadow-2xl flex flex-col font-sans border-l border-amber-900/30 animate-in slide-in-from-right duration-300">
       {/* Drawer Header */}
       <div className="p-4 border-b border-stone-800 flex items-center justify-between bg-stone-950">
         <div className="flex items-center gap-2">
@@ -157,7 +153,7 @@ export default function AIAssistantDrawer({
           </div>
           <div>
             <h3 className="font-serif font-bold text-amber-200 text-base">Scripture AI Assistant</h3>
-            <span className="text-[10px] text-stone-400 block font-sans">Powered by Gemini & RAG</span>
+            <span className="text-[10px] text-stone-400 block font-sans">{selectedPassage?.reference || sectionToSummarize?.title || 'Select a passage or section'}</span>
           </div>
         </div>
 
@@ -254,7 +250,7 @@ export default function AIAssistantDrawer({
                   Selected Verse: {selectedPassage.reference}
                 </span>
                 <p className="text-sm font-serif italic text-stone-200">
-                  "{selectedPassage.text}"
+                  "{selectedPassage.selectedText || selectedPassage.text}"
                 </p>
               </div>
             ) : (
@@ -312,10 +308,10 @@ export default function AIAssistantDrawer({
               {chatMessages.length === 0 && (
                 <div className="text-center py-8 text-stone-400 text-xs">
                   <HelpCircle className="w-8 h-8 text-amber-500/50 mx-auto mb-2" />
-                  <p className="font-serif">Ask anything about the scripture, philosophy, context, or comparisons.</p>
+                  <p className="font-serif">Ask about the selected passage or section. Answers use this source text.</p>
                   <div className="mt-4 flex flex-wrap gap-2 justify-center">
                     <button
-                      onClick={() => setQuestion('What are the core philosophical themes of this text?')}
+                      onClick={() => setQuestion('What are the main ideas in this selected text?')}
                       className="text-[11px] bg-stone-800 hover:bg-stone-700 px-2.5 py-1 rounded-full border border-stone-700"
                     >
                       Core themes?
@@ -379,7 +375,7 @@ export default function AIAssistantDrawer({
           <div className="space-y-4">
             <button
               onClick={handleSummarizeSection}
-              disabled={loading}
+              disabled={loading || !sectionToSummarize}
               className="w-full py-2.5 bg-amber-800 text-amber-50 rounded-lg text-xs font-semibold hover:bg-amber-900 transition flex items-center justify-center gap-2"
             >
               <Sparkles className="w-4 h-4" />
