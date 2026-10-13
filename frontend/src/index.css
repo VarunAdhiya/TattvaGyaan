@@ -78,9 +78,9 @@
 .reader-shell { display: flex; flex-direction: column; background: var(--reader-bg); color: var(--reader-text); }
 .reader-shell:fullscreen { overflow-y: auto; }
 .reader-control { background: var(--reader-paper); color: var(--reader-text); }
-.reader-spread { position: relative; display: grid; max-width: 800px; margin: auto; perspective: 2400px; isolation: isolate; }
+.reader-spread { position: relative; display: grid; width: 100%; max-width: 800px; margin: auto; perspective: 2400px; isolation: isolate; }
 .reader-spread-wide { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); max-width: 1600px; }
-.reader-visible-page { min-width: 0; height: max(380px, calc(100dvh - 240px)); padding: clamp(16px, 3vw, 40px); overflow-y: auto; overflow-wrap: anywhere; }
+.reader-visible-page { min-width: 0; height: max(380px, calc(100dvh - 240px)); padding: clamp(16px, 3vw, 40px); overflow-y: auto; scrollbar-gutter: stable; overflow-wrap: anywhere; }
 .reader-passage { scroll-margin-top: 16px; }
 .reader-scan { width: 100%; overflow-x: auto; }
 .reader-scan canvas { display: block; margin-inline: auto; }
@@ -100,7 +100,7 @@
   position: absolute; inset: 0; width: 100%; height: 100%;
   padding: clamp(16px, 3vw, 40px); overflow: hidden; overflow-wrap: anywhere;
   background: var(--reader-paper); color: var(--reader-text); box-shadow: none;
-  user-select: none; scrollbar-width: none;
+  user-select: none; scrollbar-gutter: stable;
 }
 .reader-turn-scene { position: absolute; inset: 0; perspective: 2400px; }
 .reader-turn-sheet {

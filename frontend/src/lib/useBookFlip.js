@@ -118,9 +118,11 @@ export default function useBookFlip(visibleKey, layoutKey) {
       frame = requestAnimationFrame(() => {
         book.dataset.turnState = 'flipping';
         scene.classList.add('reader-turn-scene--animate');
+        const animation = sheet.getAnimations()[0];
+        const finish = () => { if (pendingRef.current === pending) cancelTurn(); };
+        if (animation) animation.finished.then(finish, finish);
+        else finish();
       });
-      sheet.addEventListener('animationend', event => { if (event.target === sheet) cancelTurn(); }, { once: true });
-      timer = setTimeout(cancelTurn, 1100);
     }
     cleanupRef.current = () => { observer.disconnect(); cancelAnimationFrame(frame); clearTimeout(timer); };
     observer.observe(book, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-page-ready', 'aria-busy'] });

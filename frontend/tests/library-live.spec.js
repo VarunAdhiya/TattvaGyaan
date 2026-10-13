@@ -1,4 +1,45 @@
 import { test, expect } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+
+test('live catalog omits Upanishads and serves the imported Purana and Ramcharitmanas PDFs', async ({ page, request }) => {
+  test.setTimeout(60000);
+  test.skip(!process.env.RUN_LIVE_LIBRARY, 'Set RUN_LIVE_LIBRARY=1 with the API running on port 3001.');
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.route(url => url.pathname === '/api/auth/me', route => route.fulfill({ json: { user: { id: 'smoke', username: 'reader' } } }));
+  await page.route(url => url.pathname.startsWith('/api/reading-progress'), route => route.fulfill({ json: { progress: null } }));
+  const removed = await request.get('http://localhost:3001/api/scriptures?search=Upanishad');
+  expect(removed.ok()).toBeTruthy();
+  expect((await removed.json()).scriptures).toHaveLength(0);
+  await page.goto('/dashboard');
+  await expect(page.getByRole('heading', { name: 'शिव पुराण', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'रामायण', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'गरुड़ पुराण', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /उपनिषद/ })).toHaveCount(0);
+  for (const [file, query] of [['ramcharitmanas-hi', 'Ramcharitmanas'], ['shiva-purana-hi', 'Shivapuran'], ['garuda-purana-hi', 'Garudpuran']]) {
+    const document = JSON.parse(readFileSync(new URL(`../../library/documents/${file}.json`, import.meta.url), 'utf8'));
+    const response = await request.get('http://localhost:3001/api/scriptures?search=' + query);
+    expect(response.ok()).toBeTruthy();
+    const book = (await response.json()).scriptures.find(item => item.slug === document.scriptureSlug);
+    expect(book).toBeTruthy();
+    const detail = await request.get('http://localhost:3001/api/scriptures/' + book.id);
+    const edition = (await detail.json()).scripture.editions.find(item => item.source === document.source);
+    expect(edition.contentStatus).toBe('scanned');
+    const pdf = await request.get(document.source);
+    expect(pdf.ok()).toBeTruthy();
+    expect(createHash('sha256').update(await pdf.body()).digest('hex')).toBe(document.sha256);
+    await page.goto('/scripture/' + book.id);
+    await page.getByRole('button', { name: 'Start Reading', exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(edition.id));
+    await expect(page.getByRole('img', { name: 'Scanned page 1', exact: true })).toBeVisible();
+    await expect(page.getByLabel('Page', { exact: true })).toHaveAttribute('max', String(document.pageCount + 2));
+    await page.screenshot({ path: `test-results/${file}-live.png`, fullPage: true });
+    await page.getByLabel('Page', { exact: true }).fill(String(document.pageCount + 2));
+    await page.getByRole('button', { name: 'Go', exact: true }).click();
+    await expect(page.getByRole('img', { name: `Scanned page ${document.pageCount}`, exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeDisabled();
+  }
+});
 
 test('live Rigveda search opens its scanned edition under Vedas', async ({ page, request }) => {
   test.skip(!process.env.RUN_LIVE_LIBRARY, 'Set RUN_LIVE_LIBRARY=1 with the API running on port 3001.');

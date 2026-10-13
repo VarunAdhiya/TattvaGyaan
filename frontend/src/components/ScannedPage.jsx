@@ -1,18 +1,34 @@
 import { useEffect, useRef, useState } from 'react';
 
-// Each visible page owns its canvas, including while a resize is rendering.
+// Render offscreen and swap only when ready, retaining the painted page while
+// zoom or layout changes are being rasterized.
 export default function ScannedPage({ pdfDocument, pageNumber, zoom, onReady }) {
   const containerRef = useRef(null);
+  const paintedRef = useRef(null);
   const [width, setWidth] = useState(0);
   const [retry, setRetry] = useState(0);
   const [result, setResult] = useState(null);
   const renderKey = `${pageNumber}:${width}:${zoom}:${retry}`;
   const current = result?.key === renderKey ? result : null;
+  const hasPaintedPage = result?.pdfDocument === pdfDocument && result?.pageNumber === pageNumber;
 
   useEffect(() => {
-    const observer = new ResizeObserver(entries => setWidth(Math.floor(entries[0].contentRect.width)));
+    let timer;
+    let measured = false;
+    const observer = new ResizeObserver(entries => {
+      const nextWidth = Math.floor(entries[0].contentRect.width);
+      clearTimeout(timer);
+      if (!measured) { measured = true; setWidth(nextWidth); }
+      else timer = setTimeout(() => setWidth(nextWidth), 80);
+    });
     observer.observe(containerRef.current);
-    return () => observer.disconnect();
+    return () => { observer.disconnect(); clearTimeout(timer); };
+  }, []);
+
+  useEffect(() => () => {
+    const canvas = paintedRef.current;
+    if (canvas) { canvas.width = 0; canvas.height = 0; }
+    paintedRef.current = null;
   }, []);
 
   useEffect(() => {
@@ -41,30 +57,31 @@ export default function ScannedPage({ pdfDocument, pageNumber, zoom, onReady }) 
         });
         await renderTask.promise;
         if (!active) return;
+        const previous = paintedRef.current;
         container.replaceChildren(canvas);
-        setResult({ key: renderKey });
+        paintedRef.current = canvas;
+        if (previous) { previous.width = 0; previous.height = 0; }
+        setResult({ key: renderKey, pdfDocument, pageNumber });
         onReady(pageNumber);
       } catch (error) {
         if (active && error.name !== 'RenderingCancelledException') {
-          setResult({ key: renderKey, error: 'Unable to load this scanned page.' });
+          setResult(previous => ({ ...previous, key: renderKey, error: 'Unable to load this scanned page.' }));
         }
       } finally {
-        if (!active) { pdfPage?.cleanup(); canvas.width = 0; canvas.height = 0; }
+        if (paintedRef.current !== canvas) { canvas.width = 0; canvas.height = 0; }
       }
     }
     render();
     return () => {
       active = false;
       renderTask?.cancel();
-      container.replaceChildren();
-      pdfPage?.cleanup();
-      canvas.width = 0;
-      canvas.height = 0;
+      // Do not clear the visible canvas or clean shared PDF page resources here:
+      // the next render may still need them. Document disposal owns PDF cleanup.
     };
   }, [pdfDocument, pageNumber, zoom, width, renderKey, onReady]);
 
   return <>
-    {!current && <p role="status" className="text-sm py-3">Loading page…</p>}
+    {!current && !hasPaintedPage && <p role="status" className="text-sm py-3">Loading page…</p>}
     {current?.error && <div role="alert" className="text-sm py-3">{current.error} <button className="underline" onClick={() => setRetry(value => value + 1)}>Retry page</button></div>}
     <div ref={containerRef} className="reader-scan" aria-busy={!current} />
   </>;

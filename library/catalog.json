@@ -12,10 +12,12 @@
       "title": "महाभारत",
       "aliases": [
         "Mahabharata",
-        "Mahabharat"
+        "Mahabharat",
+        "Bal Mahabharat Katha",
+        "बाल महाभारत कथा"
       ],
       "originalLang": "Sanskrit",
-      "description": "महाभारत का हिन्दी संस्करण। प्रमाणित पाठ उपलब्ध होने पर अध्याय यहाँ पढ़े जा सकेंगे।",
+      "description": "बाल महाभारत कथा का 96-पृष्ठ हिन्दी PDF उपलब्ध है। यह महाभारत का बालोपयोगी कथारूप है, सम्पूर्ण मूल महाभारत नहीं।",
       "themes": [
         "धर्म",
         "इतिहास"
@@ -49,29 +51,58 @@
       "title": "रामायण",
       "aliases": [
         "Ramayana",
-        "Ramayan"
+        "Ramayan",
+        "Ramcharitmanas",
+        "Ram Charit Manas",
+        "Shri Ramcharitmanas",
+        "रामचरितमानस",
+        "श्रीरामचरितमानस"
       ],
       "originalLang": "Sanskrit",
-      "description": "रामायण का हिन्दी संस्करण। प्रमाणित पाठ उपलब्ध होने पर अध्याय यहाँ पढ़े जा सकेंगे।",
+      "description": "गोस्वामी तुलसीदासकृत श्रीरामचरितमानस का गीताप्रेस संस्करण, हनुमानप्रसाद पोद्दार की टीका सहित। मूल 1,058-पृष्ठ PDF रामायण संग्रह में उपलब्ध है।",
       "themes": [
         "धर्म",
         "कर्तव्य"
       ]
     },
     {
-      "slug": "upanishads",
-      "title": "उपनिषद्",
+      "slug": "garuda-purana",
+      "title": "गरुड़ पुराण",
       "aliases": [
-        "Upanishads",
-        "Upanishad",
-        "उपनिषद",
-        "उपनिषदों"
+        "Garuda Purana",
+        "Garud Purana",
+        "Garud Puran",
+        "Garudpuran",
+        "Garudpurana",
+        "गरुड़पुराण",
+        "गरुड पुराण",
+        "गरुडपुराण"
       ],
       "originalLang": "Sanskrit",
-      "description": "उपनिषदों का हिन्दी संग्रह। उपलब्ध पाठ की पूर्णता प्रत्येक संस्करण में दी गई है।",
+      "description": "गीताप्रेस, गोरखपुर का संक्षिप्त गरुड़पुराण, सचित्र हिन्दी संस्करण। मूल 638-पृष्ठ PDF उपलब्ध है; यह संक्षिप्त संस्करण है।",
       "themes": [
-        "आत्मा",
-        "ब्रह्म"
+        "विष्णु",
+        "धर्म",
+        "पुराण"
+      ]
+    },
+    {
+      "slug": "shiva-purana",
+      "title": "शिव पुराण",
+      "aliases": [
+        "Shiva Purana",
+        "Shiv Purana",
+        "Shiv Puran",
+        "Shivapuran",
+        "Shivapuranam",
+        "शिवपुराण"
+      ],
+      "originalLang": "Sanskrit",
+      "description": "डॉ. महेंद्र मित्तल द्वारा संपादित शिव पुराण का सरल हिन्दी संस्करण, मनोज पब्लिकेशन्स, छठा संस्करण (2016)। मूल 845-पृष्ठ PDF उपलब्ध है।",
+      "themes": [
+        "शिव",
+        "भक्ति",
+        "पुराण"
       ]
     },
     {
@@ -103,10 +134,29 @@
         "Manusmruti"
       ],
       "originalLang": "Sanskrit",
-      "description": "मनुस्मृति का हिन्दी संस्करण। प्रमाणित पाठ उपलब्ध होने पर अध्याय यहाँ पढ़े जा सकेंगे।",
+      "description": "मनुस्मृति का 509-पृष्ठ PDF उपलब्ध है। मूल फ़ाइल के सभी पृष्ठ सुरक्षित हैं; पाठ की शुद्धता एवं पूर्णता का स्वतंत्र सत्यापन नहीं हुआ है।",
       "themes": [
         "धर्म",
         "इतिहास"
+      ]
+    },
+    {
+      "slug": "valmiki-ramayana-ramakien-study",
+      "title": "वाल्मीकि रामायण और रामकीर्ति (रामकियन): एक तुलनात्मक अध्ययन",
+      "aliases": [
+        "Valmiki Ramayana aur Ramakien Ek Tulnamatmak Adhyayan",
+        "Valmiki Ramayana Ramakien comparative study",
+        "Ramkirti",
+        "Ramakiyan",
+        "Karuna Sharma",
+        "करुणा शर्मा"
+      ],
+      "originalLang": "Hindi",
+      "description": "डॉ. करुणा शर्मा का वाल्मीकि रामायण और रामकीर्ति (रामकियन) पर तुलनात्मक अध्ययन। 266-पृष्ठ हिन्दी PDF; यह शोध-अध्ययन है, मूल रामायण का संस्करण नहीं।",
+      "themes": [
+        "तुलनात्मक अध्ययन",
+        "रामकथा",
+        "साहित्य"
       ]
     }
   ]

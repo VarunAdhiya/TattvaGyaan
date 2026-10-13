@@ -5,15 +5,17 @@ const source = JSON.parse(readFileSync(new URL('../../library/documents/rigved-h
 const edition = { ...source, id: 'rigveda-scan', scriptureId: 'vedas', contentStatus: 'scanned', expectedPassages: null };
 const scripture = { id: 'vedas', title: 'वेद', originalLang: 'Sanskrit', availabilityStatus: 'partial', editions: [edition] };
 
-async function mockCatalog(page) {
+async function mockCatalog(page, document = source) {
+  const scanEdition = { ...edition, ...document };
+  const scanScripture = { ...scripture, editions: [scanEdition] };
   const state = { requests: [], progress: null, saves: [], errors: [] };
   page.on('pageerror', error => state.errors.push(error.message));
   await page.route(url => url.pathname.startsWith('/api/'), async route => {
     const path = new URL(route.request().url()).pathname;
     state.requests.push(path);
     if (path === '/api/auth/me') return route.fulfill({ json: { user: { id: 'reader', username: 'reader' } } });
-    if (path === '/api/scriptures/vedas') return route.fulfill({ json: { scripture } });
-    if (path === '/api/scripture-editions/rigveda-scan') return route.fulfill({ json: { edition: { ...edition, scripture } } });
+    if (path === '/api/scriptures/vedas') return route.fulfill({ json: { scripture: scanScripture } });
+    if (path === '/api/scripture-editions/rigveda-scan') return route.fulfill({ json: { edition: { ...scanEdition, scripture: scanScripture } } });
     if (path.startsWith('/api/reading-progress')) {
       if (route.request().method() === 'POST') {
         state.progress = route.request().postDataJSON();
@@ -30,6 +32,78 @@ async function jumpToPage(page, number) {
   await page.getByLabel('Page', { exact: true }).fill(String(number));
   await page.getByRole('button', { name: 'Go', exact: true }).click();
 }
+
+for (const file of ['rigved-hi', 'manusmriti-hi', 'bal-mahabharat-katha-hi', 'valmiki-ramayana-ramakien-study-hi', 'ramcharitmanas-hi', 'shiva-purana-hi', 'garuda-purana-hi']) {
+test(`${file}: an idle scanned page keeps its canvas without blank frames or repeated rendering`, async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  const document = JSON.parse(readFileSync(new URL(`../../library/documents/${file}.json`, import.meta.url), 'utf8'));
+  await mockCatalog(page, document);
+  await page.goto('/reader/vedas/rigveda-scan?page=4');
+  await expect(page.locator('.reader-visible-page .reader-scan canvas')).toHaveCount(2);
+  await expect(page.locator('.reader-visible-page .reader-scan[aria-busy="true"]')).toHaveCount(0);
+  const sample = await page.evaluate(async () => {
+    const scans = [...document.querySelectorAll('.reader-visible-page .reader-scan')];
+    const original = scans.map(scan => scan.querySelector('canvas'));
+    let blankFrames = 0;
+    let replacedFrames = 0;
+    for (let frame = 0; frame < 120; frame++) {
+      await new Promise(requestAnimationFrame);
+      if (scans.some(scan => !scan.querySelector('canvas')?.width)) blankFrames++;
+      if (scans.some((scan, index) => scan.querySelector('canvas') !== original[index])) replacedFrames++;
+    }
+    return { blankFrames, replacedFrames };
+  });
+  expect(sample).toEqual({ blankFrames: 0, replacedFrames: 0 });
+});
+}
+
+test('Garuda Purana renders JBIG2 text pages with the local decoder', async ({ page }) => {
+  const document = JSON.parse(readFileSync(new URL('../../library/documents/garuda-purana-hi.json', import.meta.url), 'utf8'));
+  const errors = [];
+  page.on('console', message => { if (/Unable to decode image|JBig2 failed/.test(message.text())) errors.push(message.text()); });
+  await mockCatalog(page, document);
+  const decoder = page.waitForResponse(response => response.url().endsWith('/pdfjs/wasm/jbig2.wasm'));
+  await page.goto('/reader/vedas/rigveda-scan?page=12');
+  expect((await decoder).ok()).toBeTruthy();
+  const scan = page.getByRole('img', { name: 'Scanned page 10', exact: true });
+  await expect(scan).toBeVisible();
+  const inkFraction = await scan.evaluate(canvas => {
+    const pixels = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+    let darkPixels = 0;
+    for (let index = 0; index < pixels.length; index += 4) if (pixels[index] < 120 && pixels[index + 3] > 0) darkPixels++;
+    return darkPixels / (canvas.width * canvas.height);
+  });
+  expect(inkFraction).toBeGreaterThan(0.02); // Watermarks alone must not pass.
+  expect(errors).toEqual([]);
+  await page.screenshot({ path: 'test-results/garuda-decoded-page.png' });
+});
+
+test('zoom and resize retain the painted scan until its replacement is ready', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await mockCatalog(page);
+  await page.goto('/reader/vedas/rigveda-scan?page=4');
+  await expect(page.locator('.reader-visible-page .reader-scan canvas')).toHaveCount(2);
+  await expect(page.locator('.reader-visible-page .reader-scan[aria-busy="true"]')).toHaveCount(0);
+  await page.evaluate(() => {
+    window.blankScanFrames = 0;
+    window.monitorScans = true;
+    const sample = () => {
+      if (!window.monitorScans) return;
+      if ([...document.querySelectorAll('.reader-visible-page .reader-scan')].some(scan => !scan.querySelector('canvas')?.width)) window.blankScanFrames++;
+      requestAnimationFrame(sample);
+    };
+    requestAnimationFrame(sample);
+  });
+  const scan = page.getByRole('img', { name: 'Scanned page 3', exact: true });
+  const originalWidth = await scan.evaluate(canvas => canvas.width);
+  await page.getByRole('button', { name: 'Increase page zoom' }).click();
+  await expect.poll(() => scan.evaluate(canvas => canvas.width)).toBeGreaterThan(originalWidth);
+  const zoomedWidth = await scan.evaluate(canvas => canvas.width);
+  await page.setViewportSize({ width: 1300, height: 900 });
+  await expect.poll(() => scan.evaluate(canvas => canvas.width)).toBeLessThan(zoomedWidth);
+  await expect(page.locator('.reader-visible-page .reader-scan[aria-busy="true"]')).toHaveCount(0);
+  expect(await page.evaluate(() => { window.monitorScans = false; return window.blankScanFrames; })).toBe(0);
+});
 
 test('Vedas uses the Gita book layout, controls, contents and original scanned pages', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
@@ -164,7 +238,8 @@ test('scanned pages retain their image on the turning sheet', async ({ page }) =
     return pixels.some((value, index) => index % 4 === 0 && value < 128 && pixels[index + 3] > 0);
   })).toBe(true);
   await expect(page.locator('.reader-turn-face--back')).toContainText('Scanned page 4 of 739');
-  await page.screenshot({ path: 'test-results/rigveda-book-flip.png', fullPage: true });
+  // Full-page screenshots resize the viewport and intentionally cancel a turn.
+  await page.screenshot({ path: 'test-results/rigveda-book-flip.png' });
   await sheet.evaluate(element => element.getAnimations()[0].finish());
   await expect(page.locator('.reader-turn-sheet')).toHaveCount(0);
   await expect(page.getByRole('img', { name: 'Scanned page 4', exact: true })).toBeVisible();

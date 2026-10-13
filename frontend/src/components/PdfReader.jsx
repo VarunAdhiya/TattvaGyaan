@@ -16,7 +16,7 @@ export default function PdfReader({ edition, ...readerProps }) {
   useEffect(() => {
     if (!source) return;
     let active = true;
-    const task = getDocument({ url: source, disableAutoFetch: true, disableStream: true, isEvalSupported: false });
+    const task = getDocument({ url: source, wasmUrl: `${import.meta.env.BASE_URL}pdfjs/wasm/`, disableAutoFetch: true, disableStream: true, isEvalSupported: false });
     task.promise.then(pdfDocument => {
       if (active) setResult({ key, pdfDocument });
     }).catch(() => {

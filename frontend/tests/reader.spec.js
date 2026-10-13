@@ -189,7 +189,8 @@ test('desktop pages turn around the spine in both directions with inert readable
     return Math.abs(new DOMMatrix(getComputedStyle(element).transform).m13);
   });
   expect(perspective).toBeGreaterThan(0.1);
-  await page.screenshot({ path: 'test-results/book-flip-desktop.png', fullPage: true });
+  // Keep the viewport unchanged while inspecting a paused page turn.
+  await page.screenshot({ path: 'test-results/book-flip-desktop.png' });
   await sheet.evaluate(element => element.getAnimations()[0].finish());
   await expect(page.locator('.reader-turn-sheet')).toHaveCount(0);
   await expect(page.getByLabel('Page', { exact: true })).toHaveValue('6');

@@ -1,6 +1,6 @@
 # Hindi scripture catalog
 
-`catalog.json` is the editorial catalog: one tradition, six works, Hindi editions, and searchable title aliases. Application code contains no book-specific content or fallback passages. PostgreSQL is the runtime source of truth.
+`catalog.json` is the editorial catalog: one tradition, eight works (including a separately identified comparative study), Hindi editions, and searchable title aliases. Application code contains no book-specific content or fallback passages. PostgreSQL is the runtime source of truth.
 
 `editions/*.json` contains attributed source imports, never AI-generated scripture. The Hindi Gita is extracted verbatim from the existing Hansi Gita Bhawan Trust snapshot (700 verses, 18 chapters). Its source URL, translator, reuse notice, and provenance are retained in the edition and reader. Other works remain partial or metadata-only until verified Hindi editions are supplied; an empty edition must not be labeled complete.
 
@@ -8,7 +8,23 @@
 
 To validate PDF assets, run `node scripts/import-documents.cjs` from `backend/`. To add them to the configured database, run `node scripts/import-documents.cjs --apply`. This targeted import preserves existing content and annotations, updates catalog metadata for the affected books, and reuses existing scan edition IDs. It checks file headers and hashes before opening the transaction. Full synchronization and seeding also include these documents. PDF editions use `contentStatus: scanned`, no passage counts, and never fabricate passage records; no schema migration is needed. Deploy the frontend build containing the PDF together with the updated database catalog.
 
+## User-supplied PDFs added on 2026-10-13
+
+The document manifests preserve file checksums, page counts, printed attribution, and unverified reuse status:
+
+| Original file | Catalog placement | PDF pages |
+| --- | --- | --- |
+| `मनुस्मृति-सम्पूर्ण.pdf` | Manusmriti | 509 |
+| `ghmb101.pdf` | Bal Mahabharat Katha, under Mahabharata; a children's retelling | 96 |
+| `Valmiki Ramayana aur Ramakien Ek Tulnamatmak Adhyayan.pdf` | Dr. Karuna Sharma's comparative study, a separate work from Ramayana | 266 |
+
+These PDFs contain text layers with extraction/legacy-font issues. They use the existing `scanned` PDF reader mode without creating passage records or enabling text-based AI and annotations. Original bytes, including blank pages, are unchanged. All supplied pages are retained, but no claim of verified textual completeness is made. The comparative study's first two PDF pages are blank; its title is on PDF page 3 (reader page 5).
+
 ## Import and deployment
+
+Garuda Purana has a dedicated catalog entry for the supplied 638-page `Garuda Purana Original upayogibooks.com.pdf`. Its printed title is **संक्षिप्त गरुड़पुराण**, an abridged Hindi Gita Press edition (code 1189, ISBN 81-293-0285-3). Original bytes and watermarks are retained. Its scanned text uses JBIG2 compression; the Vite configuration serves PDF.js decoder assets and their licenses from the installed package at `/pdfjs/wasm/` and emits them into production builds. Deploy this decoder directory with the PDF assets.
+
+The user also supplied `Shri-Ramcharitmanas-Gita-Press.pdf` (1,058 pages) and `शिव पुराण.pdf` (845 pages) on 2026-10-13. Ramcharitmanas is filed under the existing Ramayana collection with its own title and Gita Press/commentator attribution; Shiva Purana has a dedicated catalog entry with Manoj Publications/editor attribution. Both use the same PDF reader and preserve their original bytes. The former Upanishads catalog entry and its database content were removed at the user's request; a recovery snapshot is kept locally in the ignored `backend/backups/` directory.
 
 From `backend/`:
 

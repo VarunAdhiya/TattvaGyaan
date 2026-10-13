@@ -4,7 +4,7 @@ const { loadCatalog, loadEditions, validateEdition, loadDocuments } = require('.
 test('imports only attributed editions in the configured catalog and language', () => {
   const catalog = loadCatalog();
   const editions = loadEditions();
-  assert.equal(catalog.scriptures.length, 6);
+  assert.equal(catalog.scriptures.length, 8);
   assert.ok(editions.length > 0);
   for (const edition of editions) {
     assert.equal(edition.language, catalog.language);
