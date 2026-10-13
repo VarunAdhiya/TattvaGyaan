@@ -66,4 +66,30 @@ function loadEditions() {
     return { ...edition, checksum: createHash('sha256').update(JSON.stringify(edition.sections)).digest('hex') };
   });
 }
-module.exports = { loadCatalog, loadEditions, validateEdition };
+const documentSchema = z.object({
+  scriptureSlug: z.string().min(1), title: z.string().min(1), language: z.string().min(2),
+  script: z.string().optional(), isOriginal: z.boolean(), textDirection: z.enum(['ltr', 'rtl']),
+  source: z.string().regex(/^\/library\/[a-z0-9][a-z0-9-]*\.pdf$/),
+  license: z.string().min(1), provenance: z.string().min(1),
+  pageCount: z.number().int().positive(), sha256: z.string().regex(/^[a-f0-9]{64}$/),
+});
+
+function loadDocuments() {
+  const catalog = loadCatalog();
+  const sources = new Set();
+  return fs.readdirSync(path.join(directory, 'documents')).filter(file => file.endsWith('.json')).sort().map(file => {
+    const document = documentSchema.parse(JSON.parse(fs.readFileSync(path.join(directory, 'documents', file), 'utf8')));
+    if (document.language !== catalog.language || !catalog.scriptures.some(book => book.slug === document.scriptureSlug)) {
+      throw new Error(file + ': document is outside the configured catalog');
+    }
+    if (sources.has(document.source)) throw new Error(file + ': duplicate document source');
+    sources.add(document.source);
+    const bytes = fs.readFileSync(path.resolve(directory, '../frontend/public', document.source.slice(1)));
+    if (bytes.subarray(0, 5).toString() !== '%PDF-' || createHash('sha256').update(bytes).digest('hex') !== document.sha256) {
+      throw new Error(file + ': PDF missing its header or checksum does not match');
+    }
+    return document;
+  });
+}
+
+module.exports = { loadCatalog, loadEditions, validateEdition, loadDocuments };

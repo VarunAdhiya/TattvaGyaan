@@ -4,6 +4,8 @@ import Reader3D from '../components/Reader3D';
 import AIAssistantDrawer from '../components/AIAssistantDrawer';
 import { api } from '../api/client';
 
+const PdfReader = React.lazy(() => import('../components/PdfReader'));
+
 export default function ReaderPage() {
   const { editionId } = useParams();
   const [searchParams] = useSearchParams();
@@ -26,13 +28,21 @@ export default function ReaderPage() {
       setLoading(true);
       setError(null);
       try {
-        const [editionRes, readerRes, progressRes] = await Promise.all([
-          api.getEdition(editionId),
+        const editionRes = await api.getEdition(editionId);
+        if (cancelled) return;
+        setEdition(editionRes.edition);
+        if (editionRes.edition.contentStatus === 'scanned') {
+          const progressRes = await api.getProgressForEdition(editionId).catch(() => ({ progress: null }));
+          if (cancelled) return;
+          setSections([]);
+          setProgress(progressRes.progress);
+          return;
+        }
+        const [readerRes, progressRes] = await Promise.all([
           api.getReaderContent(editionId),
           api.getProgressForEdition(editionId).catch(() => ({ progress: null })),
         ]);
         if (cancelled) return;
-        setEdition(editionRes.edition);
         setSections(readerRes.sections);
         setProgress(progressRes.progress);
       } catch (err) {
@@ -67,20 +77,23 @@ export default function ReaderPage() {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
   if (error || !edition) return <div className="p-8 text-center" role="alert">{error || 'Edition not found'}</div>;
+  const Reader = edition.contentStatus === 'scanned' ? PdfReader : Reader3D;
 
   return (
     <div className="flex flex-col">
       {saveError && <p role="alert" className="p-3 text-sm text-amber-900 bg-amber-50">{saveError}</p>}
-      <Reader3D
-        key={`${editionId}-${searchParams.get('passage') || ''}-${searchParams.get('page') || ''}`}
-        edition={edition}
-        sections={sections}
-        initialPassageId={searchParams.get('passage') || (!searchParams.has('page') ? progress?.passageId : undefined)}
-        initialPageIndex={searchParams.has('page') ? Math.max(0, (Number(searchParams.get('page')) || 1) - 1) : progress?.pageIndex ?? 1}
-        onProgressUpdate={handleUpdateProgress}
-        onAskAI={handleAskAI}
-        onSummarize={handleSummarize}
-      />
+      <React.Suspense fallback={<div className="reader-shell theme-light items-center justify-center" role="status">Opening book…</div>}>
+        <Reader
+          key={`${editionId}-${searchParams.get('passage') || ''}-${searchParams.get('page') || ''}`}
+          edition={edition}
+          sections={sections}
+          initialPassageId={searchParams.get('passage') || (!searchParams.has('page') ? progress?.passageId : undefined)}
+          initialPageIndex={searchParams.has('page') ? Math.max(0, (Number(searchParams.get('page')) || 1) - 1) : progress?.pageIndex ?? 1}
+          onProgressUpdate={handleUpdateProgress}
+          onAskAI={handleAskAI}
+          onSummarize={handleSummarize}
+        />
+      </React.Suspense>
       {aiDrawerOpen && <AIAssistantDrawer
         key={`${editionId}-${aiContext.selectedPassage?.id || aiContext.sectionToSummarize?.id}-${aiContext.selectedPassage?.selectedText || ''}`}
         isOpen={aiDrawerOpen}

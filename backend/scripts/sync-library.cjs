@@ -3,12 +3,14 @@ const { PrismaClient } = require('@prisma/client');
 const { randomUUID } = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
-const { loadCatalog, loadEditions } = require('./library-sources.cjs');
+const { loadCatalog, loadEditions, loadDocuments } = require('./library-sources.cjs');
+const { syncDocuments } = require('./import-documents.cjs');
 
 // Catalog policy is data, outside both applications. Runtime readers query PostgreSQL.
 async function syncLibrary(apply = false) {
   const catalog = loadCatalog();
   const sources = loadEditions(); // Validate the entire import before opening a transaction.
+  const documents = loadDocuments();
   // Imports are sequential and need only one connection, leaving capacity for
   // the running API and session store even on small hosted database pools.
   const databaseUrl = new URL(process.env.DATABASE_URL);
@@ -20,7 +22,7 @@ async function syncLibrary(apply = false) {
     const editions = await prisma.scriptureEdition.findMany({ include: { scripture: true } });
     const removed = editions.filter(edition => !allowedSlugs.includes(edition.scripture.slug) ||
       ![catalog.language, 'hindi'].includes(edition.language.toLowerCase()));
-    console.log(JSON.stringify({ catalogBooks: allowedSlugs.length, importedEditions: sources.length, removedEditions: removed.length, apply }));
+    console.log(JSON.stringify({ catalogBooks: allowedSlugs.length, importedEditions: sources.length, documentEditions: documents.length, removedEditions: removed.length, apply }));
     if (!apply) return;
     await prisma.$transaction(async tx => {
       const removedIds = removed.map(edition => edition.id);
@@ -98,14 +100,15 @@ async function syncLibrary(apply = false) {
           await tx.scripturePassage.createMany({ data: passages.slice(index, index + 500) });
         }
       }
-      // Availability derives from retained text, never from requested catalog titles.
+      await syncDocuments(tx, catalog, documents);
+      // A scan is available to read, but does not establish textual completeness.
       for (const book of catalog.scriptures) {
         const scripture = await tx.scripture.findUniqueOrThrow({ where: { slug: book.slug } });
         const editions = await tx.scriptureEdition.findMany({ where: { scriptureId: scripture.id } });
         const count = await tx.scripturePassage.count({ where: { section: { edition: { scriptureId: scripture.id } } } });
         const complete = editions.some(edition => edition.contentStatus === 'complete');
         await tx.scripture.update({ where: { id: scripture.id }, data: {
-          availabilityStatus: complete ? 'complete' : count ? 'partial' : 'metadata_only',
+          availabilityStatus: complete ? 'complete' : count || editions.some(edition => edition.contentStatus === 'scanned') ? 'partial' : 'metadata_only',
         } });
       }
     }, { timeout: 180000, maxWait: 10000 });

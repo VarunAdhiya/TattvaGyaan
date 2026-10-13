@@ -167,3 +167,76 @@ test('reader deep links resolve a passage that was not downloaded', async ({ pag
   await expect(page.getByLabel('Page', { exact: true })).toHaveValue('50');
   await expect(page.locator('#passage-passage-3-4')).toBeVisible();
 });
+
+test('desktop pages turn around the spine in both directions with inert readable faces', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await mockReader(page);
+  await page.goto('/reader/book-test/edition-test?page=4');
+  await expect(page.locator('#text-passage-0-4')).toBeVisible();
+  const book = page.locator('.reader-book');
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
+  await expect(book).toHaveAttribute('data-turn-state', 'flipping');
+  await expect(book).toHaveAttribute('data-turning', 'forward');
+  await expect(page.locator('.reader-turn-face--front')).toContainText('Reader test passage 5.');
+  await expect(page.locator('.reader-turn-face--back')).toContainText('Reader test passage 7.');
+  await expect(page.locator('.reader-flip-layer')).toHaveAttribute('inert', '');
+  await expect(page.locator('.reader-flip-layer [id]')).toHaveCount(0);
+  const sheet = page.locator('.reader-turn-sheet');
+  const perspective = await sheet.evaluate(element => {
+    const animation = element.getAnimations()[0];
+    animation.pause();
+    animation.currentTime = 220;
+    return Math.abs(new DOMMatrix(getComputedStyle(element).transform).m13);
+  });
+  expect(perspective).toBeGreaterThan(0.1);
+  await page.screenshot({ path: 'test-results/book-flip-desktop.png', fullPage: true });
+  await sheet.evaluate(element => element.getAnimations()[0].finish());
+  await expect(page.locator('.reader-turn-sheet')).toHaveCount(0);
+  await expect(page.getByLabel('Page', { exact: true })).toHaveValue('6');
+  await page.getByRole('button', { name: 'Previous', exact: true }).click();
+  await expect(book).toHaveAttribute('data-turning', 'backward');
+  await expect(book).toHaveAttribute('data-turn-state', 'flipping');
+  await expect(page.locator('.reader-turn-sheet')).toHaveCount(0);
+  await expect(page.getByLabel('Page', { exact: true })).toHaveValue('4');
+  await expect(page.locator('#text-passage-0-4')).toBeVisible();
+});
+
+test('page corners work on mobile and reduced motion bypasses 3D animation', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await mockReader(page);
+  await page.goto('/reader/book-test/edition-test?page=3');
+  await expect(page.locator('#text-passage-0-0')).toBeVisible();
+  await page.getByRole('button', { name: 'Turn page forward', exact: true }).click();
+  await expect(page.locator('.reader-book')).toHaveAttribute('data-turn-state', 'flipping');
+  await expect(page.locator('.reader-turn-scene--single')).toHaveCount(1);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  await expect(page.locator('.reader-turn-sheet')).toHaveCount(0);
+  await expect(page.getByLabel('Page', { exact: true })).toHaveValue('4');
+  await page.getByRole('button', { name: 'Turn page backward', exact: true }).click();
+  await expect(page.locator('.reader-book')).toHaveAttribute('data-turning', 'backward');
+  await expect(page.locator('.reader-turn-sheet')).toHaveCount(0);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.getByRole('button', { name: 'Turn page forward', exact: true }).click();
+  await expect(page.getByLabel('Page', { exact: true })).toHaveValue('4');
+  await expect(page.locator('#text-passage-0-2')).toBeVisible();
+  await expect(page.locator('.reader-book')).not.toHaveAttribute('data-turning', /.+/);
+  await expect(page.locator('.reader-turn-sheet')).toHaveCount(0);
+});
+
+test('rapid navigation and resizing leave the requested page usable', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await mockReader(page);
+  await page.goto('/reader/book-test/edition-test?page=4');
+  await expect(page.locator('#text-passage-0-4')).toBeVisible();
+  await page.getByRole('button', { name: 'Next', exact: true }).dblclick();
+  await expect(page.getByLabel('Page', { exact: true })).toHaveValue('8');
+  await expect(page.locator('.reader-turn-sheet')).toHaveCount(0);
+  await page.getByLabel('Page', { exact: true }).fill('50');
+  await page.getByRole('button', { name: 'Go', exact: true }).click();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator('.reader-turn-sheet')).toHaveCount(0);
+  await expect(page.locator('.reader-paper')).toHaveCount(1);
+  await expect(page.locator('#text-passage-3-4')).toBeVisible();
+  await page.locator('#passage-passage-3-4').getByRole('button', { name: 'Bookmark verse' }).click();
+  await expect(page.locator('#passage-passage-3-4').getByRole('button', { name: 'Remove bookmark' })).toBeVisible();
+});

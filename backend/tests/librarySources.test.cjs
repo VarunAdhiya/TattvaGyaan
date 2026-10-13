@@ -1,6 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { loadCatalog, loadEditions, validateEdition } = require('../scripts/library-sources.cjs');
+const { loadCatalog, loadEditions, validateEdition, loadDocuments } = require('../scripts/library-sources.cjs');
 test('imports only attributed editions in the configured catalog and language', () => {
   const catalog = loadCatalog();
   const editions = loadEditions();
@@ -23,4 +23,17 @@ test('rejects incomplete, duplicated and placeholder scripture before import', (
   const duplicate = loadEditions()[0];
   duplicate.sections[0].passages[1].reference = duplicate.sections[0].passages[0].reference;
   assert.throws(() => validateEdition(duplicate), /duplicate/);
+});
+
+test('Rigveda scan has a verified PDF asset under Vedas without invented passages', () => {
+  const documents = loadDocuments(); // Checks the actual file header and SHA-256.
+  const rigveda = documents.find(document => document.source === '/library/rigved.pdf');
+  assert.ok(rigveda);
+  assert.equal(rigveda.scriptureSlug, 'vedas');
+  assert.equal(rigveda.language, 'hi');
+  assert.equal(rigveda.pageCount, 739);
+  assert.equal(rigveda.sections, undefined);
+  assert.equal(rigveda.expectedPassages, undefined);
+  assert.match(rigveda.license, /unverified/);
+  assert.ok(loadCatalog().scriptures.find(book => book.slug === 'vedas').aliases.includes('Rigveda'));
 });

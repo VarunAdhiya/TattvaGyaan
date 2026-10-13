@@ -1,0 +1,13 @@
+{
+  "scriptureSlug": "vedas",
+  "title": "ऋग्वेद संहिता — संस्कृत एवं हिन्दी (PDF, मण्डल 1–6)",
+  "language": "hi",
+  "script": "Devanagari",
+  "isOriginal": false,
+  "textDirection": "ltr",
+  "source": "/library/rigved.pdf",
+  "license": "User-supplied scan; publisher, translator and reuse license unverified.",
+  "provenance": "Original file: rigved.pdf, supplied by the user on 2026-10-12. All 739 scanned pages are preserved byte-for-byte. The first page is headed ऋग्वेद-संहिता and begins Mandala 1; the last page marks the end of Mandala 6. Sampled pages contain Sanskrit verses with Hindi explanations in Devanagari. This is not labeled as the complete Rigveda or the complete Vedas. No searchable text layer is present; no OCR, reconstructed passages or AI-generated scripture has been added. Publisher and translator have not been identified from the inspected pages.",
+  "pageCount": 739,
+  "sha256": "862bdf068152d3efa6e0270400273b131694253e3d659e56e5de5b626f2b718c"
+}

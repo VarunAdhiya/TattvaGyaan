@@ -1,5 +1,25 @@
 import { test, expect } from '@playwright/test';
 
+test('live Rigveda search opens its scanned edition under Vedas', async ({ page, request }) => {
+  test.skip(!process.env.RUN_LIVE_LIBRARY, 'Set RUN_LIVE_LIBRARY=1 with the API running on port 3001.');
+  await page.route(url => url.pathname === '/api/auth/me', route => route.fulfill({ json: { user: { id: 'smoke', username: 'reader' } } }));
+  await page.route(url => url.pathname.startsWith('/api/reading-progress'), route => route.fulfill({ json: { progress: null } }));
+  const response = await request.get('http://localhost:3001/api/scriptures?search=Rigveda');
+  expect(response.ok()).toBeTruthy();
+  const { scriptures } = await response.json();
+  const book = scriptures.find(item => item.slug === 'vedas');
+  expect(book.availabilityStatus).toBe('partial');
+  const edition = book.editions.find(item => item.contentStatus === 'scanned');
+  expect(edition).toBeTruthy();
+  await page.goto(`/scripture/${book.id}`);
+  await page.getByRole('button', { name: 'Start Reading', exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(edition.id));
+  await expect(page.getByRole('img', { name: 'Scanned page 1', exact: true })).toBeVisible();
+  await expect(page.locator('.reader-paper')).toHaveCount(2);
+  await expect(page.locator('iframe')).toHaveCount(0);
+  await page.screenshot({ path: 'test-results/rigveda-live.png', fullPage: true });
+});
+
 // Optional read-only smoke against the configured API/database. Only auth and
 // private annotations are fixtures; catalog, search, edition and passages are real.
 test('live Hindi catalog opens attributed text and jumps to page 50', async ({ page, request }) => {

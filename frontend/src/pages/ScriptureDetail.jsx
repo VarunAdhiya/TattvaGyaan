@@ -198,14 +198,18 @@ export default function ScriptureDetail() {
                           {edition.isOriginal && ' • Original'}
                         </div>
                         <div className="text-xs mt-1 text-amber-800">
-                          {edition.contentStatus === 'complete' ? `Complete · ${edition.expectedPassages} passages` : 'Partial sample — completeness unverified'}
+                          {edition.contentStatus === 'scanned' ? 'Scanned PDF · Partial collection' : edition.contentStatus === 'complete' ? `Complete · ${edition.expectedPassages} passages` : 'Partial sample — completeness unverified'}
                         </div>
                       </button>
                     ))}
                   </div>
 
-                  {selectedEdition?.source && /^https?:\/\//.test(selectedEdition.source) && (
+                  {selectedEdition?.source && (/^https?:\/\//.test(selectedEdition.source) || /^\/library\/[a-z0-9][a-z0-9-]*\.pdf$/.test(selectedEdition.source)) && (
                     <p className="text-xs text-stone-600 mb-4"><a className="underline" href={selectedEdition.source} target="_blank" rel="noreferrer">Source and attribution</a>{selectedEdition.translator ? ` · ${selectedEdition.translator}` : ''}</p>
+                  )}
+
+                  {selectedEdition?.contentStatus === 'scanned' && (
+                    <p className="text-xs text-stone-600 mb-4">Read the original scanned pages in the book reader. Verse selection, notes, bookmarks, AI explanations and reading plans require verified text.</p>
                   )}
 
                   <button
@@ -217,7 +221,9 @@ export default function ScriptureDetail() {
 
                   <button
                     onClick={() => setShowPlanModal(true)}
-                    className="w-full px-4 py-3 border border-stone-300 text-stone-700 rounded-lg font-medium hover:bg-stone-50 transition"
+                    disabled={selectedEdition?.contentStatus === 'scanned'}
+                    title={selectedEdition?.contentStatus === 'scanned' ? 'Reading plans require verified text.' : undefined}
+                    className="w-full px-4 py-3 border border-stone-300 text-stone-700 rounded-lg font-medium hover:bg-stone-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Create Reading Plan
                   </button>

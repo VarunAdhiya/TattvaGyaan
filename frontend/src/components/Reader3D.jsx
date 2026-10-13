@@ -3,12 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { BookOpen, Bookmark, MessageSquare, Pencil, Trash2, X, List, Sparkles, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { api } from '../api/client';
 import { buildReaderPages, spreadStart } from '../lib/readerPages';
+import ScannedPage from './ScannedPage';
+import useBookFlip from '../lib/useBookFlip';
 
 // No gesture handlers on scripture text: native selection, scrolling and buttons
 // are independent of navigation. Only the visible spread is mounted.
-export default function Reader3D({ edition, sections, initialPageIndex = 1, initialPassageId, onProgressUpdate, onAskAI, onSummarize }) {
+export default function Reader3D({ edition, sections, pdfDocument, initialPageIndex = 1, initialPassageId, onProgressUpdate, onAskAI, onSummarize }) {
   const navigate = useNavigate();
-  const pages = useMemo(() => buildReaderPages(sections), [sections]);
+  const scannedPageCount = pdfDocument?.numPages || 0;
+  const pages = useMemo(() => buildReaderPages(sections, scannedPageCount), [sections, scannedPageCount]);
   const [currentPage, setCurrentPage] = useState(() => Math.max(0, Math.min(initialPageIndex, pages.length - 1)));
   const [pageInput, setPageInput] = useState(String(currentPage + 1));
   const [wide, setWide] = useState(() => window.innerWidth >= 900);
@@ -29,23 +32,34 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
   const [loadedPages, setLoadedPages] = useState({});
   const [pageFailure, setPageFailure] = useState(null);
   const [pageRetry, setPageRetry] = useState(0);
-  const [resolving, setResolving] = useState(Boolean(initialPassageId));
+  const [renderedScans, setRenderedScans] = useState({});
+  const [resolving, setResolving] = useState(Boolean(initialPassageId && !scannedPageCount));
   const rootRef = useRef(null);
   const start = spreadStart(currentPage, wide);
   const visibleIndices = wide && start > 0 && start + 1 < pages.length ? [start, start + 1] : [start];
   const visibleKey = visibleIndices.join(',');
+  const { bookRef, layerRef, prepareTurn } = useBookFlip(visibleKey, `${wide}:${theme}:${fontSize}`);
   const pageError = pageFailure?.key === visibleKey + ':' + pageRetry ? pageFailure.message : '';
-  const contents = useMemo(() => sections.map(section => ({
-    ...section, pageIndex: pages.findIndex(page => page.sectionId === section.id),
-  })), [sections, pages]);
+  const contents = useMemo(() => scannedPageCount
+    ? Array.from({ length: Math.ceil(scannedPageCount / 25) }, (_, index) => ({
+      id: 'scan-' + index, title: `Scanned pages ${index * 25 + 1}–${Math.min((index + 1) * 25, scannedPageCount)}`,
+      pageIndex: index * 25 + 2,
+    }))
+    : sections.map(section => ({
+      ...section, pageIndex: pages.findIndex(page => page.sectionId === section.id),
+    })), [sections, pages, scannedPageCount]);
+  const handleScanReady = useCallback(pageNumber => {
+    setRenderedScans(previous => previous[pageNumber] ? previous : { ...previous, [pageNumber]: true });
+  }, []);
 
   const goToPage = useCallback(index => {
     if (!Number.isInteger(index) || index < 0 || index >= pages.length) return;
+    prepareTurn(index);
     setCurrentPage(index);
     setPageInput(String(index + 1));
     setDrawer(null);
     setSelection(null);
-  }, [pages.length]);
+  }, [pages.length, prepareTurn]);
 
   useEffect(() => {
     const resize = () => setWide(window.innerWidth >= 900);
@@ -60,15 +74,16 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
   }, [notice]);
 
   useEffect(() => {
+    if (scannedPageCount) return;
     let active = true;
     Promise.all([api.getBookmarks(), api.getNotes()]).then(([bm, nt]) => {
       if (active) { setAnnotationError(''); setBookmarks(bm.bookmarks || []); setNotes(nt.notes || []); }
     }).catch(error => { if (active) setAnnotationError(error.message || 'Unable to load notes and bookmarks.'); });
     return () => { active = false; };
-  }, [edition.id, annotationRetry]);
+  }, [edition.id, annotationRetry, scannedPageCount]);
 
   useEffect(() => {
-    if (!initialPassageId) return;
+    if (!initialPassageId || scannedPageCount) return;
     let active = true;
     api.getPassagePosition(initialPassageId).then(position => {
       if (position.editionId !== edition.id) throw new Error('This passage belongs to another edition.');
@@ -76,7 +91,7 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
     }).catch(error => { if (active) setNotice(error.message); })
       .finally(() => { if (active) setResolving(false); });
     return () => { active = false; };
-  }, [initialPassageId, edition.id, goToPage]);
+  }, [initialPassageId, edition.id, goToPage, scannedPageCount]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -119,13 +134,14 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
     const page = pages[currentPage];
     const passages = loadedPages[currentPage];
     if (page.type === 'content' && !passages?.length) return;
+    if (page.type === 'scan' && !renderedScans[page.pageNumber]) return;
     const timer = setTimeout(() => onProgressUpdate?.({
       pageIndex: currentPage, sectionId: page.sectionId,
       passageId: passages?.some(passage => passage.id === focusedPassage) ? focusedPassage : passages?.[0]?.id,
       percentage: Math.round(currentPage / Math.max(1, pages.length - 1) * 100),
     }), 400);
     return () => clearTimeout(timer);
-  }, [currentPage, loadedPages, pages, onProgressUpdate, focusedPassage, resolving, pageError]);
+  }, [currentPage, loadedPages, pages, onProgressUpdate, focusedPassage, resolving, pageError, renderedScans]);
 
   useEffect(() => {
     const onKey = event => {
@@ -226,8 +242,8 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
           <select aria-label="Reading theme" value={theme} onChange={event => setTheme(event.target.value)} className="reader-control rounded p-2">
             <option value="light">Light</option><option value="sepia">Sepia</option><option value="dark">Dark</option>
           </select>
-          <button aria-label="Decrease font size" className={buttonClass} disabled={fontSize <= 14} onClick={() => setFontSize(size => size - 2)}>A−</button>
-          <button aria-label="Increase font size" className={buttonClass} disabled={fontSize >= 28} onClick={() => setFontSize(size => size + 2)}>A+</button>
+          <button aria-label={scannedPageCount ? 'Decrease page zoom' : 'Decrease font size'} className={buttonClass} disabled={fontSize <= 14} onClick={() => setFontSize(size => size - 2)}>A−</button>
+          <button aria-label={scannedPageCount ? 'Increase page zoom' : 'Increase font size'} className={buttonClass} disabled={fontSize >= 28} onClick={() => setFontSize(size => size + 2)}>A+</button>
           <button aria-label="Toggle fullscreen" className={buttonClass} onClick={async () => {
             try {
               if (document.fullscreenElement) await document.exitFullscreen();
@@ -243,23 +259,32 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
       </div>}
       {annotationError && <div role="alert" className="p-3 text-sm">{annotationError} <button onClick={() => setAnnotationRetry(value => value + 1)} className="underline">Retry notes and bookmarks</button></div>}
       <main className="reader-stage flex-1 p-3 sm:p-6">
-        <div className={'reader-book reader-binding reader-spread ' + (visibleIndices.length === 2 ? 'reader-spread-wide' : '')}>
+        <div ref={bookRef} data-spread-start={start} data-wide={wide} className={'reader-book reader-binding reader-spread ' + (visibleIndices.length === 2 ? 'reader-spread-wide' : '')}>
           {visibleIndices.map((index, side) => {
             const page = pages[index];
-            return <article key={index} aria-label={'Page ' + (index + 1)} className={'reader-paper reader-visible-page ' + (side === 0 && visibleIndices.length === 2 ? '--left' : '--right')}>
+            const ready = page.type === 'content' ? Boolean(loadedPages[index] && !pageError) : page.type === 'scan' ? Boolean(renderedScans[page.pageNumber]) : true;
+            return <article key={index} data-page-ready={ready} aria-label={'Page ' + (index + 1)} className={'reader-paper reader-visible-page ' + (side === 0 && visibleIndices.length === 2 ? '--left' : '--right')}>
               {page.type === 'cover' ? <div className="flex flex-col justify-center items-center text-center h-full gap-6">
                 <BookOpen size={48} /><h2 className="font-serif text-3xl">{edition.scripture?.title || edition.title}</h2>
                 <p>{edition.title}</p><p>{edition.translator}</p><p className="text-xs whitespace-pre-wrap">{edition.provenance}</p>
                 {edition.source && /^https?:\/\//.test(edition.source) && <a className="underline" href={edition.source} target="_blank" rel="noreferrer">Source and attribution</a>}
+                {scannedPageCount > 0 && <a className="underline" href={edition.source} download>Download original PDF</a>}
                 <p className="text-xs">{edition.license}</p>
               </div> : page.type === 'toc' ? <>
                 <h2 className="text-2xl font-serif mb-5">Table of Contents</h2>
+                {scannedPageCount > 0 && <p className="text-sm mb-5">{scannedPageCount} original scanned pages. Reading starts on page 3, after the cover and contents. Verse selection, notes, bookmarks and AI explanations require verified text.</p>}
                 <ul>{contents.map(section => <li key={section.id}>
                   <button className="w-full flex justify-between text-left gap-4 py-3 border-b disabled:opacity-50" disabled={section.pageIndex < 0} onClick={() => goToPage(section.pageIndex)}>
                     <span>{section.title}</span><span>{section.pageIndex >= 0 ? section.pageIndex + 1 : 'Unavailable'}</span>
                   </button>
                 </li>)}</ul>
                 {pages.length <= 2 && <p className="mt-6">No verified text is available in this edition yet.</p>}
+              </> : page.type === 'scan' ? <>
+                <div className="flex flex-wrap justify-between items-center gap-2 border-b pb-3 mb-5">
+                  <h2 className="font-serif font-bold">{edition.scripture?.title || edition.title}</h2>
+                  <span className="text-xs">Scanned page {page.pageNumber} of {scannedPageCount}</span>
+                </div>
+                <ScannedPage pdfDocument={pdfDocument} pageNumber={page.pageNumber} zoom={fontSize / 18} onReady={handleScanReady} />
               </> : <>
                 <div className="flex flex-wrap justify-between items-center gap-2 border-b pb-3 mb-5">
                   <h2 className="font-serif font-bold">{page.sectionTitle}</h2>
@@ -291,6 +316,11 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
               <div className="text-center text-xs pt-4 opacity-60">{index + 1}</div>
             </article>;
           })}
+          <button type="button" className="reader-page-corner reader-page-corner--previous" aria-label="Turn page backward" title="Turn page backward" disabled={start === 0}
+            onClick={() => goToPage(Math.max(0, start - (wide ? 2 : 1)))}><ChevronLeft size={16} /></button>
+          <button type="button" className="reader-page-corner reader-page-corner--next" aria-label="Turn page forward" title="Turn page forward" disabled={start + visibleIndices.length >= pages.length}
+            onClick={() => goToPage(start + visibleIndices.length)}><ChevronRight size={16} /></button>
+          <div ref={layerRef} className="reader-flip-layer" aria-hidden="true" inert />
         </div>
       </main>
       <footer className="reader-navigation flex flex-wrap justify-between items-center gap-2 p-3 border-t text-sm">
@@ -313,6 +343,7 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
         <aside role="dialog" aria-modal="true" aria-label={drawer} className="reader-drawer" onClick={event => event.stopPropagation()}>
           <div className="flex justify-between items-center mb-5"><h2 className="text-xl capitalize">{drawer}</h2><button autoFocus aria-label="Close panel" className={buttonClass} onClick={() => setDrawer(null)}><X size={20} /></button></div>
           {drawer === 'contents' ? contents.map(section => <button key={section.id} disabled={section.pageIndex < 0} className="block w-full text-left border-b py-3 disabled:opacity-50" onClick={() => goToPage(section.pageIndex)}>{section.title} · {section.pageIndex >= 0 ? section.pageIndex + 1 : 'Unavailable'}</button>)
+            : scannedPageCount > 0 ? <p>Verse {drawer} require verified text. Your reading position is saved automatically for this scanned edition.</p>
             : (drawer === 'notes' ? notes : bookmarks).length === 0 ? <p>No {drawer} saved yet.</p>
             : (drawer === 'notes' ? notes : bookmarks).map(item => <div key={item.id} className="border rounded-lg p-3 mb-3">
               <div className="flex gap-2">
