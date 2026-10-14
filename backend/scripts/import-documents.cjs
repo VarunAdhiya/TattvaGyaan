@@ -1,4 +1,6 @@
 const { loadCatalog, loadDocuments } = require('./library-sources.cjs');
+const { loadDocumentText } = require('./document-text.cjs');
+const fs = require('node:fs');
 
 // Add document editions without removing any existing content or annotations.
 async function syncDocuments(tx, catalog, documents) {
@@ -19,14 +21,32 @@ async function syncDocuments(tx, catalog, documents) {
       include: { _count: { select: { sections: true } } },
     });
     if (existing) {
-      if (existing.contentStatus !== 'scanned' || existing._count.sections > 0) {
-        throw new Error(document.title + ': refusing to replace a text edition with a scan');
+      const transcribed = existing.contentStatus === 'transcribed' && existing._count.sections > 0 &&
+        existing.provenance?.match(/^SHA-256: ([a-f0-9]{64})$/m)?.[1] === sha256;
+      // Preserve reviewed text, but still refresh the book's availability below.
+      if (!transcribed) {
+        if (existing.contentStatus !== 'scanned' || existing._count.sections > 0) {
+          throw new Error(document.title + ': refusing to replace a text edition with a scan');
+        }
+        const priorChecksum = existing.provenance?.match(/SHA-256: ([a-f0-9]{64})/);
+        if (priorChecksum && priorChecksum[1] !== sha256) throw new Error(document.title + ': source PDF changed; review before replacing');
+        await tx.scriptureEdition.update({ where: { id: existing.id }, data: editionData });
       }
-      const priorChecksum = existing.provenance?.match(/SHA-256: ([a-f0-9]{64})/);
-      if (priorChecksum && priorChecksum[1] !== sha256) throw new Error(document.title + ': source PDF changed; review before replacing');
-      await tx.scriptureEdition.update({ where: { id: existing.id }, data: editionData });
     } else {
       await tx.scriptureEdition.create({ data: { ...editionData, scriptureId: scripture.id } });
+    }
+    // Restoring/seeding an archived edition must restore its text as well.
+    const transcription = loadDocumentText(document);
+    if (transcription) {
+      const { textPages, checksum, ...input } = transcription;
+      const { applyTranscription } = require('./import-transcription.cjs');
+      await applyTranscription(tx, document, input, snapshot => {
+        const path = require('node:path');
+        const { randomUUID } = require('node:crypto');
+        const directory = path.resolve(__dirname, '../backups');
+        fs.mkdirSync(directory, { recursive: true });
+        fs.writeFileSync(path.join(directory, `restore-text-${randomUUID()}.json`), JSON.stringify(snapshot), { flag: 'wx' });
+      });
     }
     const complete = await tx.scriptureEdition.count({ where: { scriptureId: scripture.id, contentStatus: 'complete' } });
     await tx.scripture.update({ where: { id: scripture.id }, data: { availabilityStatus: complete ? 'complete' : 'partial' } });

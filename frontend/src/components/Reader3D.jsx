@@ -309,7 +309,7 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
                         style={{ fontSize, lineHeight: 1.9 }} onMouseUp={() => captureSelection(passage)} onTouchEnd={() => captureSelection(passage)} onKeyUp={() => captureSelection(passage)}>
                         {passage.text}
                       </div>
-                      {passage.sourceNotes && <details className="mt-3 text-xs"><summary>Translator’s notes</summary><p className="whitespace-pre-wrap">{passage.sourceNotes}</p></details>}
+                      {passage.sourceNotes && <details className="mt-3 text-xs"><summary>{edition.contentStatus === 'transcribed' ? 'Source and review notes' : 'Translator’s notes'}</summary><p className="whitespace-pre-wrap">{passage.sourceNotes}</p></details>}
                     </div>;
                   })}
               </>}

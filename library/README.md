@@ -8,6 +8,8 @@
 
 To validate PDF assets, run `node scripts/import-documents.cjs` from `backend/`. To add them to the configured database, run `node scripts/import-documents.cjs --apply`. This targeted import preserves existing content and annotations, updates catalog metadata for the affected books, and reuses existing scan edition IDs. It checks file headers and hashes before opening the transaction. Full synchronization and seeding also include these documents. PDF editions use `contentStatus: scanned`, no passage counts, and never fabricate passage records; no schema migration is needed. Deploy the frontend build containing the PDF together with the updated database catalog.
 
+From `frontend/`, `npm run check:pdfs` verifies that every document manifest has its original PDF in `public/library/`, with the recorded header and SHA-256. `npm run build` runs this check automatically and stops if a PDF is missing or altered. Catalog records alone do not contain the PDF bytes: preserve and deploy the assets too. If the reader reports "Unable to load this book", check these files first; the development server can return the app's HTML page for a missing PDF URL. Restore the exact original file to its manifest's `source` path under `frontend/public/`, then retry the book. Do not change the recorded checksum to accept a different edition.
+
 ## User-supplied PDFs added on 2026-10-13
 
 The document manifests preserve file checksums, page counts, printed attribution, and unverified reuse status:
@@ -39,6 +41,18 @@ Synchronization removes editions outside the catalog/language and their dependen
 Repeating the import preserves existing Hindi passage IDs and annotations. Changed source text is rejected for editorial review. To add content, supply a JSON edition with source URL, license, provenance, expected passage counts, ordered sections, and ordered passages; the validator documents the full schema in `backend/scripts/library-sources.cjs`.
 
 ## Retrieval
+
+For the staged migration from PDFs to corrected database text, follow [Corrected text imports](transcriptions/README.md). All source pages must be reviewed before importing an edition. Draft extraction never activates the text reader.
+
+OCR now runs offline using free Tesseract language data through PyMuPDF. From `backend/`, `node scripts/transcribe-library.cjs --execute` processes all remaining pages with per-page checkpoints; see the transcription guide for the one-time local setup and book/page options. No paid OCR provider or API key is used. One real source page from each of the seven PDFs has been processed as a smoke test; the remaining corpus still needs OCR and review.
+
+The final database migration is `node scripts/migrate-library-text.cjs --apply` from `backend/`. It imports all seven reviewed transcriptions in one transaction, verifies the stored text, references, ordering and provenance, then removes each original from `frontend/public/library/` after making a checksum-verified recovery copy in the ignored `backend/data/source-pdfs/` directory. Without `--apply`, it exercises and rolls back the database imports and leaves all files intact. Missing or incomplete transcriptions stop the command before database access. It is safe to resume after interruption. Do not remove PDFs manually before this verification.
+
+After migration, the frontend build accepts reviewed text replacements instead of requiring public PDFs. Database seeding/synchronization also restores those reviewed transcriptions and does not reactivate scans. Keep the backend source archive backed up privately; it is used for source verification, extraction and review, and is never part of the frontend deployment. Deploy the database changes before deploying a frontend without PDFs.
+
+Run `node scripts/library-text-status.cjs` from `backend/` to report reviewed-page coverage and actual Supabase passage counts without printing credentials. The 2026-10-14 assessment found the complete 700-verse Gita in Supabase; the seven scanned editions still have zero passages and zero reviewed pages. The migration has **not** been applied. A separate unverified Gita sample remains untouched.
+
+For future vector retrieval, use the stored passage IDs as source identifiers and preserve edition, source-page/verse reference, provenance and text checksum alongside each derived embedding chunk. The text remains authoritative in `scripture_passages`; embeddings should be derived records, recomputed when the text changes. The scanned editions initially retain exact page text and printed verse labels, not guessed verse boundaries. Neither embeddings nor individually segmented verses for these scans have been generated.
 
 Catalog search is paginated, supports Hindi and stored English aliases, and uses a PostgreSQL trigram index. Reader startup fetches section metadata/counts only. Each visible page requests two passages using indexed section/order queries. A position endpoint resolves notes and bookmarks without downloading a book. Page 1 is the cover, page 2 is contents, and subsequent pages hold two passages within each section. Font size and screen width do not change page numbers.
 

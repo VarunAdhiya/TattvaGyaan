@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
 const { z } = require('zod');
+const { documentPaths, verifyPdf, loadDocumentText } = require('./document-text.cjs');
 const directory = path.resolve(__dirname, '../../library');
 const catalogSchema = z.object({
   religion: z.object({ name: z.string().min(1), slug: z.string().min(1), description: z.string(), sortOrder: z.number().int() }),
@@ -84,9 +85,11 @@ function loadDocuments() {
     }
     if (sources.has(document.source)) throw new Error(file + ': duplicate document source');
     sources.add(document.source);
-    const bytes = fs.readFileSync(path.resolve(directory, '../frontend/public', document.source.slice(1)));
-    if (bytes.subarray(0, 5).toString() !== '%PDF-' || createHash('sha256').update(bytes).digest('hex') !== document.sha256) {
-      throw new Error(file + ': PDF missing its header or checksum does not match');
+    const { publicFile, archiveFile } = documentPaths(document);
+    if (fs.existsSync(publicFile)) verifyPdf(publicFile, document);
+    else {
+      if (!loadDocumentText(document)) throw new Error(file + ': PDF missing without a reviewed text replacement');
+      verifyPdf(archiveFile, document);
     }
     return document;
   });

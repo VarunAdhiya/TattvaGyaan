@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "check:pdfs": "node scripts/check-pdf-assets.mjs",
+    "prebuild": "npm run check:pdfs",
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview"
