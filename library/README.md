@@ -52,6 +52,24 @@ From `backend/`, validate with `node scripts/import-draft-edition.cjs ../library
 
 For replacing PDF editions with corrected database text, follow [Corrected text imports](transcriptions/README.md). All source pages must be reviewed before activating a reviewed transcription. Draft extraction never activates that migration; explicitly imported draft editions use the separate path above.
 
+### Ramcharitmanas draft
+
+`editions/drafts/ramcharitmanas-hi.json` contains the user-selected Gita Press **Shri Ramcharitmanas**, with Hanumanprasad Poddar's commentary, under the existing `ramayana` book. It is not Valmiki Ramayana. Its 14 sections contain seven kandas plus front matter, contents, recitation guidance, arati, biography, and the closing question table: **12,821 reading passages**, not individually numbered canonical verses. All 1,058 source pages are accounted for, including three visually checked blank pages (2, 4, 1058). The original PDF remains available.
+
+From the repository root:
+
+```powershell
+backend/.venv-ocr/Scripts/python.exe backend/tests/ramcharitmanas_checks.py
+backend/.venv-ocr/Scripts/python.exe backend/scripts/extract-ramcharitmanas.py --write
+node backend/scripts/import-draft-edition.cjs library/editions/drafts/ramcharitmanas-hi.json
+node backend/scripts/import-draft-edition.cjs library/editions/drafts/ramcharitmanas-hi.json --apply
+node backend/scripts/verify-draft-api.cjs library/editions/drafts/ramcharitmanas-hi.json
+```
+
+The extractor requires PyMuPDF from `backend/scripts/requirements-transcription.txt`. It checks the exact PDF checksum, decodes the embedded Chanakya font, preserves two-column reading order and the 225-cell question table, and rejects a changed existing draft. The coverage audit is `editions/drafts/ramcharitmanas-hi.audit.json`; scratch files go to `tmp/pdfs/ramcharitmanas/`. The importer records blank-page classifications in database provenance, imports atomically, and verifies stored text. The API verifier compares every passage, reference, order, and source note. The edition remains **draft / not fully proofread**; sample checks do not attest a complete review. The frontend reads this edition through the database/API, without loading the PDF or JSON as frontend scripture content.
+
+For the live reader check, run `npx playwright test tests/ramcharitmanas-draft.spec.js --workers=1` in `frontend/` with `RUN_LIVE_LIBRARY=1` and the API on port 3001. Authentication and private writes are stubbed; catalog and text requests remain live.
+
 OCR now runs offline using free Tesseract language data through PyMuPDF. From `backend/`, `node scripts/transcribe-library.cjs --execute` processes all remaining pages with per-page checkpoints; see the transcription guide for the one-time local setup and book/page options. No paid OCR provider or API key is used. One real source page from each of the seven PDFs has been processed as a smoke test; the remaining corpus still needs OCR and review.
 
 The final database migration is `node scripts/migrate-library-text.cjs --apply` from `backend/`. It imports all seven reviewed transcriptions in one transaction, verifies the stored text, references, ordering and provenance, then removes each original from `frontend/public/library/` after making a checksum-verified recovery copy in the ignored `backend/data/source-pdfs/` directory. Without `--apply`, it exercises and rolls back the database imports and leaves all files intact. Missing or incomplete transcriptions stop the command before database access. It is safe to resume after interruption. Do not remove PDFs manually before this verification.

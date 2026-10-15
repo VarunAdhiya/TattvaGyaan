@@ -4,11 +4,11 @@
 
 TattvaGyaan provides a scripture library, a 3D reader, and AI passage explanations.
 
-- `frontend/src/`: React components, route pages, context, and `api/client.js`. Place UI assets in `src/assets/` or `frontend/public/`.
+- `frontend/src/`: React components, pages, context, and `api/client.js`. Store assets in `src/assets/` or `frontend/public/`.
 - `backend/src/`: Express TypeScript routes, controllers, services, middleware, and Zod validators. Keep business logic in services.
 - `backend/prisma/`: database schema, migrations, and seeds.
-- `library/`: catalog, attributed text imports, and PDF manifests. Actual PDFs belong in `frontend/public/library/`; database records reference their URLs.
-- `backend/tests/` and `frontend/tests/`: automated tests. Root `test-e2e.js` is a separate authentication smoke script.
+- `library/`: catalog, attributed imports, and PDF manifests. Store PDFs in `frontend/public/library/` and reference their URLs in database records.
+- `backend/tests/` and `frontend/tests/`: automated tests; root `test-e2e.js` is a separate authentication smoke script.
 
 ## Build, Test, and Development Commands
 
@@ -17,18 +17,18 @@ Run `npm install` separately in `backend/` and `frontend/`; there is no root pac
 | Directory | Command | Purpose |
 | --- | --- | --- |
 | Both | `npm run dev` | Start the respective development server. |
-| Both | `npm run build` | Compile backend TypeScript or build frontend assets. |
+| Both | `npm run build` | Compile TypeScript or build frontend assets. |
 | Backend | `npm start` | Run the compiled API. |
 | Backend | `npm test` | Build and run Node's test runner. |
 | Backend | `npm run prisma:migrate -- --name <change>` | Create and apply development migrations. |
 | Backend | `npm run prisma:generate` | Regenerate the Prisma client. |
 | Frontend | `npm run lint` | Run Oxlint. |
 | Frontend | `npm run check:pdfs` | Verify PDF headers and checksums; also runs before builds. |
-| Frontend | `npx playwright test` | Run browser tests using installed Chrome and Vite on port 5174. |
+| Frontend | `npx playwright test` | Run browser tests with installed Chrome and Vite on port 5174. |
 
 ## Coding Style & Naming Conventions
 
-Use two-space indentation and match surrounding quotes and semicolons. Backend TypeScript uses strict checking. Name React files in PascalCase, such as `Reader3D.jsx`, and services in camelCase, such as `readingPlanService.ts`. Put request schemas in `validators/` and frontend API calls in `api/client.js`. Oxlint checks React hooks; no formatter is configured.
+Use two-space indentation and match surrounding quotes and semicolons. Backend TypeScript uses strict checking. Name React files in PascalCase (`Reader3D.jsx`) and services in camelCase (`readingPlanService.ts`). Put request schemas in `validators/` and frontend API calls in `api/client.js`. Oxlint checks React hooks; no formatter is configured.
 
 ## Testing Guidelines
 
@@ -40,4 +40,4 @@ Recent commits use informal summaries. Prefer concise, imperative, scoped messag
 
 ## Security & Content Integrity
 
-Use local environment variables and `SETUP.md` for database configuration. Keep credentials uncommitted and AI provider calls server-side. Preserve original scripture, provenance, checksums, language direction, and accurate availability labels. Never fabricate passages. Consult `library/README.md` and `backend/data/SOURCES.md` before content imports.
+Follow `SETUP.md` for local configuration. Keep credentials uncommitted and AI provider calls server-side. Preserve scripture, provenance, checksums, language direction, and accurate availability labels. Never fabricate passages. Consult `library/README.md` and `backend/data/SOURCES.md` before content imports.

@@ -16,17 +16,27 @@ function validateDraftEdition(input, document) {
   const edition = validateEdition(input);
   const pages = new Set();
   const illustrations = new Set(input.illustrationOnlyPages || []);
+  const blankPages = input.blankPages || [];
+  if (!Array.isArray(blankPages) || new Set(blankPages).size !== blankPages.length ||
+      (blankPages.length && (typeof input.blankPageVerification !== 'string' || !input.blankPageVerification.trim()))) {
+    throw new Error('Blank pages require unique page numbers and a visual verification note.');
+  }
+  const blanks = new Set(blankPages);
   const checkPage = page => {
     if (!Number.isInteger(page) || page < 1 || page > document.pageCount) throw new Error('Invalid source page.');
   };
   for (const page of illustrations) checkPage(page);
+  for (const page of blanks) {
+    checkPage(page);
+    if (illustrations.has(page)) throw new Error('A page cannot be both blank and illustration-only.');
+  }
   let lastPage = 0;
   edition.sections.forEach((section, sectionIndex) => {
     if (section.sortOrder !== sectionIndex + 1) throw new Error('Chapters must be in consecutive source order.');
     section.passages.forEach((passage, passageIndex) => {
       const page = input.sections[sectionIndex].passages[passageIndex].sourcePage;
       checkPage(page);
-      if (page < lastPage || illustrations.has(page)) throw new Error('Passage source pages are out of order or illustration-only.');
+      if (page < lastPage || illustrations.has(page) || blanks.has(page)) throw new Error('Passage source pages are out of order or classified as non-text.');
       if (passage.sortOrder !== passageIndex + 1) throw new Error('Passages must be in consecutive source order.');
       if (/[\uE000-\uF8FF\uFFFD]/u.test(passage.text)) throw new Error('Unconverted font characters remain in the draft.');
       lastPage = page;
@@ -36,7 +46,8 @@ function validateDraftEdition(input, document) {
       ].filter(Boolean).join('\n');
     });
   });
-  if (new Set([...pages, ...illustrations]).size !== document.pageCount) throw new Error('Some source pages are missing.');
+  if (new Set([...pages, ...illustrations, ...blanks]).size !== document.pageCount) throw new Error('Some source pages are missing.');
+  if (blanks.size) edition.provenance += `\nBlank source PDF pages: ${[...blanks].sort((a, b) => a - b).join(', ')}. ${input.blankPageVerification}`;
   const checksum = createHash('sha256').update(JSON.stringify(edition)).digest('hex');
   edition.provenance += `\nExplicitly imported as a separate draft text edition; no review attestation is implied.\nSource PDF: ${document.source}\nSource PDF SHA-256: ${document.sha256}\nDraft edition SHA-256: ${checksum}`;
   return edition;
@@ -59,8 +70,12 @@ function assertStoredDraft(stored, source) {
   }
 }
 
-async function applyDraftEdition(tx, input, document, writeBackup) {
+async function applyDraftEdition(tx, input, document, writeBackup, onProgress = () => {}) {
   const source = validateDraftEdition(input, document);
+  // A dropped client must not leave the hosted pooler's transaction holding
+  // the book lock indefinitely. This applies only inside this transaction.
+  await tx.$queryRaw`SELECT set_config('idle_in_transaction_session_timeout', '30s', true),
+    set_config('application_name', 'tattvagyaan-draft-import', true)`;
   const scripture = await tx.scripture.findUniqueOrThrow({ where: { slug: source.scriptureSlug } });
   // Serialize imports for this book, including concurrent first-time imports.
   await tx.$queryRaw`SELECT id FROM scriptures WHERE id = ${scripture.id} FOR UPDATE`;
@@ -84,9 +99,13 @@ async function applyDraftEdition(tx, input, document, writeBackup) {
   const passages = records.flatMap(section => section.passages.map(passage => ({
     ...passage, sectionId: section.id, wordCount: passage.text.trim().split(/\s+/u).length,
   })));
-  for (let index = 0; index < passages.length; index += 250) {
-    await tx.scripturePassage.createMany({ data: passages.slice(index, index + 250) });
+  // Seven fields per row stays below PostgreSQL's parameter limit, while
+  // reducing round trips for long books within the atomic transaction.
+  for (let index = 0; index < passages.length; index += 1000) {
+    await tx.scripturePassage.createMany({ data: passages.slice(index, index + 1000) });
+    onProgress({ stage: 'passages', inserted: Math.min(index + 1000, passages.length), total: passages.length });
   }
+  onProgress({ stage: 'verifying-stored-text' });
   const stored = await tx.scriptureEdition.findUniqueOrThrow({ where: { id }, include: { sections: { include: { passages: true } } } });
   assertStoredDraft(stored, source);
   const complete = await tx.scriptureEdition.count({ where: { scriptureId: scripture.id, contentStatus: 'complete' } });
@@ -118,7 +137,7 @@ async function main(args) {
       const backups = path.resolve(__dirname, '../backups');
       fs.mkdirSync(backups, { recursive: true });
       fs.writeFileSync(path.join(backups, `draft-edition-${Date.now()}-${randomUUID()}.json`), JSON.stringify(snapshot), { flag: 'wx' });
-    }), { timeout: 120000, maxWait: 10000 });
+    }, progress => console.log(JSON.stringify(progress))), { timeout: 120000, maxWait: 10000 });
     console.log(JSON.stringify({ ...result, readerPath: `/reader/${result.scriptureId}/${result.editionId}` }));
   } finally { await prisma.$disconnect(); }
 }

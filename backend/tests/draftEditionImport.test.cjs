@@ -71,3 +71,42 @@ test('the supplied Mahabharata draft validates without changing any scripture te
   assert.equal(source.expectedPassages, 725);
   assert.deepEqual(source.sections.flatMap(s => s.passages.map(p => p.text)), input.sections.flatMap(s => s.passages.map(p => p.text)));
 });
+
+test('visually checked blank pages cover source pages without invented passages', () => {
+  const input = fixture();
+  input.illustrationOnlyPages = [];
+  input.blankPages = [2];
+  input.blankPageVerification = 'Source page 2 was rendered and visually checked: blank.';
+  const result = validateDraftEdition(input, document);
+  assert.equal(result.expectedPassages, 1);
+  assert.match(result.provenance, /Blank source PDF pages: 2/);
+  for (const mutate of [
+    draft => { delete draft.blankPageVerification; },
+    draft => { draft.blankPages = [2, 2]; },
+    draft => { draft.blankPages = [3]; },
+    draft => { draft.blankPages = [1]; },
+    draft => { draft.illustrationOnlyPages = [2]; },
+  ]) {
+    const changed = structuredClone(input);
+    mutate(changed);
+    assert.throws(() => validateDraftEdition(changed, document));
+  }
+});
+
+test('large drafts insert every passage across batch boundaries before verification', async () => {
+  const input = fixture();
+  const count = 1001;
+  const sample = input.sections[0].passages[0];
+  input.expectedPassages = count;
+  input.sections[0].expectedPassages = count;
+  input.sections[0].passages = Array.from({ length: count }, (_, index) => ({
+    ...sample, reference: `1.${index + 1}`, sortOrder: index + 1,
+  }));
+  const { tx, state, backup } = database();
+  const progress = [];
+  await applyDraftEdition(tx, input, document, backup, step => progress.push(step));
+  assert.equal(state.passages.length, count);
+  assert.equal(state.passages.at(-1).reference, '1.1001');
+  assert.deepEqual(progress.filter(p => p.stage === 'passages').map(p => p.inserted), [1000, 1001]);
+  assert.equal(progress.at(-1).stage, 'verifying-stored-text');
+});
