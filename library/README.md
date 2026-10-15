@@ -42,7 +42,15 @@ Repeating the import preserves existing Hindi passage IDs and annotations. Chang
 
 ## Retrieval
 
-For the staged migration from PDFs to corrected database text, follow [Corrected text imports](transcriptions/README.md). All source pages must be reviewed before importing an edition. Draft extraction never activates the text reader.
+### Explicit draft text editions
+
+At the user's request, `editions/drafts/bal-mahabharat-katha-hi.json` can be imported as a separate text edition under Mahabharata. It contains 41 chapters and 725 passages from 94 text pages; source pages 22 and 80 contain illustrations. It is **not fully proofread**. The original PDF edition and its saved positions are preserved. The text reader displays a draft label and source-page notes; the Mahabharata collection remains partial.
+
+`editions/drafts/manusmriti-hi.json` likewise contains a separate draft text edition: 12 printed chapters plus front matter and credits (14 sections, 1,867 passages), covering all 509 pages. It preserves Sanskrit verses and Hindi explanations. The user-selected `frontend/dist/library/manusmriti-sampurna.pdf` matches the original catalog PDF checksum. Incorrect PDF Unicode mappings were decoded from Nirmala UI glyph IDs using font cmap/GSUB data; all seven embedded font subsets were checked against the installed font's outlines. The output retains source-page references, printed verse labels and unverified attribution/reuse status. It is not fully proofread and does not mark the work complete. Use the same explicit importer below with `../library/editions/drafts/manusmriti-hi.json` to restore this edition.
+
+From `backend/`, validate with `node scripts/import-draft-edition.cjs ../library/editions/drafts/bal-mahabharat-katha-hi.json`; append `--apply` to import into the configured database. The import checks source identity and PDF checksum, writes a recovery snapshot, creates the edition/chapters/passages in one transaction, and verifies the stored text before committing. Identical reruns preserve IDs and annotations; changed existing content is rejected. No schema migration is needed. Ordinary catalog sync preserves this separate edition but does not automatically import drafts; run this explicit command when restoring a fresh database. This path does not attest review, activate a reviewed transcription, or remove PDFs.
+
+For replacing PDF editions with corrected database text, follow [Corrected text imports](transcriptions/README.md). All source pages must be reviewed before activating a reviewed transcription. Draft extraction never activates that migration; explicitly imported draft editions use the separate path above.
 
 OCR now runs offline using free Tesseract language data through PyMuPDF. From `backend/`, `node scripts/transcribe-library.cjs --execute` processes all remaining pages with per-page checkpoints; see the transcription guide for the one-time local setup and book/page options. No paid OCR provider or API key is used. One real source page from each of the seven PDFs has been processed as a smoke test; the remaining corpus still needs OCR and review.
 

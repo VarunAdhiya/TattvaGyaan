@@ -199,6 +199,7 @@ export default function ScriptureDetail() {
                         </div>
                         <div className="text-xs mt-1 text-amber-800">
                           {edition.contentStatus === 'scanned' ? 'Scanned PDF · Partial collection'
+                            : edition.contentStatus === 'draft' ? `Draft text · ${edition.expectedPassages} passages · Not fully proofread`
                             : edition.contentStatus === 'transcribed' ? `Reviewed transcription · ${edition.expectedPassages} source page${edition.expectedPassages === 1 ? '' : 's'} with text`
                               : edition.contentStatus === 'complete' ? `Complete · ${edition.expectedPassages} passages` : 'Partial sample — completeness unverified'}
                         </div>

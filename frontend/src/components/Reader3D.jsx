@@ -252,6 +252,7 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
           }}><Maximize2 size={16} /></button>
         </div>
       </header>
+      {edition.contentStatus === 'draft' && <p className="px-4 py-2 text-sm border-b">Draft text · Not fully proofread</p>}
       {selection && <div className="reader-control fixed bottom-24 left-1/2 -translate-x-1/2 z-40 max-w-[95vw] flex flex-wrap gap-3 items-center p-3 border rounded-xl shadow-xl text-sm" role="status">
         <span>Selected text · {selection.reference}</span>
         <button className={buttonClass} onClick={() => onAskAI(selection)}><Sparkles size={16} />Ask AI about selected text</button>
@@ -309,7 +310,7 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
                         style={{ fontSize, lineHeight: 1.9 }} onMouseUp={() => captureSelection(passage)} onTouchEnd={() => captureSelection(passage)} onKeyUp={() => captureSelection(passage)}>
                         {passage.text}
                       </div>
-                      {passage.sourceNotes && <details className="mt-3 text-xs"><summary>{edition.contentStatus === 'transcribed' ? 'Source and review notes' : 'Translator’s notes'}</summary><p className="whitespace-pre-wrap">{passage.sourceNotes}</p></details>}
+                      {passage.sourceNotes && <details className="mt-3 text-xs"><summary>{edition.contentStatus === 'transcribed' ? 'Source and review notes' : edition.contentStatus === 'draft' ? 'Source notes' : 'Translator’s notes'}</summary><p className="whitespace-pre-wrap">{passage.sourceNotes}</p></details>}
                     </div>;
                   })}
               </>}
