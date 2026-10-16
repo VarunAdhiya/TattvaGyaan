@@ -3,26 +3,26 @@ export declare const config: {
     nodeEnv: string;
     database: {
         url: string;
+        prismaUrl: string;
+        connectionLimit: number;
+        sessionPool: {
+            connectionString: string;
+            max: number;
+            connectionTimeoutMillis: number;
+            idleTimeoutMillis: number;
+        };
     };
     session: {
         secret: string;
         maxAge: number;
     };
-    openai: {
+    gemini: {
         apiKey: string;
         model: string;
-        embeddingModel: string;
+        timeoutMs: number;
     };
     cors: {
         origin: string;
-    };
-    rateLimit: {
-        windowMs: number;
-        max: number;
-    };
-    aiRateLimit: {
-        windowMs: number;
-        max: number;
     };
 };
 //# sourceMappingURL=index.d.ts.map

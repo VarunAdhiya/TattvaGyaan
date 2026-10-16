@@ -1,5 +1,6 @@
 import prisma from '../lib/prisma';
 import { AppError } from '../middleware/errorHandler';
+import { Prisma } from '@prisma/client';
 
 export class ScriptureService {
   async getReligions() {
@@ -29,16 +30,15 @@ export class ScriptureService {
   }
 
   async getScriptures(filters: { religionId?: string; language?: string; search?: string; page: number; limit: number }) {
-    const where: any = {};
+    const where: Prisma.ScriptureWhereInput = {};
     if (filters.religionId) where.religionId = filters.religionId;
     if (filters.language) {
       where.editions = { some: { language: filters.language } };
     }
     if (filters.search) {
-      where.OR = [
-        { title: { contains: filters.search, mode: 'insensitive' } },
-        { description: { contains: filters.search, mode: 'insensitive' } },
-      ];
+      where.AND = filters.search.normalize('NFC').trim().split(/\s+/u).map(term => ({
+        searchText: { contains: term, mode: 'insensitive' },
+      }));
     }
 
     const [scriptures, total] = await Promise.all([
@@ -47,7 +47,8 @@ export class ScriptureService {
         include: {
           religion: { select: { id: true, name: true, slug: true } },
           editions: {
-            select: { id: true, title: true, language: true, isOriginal: true, textDirection: true },
+            orderBy: [{ contentStatus: 'asc' }, { isOriginal: 'desc' }],
+            select: { id: true, title: true, language: true, isOriginal: true, textDirection: true, contentStatus: true, expectedPassages: true },
           },
         },
         orderBy: { title: 'asc' },
@@ -74,6 +75,7 @@ export class ScriptureService {
       include: {
         religion: true,
         editions: {
+          orderBy: [{ contentStatus: 'asc' }, { isOriginal: 'desc' }],
           include: {
             _count: { select: { sections: true } },
           },
@@ -118,7 +120,7 @@ export class ScriptureService {
     const [passages, total] = await Promise.all([
       prisma.scripturePassage.findMany({
         where: { sectionId },
-        orderBy: { sortOrder: 'asc' },
+        orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
         skip: (page - 1) * limit,
         take: limit,
       }),
@@ -154,21 +156,45 @@ export class ScriptureService {
       where: { scriptureId },
       orderBy: { isOriginal: 'desc' },
     });
-    if (editions.length === 0) throw new AppError('No editions found for this scripture', 404);
     return editions;
   }
 
-  async getPassagesForReader(editionId: string) {
+  async getPassagesForReader(editionId: string, includeBookText = false) {
+    const edition = await prisma.scriptureEdition.findUnique({ where: { id: editionId }, select: { id: true, source: true, language: true } });
+    if (!edition) throw new AppError('Edition not found', 404);
+    // Only this short prose edition is laid out as a complete book in-browser.
+    // Other editions and position lookups retain their paginated API behavior.
+    const bookText = includeBookText && edition.language === 'hi' && edition.source ===
+      'urn:sha256:eb00713009dd7b6a81feec459c7518a494f851dc79d77e5d67856e4d8d70d809';
     const sections = await prisma.scriptureSection.findMany({
       where: { editionId },
-      orderBy: { sortOrder: 'asc' },
-      include: {
-        passages: {
-          orderBy: { sortOrder: 'asc' },
-        },
+      orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+      select: { id: true, title: true, slug: true, parentId: true, _count: { select: { passages: true } },
+        passages: bookText ? {
+          orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+          select: { id: true, sectionId: true, reference: true, text: true, sourceNotes: true },
+        } : false,
       },
     });
     return sections;
+  }
+
+  async getPassagePosition(id: string) {
+    const passage = await prisma.scripturePassage.findUnique({ where: { id }, include: { section: { select: { editionId: true } } } });
+    if (!passage) throw new AppError('Passage not found', 404);
+    const [sections, preceding] = await Promise.all([
+      this.getPassagesForReader(passage.section.editionId),
+      prisma.scripturePassage.count({ where: { sectionId: passage.sectionId, OR: [
+        { sortOrder: { lt: passage.sortOrder } },
+        { sortOrder: passage.sortOrder, id: { lt: passage.id } },
+      ] } }),
+    ]);
+    let pageIndex = 2; // Cover and contents precede stable, two-passage reading pages.
+    for (const section of sections) {
+      if (section.id === passage.sectionId) break;
+      pageIndex += Math.ceil(section._count.passages / 2);
+    }
+    return { editionId: passage.section.editionId, pageIndex: pageIndex + Math.floor(preceding / 2) };
   }
 }
 

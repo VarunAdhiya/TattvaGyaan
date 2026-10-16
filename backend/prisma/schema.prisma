@@ -59,6 +59,7 @@ model Scripture {
   description        String?
   summary            String?
   themes             String[]
+  searchText         String   @default("") @map("search_text")
   estimatedReadTime  Int?     @map("estimated_read_time")
   availabilityStatus String   @default("metadata_only") @map("availability_status")
   createdAt          DateTime @default(now()) @map("created_at")
@@ -67,6 +68,7 @@ model Scripture {
   religion Religion           @relation(fields: [religionId], references: [id])
   editions ScriptureEdition[]
 
+  @@index([religionId])
   @@map("scriptures")
 }
 
@@ -81,6 +83,8 @@ model ScriptureEdition {
   source        String?
   license       String?
   provenance    String?
+  contentStatus String @default("unverified") @map("content_status")
+  expectedPassages Int? @map("expected_passages")
   isOriginal    Boolean  @default(false) @map("is_original")
   textDirection String   @default("ltr") @map("text_direction")
   createdAt     DateTime @default(now()) @map("created_at")
@@ -88,6 +92,7 @@ model ScriptureEdition {
   scripture Scripture          @relation(fields: [scriptureId], references: [id])
   sections  ScriptureSection[]
 
+  @@index([scriptureId, language])
   @@map("scripture_editions")
 }
 
@@ -107,6 +112,7 @@ model ScriptureSection {
   passages ScripturePassage[]
 
   @@unique([editionId, slug])
+  @@index([editionId, sortOrder, id])
   @@map("scripture_sections")
 }
 
@@ -115,6 +121,7 @@ model ScripturePassage {
   sectionId String   @map("section_id")
   reference String
   text      String
+  sourceNotes String? @map("source_notes")
   wordCount Int      @default(0) @map("word_count")
   sortOrder Int      @default(0) @map("sort_order")
   createdAt DateTime @default(now()) @map("created_at")
@@ -125,6 +132,7 @@ model ScripturePassage {
   notes      Note[]
 
   @@index([sectionId, sortOrder])
+  @@index([sectionId, sortOrder, id])
   @@map("scripture_passages")
 }
 
@@ -156,6 +164,7 @@ model ReadingPlan {
   endDate       DateTime @map("end_date")
   minutesPerDay Int?     @map("minutes_per_day")
   status        String   @default("active")
+  analysis      Json?
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
@@ -174,6 +183,8 @@ model ReadingPlanItem {
   completed   Boolean   @default(false)
   completedAt DateTime? @map("completed_at")
   sortOrder   Int       @default(0) @map("sort_order")
+  estimatedMinutes Int? @map("estimated_minutes")
+  rationale   String?
 
   plan ReadingPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
 

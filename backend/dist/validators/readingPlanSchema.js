@@ -7,7 +7,9 @@ exports.createReadingPlanSchema = zod_1.z.object({
     title: zod_1.z.string().min(1).max(200),
     targetDays: zod_1.z.number().int().min(1).max(365),
     minutesPerDay: zod_1.z.number().int().min(1).max(480).optional(),
-    startDate: zod_1.z.string().datetime().optional(),
+    startDate: zod_1.z
+        .union([zod_1.z.literal(''), zod_1.z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date (expected YYYY-MM-DD)')])
+        .optional(),
 });
 exports.updateReadingPlanSchema = zod_1.z.object({
     status: zod_1.z.enum(['active', 'paused', 'completed', 'cancelled']).optional(),

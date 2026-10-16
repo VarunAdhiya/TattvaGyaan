@@ -1,0 +1,2 @@
+-r requirements-transcription.txt
+numpy==2.5.4

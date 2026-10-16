@@ -31,6 +31,7 @@ export declare class ScriptureService {
             originalLang: string;
             summary: string | null;
             themes: string[];
+            searchText: string;
             estimatedReadTime: number | null;
             availabilityStatus: string;
         })[];
@@ -60,6 +61,8 @@ export declare class ScriptureService {
                 id: string;
                 title: string;
                 language: string;
+                contentStatus: string;
+                expectedPassages: number | null;
                 isOriginal: boolean;
                 textDirection: string;
             }[];
@@ -74,6 +77,7 @@ export declare class ScriptureService {
             originalLang: string;
             summary: string | null;
             themes: string[];
+            searchText: string;
             estimatedReadTime: number | null;
             availabilityStatus: string;
         })[];
@@ -110,6 +114,8 @@ export declare class ScriptureService {
             source: string | null;
             license: string | null;
             provenance: string | null;
+            contentStatus: string;
+            expectedPassages: number | null;
             isOriginal: boolean;
             textDirection: string;
         })[];
@@ -124,6 +130,7 @@ export declare class ScriptureService {
         originalLang: string;
         summary: string | null;
         themes: string[];
+        searchText: string;
         estimatedReadTime: number | null;
         availabilityStatus: string;
     }>;
@@ -149,6 +156,7 @@ export declare class ScriptureService {
             originalLang: string;
             summary: string | null;
             themes: string[];
+            searchText: string;
             estimatedReadTime: number | null;
             availabilityStatus: string;
         };
@@ -185,6 +193,8 @@ export declare class ScriptureService {
         source: string | null;
         license: string | null;
         provenance: string | null;
+        contentStatus: string;
+        expectedPassages: number | null;
         isOriginal: boolean;
         textDirection: string;
     }>;
@@ -215,6 +225,7 @@ export declare class ScriptureService {
             sectionId: string;
             reference: string;
             text: string;
+            sourceNotes: string | null;
             wordCount: number;
         }[];
         pagination: {
@@ -238,6 +249,7 @@ export declare class ScriptureService {
                     originalLang: string;
                     summary: string | null;
                     themes: string[];
+                    searchText: string;
                     estimatedReadTime: number | null;
                     availabilityStatus: string;
                 };
@@ -253,6 +265,8 @@ export declare class ScriptureService {
                 source: string | null;
                 license: string | null;
                 provenance: string | null;
+                contentStatus: string;
+                expectedPassages: number | null;
                 isOriginal: boolean;
                 textDirection: string;
             };
@@ -273,6 +287,7 @@ export declare class ScriptureService {
         sectionId: string;
         reference: string;
         text: string;
+        sourceNotes: string | null;
         wordCount: number;
     }>;
     getEditionsByScripture(scriptureId: string): Promise<{
@@ -287,10 +302,19 @@ export declare class ScriptureService {
         source: string | null;
         license: string | null;
         provenance: string | null;
+        contentStatus: string;
+        expectedPassages: number | null;
         isOriginal: boolean;
         textDirection: string;
     }[]>;
-    getPassagesForReader(editionId: string): Promise<({
+    getPassagesForReader(editionId: string, includeBookText?: boolean): Promise<{
+        id: string;
+        _count: {
+            passages: number;
+        };
+        slug: string;
+        title: string;
+        parentId: string | null;
         passages: {
             id: string;
             createdAt: Date;
@@ -298,18 +322,14 @@ export declare class ScriptureService {
             sectionId: string;
             reference: string;
             text: string;
+            sourceNotes: string | null;
             wordCount: number;
         }[];
-    } & {
-        id: string;
-        createdAt: Date;
-        slug: string;
-        sortOrder: number;
-        title: string;
-        parentId: string | null;
+    }[]>;
+    getPassagePosition(id: string): Promise<{
         editionId: string;
-        level: number;
-    })[]>;
+        pageIndex: number;
+    }>;
 }
 export declare const scriptureService: ScriptureService;
 //# sourceMappingURL=scriptureService.d.ts.map

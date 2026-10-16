@@ -58,10 +58,252 @@
 }
 
 /* Page flip library tweaks */
-.stPage {
+.reader-paper {
   background-color: var(--reader-paper) !important;
+  color: var(--reader-text);
   box-shadow: 0 4px 12px var(--paper-shadow);
   border-radius: 2px;
+}
+
+.reader-shell { min-height: calc(100dvh - 64px); }
+.reader-stage { background: radial-gradient(ellipse at center, transparent 20%, #0000000c 100%); overflow-x: clip; }
+.reader-binding {
+  box-shadow: 0 22px 38px -18px #1c191770, 0 6px 0 -1px #d8cbb5, 0 9px 0 -2px #b3a084;
+}
+.reader-paper.--left { background-image: linear-gradient(to right, transparent 92%, #00000018); }
+.reader-paper.--right { background-image: linear-gradient(to right, #00000018, transparent 8%); }
+.reader-paper .scripture-text { color: var(--reader-text); }
+.reader-paper .scripture-text { user-select: text; -webkit-user-select: text; }
+
+.reader-shell { display: flex; flex-direction: column; background: var(--reader-bg); color: var(--reader-text); }
+.reader-shell:fullscreen { overflow-y: auto; }
+.reader-control { background: var(--reader-paper); color: var(--reader-text); }
+.reader-spread { position: relative; display: grid; width: 100%; max-width: 800px; margin: auto; perspective: 2400px; isolation: isolate; }
+.reader-spread-wide { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); max-width: 1600px; }
+.reader-visible-page { min-width: 0; height: max(380px, calc(100dvh - 240px)); padding: clamp(16px, 3vw, 40px); overflow-y: auto; scrollbar-gutter: stable; overflow-wrap: anywhere; }
+.reader-passage { scroll-margin-top: 16px; }
+/* Hindi Bal Mahabharat prose: reflow the source's printed column breaks without
+   changing its text nodes, passage boundaries, or stable reader pages. */
+.reader-prose .reader-section-header,
+.reader-prose .reader-passage {
+  max-inline-size: 38rem;
+  margin-inline: auto;
+}
+.reader-prose .reader-section-header {
+  align-items: baseline;
+  padding-block-end: 1rem;
+  margin-block-end: 1.75rem;
+  border-color: var(--reader-border);
+}
+.reader-prose .reader-section-header h2 { line-height: 1.7; }
+.reader-prose .reader-passage {
+  padding: 0;
+  border: 0;
+  margin-block-end: 2rem;
+  border-radius: 4px;
+}
+.reader-prose .reader-passage-header {
+  align-items: center;
+  gap: .5rem 1rem;
+  margin-block-end: .75rem;
+  color: var(--reader-accent);
+}
+.reader-prose .scripture-text {
+  white-space: normal;
+  text-align: justify;
+  text-align-last: start;
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: manual;
+}
+.reader-prose .reader-passage details {
+  line-height: 1.7;
+  margin-block-start: 1rem;
+}
+.reader-prose .reader-passage summary {
+  cursor: pointer;
+  padding-block: .25rem;
+}
+.reader-prose .reader-page-number {
+  border-block-start: 1px solid var(--reader-border);
+  margin-block-start: 1rem;
+}
+@media (max-width: 599px) {
+  .reader-prose .scripture-text { text-align: start; }
+  .reader-prose .reader-section-header { margin-block-end: 1.25rem; }
+  .reader-prose .reader-passage { margin-block-end: 1.5rem; }
+}
+/* Content-sized Mahabharat pages. The measurement element uses these exact
+   paragraph rules; controls and attribution live outside the reading measure. */
+.reader-typeset .reader-spread { max-width: 720px; }
+.reader-typeset .reader-spread-wide { max-width: 1440px; }
+.reader-typeset .reader-visible-page,
+.reader-typeset .reader-flip-copy {
+  height: var(--book-height, 640px);
+  padding: var(--book-padding, 44px);
+  scrollbar-gutter: auto;
+}
+.reader-typeset [data-prose-content="true"] { overflow: hidden; }
+.reader-typeset .reader-section-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  height: 50px;
+  gap: 4px;
+  max-inline-size: none;
+  padding: 0 0 12px;
+  margin: 0 0 20px;
+  font-size: 13px;
+}
+.reader-typeset .reader-section-header h2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.8;
+}
+.reader-typeset .reader-section-header button { padding: 6px; font-size: 11px; }
+.book-page-content {
+  height: var(--book-content-height);
+  font-size: var(--book-font-size, 18px);
+  line-height: 1.9;
+}
+.reader-typeset .book-paragraph {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  text-indent: 1.25em;
+  text-align: justify;
+  text-align-last: start;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: manual;
+}
+.book-paragraph + .book-paragraph,
+.book-paragraph + .book-family-tree { margin-block-start: .65em; }
+.reader-typeset .book-paragraph-continued { text-indent: 0; }
+.reader-typeset .book-measure {
+  position: fixed;
+  top: 0;
+  left: -10000px;
+  visibility: hidden;
+  pointer-events: none;
+  contain: layout style;
+}
+.reader-typeset .reader-page-number {
+  height: 30px;
+  margin: 0;
+  padding-top: 12px;
+  border: 0;
+  line-height: 18px;
+  font-variant-numeric: tabular-nums;
+}
+.book-focused-passage { background: color-mix(in srgb, var(--reader-highlight) 28%, transparent); }
+.book-family-tree {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  background: color-mix(in srgb, var(--reader-accent) 5%, var(--reader-paper));
+  border-radius: 3px;
+}
+.book-family-tree svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.book-family-tree path { stroke: var(--reader-accent); stroke-width: .25; fill: none; opacity: .65; }
+.book-tree-label { position: absolute; width: 24%; transform: translate(-50%, -35%); text-align: center; line-height: 1.4; }
+.reader-typeset .book-tree-label .scripture-text { white-space: pre-line; text-align: center; }
+@media (max-width: 1199px) {
+  .reader-typeset .reader-section-header { grid-template-columns: 1fr auto; padding-bottom: 4px; }
+  .reader-typeset .reader-section-header h2 { grid-column: 1 / -1; }
+  .reader-typeset .reader-section-header .book-tools-button { justify-self: start; }
+}
+@media (max-width: 599px) {
+  .reader-typeset .book-paragraph { text-align: start; }
+}
+.reader-scan { width: 100%; overflow-x: auto; }
+.reader-scan canvas { display: block; margin-inline: auto; }
+.theme-sepia .reader-scan canvas { filter: sepia(.35); }
+.theme-dark .reader-scan canvas { filter: invert(.88) hue-rotate(180deg); }
+.reader-navigation { position: sticky; bottom: 0; background: var(--reader-bg); z-index: 20; }
+.reader-overlay { position: fixed; inset: 0; z-index: 60; background: #0008; display: flex; justify-content: flex-end; }
+.reader-drawer { width: min(100%, 440px); overflow-y: auto; padding: 24px; background: var(--reader-paper); color: var(--reader-text); }
+.reader-note-editor { width: min(90%, 500px); margin: auto; padding: 24px; border-radius: 16px; background: var(--reader-paper); color: var(--reader-text); }
+/* A turning leaf has two separate faces, with a fixed spine and a cast shadow.
+   The real reader stays mounted below it; these copies are inert and temporary. */
+.reader-flip-layer { position: absolute; inset: 0; z-index: 8; pointer-events: none; perspective: 2400px; }
+.reader-turn-hold { position: absolute; inset: 0; display: grid; }
+.reader-turn-hold--spread { grid-template-columns: 1fr 1fr; }
+.reader-turn-held-page { position: relative; min-width: 0; }
+.reader-flip-copy {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  padding: clamp(16px, 3vw, 40px); overflow: hidden; overflow-wrap: anywhere;
+  background: var(--reader-paper); color: var(--reader-text); box-shadow: none;
+  user-select: none; scrollbar-gutter: stable;
+}
+.reader-turn-scene { position: absolute; inset: 0; perspective: 2400px; }
+.reader-turn-sheet {
+  position: absolute; inset-block: 0; width: 100%;
+  transform-style: preserve-3d; transform-origin: left center;
+  will-change: transform; --turn-angle: -180deg;
+}
+.reader-turn-scene--spread .reader-turn-sheet { width: 50%; }
+.reader-turn-scene--spread.reader-turn-scene--forward .reader-turn-sheet { left: 50%; }
+.reader-turn-scene--spread.reader-turn-scene--backward .reader-turn-sheet { left: 0; transform-origin: right center; --turn-angle: 180deg; }
+.reader-turn-scene--single.reader-turn-scene--backward .reader-turn-sheet { transform: rotateY(-180deg); }
+.reader-turn-face {
+  position: absolute; inset: 0; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background: var(--reader-paper); border: 1px solid var(--reader-border);
+  box-shadow: 0 3px 8px #0002; border-radius: 2px;
+}
+.reader-turn-face--front { transform: translateZ(.5px); }
+.reader-turn-face--back { transform: rotateY(180deg) translateZ(.5px); }
+.reader-turn-face::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, #0005, #0000 18%, #fff2 68%, #0002);
+  opacity: 0; pointer-events: none;
+}
+.reader-turn-face--back::after { background: linear-gradient(90deg, #0001, #fff1 30%, #0000 78%, #0005); }
+.reader-turn-stationary { position: absolute; inset-block: 0; width: 100%; }
+.reader-turn-scene--spread .reader-turn-stationary { width: 50%; }
+.reader-turn-scene--spread.reader-turn-scene--backward .reader-turn-stationary { left: 50%; }
+.reader-turn-shadow { position: absolute; inset: 0; opacity: 0; background: linear-gradient(90deg, #0000 25%, #0007 50%, #0000 75%); transform-origin: center; }
+.reader-turn-scene--animate .reader-turn-sheet { animation: reader-turn-leaf 700ms cubic-bezier(.35,.08,.28,1) both; }
+.reader-turn-scene--single.reader-turn-scene--backward.reader-turn-scene--animate .reader-turn-sheet { animation-name: reader-turn-single-back; }
+.reader-turn-scene--animate .reader-turn-face::after { animation: reader-turn-shading 700ms ease-in-out both; }
+.reader-turn-scene--animate .reader-turn-shadow { animation: reader-turn-cast 700ms ease-in-out both; }
+.reader-book[data-turning] > .reader-visible-page { pointer-events: none; }
+@keyframes reader-turn-leaf {
+  0% { transform: rotateY(0deg) translateZ(0); }
+  45% { transform: rotateY(calc(var(--turn-angle) * .48)) translateZ(12px); }
+  100% { transform: rotateY(var(--turn-angle)) translateZ(0); }
+}
+@keyframes reader-turn-single-back {
+  0% { transform: rotateY(-180deg); }
+  55% { transform: rotateY(-85deg) translateZ(12px); }
+  100% { transform: rotateY(0deg); }
+}
+@keyframes reader-turn-shading { 0%, 100% { opacity: 0; } 45%, 60% { opacity: .9; } }
+@keyframes reader-turn-cast { 0%, 100% { opacity: 0; transform: scaleX(.2); } 45% { opacity: .5; transform: scaleX(1); } }
+.reader-page-corner {
+  position: absolute; bottom: 0; width: 44px; height: 44px; z-index: 9;
+  display: grid; place-items: center; color: var(--reader-accent); cursor: pointer;
+  border: 0; background: transparent; touch-action: manipulation;
+}
+.reader-page-corner::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(135deg, transparent 48%, var(--reader-border) 49%, var(--reader-paper) 72%);
+  transform: scale(.6); transform-origin: bottom right; transition: transform 160ms ease, filter 160ms ease;
+}
+.reader-page-corner svg { opacity: .3; }
+.reader-page-corner--next { right: 0; }
+.reader-page-corner--previous { left: 0; }
+.reader-page-corner--previous::before { transform: scale(-.6, .6); transform-origin: center; }
+.reader-page-corner:hover::before, .reader-page-corner:focus-visible::before { transform: scale(1); filter: drop-shadow(-2px -2px 2px #0002); }
+.reader-page-corner--previous:hover::before, .reader-page-corner--previous:focus-visible::before { transform: scale(-1, 1); }
+.reader-page-corner:hover svg, .reader-page-corner:focus-visible svg { opacity: 1; }
+.reader-page-corner:focus-visible { outline: 2px solid var(--reader-accent); outline-offset: 2px; }
+.reader-page-corner:disabled { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) {
+  .reader-flip-layer { display: none; }
+  .reader-page-corner::before { transition: none; }
 }
 
 /* Scrollbar styling */

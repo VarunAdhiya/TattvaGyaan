@@ -41,3 +41,16 @@ Thumbs.db
 # Temp files
 *.tmp
 .claude/
+
+# Local database recovery snapshots and validation artifacts
+backend/backups/
+# Unverified extraction drafts must never be mistaken for curated scripture.
+backend/data/transcription-drafts/
+backend/data/transcription-ocr/
+backend/data/source-pdfs/
+backend/data/ocr-models/
+backend/.venv-ocr/
+__pycache__/
+frontend/test-results/
+frontend/playwright-report/
+scripts/apply-issue-*.cjs

@@ -35,8 +35,10 @@ class BookmarkController {
     async create(req, res, next) {
         try {
             const { passageId, label } = req.body;
-            const bookmark = await prisma_1.default.bookmark.create({
-                data: {
+            const bookmark = await prisma_1.default.bookmark.upsert({
+                where: { userId_passageId: { userId: req.userId, passageId } },
+                update: { label },
+                create: {
                     userId: req.userId,
                     passageId,
                     label,

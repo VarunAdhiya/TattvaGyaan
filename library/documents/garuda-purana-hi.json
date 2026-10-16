@@ -1,0 +1,13 @@
+{
+  "scriptureSlug": "garuda-purana",
+  "title": "संक्षिप्त गरुड़पुराण — गीताप्रेस, सचित्र हिन्दी (PDF)",
+  "language": "hi",
+  "script": "Devanagari",
+  "isOriginal": false,
+  "textDirection": "ltr",
+  "source": "/library/garuda-purana.pdf",
+  "license": "User-supplied Gita Press scan bearing upayogibooks.com watermarks; reuse license unverified.",
+  "provenance": "Original file: Garuda Purana Original upayogibooks.com.pdf, supplied by the user on 2026-10-13. All 638 scanned PDF pages, including covers and blank pages, are preserved byte-for-byte, along with existing watermarks. The cover and PDF page 4 identify संक्षिप्त गरुड़पुराण (सचित्र, मोटा टाइप, केवल हिन्दी), published by Gita Press, Gorakhpur, book code 1189. PDF page 5 gives ISBN 81-293-0285-3. This is explicitly cataloged as an abridged Hindi edition; the filename's 'Original' wording is not treated as a claim of complete original scripture. Translator/editor not identified in inspected pages. Sampled text extraction yields website watermarks rather than scripture; scanned text pages require the PDF.js JBIG2 decoder. No OCR or generated passage records were added. Textual completeness and reuse permission remain unverified.",
+  "pageCount": 638,
+  "sha256": "c05368e6b60c64f58b2b86b8a9375d483259cd81d6b2469faaafb4a698a6dcb0"
+}

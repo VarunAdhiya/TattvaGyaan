@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "check:pdfs": "node scripts/check-pdf-assets.mjs",
+    "prebuild": "npm run check:pdfs",
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview"
@@ -13,14 +15,14 @@
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
     "lucide-react": "^1.55.0",
-    "page-flip": "^2.0.7",
+    "pdfjs-dist": "^6.4.299",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-pageflip": "^2.0.3",
     "react-router-dom": "^7.18.4",
     "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",

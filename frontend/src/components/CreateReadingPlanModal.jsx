@@ -2,14 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../api/client';
 import { X, Loader2 } from 'lucide-react';
 
-export default function CreateReadingPlanModal({ isOpen, onClose, onCreated }) {
+export default function CreateReadingPlanModal({
+  isOpen,
+  onClose,
+  onCreated,
+  initialReligionId = '',
+  initialEditionId = '',
+  initialTitle = ''
+}) {
+  const [religions, setReligions] = useState([]);
   const [scriptures, setScriptures] = useState([]);
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
-    editionId: '',
-    title: '',
+    religionId: initialReligionId,
+    editionId: initialEditionId,
+    title: initialTitle,
     targetDays: 30,
     startDate: new Date().toISOString().split('T')[0],
     minutesPerDay: 30,
@@ -17,14 +26,47 @@ export default function CreateReadingPlanModal({ isOpen, onClose, onCreated }) {
 
   useEffect(() => {
     if (isOpen) {
-      loadScriptures();
+      loadReligions();
+      if (initialReligionId) {
+        setFormData(prev => ({
+          ...prev,
+          religionId: initialReligionId,
+          editionId: initialEditionId || prev.editionId,
+          title: initialTitle || prev.title,
+        }));
+        loadScriptures(initialReligionId);
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, initialReligionId, initialEditionId, initialTitle]);
 
-  const loadScriptures = async () => {
+  // Load scriptures when religion changes
+  useEffect(() => {
+    if (formData.religionId) {
+      loadScriptures(formData.religionId);
+    } else {
+      setScriptures([]);
+      setFormData(prev => ({ ...prev, editionId: '' }));
+    }
+  }, [formData.religionId]);
+
+  const loadReligions = async () => {
     try {
       setLoading(true);
-      const res = await api.getScriptures({ limit: 100 });
+      const res = await api.getReligions();
+      setReligions(res.religions || []);
+      setError(null);
+    } catch (err) {
+      setError('Failed to load religions');
+      console.error('Error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadScriptures = async (religionId) => {
+    try {
+      setLoading(true);
+      const res = await api.getScriptures({ religionId, limit: 100 });
       setScriptures(res.scriptures || []);
       setError(null);
     } catch (err) {
@@ -74,6 +116,7 @@ export default function CreateReadingPlanModal({ isOpen, onClose, onCreated }) {
 
       // Reset form
       setFormData({
+        religionId: '',
         editionId: '',
         title: '',
         targetDays: 30,
@@ -111,6 +154,28 @@ export default function CreateReadingPlanModal({ isOpen, onClose, onCreated }) {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Religion Selection */}
+          <div>
+            <label className="block text-sm font-semibold text-stone-700 mb-2">
+              Religion
+            </label>
+            <select
+              value={formData.religionId}
+              onChange={(e) => setFormData({ ...formData, religionId: e.target.value, editionId: '' })}
+              className="w-full px-4 py-2.5 border border-stone-200 rounded-lg bg-stone-50/50 text-stone-900 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:bg-white focus:border-amber-300 transition-all text-sm"
+              disabled={loading}
+            >
+              <option value="">
+                {loading ? 'Loading religions...' : 'Select a religion'}
+              </option>
+              {religions.map((religion) => (
+                <option key={religion.id} value={religion.id}>
+                  {religion.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Scripture Selection */}
           <div>
             <label className="block text-sm font-semibold text-stone-700 mb-2">
@@ -120,14 +185,18 @@ export default function CreateReadingPlanModal({ isOpen, onClose, onCreated }) {
               value={formData.editionId}
               onChange={(e) => setFormData({ ...formData, editionId: e.target.value })}
               className="w-full px-4 py-2.5 border border-stone-200 rounded-lg bg-stone-50/50 text-stone-900 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:bg-white focus:border-amber-300 transition-all text-sm"
-              disabled={loading}
+              disabled={loading || !formData.religionId}
             >
               <option value="">
-                {loading ? 'Loading scriptures...' : 'Select a scripture'}
+                {!formData.religionId
+                  ? 'Please select a religion first'
+                  : loading
+                  ? 'Loading scriptures...'
+                  : 'Select a scripture'}
               </option>
               {scriptures.map((scripture) =>
                 scripture.editions && scripture.editions.length > 0
-                  ? scripture.editions.map((edition) => (
+                  ? scripture.editions.filter((edition) => edition.contentStatus !== 'scanned').map((edition) => (
                       <option key={edition.id} value={edition.id}>
                         {scripture.title} - {edition.title} ({edition.language})
                       </option>

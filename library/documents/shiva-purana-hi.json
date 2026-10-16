@@ -1,0 +1,13 @@
+{
+  "scriptureSlug": "shiva-purana",
+  "title": "शिव पुराण — सरल हिन्दी, मनोज पब्लिकेशन्स (PDF)",
+  "language": "hi",
+  "script": "Devanagari",
+  "isOriginal": false,
+  "textDirection": "ltr",
+  "source": "/library/shiva-purana.pdf",
+  "license": "User-supplied Manoj Publications edition; reuse license unverified.",
+  "provenance": "Original file: शिव पुराण.pdf, supplied by the user on 2026-10-13. All 845 PDF pages, including covers and any blank pages, are preserved byte-for-byte. The cover identifies शिव पुराण in सरल हिन्दी भाषा. PDF page 3 credits publisher मनोज पब्लिकेशन्स and editor डॉ. महेंद्र मित्तल, states sixth edition (2016), and gives ISBN 978-81-310-0619-1. Added to a separate Shiva Purana catalog entry. The PDF has a text layer, but sampled extraction has Devanagari character errors. Imported in PDF reader mode without OCR or generated passage records. The cover's completeness claim has not been independently verified; reuse permission remains unverified.",
+  "pageCount": 845,
+  "sha256": "f01e41ced20f14d1d071229078693372035f64d4fb459974b19e9618a02bb666"
+}

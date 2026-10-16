@@ -4,7 +4,6 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import connectPgSimple from 'connect-pg-simple';
-import rateLimit from 'express-rate-limit';
 import { config } from './config';
 import { errorHandler } from './middleware/errorHandler';
 
@@ -30,24 +29,19 @@ app.use(cors({
   credentials: true,
 }));
 
-// Rate limiting
-app.use(rateLimit({
-  windowMs: config.rateLimit.windowMs,
-  max: config.rateLimit.max,
-}));
-
 // Body parsing
 app.use(express.json({ limit: '10mb' }));
 app.use(cookieParser());
 
 // Session
 const PgSession = connectPgSimple(session);
+export const sessionStore = config.database.url ? new PgSession({
+  conObject: config.database.sessionPool,
+  tableName: 'sessions',
+  createTableIfMissing: true,
+}) : undefined;
 app.use(session({
-  store: config.database.url ? new PgSession({
-    conString: config.database.url,
-    tableName: 'sessions',
-    createTableIfMissing: true,
-  }) : undefined,
+  store: sessionStore,
   secret: config.session.secret,
   resave: false,
   saveUninitialized: false,

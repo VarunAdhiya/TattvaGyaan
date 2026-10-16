@@ -14,6 +14,8 @@ export declare class ReadingPlanService {
             passageIds: string[];
             completed: boolean;
             completedAt: Date | null;
+            estimatedMinutes: number | null;
+            rationale: string | null;
             planId: string;
         }[];
     } & {
@@ -28,9 +30,43 @@ export declare class ReadingPlanService {
         startDate: Date;
         endDate: Date;
         minutesPerDay: number | null;
+        analysis: import("@prisma/client/runtime/library").JsonValue | null;
     }>;
     getUserPlans(userId: string): Promise<any[]>;
     getPlan(planId: string, userId: string): Promise<{
+        edition: ({
+            scripture: {
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+                slug: string;
+                description: string | null;
+                title: string;
+                religionId: string;
+                originalLang: string;
+                summary: string | null;
+                themes: string[];
+                searchText: string;
+                estimatedReadTime: number | null;
+                availabilityStatus: string;
+            };
+        } & {
+            id: string;
+            createdAt: Date;
+            scriptureId: string;
+            title: string;
+            language: string;
+            script: string | null;
+            translator: string | null;
+            editor: string | null;
+            source: string | null;
+            license: string | null;
+            provenance: string | null;
+            contentStatus: string;
+            expectedPassages: number | null;
+            isOriginal: boolean;
+            textDirection: string;
+        }) | null;
         completionPercentage: number;
         items: {
             id: string;
@@ -40,6 +76,8 @@ export declare class ReadingPlanService {
             passageIds: string[];
             completed: boolean;
             completedAt: Date | null;
+            estimatedMinutes: number | null;
+            rationale: string | null;
             planId: string;
         }[];
         id: string;
@@ -53,6 +91,7 @@ export declare class ReadingPlanService {
         startDate: Date;
         endDate: Date;
         minutesPerDay: number | null;
+        analysis: import("@prisma/client/runtime/library").JsonValue | null;
     }>;
     completePlanItem(itemId: string, userId: string, completed: boolean): Promise<{
         id: string;
@@ -62,6 +101,8 @@ export declare class ReadingPlanService {
         passageIds: string[];
         completed: boolean;
         completedAt: Date | null;
+        estimatedMinutes: number | null;
+        rationale: string | null;
         planId: string;
     }>;
     updatePlan(planId: string, userId: string, data: {
@@ -79,6 +120,7 @@ export declare class ReadingPlanService {
         startDate: Date;
         endDate: Date;
         minutesPerDay: number | null;
+        analysis: import("@prisma/client/runtime/library").JsonValue | null;
     }>;
     deletePlan(planId: string, userId: string): Promise<void>;
 }

@@ -58,9 +58,9 @@ export const api = {
   // Religions & Scriptures
   getReligions: () => request('/religions'),
   getReligion: (id) => request(`/religions/${id}`),
-  getScriptures: (params = {}) => {
+  getScriptures: (params = {}, signal) => {
     const query = new URLSearchParams(params).toString();
-    return request(`/scriptures${query ? `?${query}` : ''}`);
+    return request(`/scriptures${query ? `?${query}` : ''}`, { signal });
   },
   getScripture: (id) => request(`/scriptures/${id}`),
   getScriptureEditions: (scriptureId) => {
@@ -72,7 +72,31 @@ export const api = {
   getEdition: (id) => request(`/scripture-editions/${id}`),
   getEditionContent: (editionId, page = 1, limit = 100) => request(`/scripture-editions/${editionId}/content?page=${page}&limit=${limit}`),
   getReaderContent: (editionId) => request(`/passages/edition/${editionId}`),
-  getSectionPassages: (sectionId, page = 1) => request(`/passages/section/${sectionId}?page=${page}`),
+  // Compatibility with an API process started before the book-layout update.
+  // Bound parallel requests so loading a book does not exhaust database pools.
+  getBookSections: async (sections, signal) => {
+    const result = [...sections];
+    let next = 0;
+    await Promise.all(Array.from({ length: Math.min(3, sections.length) }, async () => {
+      while (next < sections.length) {
+        const index = next++;
+        const section = sections[index];
+        const count = section._count?.passages ?? section.passages?.length ?? 0;
+        if (section.passages?.length === count && section.passages.every(passage => passage.id)) continue;
+        const passages = [];
+        for (let page = 1; passages.length < count; page += 1) {
+          const data = await request(`/passages/section/${section.id}?page=${page}&limit=100`, { signal });
+          if (!data.passages?.length) throw new Error('The book text could not be loaded completely. Please reload.');
+          passages.push(...data.passages);
+        }
+        if (passages.length !== count) throw new Error('The book changed while loading. Please reload.');
+        result[index] = { ...section, passages };
+      }
+    }));
+    return result;
+  },
+  getSectionPassages: (sectionId, page = 1, limit = 50, signal) => request(`/passages/section/${sectionId}?page=${page}&limit=${limit}`, { signal }),
+  getPassagePosition: (passageId) => request(`/passages/${passageId}/position`),
   getPassage: (passageId) => request(`/passages/${passageId}`),
 
   // Progress & Plans
@@ -110,8 +134,8 @@ export const api = {
   searchScriptures: (q) => request(`/search/scriptures?q=${encodeURIComponent(q)}`),
 
   // AI Assistant
-  explainPassage: (aiData) => request('/ai/explain', { method: 'POST', body: aiData }),
-  summarizeSection: (summaryData) => request('/ai/summarize', { method: 'POST', body: summaryData }),
+  explainPassage: (aiData, signal) => request('/ai/explain', { method: 'POST', body: aiData, signal }),
+  summarizeSection: (summaryData, signal) => request('/ai/summarize', { method: 'POST', body: summaryData, signal }),
   chatAI: (chatData) => request('/ai/chat', { method: 'POST', body: chatData }),
   getAIConversations: () => request('/ai/conversations'),
   getAIConversation: (id) => request(`/ai/conversations/${id}`),

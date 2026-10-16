@@ -1,0 +1,13 @@
+{
+  "scriptureSlug": "mahabharata",
+  "title": "बाल महाभारत कथा — हिन्दी PDF (96 पृष्ठ)",
+  "language": "hi",
+  "script": "Devanagari",
+  "isOriginal": false,
+  "textDirection": "ltr",
+  "source": "/library/bal-mahabharat-katha.pdf",
+  "license": "User-supplied PDF bearing NCERT copyright and 'not to be republished' markings. No additional reuse license verified.",
+  "provenance": "Original file: ghmb101.pdf, supplied by the user on 2026-10-13. All 96 PDF pages are preserved byte-for-byte. Page headers identify बाल महाभारत कथा, with Reprint 2024-25 in the footer and NCERT copyright markings. The first page begins महाभारत कथा and the last page contains chapter 41, श्रीकृष्ण और युधिष्ठिर. This is a children's narrative retelling, not the complete Sanskrit Mahabharata. Author and translator are not identified in the inspected pages. The embedded legacy-font text does not extract as reliable Unicode Hindi. Imported as an original PDF asset without OCR or generated passage records.",
+  "pageCount": 96,
+  "sha256": "eb00713009dd7b6a81feec459c7518a494f851dc79d77e5d67856e4d8d70d809"
+}

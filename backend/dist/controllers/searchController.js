@@ -5,17 +5,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.searchController = exports.SearchController = void 0;
 const prisma_1 = __importDefault(require("../lib/prisma"));
+const scriptureService_1 = require("../services/scriptureService");
+const zod_1 = require("zod");
+const searchQuerySchema = zod_1.z.object({
+    q: zod_1.z.string().trim().max(200).default(''),
+    editionId: zod_1.z.string().optional(),
+    limit: zod_1.z.coerce.number().int().min(1).max(100).default(20),
+});
 class SearchController {
     async search(req, res, next) {
         try {
-            const query = req.query.q;
-            const editionId = req.query.editionId;
-            const limit = parseInt(req.query.limit) || 20;
-            if (!query || query.length < 2) {
+            const { q: query, editionId, limit } = searchQuerySchema.parse(req.query);
+            if (!query) {
                 return res.json({ results: [] });
             }
             const where = {
-                text: { contains: query, mode: 'insensitive' },
+                OR: [
+                    { text: { contains: query, mode: 'insensitive' } },
+                    { reference: { contains: query, mode: 'insensitive' } },
+                ],
             };
             if (editionId) {
                 where.section = { editionId };
@@ -52,23 +60,12 @@ class SearchController {
     }
     async searchScriptures(req, res, next) {
         try {
-            const query = req.query.q;
-            if (!query || query.length < 2) {
+            const { q: query, limit } = searchQuerySchema.parse(req.query);
+            if (!query) {
                 return res.json({ results: [] });
             }
-            const results = await prisma_1.default.scripture.findMany({
-                where: {
-                    OR: [
-                        { title: { contains: query, mode: 'insensitive' } },
-                        { description: { contains: query, mode: 'insensitive' } },
-                    ],
-                },
-                include: {
-                    religion: { select: { name: true, slug: true } },
-                },
-                take: 10,
-            });
-            res.json({ results });
+            const result = await scriptureService_1.scriptureService.getScriptures({ search: query, page: 1, limit });
+            res.json({ results: result.scriptures });
         }
         catch (err) {
             next(err);

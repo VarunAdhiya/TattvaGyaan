@@ -2,6 +2,13 @@ import { Request, Response, NextFunction } from 'express';
 import { scriptureService } from '../services/scriptureService';
 
 export class PassageController {
+  async getPosition(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+      res.json(await scriptureService.getPassagePosition(id));
+    } catch (err) { next(err); }
+  }
+
   async getBySection(req: Request, res: Response, next: NextFunction) {
     try {
       const sectionId = Array.isArray(req.params.sectionId) ? req.params.sectionId[0] : req.params.sectionId;

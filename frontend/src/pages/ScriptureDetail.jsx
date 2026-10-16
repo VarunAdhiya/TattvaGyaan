@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
 import { BookOpen, ArrowLeft, Clock, Globe, Calendar, AlertCircle } from 'lucide-react';
+import CreateReadingPlanModal from '../components/CreateReadingPlanModal';
 
 export default function ScriptureDetail() {
   const { scriptureId } = useParams();
@@ -11,6 +12,7 @@ export default function ScriptureDetail() {
   const [selectedEdition, setSelectedEdition] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showPlanModal, setShowPlanModal] = useState(false);
 
   useEffect(() => {
     async function loadScripture() {
@@ -195,9 +197,23 @@ export default function ScriptureDetail() {
                           {edition.language}
                           {edition.isOriginal && ' • Original'}
                         </div>
+                        <div className="text-xs mt-1 text-amber-800">
+                          {edition.contentStatus === 'scanned' ? 'Scanned PDF · Partial collection'
+                            : edition.contentStatus === 'draft' ? `Draft text · ${edition.expectedPassages} passages · Not fully proofread`
+                            : edition.contentStatus === 'transcribed' ? `Reviewed transcription · ${edition.expectedPassages} source page${edition.expectedPassages === 1 ? '' : 's'} with text`
+                              : edition.contentStatus === 'complete' ? `Complete · ${edition.expectedPassages} passages` : 'Partial sample — completeness unverified'}
+                        </div>
                       </button>
                     ))}
                   </div>
+
+                  {selectedEdition?.source && (/^https?:\/\//.test(selectedEdition.source) || (selectedEdition.contentStatus === 'scanned' && /^\/library\/[a-z0-9][a-z0-9-]*\.pdf$/.test(selectedEdition.source))) && (
+                    <p className="text-xs text-stone-600 mb-4"><a className="underline" href={selectedEdition.source} target="_blank" rel="noreferrer">Source and attribution</a>{selectedEdition.translator ? ` · ${selectedEdition.translator}` : ''}</p>
+                  )}
+
+                  {selectedEdition?.contentStatus === 'scanned' && (
+                    <p className="text-xs text-stone-600 mb-4">Read the original scanned pages in the book reader. Verse selection, notes, bookmarks, AI explanations and reading plans require verified text.</p>
+                  )}
 
                   <button
                     onClick={startReading}
@@ -206,7 +222,12 @@ export default function ScriptureDetail() {
                     Start Reading
                   </button>
 
-                  <button className="w-full px-4 py-3 border border-stone-300 text-stone-700 rounded-lg font-medium hover:bg-stone-50 transition">
+                  <button
+                    onClick={() => setShowPlanModal(true)}
+                    disabled={selectedEdition?.contentStatus === 'scanned'}
+                    title={selectedEdition?.contentStatus === 'scanned' ? 'Reading plans require verified text.' : undefined}
+                    className="w-full px-4 py-3 border border-stone-300 text-stone-700 rounded-lg font-medium hover:bg-stone-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
                     Create Reading Plan
                   </button>
                 </>
@@ -227,6 +248,21 @@ export default function ScriptureDetail() {
           </div>
         </div>
       </div>
+
+      {/* Create Reading Plan Modal */}
+      {showPlanModal && (
+        <CreateReadingPlanModal
+          isOpen={showPlanModal}
+          onClose={() => setShowPlanModal(false)}
+          onCreated={() => {
+            setShowPlanModal(false);
+            navigate('/reading-plans');
+          }}
+          initialReligionId={scripture.religionId}
+          initialEditionId={selectedEdition?.id || ''}
+          initialTitle={`Read ${scripture.title}`}
+        />
+      )}
     </div>
   );
 }

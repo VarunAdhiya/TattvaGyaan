@@ -1,0 +1,13 @@
+{
+  "scriptureSlug": "manusmriti",
+  "title": "मनुस्मृति — मूल PDF (509 पृष्ठ)",
+  "language": "hi",
+  "script": "Devanagari",
+  "isOriginal": false,
+  "textDirection": "ltr",
+  "source": "/library/manusmriti-sampurna.pdf",
+  "license": "User-supplied PDF; reuse license unverified. The document credits Shri Hindu Dharma Vedic Education Foundation (shdvef.com).",
+  "provenance": "Original file: मनुस्मृति-सम्पूर्ण.pdf, supplied by the user on 2026-10-13. All 509 PDF pages are preserved byte-for-byte. The title page identifies मनुस्मृति; the final page credits compiler श्री मनीष त्यागी, founder and president of श्री हिंदू धर्म वैदिक एजुकेशन फाउंडेशन, and prints www.shdvef.com. The PDF has a text layer, but sampled extraction contains Devanagari character errors. Imported as a PDF edition without OCR or generated passage records. The filename's completeness claim and textual accuracy have not been independently verified; translator unverified.",
+  "pageCount": 509,
+  "sha256": "992c71ecb2a16913c2fb578ae51f3a73d6288109f133b10b811d1b976f8698e3"
+}

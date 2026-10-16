@@ -1,19 +1,28 @@
 import { Request, Response, NextFunction } from 'express';
 import prisma from '../lib/prisma';
+import { scriptureService } from '../services/scriptureService';
+import { z } from 'zod';
+
+const searchQuerySchema = z.object({
+  q: z.string().trim().max(200).default(''),
+  editionId: z.string().optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+});
 
 export class SearchController {
   async search(req: Request, res: Response, next: NextFunction) {
     try {
-      const query = req.query.q as string;
-      const editionId = req.query.editionId as string;
-      const limit = parseInt(req.query.limit as string) || 20;
+      const { q: query, editionId, limit } = searchQuerySchema.parse(req.query);
 
-      if (!query || query.length < 2) {
+      if (!query) {
         return res.json({ results: [] });
       }
 
       const where: any = {
-        text: { contains: query, mode: 'insensitive' },
+        OR: [
+          { text: { contains: query, mode: 'insensitive' } },
+          { reference: { contains: query, mode: 'insensitive' } },
+        ],
       };
       if (editionId) {
         where.section = { editionId };
@@ -52,25 +61,13 @@ export class SearchController {
 
   async searchScriptures(req: Request, res: Response, next: NextFunction) {
     try {
-      const query = req.query.q as string;
-      if (!query || query.length < 2) {
+      const { q: query, limit } = searchQuerySchema.parse(req.query);
+      if (!query) {
         return res.json({ results: [] });
       }
 
-      const results = await prisma.scripture.findMany({
-        where: {
-          OR: [
-            { title: { contains: query, mode: 'insensitive' } },
-            { description: { contains: query, mode: 'insensitive' } },
-          ],
-        },
-        include: {
-          religion: { select: { name: true, slug: true } },
-        },
-        take: 10,
-      });
-
-      res.json({ results });
+      const result = await scriptureService.getScriptures({ search: query, page: 1, limit });
+      res.json({ results: result.scriptures });
     } catch (err) {
       next(err);
     }

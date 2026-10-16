@@ -120,8 +120,20 @@ export default function PlanDetailPage() {
       )}
 
       {/* Daily Items */}
+      {plan.analysis && (
+        <div className="mb-6 p-4 rounded-lg bg-amber-50 border border-amber-200 text-sm text-stone-700">
+          <p className="font-semibold mb-2">How your reading plan was calculated</p>
+          <p>{plan.analysis.summary}</p>
+          <p className="mt-2">Estimated pace: {Math.round(plan.analysis.wordsPerMinute)} words/minute, with {plan.analysis.reflectionPercent}% extra reflection time. About {plan.minutesPerDay} minutes per day.</p>
+          <p className="mt-2 text-xs">{plan.analysis.basis}</p>
+          {plan.analysis.requestedMinutesPerDay && plan.minutesPerDay > plan.analysis.requestedMinutesPerDay && (
+            <p className="mt-2">Your {plan.analysis.requestedMinutesPerDay}-minute daily budget would take about {plan.analysis.suggestedDays} days. This plan keeps your chosen finish date.</p>
+          )}
+          {plan.analysis.requestedDays > plan.targetDays && <p className="mt-2">This edition has fewer passages than your requested days, so the plan uses {plan.targetDays} reading days.</p>}
+        </div>
+      )}
       <div className="space-y-3">
-        {plan.items.map((item, idx) => (
+        {plan.items.map((item) => (
           <div
             key={item.id}
             className={`p-4 rounded-lg border-2 transition ${
@@ -138,22 +150,35 @@ export default function PlanDetailPage() {
                 </div>
                 <div className="text-sm text-stone-600 mt-1">
                   {item.passageIds.length} passage{item.passageIds.length !== 1 ? 's' : ''}
+                  {item.estimatedMinutes && <span> · About {item.estimatedMinutes} minutes</span>}
                   {item.completedAt && (
                     <span className="ml-2 text-emerald-600">
                       on {new Date(item.completedAt).toLocaleDateString()}
                     </span>
                   )}
                 </div>
+                {item.rationale && <p className="text-xs text-stone-500 mt-2">{item.rationale}</p>}
               </div>
-              <button
-                onClick={() => handleToggleItem(item.id, item.completed)}
-                disabled={completingItems[item.id]}
-                className={`px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2 ${
-                  item.completed
-                    ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                    : 'bg-amber-700 text-amber-50 hover:bg-amber-800'
-                } disabled:opacity-50`}
-              >
+              <div className="flex items-center gap-2">
+                {plan.edition && (
+                  <button
+                    onClick={() => navigate(`/reader/${plan.edition.scriptureId}/${plan.editionId}?passage=${encodeURIComponent(item.passageIds[0])}`)}
+                    className="px-3 py-2 border border-stone-300 text-stone-700 hover:bg-stone-50 rounded-lg text-sm font-medium transition flex items-center gap-1.5"
+                    title="Open in Reader"
+                  >
+                    <BookOpen className="w-4 h-4 text-amber-800" />
+                    <span>Read</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => handleToggleItem(item.id, item.completed)}
+                  disabled={completingItems[item.id]}
+                  className={`px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2 ${
+                    item.completed
+                      ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+                      : 'bg-amber-700 text-amber-50 hover:bg-amber-800'
+                  } disabled:opacity-50 text-sm`}
+                >
                 {completingItems[item.id] ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
@@ -162,7 +187,8 @@ export default function PlanDetailPage() {
                     {item.completed ? 'Undo' : 'Mark Done'}
                   </>
                 )}
-              </button>
+                </button>
+              </div>
             </div>
           </div>
         ))}

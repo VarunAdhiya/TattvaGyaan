@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { BookOpen, Search, User, LogOut, BookMarked, Sparkles, Menu, X, Home, Compass } from 'lucide-react';
+import { BookOpen, Search, LogOut, BookMarked, Menu, X, Compass } from 'lucide-react';
 
 export default function Navbar({ onSearch }) {
   const { user, logout } = useAuth();
@@ -16,7 +16,7 @@ export default function Navbar({ onSearch }) {
       if (onSearch) {
         onSearch(searchQuery);
       } else {
-        navigate(`/dashboard?search=${encodeURIComponent(searchQuery)}`);
+        navigate(`/dashboard?search=${encodeURIComponent(searchQuery.trim())}`);
       }
     }
   };
@@ -37,21 +37,24 @@ export default function Navbar({ onSearch }) {
             </div>
             <div>
               <span className="font-serif text-xl font-bold text-amber-950 tracking-wide block">TattvaGyaan</span>
-              <span className="text-[10px] uppercase tracking-widest text-amber-700 -mt-1 block font-sans">Multilingual Scriptures</span>
+              <span className="text-[10px] uppercase tracking-widest text-amber-700 -mt-1 block font-sans">Hindi Scripture Library</span>
             </div>
           </Link>
 
-          {/* Quick Search */}
-          <form onSubmit={handleSearchSubmit} className="hidden md:flex items-center flex-1 max-w-md mx-8 relative">
-            <Search className="w-4 h-4 absolute left-3 text-stone-400" />
-            <input
-              type="text"
-              placeholder="Search scriptures, verses, themes..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-1.5 text-sm bg-stone-100/80 border border-stone-200 rounded-full focus:outline-none focus:ring-2 focus:ring-amber-600 focus:bg-white transition-all placeholder:text-stone-400"
-            />
-          </form>
+          {/* Quick Search - only shown when logged in */}
+          {user && !location.pathname.startsWith('/reader/') && (
+            <form onSubmit={handleSearchSubmit} className="hidden md:flex items-center flex-1 max-w-md mx-8 relative">
+              <Search className="w-4 h-4 absolute left-3 text-stone-400" />
+              <input
+                type="text"
+                aria-label="Search library"
+                placeholder="Search books and scriptures..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-4 py-1.5 text-sm bg-stone-100/80 border border-stone-200 rounded-full focus:outline-none focus:ring-2 focus:ring-amber-600 focus:bg-white transition-all placeholder:text-stone-400"
+              />
+            </form>
+          )}
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center gap-6 text-sm font-medium text-stone-700">
@@ -108,16 +111,18 @@ export default function Navbar({ onSearch }) {
       {/* Mobile Drawer */}
       {menuOpen && (
         <div className="md:hidden border-t border-amber-200/60 bg-amber-50 px-4 py-4 space-y-3">
-          <form onSubmit={handleSearchSubmit} className="relative mb-3">
-            <Search className="w-4 h-4 absolute left-3 top-2.5 text-stone-400" />
-            <input
-              type="text"
-              placeholder="Search scriptures..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-stone-200 rounded-lg"
-            />
-          </form>
+          {user && !location.pathname.startsWith('/reader/') && (
+            <form onSubmit={handleSearchSubmit} className="relative mb-3">
+              <Search className="w-4 h-4 absolute left-3 top-2.5 text-stone-400" />
+              <input
+                type="text"
+                placeholder="Search scriptures..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-stone-200 rounded-lg"
+              />
+            </form>
+          )}
 
           {user ? (
             <>
