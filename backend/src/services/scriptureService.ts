@@ -159,13 +159,22 @@ export class ScriptureService {
     return editions;
   }
 
-  async getPassagesForReader(editionId: string) {
-    const edition = await prisma.scriptureEdition.findUnique({ where: { id: editionId }, select: { id: true } });
+  async getPassagesForReader(editionId: string, includeBookText = false) {
+    const edition = await prisma.scriptureEdition.findUnique({ where: { id: editionId }, select: { id: true, source: true, language: true } });
     if (!edition) throw new AppError('Edition not found', 404);
+    // Only this short prose edition is laid out as a complete book in-browser.
+    // Other editions and position lookups retain their paginated API behavior.
+    const bookText = includeBookText && edition.language === 'hi' && edition.source ===
+      'urn:sha256:eb00713009dd7b6a81feec459c7518a494f851dc79d77e5d67856e4d8d70d809';
     const sections = await prisma.scriptureSection.findMany({
       where: { editionId },
       orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
-      select: { id: true, title: true, slug: true, parentId: true, _count: { select: { passages: true } } },
+      select: { id: true, title: true, slug: true, parentId: true, _count: { select: { passages: true } },
+        passages: bookText ? {
+          orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+          select: { id: true, sectionId: true, reference: true, text: true, sourceNotes: true },
+        } : false,
+      },
     });
     return sections;
   }

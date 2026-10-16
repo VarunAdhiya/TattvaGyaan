@@ -51,7 +51,7 @@ class ScriptureController {
     async getReaderContent(req, res, next) {
         try {
             const editionId = Array.isArray(req.params.editionId) ? req.params.editionId[0] : req.params.editionId;
-            const sections = await scriptureService_1.scriptureService.getPassagesForReader(editionId);
+            const sections = await scriptureService_1.scriptureService.getPassagesForReader(editionId, true);
             res.json({ sections });
         }
         catch (err) {

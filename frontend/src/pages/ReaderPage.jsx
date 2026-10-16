@@ -3,6 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import Reader3D from '../components/Reader3D';
 import AIAssistantDrawer from '../components/AIAssistantDrawer';
 import { api } from '../api/client';
+import { isMahabharataProse } from '../lib/mahabharataLayout';
 
 const PdfReader = React.lazy(() => import('../components/PdfReader'));
 
@@ -24,6 +25,7 @@ export default function ReaderPage() {
 
   useEffect(() => {
     let cancelled = false;
+    const controller = new AbortController();
     async function loadContent() {
       setLoading(true);
       setError(null);
@@ -43,7 +45,10 @@ export default function ReaderPage() {
           api.getProgressForEdition(editionId).catch(() => ({ progress: null })),
         ]);
         if (cancelled) return;
-        setSections(readerRes.sections);
+        const bookSections = isMahabharataProse(editionRes.edition)
+          ? await api.getBookSections(readerRes.sections, controller.signal) : readerRes.sections;
+        if (cancelled) return;
+        setSections(bookSections);
         setProgress(progressRes.progress);
       } catch (err) {
         if (!cancelled) setError(err.message || 'Failed to load reader');
@@ -52,7 +57,7 @@ export default function ReaderPage() {
       }
     }
     loadContent();
-    return () => { cancelled = true; };
+    return () => { cancelled = true; controller.abort(); };
   }, [editionId]);
 
   const handleUpdateProgress = useCallback((progressData) => {

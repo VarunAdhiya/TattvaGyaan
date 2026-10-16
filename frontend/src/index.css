@@ -82,6 +82,142 @@
 .reader-spread-wide { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); max-width: 1600px; }
 .reader-visible-page { min-width: 0; height: max(380px, calc(100dvh - 240px)); padding: clamp(16px, 3vw, 40px); overflow-y: auto; scrollbar-gutter: stable; overflow-wrap: anywhere; }
 .reader-passage { scroll-margin-top: 16px; }
+/* Hindi Bal Mahabharat prose: reflow the source's printed column breaks without
+   changing its text nodes, passage boundaries, or stable reader pages. */
+.reader-prose .reader-section-header,
+.reader-prose .reader-passage {
+  max-inline-size: 38rem;
+  margin-inline: auto;
+}
+.reader-prose .reader-section-header {
+  align-items: baseline;
+  padding-block-end: 1rem;
+  margin-block-end: 1.75rem;
+  border-color: var(--reader-border);
+}
+.reader-prose .reader-section-header h2 { line-height: 1.7; }
+.reader-prose .reader-passage {
+  padding: 0;
+  border: 0;
+  margin-block-end: 2rem;
+  border-radius: 4px;
+}
+.reader-prose .reader-passage-header {
+  align-items: center;
+  gap: .5rem 1rem;
+  margin-block-end: .75rem;
+  color: var(--reader-accent);
+}
+.reader-prose .scripture-text {
+  white-space: normal;
+  text-align: justify;
+  text-align-last: start;
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: manual;
+}
+.reader-prose .reader-passage details {
+  line-height: 1.7;
+  margin-block-start: 1rem;
+}
+.reader-prose .reader-passage summary {
+  cursor: pointer;
+  padding-block: .25rem;
+}
+.reader-prose .reader-page-number {
+  border-block-start: 1px solid var(--reader-border);
+  margin-block-start: 1rem;
+}
+@media (max-width: 599px) {
+  .reader-prose .scripture-text { text-align: start; }
+  .reader-prose .reader-section-header { margin-block-end: 1.25rem; }
+  .reader-prose .reader-passage { margin-block-end: 1.5rem; }
+}
+/* Content-sized Mahabharat pages. The measurement element uses these exact
+   paragraph rules; controls and attribution live outside the reading measure. */
+.reader-typeset .reader-spread { max-width: 720px; }
+.reader-typeset .reader-spread-wide { max-width: 1440px; }
+.reader-typeset .reader-visible-page,
+.reader-typeset .reader-flip-copy {
+  height: var(--book-height, 640px);
+  padding: var(--book-padding, 44px);
+  scrollbar-gutter: auto;
+}
+.reader-typeset [data-prose-content="true"] { overflow: hidden; }
+.reader-typeset .reader-section-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  height: 50px;
+  gap: 4px;
+  max-inline-size: none;
+  padding: 0 0 12px;
+  margin: 0 0 20px;
+  font-size: 13px;
+}
+.reader-typeset .reader-section-header h2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.8;
+}
+.reader-typeset .reader-section-header button { padding: 6px; font-size: 11px; }
+.book-page-content {
+  height: var(--book-content-height);
+  font-size: var(--book-font-size, 18px);
+  line-height: 1.9;
+}
+.reader-typeset .book-paragraph {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  text-indent: 1.25em;
+  text-align: justify;
+  text-align-last: start;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: manual;
+}
+.book-paragraph + .book-paragraph,
+.book-paragraph + .book-family-tree { margin-block-start: .65em; }
+.reader-typeset .book-paragraph-continued { text-indent: 0; }
+.reader-typeset .book-measure {
+  position: fixed;
+  top: 0;
+  left: -10000px;
+  visibility: hidden;
+  pointer-events: none;
+  contain: layout style;
+}
+.reader-typeset .reader-page-number {
+  height: 30px;
+  margin: 0;
+  padding-top: 12px;
+  border: 0;
+  line-height: 18px;
+  font-variant-numeric: tabular-nums;
+}
+.book-focused-passage { background: color-mix(in srgb, var(--reader-highlight) 28%, transparent); }
+.book-family-tree {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  background: color-mix(in srgb, var(--reader-accent) 5%, var(--reader-paper));
+  border-radius: 3px;
+}
+.book-family-tree svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.book-family-tree path { stroke: var(--reader-accent); stroke-width: .25; fill: none; opacity: .65; }
+.book-tree-label { position: absolute; width: 24%; transform: translate(-50%, -35%); text-align: center; line-height: 1.4; }
+.reader-typeset .book-tree-label .scripture-text { white-space: pre-line; text-align: center; }
+@media (max-width: 1199px) {
+  .reader-typeset .reader-section-header { grid-template-columns: 1fr auto; padding-bottom: 4px; }
+  .reader-typeset .reader-section-header h2 { grid-column: 1 / -1; }
+  .reader-typeset .reader-section-header .book-tools-button { justify-self: start; }
+}
+@media (max-width: 599px) {
+  .reader-typeset .book-paragraph { text-align: start; }
+}
 .reader-scan { width: 100%; overflow-x: auto; }
 .reader-scan canvas { display: block; margin-inline: auto; }
 .theme-sepia .reader-scan canvas { filter: sepia(.35); }

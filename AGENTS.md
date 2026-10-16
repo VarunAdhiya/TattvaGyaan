@@ -36,7 +36,7 @@ Name backend tests `*.test.cjs` and Playwright tests `*.spec.js`. No coverage th
 
 ## Commit & Pull Request Guidelines
 
-Recent commits use informal summaries. Prefer concise, imperative, scoped messages. PRs should explain behavior changes, link relevant issues, report validation, include screenshots for UI changes, and document migration or configuration steps.
+Recent commits use informal summaries, such as “added shiv puran.” Prefer concise, imperative, scoped messages. PRs should explain behavior changes, link relevant issues, report validation, include screenshots for UI changes, and document migration or configuration steps.
 
 ## Security & Content Integrity
 

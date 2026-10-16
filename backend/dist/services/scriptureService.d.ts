@@ -307,7 +307,7 @@ export declare class ScriptureService {
         isOriginal: boolean;
         textDirection: string;
     }[]>;
-    getPassagesForReader(editionId: string): Promise<{
+    getPassagesForReader(editionId: string, includeBookText?: boolean): Promise<{
         id: string;
         _count: {
             passages: number;
@@ -315,6 +315,16 @@ export declare class ScriptureService {
         slug: string;
         title: string;
         parentId: string | null;
+        passages: {
+            id: string;
+            createdAt: Date;
+            sortOrder: number;
+            sectionId: string;
+            reference: string;
+            text: string;
+            sourceNotes: string | null;
+            wordCount: number;
+        }[];
     }[]>;
     getPassagePosition(id: string): Promise<{
         editionId: string;

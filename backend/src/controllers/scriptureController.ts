@@ -50,7 +50,7 @@ export class ScriptureController {
   async getReaderContent(req: Request, res: Response, next: NextFunction) {
     try {
       const editionId = Array.isArray(req.params.editionId) ? req.params.editionId[0] : req.params.editionId;
-      const sections = await scriptureService.getPassagesForReader(editionId);
+      const sections = await scriptureService.getPassagesForReader(editionId, true);
       res.json({ sections });
     } catch (err) {
       next(err);
