@@ -1,6 +1,6 @@
 # PDF → JSON → Supabase → reader: TattvaGyaan handoff guide
 
-This guide records the work performed on **Bal Mahabharat Katha** and **Manusmriti**. Give it to another Claude/Codex agent together with access to this repository. It explains how to repeat the process without inventing text, losing source information, overwriting annotations, or incorrectly calling a draft verified.
+This guide records the work performed on **Bal Mahabharat Katha** and **Manusmriti**, with a reproducible **Shiva Purana** addition at the end. Give it to another Claude/Codex agent together with access to this repository. It explains how to repeat the process without inventing text, losing source information, overwriting annotations, or incorrectly calling a draft verified.
 
 The importer, tables, API routes and UI behavior described here reflect this working tree. Inspect their current implementations before applying this guide to a different revision. Some files were newly created during this work and may not yet be committed.
 
@@ -1056,4 +1056,30 @@ async function main() {
 }
 main().catch(error => { console.error(error.message); process.exitCode = 1; });
 ```
+
+# Shiva Purana: reproducible addition (2026-10-16)
+
+For the 845-page Manoj Publications **Shiva Purana** PDF, use the dedicated extractor rather than the Manusmriti or Chanakya converters described above. It produces the same edition/sections/passages JSON schema and uses the same atomic Supabase draft importer.
+
+```powershell
+# Run from the repository root. Existing local PyMuPDF environment is sufficient.
+backend/.venv-ocr/Scripts/python.exe backend/scripts/extract-shiva-purana.py --write
+node backend/scripts/import-draft-edition.cjs library/editions/drafts/shiva-purana-hi.json
+node backend/scripts/import-draft-edition.cjs library/editions/drafts/shiva-purana-hi.json --apply
+# Requires the application API running on localhost:3001; read-only verification.
+node backend/scripts/verify-draft-api.cjs library/editions/drafts/shiva-purana-hi.json
+```
+
+- Source SHA-256: `f01e41ced20f14d1d071229078693372035f64d4fb459974b19e9618a02bb666`.
+- Output: `library/editions/drafts/shiva-purana-hi.json`; page audit: `shiva-purana-hi.audit.json` in the same directory.
+- Result: 4,292 reading blocks, 484 sections: 462 printed chapters, 13 division title sections, nine other front-matter/appendix sections. All 845 pages accounted for: 814 text pages and 31 illustration/decorative-only pages. Image-only text on pages 1, 2, 37 and 844 was manually transcribed from rendered images.
+- Font problem: the PDF renders Hindi correctly but its Unicode extraction maps conjuncts and marks to unrelated characters. All 227 regular and 66 bold nonempty glyph outlines matched historical official Noto Sans Devanagari fonts at commit `ad153f5a14c838afb16c83f0a02784c7605f1e21`. The checked-in mapping `backend/data/font-maps/shiva-purana-noto.json` records the font URLs, original/embedded font hashes, and glyph-to-Unicode mappings derived from cmap/GSUB.
+- Context matters: glyph 606 is an empty placeholder, shared by contextual i+anusvara, i+reph, and i+reph+anusvara forms. Treating it as a literal anusvara corrupts words such as `निर्विकल्पं`. The extractor handles these variants and reorders pre-base i and reph. Do not reuse a simple global character replacement for another font/PDF.
+- Example: source PDF page 101 becomes section `division-55-chapter-22`, with the printed heading `बाईसवां अध्याय` and topic `शिव नैवेद्य और बिल्व माहात्म्य`. Its passage references are local reading-block IDs, not canonical verse numbers. Every passage retains `sourcePage` and source notes.
+- The extractor verifies source/font hashes, fails on unknown glyphs or unresolved positioning markers, verifies every decoded line survives grouping, checks the 462 chapter boundaries, and refuses to overwrite a changed existing edition. It does not write the database. The separate importer validates and writes the draft transactionally; the API verifier compares every stored passage against JSON.
+- Import as `contentStatus: draft`, preserve the original PDF edition, and keep the not-fully-proofread label. Printed anomalies, such as the chapter label on page 625, are retained rather than silently corrected. Coverage and sample checks are not a full editorial review or a claim of canonical completeness.
+
+The completed Supabase import created edition `97657e7d-08d6-4d1c-8e46-a63c07eeab6f` under scripture `fcd3159a-1662-4009-b29c-26f6f5f89f2c`. Repeating the import returned `unchanged: true`. Its reader route is `/reader/fcd3159a-1662-4009-b29c-26f6f5f89f2c/97657e7d-08d6-4d1c-8e46-a63c07eeab6f`. Desktop/mobile navigation, contents and the final reader page (2266) passed against the live public API, with private-user writes stubbed. Backend compilation passed; 55 of 56 backend tests passed and frontend lint completed with existing warnings. The unrelated missing `frontend/public/library/garuda-purana.pdf` blocked the frontend build and caused the remaining backend asset test failure.
+
+---
 

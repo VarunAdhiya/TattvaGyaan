@@ -52,6 +52,21 @@ From `backend/`, validate with `node scripts/import-draft-edition.cjs ../library
 
 For replacing PDF editions with corrected database text, follow [Corrected text imports](transcriptions/README.md). All source pages must be reviewed before activating a reviewed transcription. Draft extraction never activates that migration; explicitly imported draft editions use the separate path above.
 
+### Shiva Purana draft
+
+`editions/drafts/shiva-purana-hi.json` contains a separate draft of the supplied Manoj Publications simplified Hindi edition, edited by Dr. Mahendra Mittal. The selected `frontend/dist/library/shiva-purana.pdf` matches the catalog's original SHA-256. **4,292 reading passages in 484 sections** preserve 462 printed chapters, 13 division title sections, and nine front-matter/appendix sections. These are local reading blocks, not canonical shloka numbers. All 845 pages are accounted for: 814 pages with text (including four manually transcribed image pages) and 31 illustration/decorative-only pages. The edition remains **draft / not fully proofread**, with the original PDF available and reuse status unchanged.
+
+From the repository root:
+
+```powershell
+backend/.venv-ocr/Scripts/python.exe backend/scripts/extract-shiva-purana.py --write
+node backend/scripts/import-draft-edition.cjs library/editions/drafts/shiva-purana-hi.json
+node backend/scripts/import-draft-edition.cjs library/editions/drafts/shiva-purana-hi.json --apply
+node backend/scripts/verify-draft-api.cjs library/editions/drafts/shiva-purana-hi.json
+```
+
+The extractor uses PyMuPDF and the checked-in `backend/data/font-maps/shiva-purana-noto.json`. The PDF's incorrect Unicode mappings are decoded from glyph IDs after exact matching of all 293 embedded nonempty Noto font outlines against historical official font files. The mapping records upstream URLs and font hashes; the extractor checks the PDF and embedded font hashes on every run. It reconstructs contextual i/reph/anusvara positioning, preserves source line order and printed spelling, checks every text line survives passage grouping, and refuses changes to an existing JSON. The accompanying `shiva-purana-hi.audit.json` records per-page coverage and hashes. Image-only text on pages 1, 2, 37 and 844 was transcribed from rendered pages; illustration-only pages were visually checked. Full editorial review is still outstanding.
+
 ### Ramcharitmanas draft
 
 `editions/drafts/ramcharitmanas-hi.json` contains the user-selected Gita Press **Shri Ramcharitmanas**, with Hanumanprasad Poddar's commentary, under the existing `ramayana` book. It is not Valmiki Ramayana. Its 14 sections contain seven kandas plus front matter, contents, recitation guidance, arati, biography, and the closing question table: **12,821 reading passages**, not individually numbered canonical verses. All 1,058 source pages are accounted for, including three visually checked blank pages (2, 4, 1058). The original PDF remains available.

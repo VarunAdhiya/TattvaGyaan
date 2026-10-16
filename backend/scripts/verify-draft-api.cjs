@@ -18,8 +18,14 @@ async function main() {
     assert.ok(response.ok, `API ${endpoint}: HTTP ${response.status}`);
     return response.json();
   }
-  const catalog = await get('/scriptures?search=' + encodeURIComponent(source.scriptureSlug));
-  const book = catalog.scriptures.find(s => s.slug === source.scriptureSlug);
+  // Search matches title/aliases, not slugs (e.g. shiva-purana). Resolve the
+  // exact slug in the paginated catalog without relying on display spelling.
+  let book;
+  for (let page = 1; !book; page++) {
+    const catalog = await get(`/scriptures?page=${page}&limit=100`);
+    book = catalog.scriptures.find(s => s.slug === source.scriptureSlug);
+    if (page >= catalog.pagination.totalPages) break;
+  }
   assert.ok(book, 'Catalog book exists');
   const { scripture } = await get('/scriptures/' + book.id);
   const matches = scripture.editions.filter(e => e.source === source.source && e.language === source.language);
