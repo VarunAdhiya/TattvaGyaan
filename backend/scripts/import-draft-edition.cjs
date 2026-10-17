@@ -62,12 +62,34 @@ function assertStoredDraft(stored, source) {
     if (!saved || saved.title !== section.title || saved.sortOrder !== section.sortOrder || saved.passages.length !== section.passages.length) {
       throw new Error('Stored draft chapters differ; refusing to overwrite existing content.');
     }
+    const savedPassages = new Map(saved.passages.map(item => [item.reference, item]));
+    if (savedPassages.size !== saved.passages.length) throw new Error('Stored draft passages contain duplicate references; refusing to overwrite existing content.');
     for (const passage of section.passages) {
-      const savedPassage = saved.passages.find(item => item.reference === passage.reference);
+      const savedPassage = savedPassages.get(passage.reference);
       if (!savedPassage || savedPassage.text !== passage.text || savedPassage.sortOrder !== passage.sortOrder ||
           savedPassage.sourceNotes !== passage.sourceNotes) throw new Error('Stored draft passages differ; refusing to overwrite annotated text.');
     }
   }
+}
+
+async function loadStoredDraftInBatches(tx, stored, source, pageSize = 400) {
+  const storedSections = new Map(stored.sections.map(section => [section.slug, section]));
+  const sections = [];
+  for (const section of source.sections) {
+    const saved = storedSections.get(section.slug);
+    if (!saved) throw new Error('Stored draft chapters differ; refusing to overwrite existing content.');
+    const passages = [];
+    while (passages.length < section.expectedPassages) {
+      const batch = await tx.scripturePassage.findMany({
+        where: { sectionId: saved.id }, orderBy: { sortOrder: 'asc' },
+        skip: passages.length, take: Math.min(pageSize, section.expectedPassages - passages.length),
+      });
+      if (!batch.length) break;
+      passages.push(...batch);
+    }
+    sections.push({ ...saved, passages });
+  }
+  return { ...stored, sections };
 }
 
 async function applyDraftEdition(tx, input, document, writeBackup, onProgress = () => {}) {
@@ -81,11 +103,11 @@ async function applyDraftEdition(tx, input, document, writeBackup, onProgress = 
   await tx.$queryRaw`SELECT id FROM scriptures WHERE id = ${scripture.id} FOR UPDATE`;
   const matches = await tx.scriptureEdition.findMany({
     where: { scriptureId: scripture.id, source: source.source, language: source.language },
-    include: { sections: { include: { passages: true } } },
+    include: { sections: true },
   });
   if (matches.length > 1) throw new Error('Multiple editions match this draft source; no changes made.');
   if (matches.length) {
-    assertStoredDraft(matches[0], source);
+    assertStoredDraft(await loadStoredDraftInBatches(tx, matches[0], source), source);
     return { editionId: matches[0].id, scriptureId: scripture.id, unchanged: true, chapters: source.sections.length, passages: source.expectedPassages };
   }
   const id = randomUUID();
@@ -106,8 +128,8 @@ async function applyDraftEdition(tx, input, document, writeBackup, onProgress = 
     onProgress({ stage: 'passages', inserted: Math.min(index + 1000, passages.length), total: passages.length });
   }
   onProgress({ stage: 'verifying-stored-text' });
-  const stored = await tx.scriptureEdition.findUniqueOrThrow({ where: { id }, include: { sections: { include: { passages: true } } } });
-  assertStoredDraft(stored, source);
+  const stored = await tx.scriptureEdition.findUniqueOrThrow({ where: { id }, include: { sections: true } });
+  assertStoredDraft(await loadStoredDraftInBatches(tx, stored, source), source);
   const complete = await tx.scriptureEdition.count({ where: { scriptureId: scripture.id, contentStatus: 'complete' } });
   await tx.scripture.update({ where: { id: scripture.id }, data: { availabilityStatus: complete ? 'complete' : 'partial' } });
   return { editionId: id, scriptureId: scripture.id, unchanged: false, chapters: sections.length, passages: passages.length };

@@ -26,8 +26,14 @@ function database() {
       findUniqueOrThrow: async ({ where }) => hydrate(state.editions.find(e => e.id === where.id)),
       count: async () => 0,
     },
+    scripturePassage: {
+      createMany: async ({ data }) => state.passages.push(...data.map((p, i) => ({ ...p, id: 'passage-' + i }))),
+      findMany: async ({ where, orderBy, skip, take }) => state.passages
+        .filter(passage => passage.sectionId === where.sectionId)
+        .sort((a, b) => orderBy.sortOrder === 'asc' ? a.sortOrder - b.sortOrder : b.sortOrder - a.sortOrder)
+        .slice(skip, skip + take),
+    },
     scriptureSection: { createMany: async ({ data }) => state.sections.push(...data) },
-    scripturePassage: { createMany: async ({ data }) => state.passages.push(...data.map((p, i) => ({ ...p, id: 'passage-' + i }))) },
   };
   return { state, tx, backup: async () => { state.backups++; } };
 }
@@ -109,4 +115,8 @@ test('large drafts insert every passage across batch boundaries before verificat
   assert.equal(state.passages.at(-1).reference, '1.1001');
   assert.deepEqual(progress.filter(p => p.stage === 'passages').map(p => p.inserted), [1000, 1001]);
   assert.equal(progress.at(-1).stage, 'verifying-stored-text');
+  const rerun = await applyDraftEdition(tx, input, document, backup);
+  assert.equal(rerun.unchanged, true);
+  state.passages.reverse();
+  assert.equal((await applyDraftEdition(tx, input, document, backup)).unchanged, true);
 });
