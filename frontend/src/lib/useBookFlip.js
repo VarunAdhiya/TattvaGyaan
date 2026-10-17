@@ -1,5 +1,6 @@
 import { useCallback, useLayoutEffect, useRef } from 'react';
 import { spreadStart } from './readerPages';
+import { buildCurvedSheet } from './curvedBookSheet';
 
 // Transient, inert copies keep text selection and PDF rendering independent of
 // the animation. Canvas pixels and scroll positions need copying explicitly.
@@ -30,7 +31,7 @@ function panel(className, snapshot) {
   return element;
 }
 
-export default function useBookFlip(visibleKey, layoutKey) {
+export default function useBookFlip(visibleKey, layoutKey, curved = false) {
   const bookRef = useRef(null);
   const layerRef = useRef(null);
   const pendingRef = useRef(null);
@@ -109,16 +110,17 @@ export default function useBookFlip(visibleKey, layoutKey) {
       if (stationary) scene.append(panel('reader-turn-stationary', stationary));
       scene.append(panel('reader-turn-shadow'));
       const sheet = panel('reader-turn-sheet');
-      sheet.append(panel('reader-turn-face reader-turn-face--front', front), panel('reader-turn-face reader-turn-face--back', back));
+      if (!curved) sheet.append(panel('reader-turn-face reader-turn-face--front', front), panel('reader-turn-face reader-turn-face--back', back));
       scene.append(sheet);
       layer.replaceChildren(scene);
+      const startCurve = curved ? buildCurvedSheet(sheet, front, back, { forward, spread, copyPage }) : null;
       [front, back, stationary].forEach(snapshot => snapshot?.restoreScroll());
       // A separate frame guarantees that the starting face is painted before
       // the hinge rotates; each side has its own readable, non-mirrored texture.
       frame = requestAnimationFrame(() => {
         book.dataset.turnState = 'flipping';
         scene.classList.add('reader-turn-scene--animate');
-        const animation = sheet.getAnimations()[0];
+        const animation = startCurve ? startCurve() : sheet.getAnimations()[0];
         const finish = () => { if (pendingRef.current === pending) cancelTurn(); };
         if (animation) animation.finished.then(finish, finish);
         else finish();
@@ -130,7 +132,7 @@ export default function useBookFlip(visibleKey, layoutKey) {
     timer = setTimeout(cancelTurn, 1800);
     tryStart();
     return () => { if (pendingRef.current === pending) cancelTurn(); };
-  }, [visibleKey, cancelTurn]);
+  }, [visibleKey, cancelTurn, curved]);
 
   return { bookRef, layerRef, prepareTurn };
 }

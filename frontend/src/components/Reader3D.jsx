@@ -8,6 +8,7 @@ import useBookFlip from '../lib/useBookFlip';
 import { isMahabharataProse, pageForPassage } from '../lib/mahabharataLayout';
 import useMahabharataLayout from '../lib/useMahabharataLayout';
 import ProsePage from './ProsePage';
+import BookStand from './BookStand';
 
 // No gesture handlers on scripture text: native selection, scrolling and buttons
 // are independent of navigation. Only the visible spread is mounted.
@@ -50,7 +51,7 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
   const start = spreadStart(Math.min(currentPage, pages.length - 1), wide);
   const visibleIndices = wide && start > 0 && start + 1 < pages.length ? [start, start + 1] : [start];
   const visibleKey = visibleIndices.join(',');
-  const { bookRef, layerRef, prepareTurn } = useBookFlip(visibleKey, `${wide}:${theme}:${fontSize}:${bookLayout?.width}:${bookLayout?.height}`);
+  const { bookRef, layerRef, prepareTurn } = useBookFlip(visibleKey, `${wide}:${theme}:${fontSize}:${bookLayout?.width}:${bookLayout?.height}`, reflowProse);
   const pageError = pageFailure?.key === visibleKey + ':' + pageRetry ? pageFailure.message : '';
   const contents = useMemo(() => scannedPageCount
     ? Array.from({ length: Math.ceil(scannedPageCount / 25) }, (_, index) => ({
@@ -58,7 +59,7 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
       pageIndex: index * 25 + 2,
     }))
     : sections.map(section => ({
-      ...section, pageIndex: pages.findIndex(page => page.sectionId === section.id),
+      ...section, pageIndex: pages.findIndex(page => page.sectionId === section.id || page.sectionIds?.includes(section.id)),
     })), [sections, pages, scannedPageCount]);
   const handleScanReady = useCallback(pageNumber => {
     setRenderedScans(previous => previous[pageNumber] ? previous : { ...previous, [pageNumber]: true });
@@ -72,6 +73,11 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
     setDrawer(null);
     setSelection(null);
   }, [pages.length, prepareTurn]);
+
+  function goToSection(section) {
+    goToPage(section.pageIndex);
+    if (bookLayout) setFocusedPassage(section.passages?.[0]?.id);
+  }
 
   useLayoutEffect(() => {
     if (!bookLayout || previousLayout.current === bookLayout) return;
@@ -172,7 +178,7 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
     if (page.type === 'content' && !passages?.length) return;
     if (page.type === 'scan' && !renderedScans[page.pageNumber]) return;
     const timer = setTimeout(() => onProgressUpdate?.({
-      pageIndex: currentPage, sectionId: page.sectionId,
+      pageIndex: currentPage, sectionId: passages?.find(passage => passage.id === focusedPassage)?.sectionId || page.sectionId,
       passageId: passages?.some(passage => passage.id === focusedPassage) ? focusedPassage : passages?.[0]?.id,
       percentage: Math.round(currentPage / Math.max(1, pages.length - 1) * 100),
     }), 400);
@@ -275,6 +281,7 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
   return (
     <div ref={rootRef} className={'reader-shell theme-' + theme + (reflowProse ? ' reader-prose reader-typeset' : '')}
       style={bookLayout ? { '--book-height': `${bookLayout.pageHeight}px`, '--book-padding': `${bookLayout.padding}px`,
+        '--book-page-width': `${bookLayout.width + bookLayout.padding * 2}px`,
         '--book-content-height': `${bookLayout.height}px`, '--book-font-size': `${fontSize}px` } : undefined}>
       <header className="flex flex-wrap items-center justify-between gap-2 border-b p-3 text-sm">
         <div className="flex flex-wrap gap-1">
@@ -306,6 +313,7 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
       {annotationError && <div role="alert" className="p-3 text-sm">{annotationError} <button onClick={() => setAnnotationRetry(value => value + 1)} className="underline">Retry notes and bookmarks</button></div>}
       <main className="reader-stage flex-1 p-3 sm:p-6">
         {reflowProse && !bookLayout && <p role="status">Preparing book pages…</p>}
+        <BookStand enabled={reflowProse} spread={visibleIndices.length === 2}>
         <div ref={bookRef} data-spread-start={start} data-wide={wide} className={'reader-book reader-binding reader-spread ' + (visibleIndices.length === 2 ? 'reader-spread-wide' : '')}>
           {visibleIndices.map((index, side) => {
             const page = pages[index];
@@ -321,7 +329,7 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
                 <h2 className="text-2xl font-serif mb-5">Table of Contents</h2>
                 {scannedPageCount > 0 && <p className="text-sm mb-5">{scannedPageCount} original scanned pages. Reading starts on page 3, after the cover and contents. Verse selection, notes, bookmarks and AI explanations require verified text.</p>}
                 <ul>{contents.map(section => <li key={section.id}>
-                  <button className="w-full flex justify-between text-left gap-4 py-3 border-b disabled:opacity-50" disabled={section.pageIndex < 0} onClick={() => goToPage(section.pageIndex)}>
+                  <button className="w-full flex justify-between text-left gap-4 py-3 border-b disabled:opacity-50" disabled={section.pageIndex < 0} onClick={() => goToSection(section)}>
                     <span>{section.title}</span><span>{section.pageIndex >= 0 ? section.pageIndex + 1 : 'Unavailable'}</span>
                   </button>
                 </li>)}</ul>
@@ -340,7 +348,7 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
                   }}>Passage tools</button>}
                   <button className={buttonClass + ' text-xs'} onClick={() => onSummarize(page.sectionId)}><Sparkles size={14} />Summarize Section</button>
                 </div>
-                {bookLayout ? <ProsePage page={page} layout={bookLayout} focusedPassage={focusedPassage} onSelect={captureSelection} />
+                {bookLayout ? <ProsePage page={page} layout={bookLayout} focusedPassage={focusedPassage} onSelect={captureSelection} onSummarize={onSummarize} />
                   : pageError ? <div role="alert">{pageError} <button className="underline" onClick={() => setPageRetry(value => value + 1)}>Retry page</button></div>
                   : !loadedPages[index] ? <p role="status">Loading page…</p>
                   : loadedPages[index].map(rawPassage => {
@@ -373,6 +381,7 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
             onClick={() => goToPage(start + visibleIndices.length)}><ChevronRight size={16} /></button>
           <div ref={layerRef} className="reader-flip-layer" aria-hidden="true" inert />
         </div>
+        </BookStand>
       </main>
       <footer className="reader-navigation flex flex-wrap justify-between items-center gap-2 p-3 border-t text-sm">
         <button aria-label="Previous" className={buttonClass} disabled={start === 0} onClick={() => goToPage(Math.max(0, start - (wide ? 2 : 1)))}><ChevronLeft size={16} /><span className="hidden sm:inline">Previous</span></button>
@@ -408,7 +417,7 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
             </div>
             <p className="font-indic whitespace-pre-wrap leading-loose">{toolPassage.text}</p>
             {toolPassage.sourceNotes && <details className="mt-5 text-sm"><summary>Source notes</summary><p className="mt-2">{toolPassage.sourceNotes}</p></details>}
-          </> : drawer === 'contents' ? contents.map(section => <button key={section.id} disabled={section.pageIndex < 0} className="block w-full text-left border-b py-3 disabled:opacity-50" onClick={() => goToPage(section.pageIndex)}>{section.title} · {section.pageIndex >= 0 ? section.pageIndex + 1 : 'Unavailable'}</button>)
+          </> : drawer === 'contents' ? contents.map(section => <button key={section.id} disabled={section.pageIndex < 0} className="block w-full text-left border-b py-3 disabled:opacity-50" onClick={() => goToSection(section)}>{section.title} · {section.pageIndex >= 0 ? section.pageIndex + 1 : 'Unavailable'}</button>)
             : scannedPageCount > 0 ? <p>Verse {drawer} require verified text. Your reading position is saved automatically for this scanned edition.</p>
             : (drawer === 'notes' ? notes : bookmarks).length === 0 ? <p>No {drawer} saved yet.</p>
             : (drawer === 'notes' ? notes : bookmarks).map(item => <div key={item.id} className="border rounded-lg p-3 mb-3">

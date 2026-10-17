@@ -135,8 +135,9 @@
 }
 /* Content-sized Mahabharat pages. The measurement element uses these exact
    paragraph rules; controls and attribution live outside the reading measure. */
-.reader-typeset .reader-spread { max-width: 720px; }
-.reader-typeset .reader-spread-wide { max-width: 1440px; }
+.reader-typeset .reader-spread { max-width: var(--book-page-width, 720px); }
+.reader-typeset .reader-spread-wide { max-width: 1200px; }
+.reader-typeset > header, .reader-typeset > p { position: relative; z-index: 10; background: var(--reader-bg); }
 .reader-typeset .reader-visible-page,
 .reader-typeset .reader-flip-copy {
   height: var(--book-height, 640px);
@@ -181,6 +182,12 @@
 }
 .book-paragraph + .book-paragraph,
 .book-paragraph + .book-family-tree { margin-block-start: .65em; }
+.book-chapter-heading, .book-chapter-heading + .book-paragraph { margin-block-start: .65em; }
+.book-chapter-heading { display: flex; align-items: center; gap: 12px; border-top: 1px solid var(--reader-border); }
+.book-chapter-heading h3 { flex: 1; min-width: 0; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.9; }
+.book-chapter-heading button { flex: none; font: 11px/1.5 sans-serif; color: var(--reader-accent); cursor: pointer; padding: 8px 0; }
+.book-chapter-heading button:hover { text-decoration: underline; }
+.book-chapter-heading button:focus-visible { outline: 2px solid var(--reader-accent); outline-offset: 2px; }
 .reader-typeset .book-paragraph-continued { text-indent: 0; }
 .reader-typeset .book-measure {
   position: fixed;
@@ -197,6 +204,77 @@
   border: 0;
   line-height: 18px;
   font-variant-numeric: tabular-nums;
+}
+/* Mahabharat's reading stand: live paper framed by the supplied visual's
+   carved wood, ivory leaves, gold mala and crimson bookmark. */
+.reader-typeset.theme-light {
+  --reader-bg: #f4f1ea;
+  --reader-paper: #fffdf5;
+  --reader-text: #39291f;
+  --reader-border: #d6c4a6;
+  --reader-accent: #784528;
+}
+.reader-typeset .reader-stage {
+  padding: 52px 80px 150px;
+  background: radial-gradient(ellipse at 50% 35%, #fffdf580, transparent 72%);
+}
+.scripture-book-setting { position: relative; max-width: var(--book-page-width, 720px); margin: auto; isolation: isolate; }
+.scripture-book-setting--spread { max-width: 1200px; }
+.scripture-wooden-stand {
+  position: absolute; pointer-events: none; user-select: none;
+  width: 120%; max-width: none; height: 123%; left: -10%; top: -6%;
+  object-fit: fill; filter: drop-shadow(0 18px 14px #3d251d30);
+}
+.scripture-book-setting .reader-book {
+  z-index: 1; border-radius: 7px 12px 18px 12px;
+  box-shadow: 0 3px 0 2px #dccbab, 0 7px 0 2px #f4e8cd,
+    0 11px 0 3px #b9a183, 0 15px 0 5px #52372b, 0 24px 24px -8px #24150e50;
+}
+.reader-typeset .reader-visible-page { position: relative; }
+.reader-typeset .reader-visible-page,
+.reader-typeset .reader-flip-copy { border-radius: 6px 10px 14px 6px; }
+.reader-typeset .reader-visible-page.--left { border-radius: 10px 4px 5px 14px; }
+.reader-typeset .reader-visible-page::before,
+.reader-typeset .reader-flip-copy::before {
+  content: ''; position: absolute; inset: 17px; pointer-events: none;
+  border: 3px double var(--reader-border); border-radius: 2px;
+}
+.reader-typeset .reader-visible-page::after,
+.reader-typeset .reader-flip-copy::after {
+  content: ''; position: absolute; inset: 22px; pointer-events: none;
+  border: 1px solid color-mix(in srgb, var(--reader-border) 55%, transparent);
+}
+.reader-typeset .reader-paper.--left {
+  background-image: linear-gradient(90deg, #c9af8020, transparent 12%, transparent 87%, #8b65322b 100%);
+}
+.reader-typeset .reader-paper.--right {
+  background-image: linear-gradient(90deg, #8b65322b, transparent 13%, transparent 88%, #c9af8020);
+}
+.scripture-prayer-beads {
+  position: absolute; z-index: 5; pointer-events: none; user-select: none;
+  width: 160px; max-width: none; height: 370px; object-fit: fill;
+  right: -57px; top: -29px; transform: rotate(-7deg);
+  filter: drop-shadow(3px 6px 3px #3b24172b);
+}
+.scripture-book-ribbon {
+  position: absolute; z-index: 3; width: 3px; top: 0; bottom: -58px; left: 50%;
+  background: linear-gradient(90deg, #6e2924, #c36a5b, #7b3028);
+  transform: translateX(-50%); pointer-events: none;
+}
+.scripture-book-ribbon::after {
+  content: ''; position: absolute; width: 9px; height: 28px; bottom: -4px; left: -3px;
+  background: #8c3630; transform: rotate(9deg); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%);
+}
+.scripture-book-setting:not(.scripture-book-setting--spread) .scripture-book-ribbon { left: 0; top: 4px; }
+.reader-typeset .reader-section-header { border-color: color-mix(in srgb, var(--reader-border) 65%, transparent); }
+.reader-typeset.theme-dark .scripture-wooden-stand,
+.reader-typeset.theme-dark .scripture-prayer-beads { filter: brightness(.72) saturate(.8); }
+@media (max-width: 639px) {
+  .reader-typeset .reader-stage { padding: 32px 20px 110px; }
+  .scripture-wooden-stand { width: 112%; left: -6%; height: 117%; top: -3%; }
+  .scripture-prayer-beads { width: 70px; height: 184px; right: -27px; top: -21px; }
+  .reader-typeset .reader-visible-page::before, .reader-typeset .reader-flip-copy::before { inset: 9px; }
+  .reader-typeset .reader-visible-page::after, .reader-typeset .reader-flip-copy::after { inset: 14px; }
 }
 .book-focused-passage { background: color-mix(in srgb, var(--reader-highlight) 28%, transparent); }
 .book-family-tree {
@@ -270,6 +348,12 @@
 .reader-turn-scene--animate .reader-turn-face::after { animation: reader-turn-shading 700ms ease-in-out both; }
 .reader-turn-scene--animate .reader-turn-shadow { animation: reader-turn-cast 700ms ease-in-out both; }
 .reader-book[data-turning] > .reader-visible-page { pointer-events: none; }
+.reader-turn-scene .reader-turn-sheet--curved { transform: none; animation: none; }
+.reader-turn-strip { position: absolute; top: 0; left: 0; height: 100%; transform-style: preserve-3d; will-change: transform; }
+.reader-turn-strip .reader-turn-face { border: 0; border-radius: 0; box-shadow: none; }
+.reader-turn-strip .reader-turn-face::after { background: rgb(0 0 0 / var(--strip-shade)); }
+.reader-typeset .reader-turn-scene--animate .reader-turn-face::after,
+.reader-typeset .reader-turn-scene--animate .reader-turn-shadow { animation-duration: 800ms; }
 @keyframes reader-turn-leaf {
   0% { transform: rotateY(0deg) translateZ(0); }
   45% { transform: rotateY(calc(var(--turn-angle) * .48)) translateZ(12px); }

@@ -1,6 +1,6 @@
 import { familyTreeNodes } from '../lib/mahabharataLayout';
 
-export default function ProsePage({ page, layout, focusedPassage, onSelect }) {
+export default function ProsePage({ page, layout, focusedPassage, onSelect, onSummarize }) {
   function text(part) {
     return <span key={`${part.passage.id}-${part.start}`} id={`text-${part.passage.id}-${part.start}`}
       data-passage-id={part.passage.id} data-source-start={part.start} data-source-end={part.end}
@@ -12,7 +12,12 @@ export default function ProsePage({ page, layout, focusedPassage, onSelect }) {
     </span>;
   }
   return <div className="book-page-content font-indic" lang="hi" dir="ltr">
-    {page.blocks.map((block, index) => block.kind === 'tree'
+    {page.blocks.map((block, index) => block.kind === 'heading'
+      ? <div key={index} className="book-chapter-heading" style={{ height: layout.fontSize * 1.9 * 1.5 }}>
+        <h3 title={block.title}>{block.title}</h3>
+        <button type="button" onClick={() => onSummarize(block.sectionId)} aria-label={`Summarize ${block.title}`}>Summarize Section</button>
+      </div>
+      : block.kind === 'tree'
       ? <figure key={index} className="book-family-tree" aria-label="कुरुवंश का वंश-वृक्ष — मूल पुस्तक, पृष्ठ 6"
         style={{ height: layout.treeHeight, fontSize: Math.min(layout.fontSize, Math.max(12, layout.width / 28)) }}>
         <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">

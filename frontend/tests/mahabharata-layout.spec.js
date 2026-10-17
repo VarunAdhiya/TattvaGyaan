@@ -1,6 +1,10 @@
 ﻿import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 
+// The full Hindi edition is measured after fonts load; cold font caches can
+// take longer than Playwright's default five-second assertion timeout.
+const expectBook = expect.configure({ timeout: 20000 });
+
 const source = JSON.parse(readFileSync(new URL('../../library/editions/drafts/bal-mahabharat-katha-hi.json', import.meta.url), 'utf8'));
 const sections = source.sections.map((section, index) => ({
   ...section, id: 'section-' + index, _count: { passages: section.passages.length },
@@ -52,7 +56,7 @@ async function mockBook(page, legacy = false) {
 
 async function checkPages(page) {
   const content = page.locator('.reader-visible-page .book-page-content');
-  await expect(content.first()).toBeVisible();
+  await expectBook(content.first()).toBeVisible();
   await expect.poll(async () => content.evaluateAll(nodes => nodes.every(node =>
     node.scrollHeight <= node.clientHeight + 1 && node.scrollWidth <= node.clientWidth + 1 &&
     node.lastElementChild.getBoundingClientRect().bottom <= node.getBoundingClientRect().bottom + 1))).toBe(true);
@@ -96,7 +100,7 @@ test('isolated chapter 3 labels form one complete family tree with working deep 
 });
 
 test('font and viewport changes repaginate without clipping and resume the saved passage', async ({ page }) => {
-  test.setTimeout(60000);
+  test.setTimeout(90000);
   await page.setViewportSize({ width: 1440, height: 1000 });
   const state = await mockBook(page);
   await page.goto('/reader/mahabharata/book?page=4');
@@ -132,7 +136,7 @@ test('selection, AI, notes, bookmarks and chapter navigation keep original passa
   const state = await mockBook(page);
   await page.goto('/reader/mahabharata/book?page=3');
   const text = page.locator('.reader-visible-page [data-passage-id="passage-0-0"]');
-  await expect(text).toBeVisible();
+  await expectBook(text).toBeVisible();
   const original = originals['passage-0-0'];
   const end = original.indexOf('\n', original.indexOf('\n') + 1);
   await text.evaluate((element, endOffset) => {
@@ -180,6 +184,69 @@ test('older API responses load complete sections without unbounded requests', as
   await checkPages(page);
   expect(state.requests).toHaveLength(sections.length);
   expect(state.requests.every(limit => limit === 100)).toBe(true);
+  expect(state.errors).toEqual([]);
+});
+
+test('taller leaves fill chapter endings and retain the next chapter summary and contents', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  const state = await mockBook(page);
+  await page.goto('/reader/mahabharata/book?page=4');
+  await checkPages(page);
+  const leaf = await page.locator('.reader-visible-page').first().boundingBox();
+  expect(leaf.height / leaf.width).toBeGreaterThan(1.3);
+  const chapter = page.locator('.reader-visible-page .book-chapter-heading').first();
+  await expect(chapter).toBeVisible();
+  const fill = await page.locator('.reader-visible-page .book-page-content').evaluateAll(nodes => nodes.map(node => {
+    const box = node.getBoundingClientRect();
+    return (node.lastElementChild.getBoundingClientRect().bottom - box.top) / box.height;
+  }));
+  for (const ratio of fill) expect(ratio).toBeGreaterThan(.9);
+  await chapter.getByRole('button').click();
+  await expect(page.getByText('Test explanation.')).toBeVisible();
+  expect(state.ai.at(-1).sectionId).toBe('section-1');
+  expect(state.ai.at(-1).passageId).toBeUndefined();
+});
+
+test('curved sheets show both faces, clean up after interruption, and respect reduced motion', async ({ page }) => {
+  test.setTimeout(60000);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  const state = await mockBook(page);
+  await page.goto('/reader/mahabharata/book?page=4');
+  await checkPages(page);
+  const book = page.locator('.reader-book');
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
+  await expect(book).toHaveAttribute('data-turn-state', 'flipping');
+  const curve = page.locator('.reader-turn-sheet--curved');
+  const shape = await curve.evaluate(sheet => {
+    for (const animation of sheet.getAnimations({ subtree: true })) { animation.pause(); animation.currentTime = 320; }
+    return [...sheet.querySelectorAll('.reader-turn-strip')].map(strip => {
+      const matrix = new DOMMatrix(getComputedStyle(strip).transform);
+      return { angle: matrix.m13, depth: matrix.m43 };
+    });
+  });
+  expect(shape).toHaveLength(16);
+  expect(Math.max(...shape.map(strip => strip.depth))).toBeGreaterThan(100);
+  expect(Math.abs(shape[0].angle - shape.at(-1).angle)).toBeGreaterThan(.1);
+  await expect(page.locator('.reader-turn-strip .reader-turn-face--front .scripture-text').first()).not.toBeEmpty();
+  await expect(page.locator('.reader-turn-strip .reader-turn-face--back .scripture-text').first()).not.toBeEmpty();
+  await expect(page.locator('.reader-flip-layer [id]')).toHaveCount(0);
+  await expect(page.locator('.reader-flip-layer')).toHaveAttribute('inert', '');
+  await page.screenshot({ path: 'test-results/mahabharata-curved-turn-desktop.png' });
+  await curve.evaluate(sheet => sheet.getAnimations().forEach(animation => animation.finish()));
+  await expect(curve).toHaveCount(0);
+  await page.getByRole('button', { name: 'Previous', exact: true }).click();
+  await expect(book).toHaveAttribute('data-turning', 'backward');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(curve).toHaveCount(0);
+  await checkPages(page);
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
+  await expect(page.locator('.reader-turn-strip')).toHaveCount(12);
+  await page.screenshot({ path: 'test-results/mahabharata-curved-turn-mobile.png' });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(curve).toHaveCount(0);
+  await page.getByRole('button', { name: 'Previous', exact: true }).click();
+  await expect(curve).toHaveCount(0);
+  await checkPages(page);
   expect(state.errors).toEqual([]);
 });
 

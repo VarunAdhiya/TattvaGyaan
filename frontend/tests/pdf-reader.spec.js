@@ -39,8 +39,9 @@ test(`${file}: an idle scanned page keeps its canvas without blank frames or rep
   const document = JSON.parse(readFileSync(new URL(`../../library/documents/${file}.json`, import.meta.url), 'utf8'));
   await mockCatalog(page, document);
   await page.goto('/reader/vedas/rigveda-scan?page=4');
-  await expect(page.locator('.reader-visible-page .reader-scan canvas')).toHaveCount(2);
-  await expect(page.locator('.reader-visible-page .reader-scan[aria-busy="true"]')).toHaveCount(0);
+  // Cold PDF decoding can exceed the default five-second assertion timeout.
+  await expect(page.locator('.reader-visible-page .reader-scan canvas')).toHaveCount(2, { timeout: 20000 });
+  await expect(page.locator('.reader-visible-page .reader-scan[aria-busy="true"]')).toHaveCount(0, { timeout: 20000 });
   const sample = await page.evaluate(async () => {
     const scans = [...document.querySelectorAll('.reader-visible-page .reader-scan')];
     const original = scans.map(scan => scan.querySelector('canvas'));

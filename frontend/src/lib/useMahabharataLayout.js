@@ -21,11 +21,11 @@ export default function useMahabharataLayout(enabled, sections, fontSize, rootRe
       if (!active) return;
       const viewport = rootRef.current.clientWidth;
       const wide = viewport >= 900;
-      const stagePadding = viewport < 640 ? 12 : 24;
-      const pageWidth = Math.min(wide ? 1440 : 720, viewport - stagePadding * 2) / (wide ? 2 : 1);
+      const stagePadding = viewport < 640 ? 20 : 80;
+      const pageWidth = Math.min(wide ? 1200 : 720, viewport - stagePadding * 2) / (wide ? 2 : 1);
       const padding = viewport < 600 ? 26 : 44;
       const width = pageWidth - padding * 2;
-      const pageHeight = Math.max(540, window.innerHeight - (viewport < 600 ? 260 : 220));
+      const pageHeight = Math.max(620, Math.min(1100, Math.max(pageWidth * 1.4, window.innerHeight - 140)));
       const height = pageHeight - padding * 2 - 100;
       const size = `${width}:${height}:${fontSize}`;
       if (size === lastSize) return;
