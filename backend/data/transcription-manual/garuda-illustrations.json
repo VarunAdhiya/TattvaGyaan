@@ -1,0 +1,30 @@
+{
+  "sourceSha256": "c05368e6b60c64f58b2b86b8a9375d483259cd81d6b2469faaafb4a698a6dcb0",
+  "method": "Inline picture rectangles visually located in all-page contact sheets and checked against full page renders. Coordinates are PDF points. These mask derived OCR inputs only, preserving adjacent prose and captions; the original PDF remains unchanged. Page 456's opening illustration is separately excluded by the OCR layout routine. Full-page art with captions uses visual transcription.",
+  "rectangles": {
+    "14": [[296,432,538,731]],
+    "19": [[297,123,540,418]],
+    "158": [[40,287,268,576]],
+    "159": [[48,470,271,759]],
+    "163": [[80,77,251,301]],
+    "164": [[58,107,237,344]],
+    "165": [[92,70,247,280]],
+    "257": [[54,300,272,569]],
+    "455": [[55,383,291,629]],
+    "463": [[315,265,520,526]],
+    "467": [[70,492,257,737],[319,492,506,765]],
+    "468": [[75,550,241,767],[314,214,492,454]],
+    "469": [[68,130,260,383],[322,115,516,382]],
+    "470": [[53,86,252,340]],
+    "473": [[66,67,275,319]],
+    "489": [[324,67,523,319]],
+    "503": [[317,472,531,742]],
+    "521": [[322,456,532,715]],
+    "533": [[83,497,258,736]],
+    "535": [[326,468,528,719]],
+    "544": [[300,80,509,331]],
+    "616": [[307,532,486,774]],
+    "632": [[301,417,511,671]],
+    "635": [[295,179,505,417]]
+  }
+}

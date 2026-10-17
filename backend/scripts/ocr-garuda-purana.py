@@ -17,7 +17,11 @@ import numpy as np
 import pymupdf
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / 'frontend/public/library/garuda-purana.pdf'
+SOURCE = next((candidate for candidate in [
+    ROOT / 'frontend/dist/library/Garuda Purana Original upayogibooks.com.pdf',
+    ROOT / 'frontend/public/library/garuda-purana.pdf',
+    ROOT / 'backend/data/source-pdfs/garuda-purana.pdf',
+] if candidate.exists()), ROOT / 'frontend/public/library/garuda-purana.pdf')
 CACHE = ROOT / 'backend/data/transcription-ocr/garuda-columns-v2'
 MODEL = ROOT / 'backend/data/transcription-drafts/garuda'
 SOURCE_SHA = 'c05368e6b60c64f58b2b86b8a9375d483259cd81d6b2469faaafb4a698a6dcb0'
@@ -27,6 +31,23 @@ MODEL_URL = 'https://raw.githubusercontent.com/tesseract-ocr/tessdata_best/4.1.0
 # handled by explicit visual transcription/classification, not noisy OCR.
 MANUAL_PAGES = {1,2,3,4,5,36,37,38,39,40,41,42,43,465,471,636,637,638}
 RECIPE = 'garuda-curved-column-bands-rgb-300dpi-hin-best-v2'
+ILLUSTRATIONS = json.loads((ROOT / 'backend/data/transcription-manual/garuda-illustrations.json').read_text(encoding='utf8'))
+assert ILLUSTRATIONS['sourceSha256'] == SOURCE_SHA
+MASKED_CACHE = ROOT / 'backend/data/transcription-ocr/garuda-columns-v2-illustrations'
+
+
+def checkpoint_identity(number):
+    identity = {'recipe': RECIPE, 'sourceSha256': SOURCE_SHA, 'modelSha256': MODEL_SHA,
+                'pymupdf': pymupdf.VersionBind, 'page': number, 'dpi': 300}
+    masks = ILLUSTRATIONS['rectangles'].get(str(number), [])
+    if masks:
+        identity['illustrationMasks'] = masks
+    return identity
+
+
+def checkpoint_path(number):
+    directory = MASKED_CACHE if str(number) in ILLUSTRATIONS['rectangles'] else CACHE
+    return directory / f'{number:04d}.json'
 
 
 def ranges(mask):
@@ -110,12 +131,12 @@ def read_lines(ocr_page):
 
 
 def process_page(number):
-    filename = CACHE / f'{number:04d}.json'
-    identity = {'recipe':RECIPE, 'sourceSha256':SOURCE_SHA, 'modelSha256':MODEL_SHA,
-                'pymupdf':pymupdf.VersionBind, 'page':number, 'dpi':300}
+    filename = checkpoint_path(number)
+    identity = checkpoint_identity(number)
     if filename.exists():
         cached = json.loads(filename.read_text(encoding='utf8'))
         assert cached['identity'] == identity, 'Checkpoint settings changed'
+        assert cached['textSha256'] == hashlib.sha256('\n'.join(r['text'] for r in cached['regions']).encode()).hexdigest(), 'Checkpoint text changed'
         return number, sum(len(r['text']) for r in cached['regions']), True
     with pymupdf.open(SOURCE) as pdf:
         source_page = pdf[number-1]
@@ -125,6 +146,11 @@ def process_page(number):
         with pymupdf.open() as scan:
             page = scan.new_page(width=source_page.rect.width,height=source_page.rect.height)
             page.insert_image(page.rect,stream=pdf.extract_image(images[0][0])['image'])
+            for rectangle in identity.get('illustrationMasks', []):
+                # Derived input only. Picture strokes otherwise become fake words.
+                box = pymupdf.Rect(rectangle)
+                assert not box.is_empty and page.rect.contains(box), 'Picture mask outside source page'
+                page.draw_rect(box, color=None, fill=(1,1,1), overlay=True)
             bands, centers = detect_layout(page,number)
             boxes = []
             position = 12
@@ -191,6 +217,7 @@ def main():
     assert hashlib.sha256(SOURCE.read_bytes()).hexdigest() == SOURCE_SHA
     assert hashlib.sha256((MODEL/'hin.traineddata').read_bytes()).hexdigest() == MODEL_SHA
     CACHE.mkdir(parents=True,exist_ok=True)
+    MASKED_CACHE.mkdir(parents=True,exist_ok=True)
     selected = [int(n) for n in args.pages.split(',')] if args.pages else list(range(1,639))
     selected = [n for n in selected if n not in MANUAL_PAGES]
     assert all(1 <= n <= 638 for n in selected)

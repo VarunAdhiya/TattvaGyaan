@@ -2,6 +2,8 @@
 
 This guide records the work performed on **Bal Mahabharat Katha** and **Manusmriti**, with a reproducible **Shiva Purana** addition at the end. Give it to another Claude/Codex agent together with access to this repository. It explains how to repeat the process without inventing text, losing source information, overwriting annotations, or incorrectly calling a draft verified.
 
+For the image-only Garuda Purana scan, follow the dedicated [Garuda OCR and Supabase procedure](library/GARUDA_IMPORT.md). It explains two-column OCR, illustration handling, all-page coverage, the text/JSON exports, and the same database/API/reader verification path.
+
 The importer, tables, API routes and UI behavior described here reflect this working tree. Inspect their current implementations before applying this guide to a different revision. Some files were newly created during this work and may not yet be committed.
 
 ## 1. What was accomplished
@@ -1010,8 +1012,13 @@ async function get(endpoint) {
   return response.json();
 }
 async function main() {
-  const catalog = await get('/scriptures?search=' + encodeURIComponent(source.scriptureSlug));
-  const book = catalog.scriptures.find(item => item.slug === source.scriptureSlug);
+  // Search matches display titles/aliases, so a hyphenated slug may not match.
+  let book;
+  for (let page = 1; !book; page++) {
+    const catalog = await get(`/scriptures?page=${page}&limit=100`);
+    book = catalog.scriptures.find(item => item.slug === source.scriptureSlug);
+    if (page >= catalog.pagination.totalPages) break;
+  }
   assert.ok(book, 'Book must exist in the API catalog');
   const { scripture } = await get('/scriptures/' + book.id);
   const matches = scripture.editions.filter(e => e.source === source.source && e.language === source.language);
@@ -1022,7 +1029,7 @@ async function main() {
   assert.ok(scripture.editions.some(e => e.source === source.sourceDocument), 'Original PDF edition must remain');
   const { sections } = await get('/passages/edition/' + edition.id);
   assert.equal(sections.length, source.sections.length);
-  const pages = new Set(source.illustrationOnlyPages || []);
+  const pages = new Set([...(source.illustrationOnlyPages || []), ...(source.blankPages || [])]);
   let count = 0;
   for (let index = 0; index < sections.length; index++) {
     const section = sections[index];

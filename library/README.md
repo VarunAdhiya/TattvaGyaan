@@ -67,6 +67,10 @@ node backend/scripts/verify-draft-api.cjs library/editions/drafts/shiva-purana-h
 
 The extractor uses PyMuPDF and the checked-in `backend/data/font-maps/shiva-purana-noto.json`. The PDF's incorrect Unicode mappings are decoded from glyph IDs after exact matching of all 293 embedded nonempty Noto font outlines against historical official font files. The mapping records upstream URLs and font hashes; the extractor checks the PDF and embedded font hashes on every run. It reconstructs contextual i/reph/anusvara positioning, preserves source line order and printed spelling, checks every text line survives passage grouping, and refuses changes to an existing JSON. The accompanying `shiva-purana-hi.audit.json` records per-page coverage and hashes. Image-only text on pages 1, 2, 37 and 844 was transcribed from rendered pages; illustration-only pages were visually checked. Full editorial review is still outstanding.
 
+### Garuda Purana draft
+
+For the 638-page Garuda Purana scan, see [Garuda PDF → text/JSON → Supabase](GARUDA_IMPORT.md). Its dedicated OCR/export scripts produced 5,277 reading blocks in six sections; all 638 source pages are accounted for. The text remains an unreviewed OCR draft. The existing full-page scratch OCR interleaves columns and should not be imported.
+
 ### Ramcharitmanas draft
 
 `editions/drafts/ramcharitmanas-hi.json` contains the user-selected Gita Press **Shri Ramcharitmanas**, with Hanumanprasad Poddar's commentary, under the existing `ramayana` book. It is not Valmiki Ramayana. Its 14 sections contain seven kandas plus front matter, contents, recitation guidance, arati, biography, and the closing question table: **12,821 reading passages**, not individually numbered canonical verses. All 1,058 source pages are accounted for, including three visually checked blank pages (2, 4, 1058). The original PDF remains available.
