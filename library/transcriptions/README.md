@@ -1,5 +1,11 @@
 # Corrected text imports
 
+**Historical workflow:** PDF editions have been retired. The application now
+publishes one text edition per remaining book, with draft labels preserved.
+Use [the current catalog guide](../README.md) for imports and deployment. The
+review rules below still apply to editorial work, but do not republish PDFs or
+restore retired books/editions through this former migration workflow.
+
 PDF editions keep using the PDF reader until **every source page** has corrected text and an explicit review. Raw extraction, OCR output, and a successful script run are not evidence of textual accuracy. The Gita import is unchanged.
 
 ## Current source coverage

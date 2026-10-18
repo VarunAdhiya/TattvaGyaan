@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 const source=JSON.parse(readFileSync(new URL('../../library/editions/drafts/ramayan-study-hi.json',import.meta.url),'utf8'));
 const ready=expect.configure({ timeout:30000 });
 
-test('live Ramayan is one collection with preserved editions, old links and source-matched database text',async({ page,request })=>{
+test('live Ramayan keeps one text edition, old book links and source-matched database text',async({ page,request })=>{
   test.skip(!process.env.RUN_LIVE_LIBRARY,'Requires local API and imported Ramayan draft.');test.setTimeout(150000);
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.route(url=>url.pathname==='/api/auth/me',r=>r.fulfill({ json:{ user:{ id:'smoke',username:'reader' } } }));
@@ -13,7 +13,7 @@ test('live Ramayan is one collection with preserved editions, old links and sour
   const { scriptures }=await response.json();expect(scriptures).toHaveLength(1);
   const book=scriptures[0];expect(book.title).toBe('Ramayan');expect(book.slug).toBe('ramayana');
   const edition=book.editions[0];expect(edition.source).toBe(source.source);expect(edition.expectedPassages).toBe(1189);
-  expect(book.editions.map(e=>e.id)).toEqual(expect.arrayContaining(['2c386bf4-27d6-47de-bf90-53c5f1c9aaee','d3058547-a340-42d8-89a3-cc01d3870d4e','91de66ce-7456-4a69-8454-bf68fcccb79c']));
+  expect(book.editions.map(e=>e.id)).toEqual(['7163a33b-6c45-4ecc-83f5-f0443037a983']);
   const legacy=await request.get('/api/scriptures/7ef9d10a-ac5f-460b-8bf7-b08d1cb6469a');expect(legacy.ok()).toBeTruthy();expect((await legacy.json()).scripture.id).toBe(book.id);
   const passagesResponse=await request.get(`/api/passages/edition/${edition.id}`);expect(passagesResponse.ok()).toBeTruthy();
   const { sections }=await passagesResponse.json();expect(sections).toHaveLength(60);
@@ -21,7 +21,7 @@ test('live Ramayan is one collection with preserved editions, old links and sour
   await page.setViewportSize({ width:1440,height:1000 });await page.goto(`/scripture/${book.id}`);
   await page.getByRole('button',{ name:'Start Reading',exact:true }).click();await expect(page).toHaveURL(new RegExp(edition.id));
   await ready(page.locator('.reader-ramayan')).toBeVisible();
-  await expect(page.getByRole('link',{ name:'Download original PDF' })).toHaveAttribute('href',source.sourceDocument);
+  await expect(page.getByRole('link',{ name:'Download original PDF' })).toHaveCount(0);
   await page.getByRole('button',{ name:'Contents',exact:true }).click();await page.getByRole('button',{ name:/^अयोध्या का प्रथम राजा ·/ }).click();
   await ready(page.locator('.reader-visible-page .book-page-content').first()).toBeVisible();
   await page.screenshot({ path:'test-results/ramayan-live-desktop.png',fullPage:true });

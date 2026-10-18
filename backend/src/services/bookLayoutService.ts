@@ -6,14 +6,22 @@ import { AppError } from '../middleware/errorHandler';
 export const GARUDA_SOURCE = 'urn:sha256:c05368e6b60c64f58b2b86b8a9375d483259cd81d6b2469faaafb4a698a6dcb0';
 export const MANUSMRITI_SOURCE = 'urn:sha256:992c71ecb2a16913c2fb578ae51f3a73d6288109f133b10b811d1b976f8698e3';
 export const RAMAYAN_SOURCE = 'urn:sha256:759f2adbfd2fc1191ff8576401d1cbc34bbfefaf79a573e8747c53d4c858af75';
-export const TYPESET_SOURCES = [GARUDA_SOURCE, MANUSMRITI_SOURCE, RAMAYAN_SOURCE, 'urn:sha256:eb00713009dd7b6a81feec459c7518a494f851dc79d77e5d67856e4d8d70d809'];
+export const GITA_SOURCE = 'https://gitabhawan.org.in/gita/research';
+export const TYPESET_SOURCES = [GARUDA_SOURCE, MANUSMRITI_SOURCE, RAMAYAN_SOURCE, GITA_SOURCE, 'urn:sha256:eb00713009dd7b6a81feec459c7518a494f851dc79d77e5d67856e4d8d70d809'];
 const layoutFiles: Record<string, string> = { [GARUDA_SOURCE]: 'garuda-purana.json', [MANUSMRITI_SOURCE]: 'manusmriti.json', [RAMAYAN_SOURCE]: 'ramayan-study.json' };
 type Passage = { reference: string; text: string };
-type Block = { kind: string; chapterKey?: string; title?: string; keepTogether?: boolean; keepWithNext?: boolean; pageBreakBefore?: boolean; sourcePage: number; printedPage?: string | null; parts: { reference: string; start: number; end: number }[] };
+type Block = { kind: string; chapterKey?: string; title?: string; keepTogether?: boolean; keepWithNext?: boolean; pageBreakBefore?: boolean; sourcePage?: number; printedPage?: string | null; parts: { reference: string; start: number; end: number }[] };
 type Layout = { source: string; sections: Record<string, { hashes: Record<string, string>; blocks: Block[] }> };
 const layouts = new Map<string, Layout>();
 
-export function bookReadingBlocks(source: string | null, slug: string, passages: Passage[]) {
+export function bookReadingBlocks(source: string | null, slug: string, passages: Passage[]): Block[] | undefined {
+  // This attributed text edition already stores one translation per verse.
+  // Derive ranges from the actual database text, without prose joins or the
+  // Mahabharat family-tree heuristic (whose references overlap Gita chapter 3).
+  if (source === GITA_SOURCE) return passages.map(passage => ({
+    kind: 'translation', keepTogether: true,
+    parts: [{ reference: passage.reference, start: 0, end: passage.text.length }],
+  }));
   if (!source || !layoutFiles[source]) return undefined;
   if (!layouts.has(source)) layouts.set(source, JSON.parse(readFileSync(resolve(__dirname, '../../data/layouts', layoutFiles[source]), 'utf8')) as Layout);
   const layout = layouts.get(source)!;

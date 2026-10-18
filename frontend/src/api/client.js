@@ -33,6 +33,10 @@ async function request(endpoint, options = {}) {
 }
 
 export const api = {
+  // Devotional collections are separate from scripture editions.
+  getDevotionals: (params, signal) => request(`/devotionals?${new URLSearchParams(params)}`, { signal }),
+  getDevotional: (category, slug, signal) => request(`/devotionals/${category}/${encodeURIComponent(slug)}`, { signal }),
+  getCalendarMonth: (year, month, signal) => request(`/devotionals/calendar?${new URLSearchParams({ year, month })}`, { signal }),
   // Auth
   register: (userData) => request('/auth/register', {
     method: 'POST',

@@ -43,7 +43,7 @@ def source_lines(page):
 
 def build():
     manifest = json.loads((ROOT/'library/documents/valmiki-ramayana-ramakien-study-hi.json').read_text(encoding='utf8'))
-    pdf = ROOT/'frontend/public/library/valmiki-ramayana-ramakien-study.pdf'
+    pdf = ROOT/'backend/data/source-pdfs/valmiki-ramayana-ramakien-study.pdf'
     assert hashlib.sha256(pdf.read_bytes()).hexdigest() == SHA == manifest['sha256']
     manual = json.loads((ROOT/'backend/data/transcription-manual/ramayan-study.json').read_text(encoding='utf8'))
     assert manual['sourceSha256'] == SHA

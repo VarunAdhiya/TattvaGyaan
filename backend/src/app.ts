@@ -19,6 +19,7 @@ import noteRoutes from './routes/notes';
 import highlightRoutes from './routes/highlights';
 import searchRoutes from './routes/search';
 import aiRoutes from './routes/ai';
+import devotionalRoutes from './routes/devotionals';
 
 const app = express();
 
@@ -67,6 +68,7 @@ app.use('/api/notes', noteRoutes);
 app.use('/api/highlights', highlightRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/devotionals', devotionalRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

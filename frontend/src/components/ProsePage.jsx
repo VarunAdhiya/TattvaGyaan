@@ -31,7 +31,8 @@ export default function ProsePage({ page, layout, focusedPassage, onSelect, onSu
       : <p key={index} role={block.kind === 'topic' ? 'heading' : undefined} aria-level={block.kind === 'topic' ? 3 : undefined}
         className={'book-paragraph book-block-' + block.kind + (block.continued ? ' book-paragraph-continued' : '')}>
         {block.parts.map((part, partIndex) => <span key={`${part.passage.id}-${part.start}`}>
-          {partIndex > 0 && !block.parts[partIndex - 1].passage.text.trimEnd().endsWith('-') ? ' ' : ''}{text(part, block.kind)}
+          {partIndex > 0 && !block.parts[partIndex - 1].passage.text.trimEnd().endsWith('-') ? ' ' : ''}
+          {block.kind === 'translation' && part.start === 0 && <span className="book-passage-reference">{part.passage.reference} </span>}{text(part, block.kind)}
         </span>)}
       </p>)}
   </div>;

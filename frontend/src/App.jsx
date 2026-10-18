@@ -12,6 +12,11 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import SectionNavigation from './components/SectionNavigation';
+import DevotionalCollection from './pages/DevotionalCollection';
+import DevotionalDetail from './pages/DevotionalDetail';
+import HinduCalendar from './pages/HinduCalendar';
+import './devotionals.css';
 
 function App() {
   return (
@@ -19,8 +24,14 @@ function App() {
       <BrowserRouter>
         <div className="flex flex-col min-h-screen">
           <Navbar />
+          <SectionNavigation />
           <main className="flex-1">
             <Routes>
+              {['chalisa', 'bhajan', 'mantra'].map(category => <React.Fragment key={category}>
+                <Route path={`/${category}s`} element={<DevotionalCollection key={category} category={category} />} />
+                <Route path={`/${category}s/:slug`} element={<DevotionalDetail key={category} category={category} />} />
+              </React.Fragment>)}
+              <Route path="/calendar" element={<HinduCalendar />} />
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />

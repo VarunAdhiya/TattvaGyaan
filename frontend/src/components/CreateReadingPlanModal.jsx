@@ -196,7 +196,7 @@ export default function CreateReadingPlanModal({
               </option>
               {scriptures.map((scripture) =>
                 scripture.editions && scripture.editions.length > 0
-                  ? scripture.editions.filter((edition) => edition.contentStatus !== 'scanned').map((edition) => (
+                  ? scripture.editions.map((edition) => (
                       <option key={edition.id} value={edition.id}>
                         {scripture.title} - {edition.title} ({edition.language})
                       </option>

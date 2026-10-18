@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
-import { BookOpen, ArrowLeft, Clock, Globe, Calendar, AlertCircle } from 'lucide-react';
+import { BookOpen, ArrowLeft, Clock, Globe, AlertCircle } from 'lucide-react';
 import CreateReadingPlanModal from '../components/CreateReadingPlanModal';
 
 export default function ScriptureDetail() {
   const { scriptureId } = useParams();
   const navigate = useNavigate();
   const [scripture, setScripture] = useState(null);
-  const [editions, setEditions] = useState([]);
   const [selectedEdition, setSelectedEdition] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,11 +20,7 @@ export default function ScriptureDetail() {
         const scriptureData = await api.getScripture(scriptureId);
         setScripture(scriptureData.scripture);
 
-        const editionsData = await api.getScriptureEditions(scriptureId);
-        setEditions(editionsData.editions || []);
-        if (editionsData.editions?.length > 0) {
-          setSelectedEdition(editionsData.editions[0]);
-        }
+        setSelectedEdition(scriptureData.scripture.editions?.[0] || null);
       } catch (err) {
         setError(err.message || 'Failed to load scripture');
       } finally {
@@ -71,7 +66,7 @@ export default function ScriptureDetail() {
 
   const startReading = () => {
     if (!selectedEdition) {
-      setError('Please select an edition');
+      setError('This book is unavailable. Please return to the library.');
       return;
     }
     navigate(`/reader/${scripture.id}/${selectedEdition.id}`);
@@ -174,45 +169,28 @@ export default function ScriptureDetail() {
             </div>
           </div>
 
-          {/* Right: Edition Selector & CTA */}
+          {/* The library publishes one text edition for each book. */}
           <div className="md:col-span-1">
             <div className="bg-white rounded-2xl border border-stone-200/80 shadow-xs p-6 sticky top-32">
-              <h2 className="text-lg font-serif font-bold text-stone-900 mb-4">Editions</h2>
+              <h2 className="text-lg font-serif font-bold text-stone-900 mb-4">Read this book</h2>
 
-              {editions.length > 0 ? (
+              {selectedEdition ? (
                 <>
                   <div className="space-y-2 mb-6">
-                    {editions.map((edition) => (
-                      <button
-                        key={edition.id}
-                        onClick={() => setSelectedEdition(edition)}
-                        className={`w-full text-left px-4 py-3 rounded-lg border-2 transition ${
-                          selectedEdition?.id === edition.id
-                            ? 'border-amber-600 bg-amber-50'
-                            : 'border-stone-200 hover:border-amber-300 bg-stone-50/50'
-                        }`}
-                      >
-                        <div className="font-medium text-stone-900">{edition.title}</div>
+                      <div className="w-full text-left px-4 py-3 rounded-lg border border-amber-200 bg-amber-50">
+                        <div className="font-medium text-stone-900">{selectedEdition.title}</div>
                         <div className="text-xs text-stone-500 mt-1">
-                          {edition.language}
-                          {edition.isOriginal && ' • Original'}
+                          Hindi text
                         </div>
                         <div className="text-xs mt-1 text-amber-800">
-                          {edition.contentStatus === 'scanned' ? 'Scanned PDF · Partial collection'
-                            : edition.contentStatus === 'draft' ? `Draft text · ${edition.expectedPassages} passages · Not fully proofread`
-                            : edition.contentStatus === 'transcribed' ? `Reviewed transcription · ${edition.expectedPassages} source page${edition.expectedPassages === 1 ? '' : 's'} with text`
-                              : edition.contentStatus === 'complete' ? `Complete · ${edition.expectedPassages} passages` : 'Partial sample — completeness unverified'}
+                          {selectedEdition.contentStatus === 'draft' ? `Draft text · ${selectedEdition.expectedPassages} passages · Not fully proofread`
+                            : selectedEdition.contentStatus === 'complete' ? `Complete · ${selectedEdition.expectedPassages} passages` : 'Partial text'}
                         </div>
-                      </button>
-                    ))}
+                      </div>
                   </div>
 
-                  {selectedEdition?.source && (/^https?:\/\//.test(selectedEdition.source) || (selectedEdition.contentStatus === 'scanned' && /^\/library\/[a-z0-9][a-z0-9-]*\.pdf$/.test(selectedEdition.source))) && (
+                  {selectedEdition?.source && /^https?:\/\//.test(selectedEdition.source) && (
                     <p className="text-xs text-stone-600 mb-4"><a className="underline" href={selectedEdition.source} target="_blank" rel="noreferrer">Source and attribution</a>{selectedEdition.translator ? ` · ${selectedEdition.translator}` : ''}</p>
-                  )}
-
-                  {selectedEdition?.contentStatus === 'scanned' && (
-                    <p className="text-xs text-stone-600 mb-4">Read the original scanned pages in the book reader. Verse selection, notes, bookmarks, AI explanations and reading plans require verified text.</p>
                   )}
 
                   <button
@@ -224,8 +202,6 @@ export default function ScriptureDetail() {
 
                   <button
                     onClick={() => setShowPlanModal(true)}
-                    disabled={selectedEdition?.contentStatus === 'scanned'}
-                    title={selectedEdition?.contentStatus === 'scanned' ? 'Reading plans require verified text.' : undefined}
                     className="w-full px-4 py-3 border border-stone-300 text-stone-700 rounded-lg font-medium hover:bg-stone-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Create Reading Plan
@@ -234,14 +210,14 @@ export default function ScriptureDetail() {
               ) : (
                 <div className="text-center py-8">
                   <AlertCircle className="w-8 h-8 text-stone-400 mx-auto mb-2" />
-                  <p className="text-sm text-stone-500">No editions available yet</p>
+                  <p className="text-sm text-stone-500">This book is currently unavailable</p>
                 </div>
               )}
 
               {/* Additional Info */}
               <div className="mt-6 pt-6 border-t border-stone-200">
                 <p className="text-xs text-stone-500 leading-relaxed">
-                  This scripture is available in multiple editions and languages. Select an edition above to begin reading.
+                  Read the Hindi text, save your place, and add private notes as you go.
                 </p>
               </div>
             </div>

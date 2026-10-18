@@ -205,6 +205,7 @@ export declare class ScriptureService {
                 };
                 id: string;
                 language: string;
+                source: string | null;
                 textDirection: string;
             };
         } & {
@@ -314,7 +315,7 @@ export declare class ScriptureService {
             keepTogether?: boolean;
             keepWithNext?: boolean;
             pageBreakBefore?: boolean;
-            sourcePage: number;
+            sourcePage?: number;
             printedPage?: string | null;
             parts: {
                 reference: string;

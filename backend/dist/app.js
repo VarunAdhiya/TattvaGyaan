@@ -24,6 +24,7 @@ const notes_1 = __importDefault(require("./routes/notes"));
 const highlights_1 = __importDefault(require("./routes/highlights"));
 const search_1 = __importDefault(require("./routes/search"));
 const ai_1 = __importDefault(require("./routes/ai"));
+const devotionals_1 = __importDefault(require("./routes/devotionals"));
 const app = (0, express_1.default)();
 // Security
 app.use((0, helmet_1.default)());
@@ -67,6 +68,7 @@ app.use('/api/notes', notes_1.default);
 app.use('/api/highlights', highlights_1.default);
 app.use('/api/search', search_1.default);
 app.use('/api/ai', ai_1.default);
+app.use('/api/devotionals', devotionals_1.default);
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });

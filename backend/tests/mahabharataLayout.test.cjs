@@ -89,8 +89,7 @@ test('complete reader text is limited to supported typeset sources and position 
     await scriptureService.getPassagesForReader('book', true);
     assert.equal(query.select.passages.select.text, true);
     edition = { ...edition, source: '/library/other-book.pdf' };
-    await scriptureService.getPassagesForReader('book', true);
-    assert.equal(query.select.passages, false);
+    await assert.rejects(scriptureService.getPassagesForReader('book', true), /Edition not found/);
   } finally {
     prisma.scriptureEdition.findUnique = originalEdition;
     prisma.scriptureSection.findMany = originalSections;

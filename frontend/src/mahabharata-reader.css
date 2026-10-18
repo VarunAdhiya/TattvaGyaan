@@ -1,4 +1,6 @@
-/* Shared by the source-identified Mahabharat, Garuda and Manusmriti editions. */
+/* Shared by the source-identified Mahabharat, Garuda, Manusmriti, Ramayan and Gita editions. */
+.reader-typeset .book-block-translation { text-indent: 0; }
+.book-passage-reference { font-size: .75em; font-weight: 700; color: var(--reader-accent); white-space: nowrap; }
 .reader-typeset .book-block-chapter { font-weight: 600; text-indent: 0; text-align: start; }
 .reader-typeset .book-block-verse { white-space: pre-line; text-indent: 0; text-align: start; }
 .reader-typeset .book-block-source-note { font-size: .78em; color: var(--reader-muted); text-indent: 0; text-align: start; }

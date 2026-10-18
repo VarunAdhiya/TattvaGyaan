@@ -37,11 +37,17 @@ export default function useMahabharataLayout(enabled, sections, fontSize, rootRe
       Object.assign(measurementPage.style, { width: `${width}px`, height: 'auto', fontSize: `${fontSize}px`, lineHeight: '1.9' });
       const measurements = new Map();
       const pages = paginateMahabharata(sections, { height: height - 2, lineHeight, gap, treeHeight }, (text, continued, parts, kind) => {
-        const key = `${kind}:${continued}:${text}`;
+        const key = `${kind}:${continued}:${kind === 'translation' ? parts.map(part => `${part.passage.reference}:${part.start}`).join(',') : ''}:${text}`;
         if (measurements.has(key)) return measurements.get(key);
         measure.replaceChildren(...parts.map((part, index) => {
           const outer = document.createElement('span');
           if (index && !parts[index - 1].passage.text.trimEnd().endsWith('-')) outer.append(' ');
+          if (kind === 'translation' && part.start === 0) {
+            const reference = document.createElement('span');
+            reference.className = 'book-passage-reference';
+            reference.textContent = part.passage.reference + ' ';
+            outer.append(reference);
+          }
           const span = document.createElement('span');
           span.className = 'scripture-text';
           for (const run of bookTextRuns(part.passage.text.slice(part.start, part.end), kind)) {

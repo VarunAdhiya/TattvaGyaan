@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TYPESET_SOURCES = exports.RAMAYAN_SOURCE = exports.MANUSMRITI_SOURCE = exports.GARUDA_SOURCE = void 0;
+exports.TYPESET_SOURCES = exports.GITA_SOURCE = exports.RAMAYAN_SOURCE = exports.MANUSMRITI_SOURCE = exports.GARUDA_SOURCE = void 0;
 exports.bookReadingBlocks = bookReadingBlocks;
 exports.chapterContext = chapterContext;
 const node_fs_1 = require("node:fs");
@@ -10,10 +10,19 @@ const errorHandler_1 = require("../middleware/errorHandler");
 exports.GARUDA_SOURCE = 'urn:sha256:c05368e6b60c64f58b2b86b8a9375d483259cd81d6b2469faaafb4a698a6dcb0';
 exports.MANUSMRITI_SOURCE = 'urn:sha256:992c71ecb2a16913c2fb578ae51f3a73d6288109f133b10b811d1b976f8698e3';
 exports.RAMAYAN_SOURCE = 'urn:sha256:759f2adbfd2fc1191ff8576401d1cbc34bbfefaf79a573e8747c53d4c858af75';
-exports.TYPESET_SOURCES = [exports.GARUDA_SOURCE, exports.MANUSMRITI_SOURCE, exports.RAMAYAN_SOURCE, 'urn:sha256:eb00713009dd7b6a81feec459c7518a494f851dc79d77e5d67856e4d8d70d809'];
+exports.GITA_SOURCE = 'https://gitabhawan.org.in/gita/research';
+exports.TYPESET_SOURCES = [exports.GARUDA_SOURCE, exports.MANUSMRITI_SOURCE, exports.RAMAYAN_SOURCE, exports.GITA_SOURCE, 'urn:sha256:eb00713009dd7b6a81feec459c7518a494f851dc79d77e5d67856e4d8d70d809'];
 const layoutFiles = { [exports.GARUDA_SOURCE]: 'garuda-purana.json', [exports.MANUSMRITI_SOURCE]: 'manusmriti.json', [exports.RAMAYAN_SOURCE]: 'ramayan-study.json' };
 const layouts = new Map();
 function bookReadingBlocks(source, slug, passages) {
+    // This attributed text edition already stores one translation per verse.
+    // Derive ranges from the actual database text, without prose joins or the
+    // Mahabharat family-tree heuristic (whose references overlap Gita chapter 3).
+    if (source === exports.GITA_SOURCE)
+        return passages.map(passage => ({
+            kind: 'translation', keepTogether: true,
+            parts: [{ reference: passage.reference, start: 0, end: passage.text.length }],
+        }));
     if (!source || !layoutFiles[source])
         return undefined;
     if (!layouts.has(source))

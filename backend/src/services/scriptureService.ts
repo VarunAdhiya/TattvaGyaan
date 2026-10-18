@@ -3,6 +3,7 @@ import { AppError } from '../middleware/errorHandler';
 import { Prisma } from '@prisma/client';
 import { TYPESET_SOURCES, bookReadingBlocks } from './bookLayoutService';
 import { isLegacyRamayan, preferRamayanText } from './ramayanCatalog';
+import { readerSlugs, readerEditionWhere, assertReaderEdition } from './readerCatalog';
 
 export class ScriptureService {
   async getReligions() {
@@ -19,8 +20,10 @@ export class ScriptureService {
       where: { id },
       include: {
         scriptures: {
+          where: { slug: { in: readerSlugs } },
           include: {
             editions: {
+              where: readerEditionWhere,
               select: { id: true, title: true, language: true, isOriginal: true },
             },
           },
@@ -32,7 +35,7 @@ export class ScriptureService {
   }
 
   async getScriptures(filters: { religionId?: string; language?: string; search?: string; page: number; limit: number }) {
-    const where: Prisma.ScriptureWhereInput = {};
+    const where: Prisma.ScriptureWhereInput = { slug: { in: readerSlugs } };
     if (filters.religionId) where.religionId = filters.religionId;
     if (filters.language) {
       where.editions = { some: { language: filters.language } };
@@ -49,6 +52,7 @@ export class ScriptureService {
         include: {
           religion: { select: { id: true, name: true, slug: true } },
           editions: {
+            where: readerEditionWhere,
             orderBy: [{ contentStatus: 'asc' }, { isOriginal: 'desc' }],
             select: { id: true, title: true, language: true, isOriginal: true, textDirection: true, contentStatus: true, expectedPassages: true, source: true },
           },
@@ -77,6 +81,7 @@ export class ScriptureService {
       include: {
         religion: true,
         editions: {
+          where: readerEditionWhere,
           orderBy: [{ contentStatus: 'asc' }, { isOriginal: 'desc' }],
           include: {
             _count: { select: { sections: true } },
@@ -84,7 +89,7 @@ export class ScriptureService {
         },
       },
     });
-    if (!scripture) throw new AppError('Scripture not found', 404);
+    if (!scripture || !readerSlugs.includes(scripture.slug)) throw new AppError('Scripture not found', 404);
     return { ...scripture, editions: preferRamayanText(scripture.editions) };
   }
 
@@ -107,6 +112,7 @@ export class ScriptureService {
       },
     });
     if (!edition) throw new AppError('Edition not found', 404);
+    assertReaderEdition(edition);
     return edition;
   }
 
@@ -114,10 +120,11 @@ export class ScriptureService {
     const section = await prisma.scriptureSection.findUnique({
       where: { id: sectionId },
       include: {
-        edition: { select: { id: true, language: true, textDirection: true, scripture: { select: { title: true } } } },
+        edition: { select: { id: true, source: true, language: true, textDirection: true, scripture: { select: { title: true } } } },
       },
     });
     if (!section) throw new AppError('Section not found', 404);
+    assertReaderEdition(section.edition);
 
     const [passages, total] = await Promise.all([
       prisma.scripturePassage.findMany({
@@ -150,6 +157,7 @@ export class ScriptureService {
       },
     });
     if (!passage) throw new AppError('Passage not found', 404);
+    assertReaderEdition(passage.section.edition);
     return passage;
   }
 
@@ -158,7 +166,7 @@ export class ScriptureService {
       scriptureId = (await prisma.scripture.findUniqueOrThrow({ where: { slug: 'ramayana' }, select: { id: true } })).id;
     }
     const editions = await prisma.scriptureEdition.findMany({
-      where: { scriptureId },
+      where: { scriptureId, ...readerEditionWhere },
       orderBy: { isOriginal: 'desc' },
     });
     return preferRamayanText(editions);
@@ -167,6 +175,7 @@ export class ScriptureService {
   async getPassagesForReader(editionId: string, includeBookText = false) {
     const edition = await prisma.scriptureEdition.findUnique({ where: { id: editionId }, select: { id: true, source: true, language: true } });
     if (!edition) throw new AppError('Edition not found', 404);
+    assertReaderEdition(edition);
     // Source-identified typeset editions use complete, ordered text. Position
     // lookups and other editions keep their lightweight paginated behavior.
     const bookText = includeBookText && edition.language === 'hi' && TYPESET_SOURCES.includes(edition.source || '');

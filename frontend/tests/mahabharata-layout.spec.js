@@ -118,7 +118,7 @@ test('isolated chapter 3 labels form one complete family tree with working deep 
   const state = await mockBook(page);
   await page.goto('/reader/mahabharata/book?passage=passage-2-18');
   const tree = page.locator('.reader-visible-page .book-family-tree');
-  await expect(tree).toBeVisible();
+  await expectBook(tree).toBeVisible();
   await expect(tree.locator('.book-tree-label')).toHaveCount(12);
   await expect(tree.locator('[data-passage-id="passage-2-18"]')).toHaveText('(अंबिका से)');
   await checkPages(page);
@@ -159,7 +159,7 @@ test('font and viewport changes repaginate without clipping and resume the saved
   await expect.poll(() => state.saves.at(-1)?.pageIndex).toBe(current);
   const saved = state.saves.at(-1).passageId;
   await page.goto('/reader/mahabharata/book');
-  await expect(page.locator('.reader-visible-page [data-passage-id="' + saved + '"]').first()).toBeVisible();
+  await expectBook(page.locator('.reader-visible-page [data-passage-id="' + saved + '"]').first()).toBeVisible();
   expect(state.errors).toEqual([]);
 });
 

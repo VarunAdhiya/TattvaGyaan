@@ -1,0 +1,8 @@
+[
+  { "scriptureSlug": "mahabharata", "file": "drafts/bal-mahabharat-katha-hi.json", "document": "bal-mahabharat-katha-hi.json", "source": "urn:sha256:eb00713009dd7b6a81feec459c7518a494f851dc79d77e5d67856e4d8d70d809", "contentStatus": "draft" },
+  { "scriptureSlug": "bhagavad-gita", "file": "gita-hi.json", "source": "https://gitabhawan.org.in/gita/research", "contentStatus": "complete" },
+  { "scriptureSlug": "ramayana", "file": "drafts/ramayan-study-hi.json", "document": "valmiki-ramayana-ramakien-study-hi.json", "source": "urn:sha256:759f2adbfd2fc1191ff8576401d1cbc34bbfefaf79a573e8747c53d4c858af75", "contentStatus": "draft" },
+  { "scriptureSlug": "garuda-purana", "file": "drafts/garuda-purana-hi.json", "document": "garuda-purana-hi.json", "source": "urn:sha256:c05368e6b60c64f58b2b86b8a9375d483259cd81d6b2469faaafb4a698a6dcb0", "contentStatus": "draft" },
+  { "scriptureSlug": "shiva-purana", "file": "drafts/shiva-purana-hi.json", "document": "shiva-purana-hi.json", "source": "urn:sha256:f01e41ced20f14d1d071229078693372035f64d4fb459974b19e9618a02bb666", "contentStatus": "draft" },
+  { "scriptureSlug": "manusmriti", "file": "drafts/manusmriti-hi.json", "document": "manusmriti-hi.json", "source": "urn:sha256:992c71ecb2a16913c2fb578ae51f3a73d6288109f133b10b811d1b976f8698e3", "contentStatus": "draft" }
+]

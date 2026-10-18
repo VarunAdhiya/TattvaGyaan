@@ -2,8 +2,6 @@
 
 ## Project Structure & Module Organization
 
-TattvaGyaan provides a scripture library, a 3D reader, and AI passage explanations.
-
 - `frontend/src/`: React pages, components, context, and `api/client.js`. Store assets in `src/assets/` or `frontend/public/`.
 - `backend/src/`: Express TypeScript routes, controllers, services, middleware, and Zod validators. Keep business logic in services.
 - `backend/prisma/`: database schema, migrations, and seeds.
@@ -12,7 +10,7 @@ TattvaGyaan provides a scripture library, a 3D reader, and AI passage explanatio
 
 ## Build, Test, and Development Commands
 
-Run `npm install` separately in `backend/` and `frontend/`; there is no root package. Run commands from the indicated directory.
+Run `npm install` separately in `backend/` and `frontend/`. Run commands from the indicated directory.
 
 | Directory | Command | Purpose |
 | --- | --- | --- |
@@ -36,7 +34,7 @@ Name backend tests `*.test.cjs` and Playwright tests `*.spec.js`. No coverage th
 
 ## Commit & Pull Request Guidelines
 
-Recent commits use informal summaries such as “added shiv puran.” Prefer concise, imperative, scoped messages. PRs should explain behavior changes, link relevant issues, report validation, include screenshots for UI changes, and document migration or configuration steps.
+Recent commits use informal summaries such as "added shiv puran." Prefer concise, imperative, scoped messages. PRs should explain behavior changes, link relevant issues, report validation, include screenshots for UI changes, and document migration or configuration steps.
 
 ## Security & Content Integrity
 

@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
 const { z } = require('zod');
-const { documentPaths, verifyPdf, loadDocumentText } = require('./document-text.cjs');
+const { documentPaths, verifyPdf } = require('./document-text.cjs');
 const directory = path.resolve(__dirname, '../../library');
 const catalogSchema = z.object({
   religion: z.object({ name: z.string().min(1), slug: z.string().min(1), description: z.string(), sortOrder: z.number().int() }),
@@ -75,7 +75,8 @@ const documentSchema = z.object({
   pageCount: z.number().int().positive(), sha256: z.string().regex(/^[a-f0-9]{64}$/),
 });
 
-function loadDocuments() {
+// Manifests retain provenance. PDF bytes are optional private extraction inputs.
+function loadDocuments({ verifyFiles = false } = {}) {
   const catalog = loadCatalog();
   const sources = new Set();
   return fs.readdirSync(path.join(directory, 'documents')).filter(file => file.endsWith('.json')).sort().map(file => {
@@ -85,11 +86,9 @@ function loadDocuments() {
     }
     if (sources.has(document.source)) throw new Error(file + ': duplicate document source');
     sources.add(document.source);
-    const { publicFile, archiveFile } = documentPaths(document);
-    if (fs.existsSync(publicFile)) verifyPdf(publicFile, document);
-    else {
-      if (!loadDocumentText(document)) throw new Error(file + ': PDF missing without a reviewed text replacement');
-      verifyPdf(archiveFile, document);
+    if (verifyFiles) {
+      const { publicFile, archiveFile } = documentPaths(document);
+      verifyPdf(fs.existsSync(publicFile) ? publicFile : archiveFile, document);
     }
     return document;
   });

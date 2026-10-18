@@ -1,5 +1,10 @@
 # Garuda Purana: PDF → text/JSON → Supabase
 
+**Current catalog:** Garuda has one draft text edition and no PDF edition/download.
+The text can be restored without PDF files using [the catalog guide](README.md).
+The extraction instructions below are historical editorial tools; optional source
+PDFs belong in the private `backend/data/source-pdfs/` archive, never the frontend.
+
 This is the procedure for the supplied **638-page abridged Hindi Gita Press edition**, book code 1189, ISBN 81-293-0285-3. Its filename is `Garuda Purana Original upayogibooks.com.pdf`; “Original” in that filename does not establish canonical completeness. Preserve its attribution and unverified reuse status. The result is an **unreviewed OCR draft**, not a reviewed transcription.
 
 ## 1. Identify and preserve the source

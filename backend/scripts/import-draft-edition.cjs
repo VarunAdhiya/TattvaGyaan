@@ -140,6 +140,7 @@ async function main(args) {
   const filenames = args.filter(arg => arg !== '--apply');
   if (filenames.length !== 1 || filenames[0].startsWith('--')) throw new Error('Usage: node scripts/import-draft-edition.cjs <draft.json> [--apply]');
   const input = JSON.parse(fs.readFileSync(path.resolve(filenames[0]), 'utf8'));
+  require('./reader-editions.cjs').assertActiveEdition(input);
   const directory = path.resolve(__dirname, '../../library/documents');
   const document = fs.readdirSync(directory).filter(file => file.endsWith('.json'))
     .map(file => JSON.parse(fs.readFileSync(path.join(directory, file), 'utf8'))).find(item => item.source === input.sourceDocument);

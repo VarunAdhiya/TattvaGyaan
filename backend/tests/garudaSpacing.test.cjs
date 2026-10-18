@@ -11,7 +11,9 @@ test('complete Garuda recovery is checksummed and reversible without changing sc
   const raw = fs.readFileSync(file, 'utf8');
   const draft = JSON.parse(raw);
   const ledger = JSON.parse(fs.readFileSync(file.replace('.json', '.spacing.json'), 'utf8'));
-  assert.equal(hash(raw), ledger.correctedDraftSha256);
+  // The export ledger hashes LF JSON; Windows Git checkouts may use CRLF.
+  // JSON string values retain their escaped scripture whitespace unchanged.
+  assert.equal(hash(raw.replace(/\r\n/g, '\n')), ledger.correctedDraftSha256);
   assert.equal(new Set(ledger.pages.map(p => p.page)).size, 620);
   assert.equal(draft.sections.flatMap(s => s.passages).length, 5277);
   let changed = 0;

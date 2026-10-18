@@ -1,5 +1,10 @@
 # Manusmriti reader layout
 
+**Current catalog:** Manusmriti has one text edition and no PDF edition/download.
+Keep optional extraction input privately in `backend/data/source-pdfs/`; follow
+[the current catalog guide](README.md) for deployment. Historical references below
+to a public PDF describe the original extraction, not an asset to publish.
+
 The existing Hindi draft contains 1,867 passages in 14 sections: front matter,
 12 adhyays, and credits. All 509 source pages remain represented. This reader
 update preserves every stored character, passage ID, reference and source note.

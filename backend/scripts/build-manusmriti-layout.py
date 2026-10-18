@@ -148,7 +148,7 @@ def build_layout(draft, evidence):
 
 def main():
     draft = json.loads((ROOT/'library/editions/drafts/manusmriti-hi.json').read_text(encoding='utf8'))
-    source = ROOT/'frontend/public/library/manusmriti-sampurna.pdf'
+    source = ROOT/'backend/data/source-pdfs/manusmriti-sampurna.pdf'
     assert hashlib.sha256(source.read_bytes()).hexdigest() == SOURCE == draft['sourceSha256']
     assert draft['expectedPassages'] == 1867 and len(draft['sections']) == 14
     with pymupdf.open(source) as pdf:

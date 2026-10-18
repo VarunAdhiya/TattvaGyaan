@@ -1,5 +1,11 @@
 # Ramayan reader and catalog consolidation
 
+**Current catalog:** only the comparative-study text edition remains. Ramcharitmanas
+and all PDF editions/downloads were retired at the user's request. The historical
+consolidation notes below record provenance, not the current edition list. Follow
+[the current catalog guide](README.md) for synchronization and deployment; optional
+extraction originals now live privately in `backend/data/source-pdfs/`.
+
 The single **Ramayan** collection (`ramayana`) contains the existing Ramcharitmanas
 text/PDF editions and Dr. Karuna Sharma's **वाल्मीकि रामायण और रामकीर्ति
 (रामकियन): एक तुलनात्मक अध्ययन** text/PDF editions. The study is the preferred

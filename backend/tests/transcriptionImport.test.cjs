@@ -137,7 +137,7 @@ test('catalog synchronization cannot revert a reviewed transcription to scan mod
       count: async () => 0,
     },
   };
-  await syncDocuments(tx, { religion: {}, scriptures: [{ slug: 'test-book', aliases: [], themes: [] }] }, [document]);
+  await assert.rejects(syncDocuments(tx, { religion: {}, scriptures: [{ slug: 'test-book', aliases: [], themes: [] }] }, [document]), /PDF editions are retired/);
   assert.equal(updates, 0);
-  assert.equal(availability, 'partial');
+  assert.equal(availability, undefined);
 });

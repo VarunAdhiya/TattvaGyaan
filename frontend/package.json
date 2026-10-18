@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "check:pdfs": "node scripts/check-pdf-assets.mjs",
-    "prebuild": "npm run check:pdfs",
+    "check:library": "node scripts/check-library.mjs",
+    "prebuild": "npm run check:library",
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview"
@@ -15,7 +15,6 @@
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
     "lucide-react": "^1.55.0",
-    "pdfjs-dist": "^6.4.299",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.4",

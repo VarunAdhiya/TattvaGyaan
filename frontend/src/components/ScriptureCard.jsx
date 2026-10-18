@@ -76,7 +76,7 @@ export default function ScriptureCard({ scripture }) {
       {/* Footer Action */}
       <div className="pt-5 mt-4 border-t border-stone-100 flex items-center justify-between">
         <span className="text-xs text-stone-400 font-sans">
-          {scripture.editions?.length || 0} Edition(s)
+          Hindi text
         </span>
 
         <Link

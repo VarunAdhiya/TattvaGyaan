@@ -2,17 +2,18 @@ export const MAHABHARATA_SOURCE = 'urn:sha256:eb00713009dd7b6a81feec459c7518a494
 export const GARUDA_SOURCE = 'urn:sha256:c05368e6b60c64f58b2b86b8a9375d483259cd81d6b2469faaafb4a698a6dcb0';
 export const MANUSMRITI_SOURCE = 'urn:sha256:992c71ecb2a16913c2fb578ae51f3a73d6288109f133b10b811d1b976f8698e3';
 export const RAMAYAN_SOURCE = 'urn:sha256:759f2adbfd2fc1191ff8576401d1cbc34bbfefaf79a573e8747c53d4c858af75';
+export const GITA_SOURCE = 'https://gitabhawan.org.in/gita/research';
 
 export function isMahabharataProse(edition) {
   return edition.language === 'hi' && edition.source === MAHABHARATA_SOURCE;
 }
 
 export function isTypesetBook(edition) {
-  return edition.language === 'hi' && [MAHABHARATA_SOURCE, GARUDA_SOURCE, MANUSMRITI_SOURCE, RAMAYAN_SOURCE].includes(edition.source);
+  return edition.language === 'hi' && [MAHABHARATA_SOURCE, GARUDA_SOURCE, MANUSMRITI_SOURCE, RAMAYAN_SOURCE, GITA_SOURCE].includes(edition.source);
 }
 
 export function requiresBookLayout(edition) {
-  return edition.language === 'hi' && [GARUDA_SOURCE, MANUSMRITI_SOURCE, RAMAYAN_SOURCE].includes(edition.source);
+  return edition.language === 'hi' && [GARUDA_SOURCE, MANUSMRITI_SOURCE, RAMAYAN_SOURCE, GITA_SOURCE].includes(edition.source);
 }
 
 const treeReferences = ['3.15', '3.16', '3.17', '3.18', '3.19', '3.20', '3.21', '3.24', '3.25', '3.26', '3.27'];

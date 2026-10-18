@@ -30,7 +30,8 @@ test('live Garuda draft renders database text, kanda navigation and final page o
   expect(book).toBeTruthy();
   expect(book.editions[0].contentStatus).toBe('draft');
   expect(book.editions[0].expectedPassages).toBe(source.expectedPassages);
-  expect(book.editions.some(e => e.contentStatus === 'scanned')).toBe(true);
+  expect(book.editions).toHaveLength(1);
+  expect(book.editions.some(e => e.contentStatus === 'scanned')).toBe(false);
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto(`/scripture/${book.id}`);
   await page.getByRole('button', { name: 'Start Reading', exact: true }).click();

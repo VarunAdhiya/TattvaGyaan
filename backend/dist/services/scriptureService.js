@@ -8,6 +8,7 @@ const prisma_1 = __importDefault(require("../lib/prisma"));
 const errorHandler_1 = require("../middleware/errorHandler");
 const bookLayoutService_1 = require("./bookLayoutService");
 const ramayanCatalog_1 = require("./ramayanCatalog");
+const readerCatalog_1 = require("./readerCatalog");
 class ScriptureService {
     async getReligions() {
         return prisma_1.default.religion.findMany({
@@ -22,8 +23,10 @@ class ScriptureService {
             where: { id },
             include: {
                 scriptures: {
+                    where: { slug: { in: readerCatalog_1.readerSlugs } },
                     include: {
                         editions: {
+                            where: readerCatalog_1.readerEditionWhere,
                             select: { id: true, title: true, language: true, isOriginal: true },
                         },
                     },
@@ -35,7 +38,7 @@ class ScriptureService {
         return religion;
     }
     async getScriptures(filters) {
-        const where = {};
+        const where = { slug: { in: readerCatalog_1.readerSlugs } };
         if (filters.religionId)
             where.religionId = filters.religionId;
         if (filters.language) {
@@ -52,6 +55,7 @@ class ScriptureService {
                 include: {
                     religion: { select: { id: true, name: true, slug: true } },
                     editions: {
+                        where: readerCatalog_1.readerEditionWhere,
                         orderBy: [{ contentStatus: 'asc' }, { isOriginal: 'desc' }],
                         select: { id: true, title: true, language: true, isOriginal: true, textDirection: true, contentStatus: true, expectedPassages: true, source: true },
                     },
@@ -78,6 +82,7 @@ class ScriptureService {
             include: {
                 religion: true,
                 editions: {
+                    where: readerCatalog_1.readerEditionWhere,
                     orderBy: [{ contentStatus: 'asc' }, { isOriginal: 'desc' }],
                     include: {
                         _count: { select: { sections: true } },
@@ -85,7 +90,7 @@ class ScriptureService {
                 },
             },
         });
-        if (!scripture)
+        if (!scripture || !readerCatalog_1.readerSlugs.includes(scripture.slug))
             throw new errorHandler_1.AppError('Scripture not found', 404);
         return { ...scripture, editions: (0, ramayanCatalog_1.preferRamayanText)(scripture.editions) };
     }
@@ -109,17 +114,19 @@ class ScriptureService {
         });
         if (!edition)
             throw new errorHandler_1.AppError('Edition not found', 404);
+        (0, readerCatalog_1.assertReaderEdition)(edition);
         return edition;
     }
     async getSectionPassages(sectionId, page = 1, limit = 50) {
         const section = await prisma_1.default.scriptureSection.findUnique({
             where: { id: sectionId },
             include: {
-                edition: { select: { id: true, language: true, textDirection: true, scripture: { select: { title: true } } } },
+                edition: { select: { id: true, source: true, language: true, textDirection: true, scripture: { select: { title: true } } } },
             },
         });
         if (!section)
             throw new errorHandler_1.AppError('Section not found', 404);
+        (0, readerCatalog_1.assertReaderEdition)(section.edition);
         const [passages, total] = await Promise.all([
             prisma_1.default.scripturePassage.findMany({
                 where: { sectionId },
@@ -150,6 +157,7 @@ class ScriptureService {
         });
         if (!passage)
             throw new errorHandler_1.AppError('Passage not found', 404);
+        (0, readerCatalog_1.assertReaderEdition)(passage.section.edition);
         return passage;
     }
     async getEditionsByScripture(scriptureId) {
@@ -157,7 +165,7 @@ class ScriptureService {
             scriptureId = (await prisma_1.default.scripture.findUniqueOrThrow({ where: { slug: 'ramayana' }, select: { id: true } })).id;
         }
         const editions = await prisma_1.default.scriptureEdition.findMany({
-            where: { scriptureId },
+            where: { scriptureId, ...readerCatalog_1.readerEditionWhere },
             orderBy: { isOriginal: 'desc' },
         });
         return (0, ramayanCatalog_1.preferRamayanText)(editions);
@@ -166,6 +174,7 @@ class ScriptureService {
         const edition = await prisma_1.default.scriptureEdition.findUnique({ where: { id: editionId }, select: { id: true, source: true, language: true } });
         if (!edition)
             throw new errorHandler_1.AppError('Edition not found', 404);
+        (0, readerCatalog_1.assertReaderEdition)(edition);
         // Source-identified typeset editions use complete, ordered text. Position
         // lookups and other editions keep their lightweight paginated behavior.
         const bookText = includeBookText && edition.language === 'hi' && bookLayoutService_1.TYPESET_SOURCES.includes(edition.source || '');

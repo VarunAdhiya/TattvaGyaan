@@ -1,5 +1,11 @@
 # PDF → JSON → Supabase → reader: TattvaGyaan handoff guide
 
+**Current deployment policy:** this is a historical extraction record. The app
+now keeps one text edition per book; Ramcharitmanas, Rigveda/Vedas, the legacy Gita
+sample, and all PDF editions are retired. Follow [library/README.md](library/README.md)
+for current imports and deployment. Optional extraction PDFs are private archives,
+not frontend assets.
+
 This guide records the work performed on **Bal Mahabharat Katha** and **Manusmriti**, with a reproducible **Shiva Purana** addition at the end. Give it to another Claude/Codex agent together with access to this repository. It explains how to repeat the process without inventing text, losing source information, overwriting annotations, or incorrectly calling a draft verified.
 
 For the image-only Garuda Purana scan, follow the dedicated [Garuda OCR and Supabase procedure](library/GARUDA_IMPORT.md). It explains two-column OCR, illustration handling, all-page coverage, the text/JSON exports, and the same database/API/reader verification path.
