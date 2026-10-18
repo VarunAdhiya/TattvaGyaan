@@ -13,6 +13,7 @@ exports.explainSchema = zod_1.z.object({
     conversationId: zod_1.z.string().optional(),
 });
 exports.askQuestionSchema = zod_1.z.object({
+    chapterKey: zod_1.z.string().max(100).optional(),
     question: zod_1.z.string().trim().min(1).max(2000),
     editionId: zod_1.z.string().optional(),
     sectionId: zod_1.z.string().optional(),
@@ -23,6 +24,7 @@ exports.askQuestionSchema = zod_1.z.object({
     style: zod_1.z.enum(['simple', 'detailed', 'scholarly']).default('simple'),
 });
 exports.summarizeSchema = zod_1.z.object({
+    chapterKey: zod_1.z.string().max(100).optional(),
     editionId: zod_1.z.string(),
     sectionId: zod_1.z.string().min(1),
     responseLang: zod_1.z.string().default('en'),

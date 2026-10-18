@@ -52,7 +52,7 @@ export default function AIAssistantDrawer({
     const controller = new AbortController();
     const request = selectedPassage
       ? api.explainPassage({ passageId: selectedPassage.id, selectedText: selectedPassage.selectedText, responseLang: 'hi', style: 'simple' }, controller.signal)
-      : api.summarizeSection({ editionId: edition.id, sectionId: sectionToSummarize?.id, responseLang: 'hi' }, controller.signal);
+      : api.summarizeSection({ editionId: edition.id, sectionId: sectionToSummarize?.id, chapterKey: sectionToSummarize?.chapterKey, responseLang: 'hi' }, controller.signal);
     const setResult = selectedPassage ? setExplanation : setSummary;
     request.then(result => { if (!controller.signal.aborted) setResult(result.content); })
       .catch(error => { if (!controller.signal.aborted) setResult('Error: ' + error.message); })
@@ -90,6 +90,7 @@ export default function AIAssistantDrawer({
       const res = await api.summarizeSection({
         editionId: edition.id,
         sectionId: sectionToSummarize.id || sectionToSummarize,
+        chapterKey: sectionToSummarize.chapterKey,
         responseLang,
       });
       setSummary(res.content);
@@ -116,6 +117,7 @@ export default function AIAssistantDrawer({
         passageId: selectedPassage?.id,
         selectedText: selectedPassage?.selectedText,
         sectionId: sectionToSummarize?.id || selectedPassage?.sectionId,
+        chapterKey: selectedPassage ? undefined : sectionToSummarize?.chapterKey,
         conversationId: conversationId || undefined,
         responseLang,
       });

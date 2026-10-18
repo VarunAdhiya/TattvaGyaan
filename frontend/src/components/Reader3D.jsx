@@ -1,20 +1,21 @@
 import { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, Bookmark, MessageSquare, Pencil, Trash2, X, List, Sparkles, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
+import { BookOpen, Bookmark, MessageSquare, Pencil, Trash2, X, List, Sparkles, ChevronLeft, ChevronRight, Maximize2, Flower2 } from 'lucide-react';
 import { api } from '../api/client';
 import { buildReaderPages, spreadStart } from '../lib/readerPages';
 import ScannedPage from './ScannedPage';
 import useBookFlip from '../lib/useBookFlip';
-import { isMahabharataProse, pageForPassage } from '../lib/mahabharataLayout';
+import { GARUDA_SOURCE, MANUSMRITI_SOURCE, RAMAYAN_SOURCE, isTypesetBook, pageForPassage } from '../lib/mahabharataLayout';
 import useMahabharataLayout from '../lib/useMahabharataLayout';
 import ProsePage from './ProsePage';
 import BookStand from './BookStand';
+import '../mahabharata-reader.css';
 
 // No gesture handlers on scripture text: native selection, scrolling and buttons
 // are independent of navigation. Only the visible spread is mounted.
 export default function Reader3D({ edition, sections, pdfDocument, initialPageIndex = 1, initialPassageId, onProgressUpdate, onAskAI, onSummarize }) {
   const navigate = useNavigate();
-  const reflowProse = isMahabharataProse(edition);
+  const reflowProse = isTypesetBook(edition);
   const [fontSize, setFontSize] = useState(18);
   const rootRef = useRef(null);
   const bookLayout = useMahabharataLayout(reflowProse, sections, fontSize, rootRef);
@@ -58,9 +59,13 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
       id: 'scan-' + index, title: `Scanned pages ${index * 25 + 1}–${Math.min((index + 1) * 25, scannedPageCount)}`,
       pageIndex: index * 25 + 2,
     }))
-    : sections.map(section => ({
+    : sections.flatMap(section => [{
       ...section, pageIndex: pages.findIndex(page => page.sectionId === section.id || page.sectionIds?.includes(section.id)),
-    })), [sections, pages, scannedPageCount]);
+    }, ...(section.readerBlocks || []).filter(block => block.kind === 'chapter').map(block => ({
+      id: section.id + '-' + block.chapterKey, title: block.title,
+      pageIndex: pages.findIndex(page => page.sectionId === section.id && page.chapterKey === block.chapterKey),
+      passageId: section.passages?.find(passage => passage.reference === block.parts[0]?.reference)?.id,
+    }))]), [sections, pages, scannedPageCount]);
   const handleScanReady = useCallback(pageNumber => {
     setRenderedScans(previous => previous[pageNumber] ? previous : { ...previous, [pageNumber]: true });
   }, []);
@@ -76,7 +81,9 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
 
   function goToSection(section) {
     goToPage(section.pageIndex);
-    if (bookLayout) setFocusedPassage(section.passages?.[0]?.id);
+    // A topic may start midway through an original OCR passage. Do not highlight
+    // that passage's preceding chapter when navigating by its heading.
+    if (bookLayout) setFocusedPassage(section.passageId ? undefined : section.passages?.[0]?.id);
   }
 
   useLayoutEffect(() => {
@@ -279,18 +286,21 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
   const buttonClass = 'inline-flex items-center gap-1.5 rounded-lg px-3 py-2 hover:bg-black/10 focus-visible:ring-2 focus-visible:ring-amber-600 disabled:opacity-40';
 
   return (
-    <div ref={rootRef} className={'reader-shell theme-' + theme + (reflowProse ? ' reader-prose reader-typeset' : '')}
+    <div ref={rootRef} className={'reader-shell theme-' + theme + (reflowProse ? ' reader-prose reader-typeset' : '') + (edition.source === GARUDA_SOURCE ? ' reader-garuda' : '') + (edition.source === MANUSMRITI_SOURCE ? ' reader-manusmriti' : '') + (edition.source === RAMAYAN_SOURCE ? ' reader-ramayan' : '')}
       style={bookLayout ? { '--book-height': `${bookLayout.pageHeight}px`, '--book-padding': `${bookLayout.padding}px`,
         '--book-page-width': `${bookLayout.width + bookLayout.padding * 2}px`,
         '--book-content-height': `${bookLayout.height}px`, '--book-font-size': `${fontSize}px` } : undefined}>
-      <header className="flex flex-wrap items-center justify-between gap-2 border-b p-3 text-sm">
-        <div className="flex flex-wrap gap-1">
+      <header className={reflowProse ? 'mahabharata-toolbar' : 'flex flex-wrap items-center justify-between gap-2 border-b p-3 text-sm'}>
+        <div className={reflowProse ? 'mahabharata-library-tools' : 'flex flex-wrap gap-1'}>
           <button className={buttonClass} onClick={() => setDrawer('contents')}><List size={16} />Contents</button>
           <button className={buttonClass} onClick={() => setDrawer('bookmarks')}><Bookmark size={16} />Bookmarks</button>
           <button className={buttonClass} onClick={() => setDrawer('notes')}><MessageSquare size={16} />Notes</button>
         </div>
-        <h1 className="font-serif font-bold truncate max-w-full">{edition.scripture?.title || edition.title}</h1>
-        <div className="flex gap-2 items-center">
+        {reflowProse ? <div className="mahabharata-title">
+          <div className="mahabharata-title-line"><Flower2 size={23} strokeWidth={1.4} aria-hidden="true" /><h1 lang="hi">{edition.scripture?.title || edition.title}</h1><Flower2 size={23} strokeWidth={1.4} aria-hidden="true" /></div>
+          {edition.contentStatus === 'draft' && <p>Draft text · Not fully proofread</p>}
+        </div> : <h1 className="font-serif font-bold truncate max-w-full">{edition.scripture?.title || edition.title}</h1>}
+        <div className={reflowProse ? 'mahabharata-reading-tools' : 'flex gap-2 items-center'}>
           <select aria-label="Reading theme" value={theme} onChange={event => setTheme(event.target.value)} className="reader-control rounded p-2">
             <option value="light">Light</option><option value="sepia">Sepia</option><option value="dark">Dark</option>
           </select>
@@ -304,7 +314,7 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
           }}><Maximize2 size={16} /></button>
         </div>
       </header>
-      {edition.contentStatus === 'draft' && <p className="px-4 py-2 text-sm border-b">Draft text · Not fully proofread</p>}
+      {!reflowProse && edition.contentStatus === 'draft' && <p className="px-4 py-2 text-sm border-b">Draft text · Not fully proofread</p>}
       {selection && <div className="reader-control fixed bottom-24 left-1/2 -translate-x-1/2 z-40 max-w-[95vw] flex flex-wrap gap-3 items-center p-3 border rounded-xl shadow-xl text-sm" role="status">
         <span>Selected text · {selection.reference}</span>
         <button className={buttonClass} onClick={() => onAskAI(selection)}><Sparkles size={16} />Ask AI about selected text</button>
@@ -324,6 +334,7 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
                 <p>{edition.title}</p><p>{edition.translator}</p><p className="text-xs whitespace-pre-wrap">{edition.provenance}</p>
                 {edition.source && /^https?:\/\//.test(edition.source) && <a className="underline" href={edition.source} target="_blank" rel="noreferrer">Source and attribution</a>}
                 {scannedPageCount > 0 && <a className="underline" href={edition.source} download>Download original PDF</a>}
+                {edition.source === RAMAYAN_SOURCE && <a className="underline" href="/library/valmiki-ramayana-ramakien-study.pdf" download>Download original PDF</a>}
                 <p className="text-xs">{edition.license}</p>
               </div> : page.type === 'toc' ? <>
                 <h2 className="text-2xl font-serif mb-5">Table of Contents</h2>
@@ -342,11 +353,11 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
                 <ScannedPage pdfDocument={pdfDocument} pageNumber={page.pageNumber} zoom={fontSize / 18} onReady={handleScanReady} />
               </> : <>
                 <div className="reader-section-header flex flex-wrap justify-between items-center gap-2 border-b pb-3 mb-5">
-                  <h2 className="font-serif font-bold">{page.sectionTitle}</h2>
+                  <h2 className="font-serif font-bold" title={page.sectionTitle}>{page.sectionTitle}</h2>
                   {bookLayout && <button className={buttonClass + ' text-xs book-tools-button'} onClick={() => {
                     setToolPassages(page.passages); setToolPassage(page.passages[0]); setDrawer('passage');
                   }}>Passage tools</button>}
-                  <button className={buttonClass + ' text-xs'} onClick={() => onSummarize(page.sectionId)}><Sparkles size={14} />Summarize Section</button>
+                  <button className={buttonClass + ' text-xs'} onClick={() => onSummarize(page.sectionId, page.chapterKey, page.sectionTitle)}><Sparkles size={14} />Summarize Section</button>
                 </div>
                 {bookLayout ? <ProsePage page={page} layout={bookLayout} focusedPassage={focusedPassage} onSelect={captureSelection} onSummarize={onSummarize} />
                   : pageError ? <div role="alert">{pageError} <button className="underline" onClick={() => setPageRetry(value => value + 1)}>Retry page</button></div>
@@ -372,7 +383,12 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
                     </div>;
                   })}
               </>}
-              <div className="reader-page-number text-center text-xs pt-4 opacity-60">{index + 1}</div>
+              <div className="reader-page-number text-center text-xs pt-4 opacity-60">
+                {edition.source === RAMAYAN_SOURCE && page.sourcePage
+                  ? <span data-source-page={page.sourcePage} title={`Reader page ${index + 1}`}>
+                    {page.printedPage ? `पुस्तक पृष्ठ ${page.printedPage} · ` : ''}PDF {page.sourcePage}
+                  </span> : index + 1}
+              </div>
             </article>;
           })}
           <button type="button" className="reader-page-corner reader-page-corner--previous" aria-label="Turn page backward" title="Turn page backward" disabled={start === 0}
@@ -383,7 +399,7 @@ export default function Reader3D({ edition, sections, pdfDocument, initialPageIn
         </div>
         </BookStand>
       </main>
-      <footer className="reader-navigation flex flex-wrap justify-between items-center gap-2 p-3 border-t text-sm">
+      <footer role={reflowProse ? 'navigation' : undefined} aria-label={reflowProse ? 'Page navigation' : undefined} className={reflowProse ? 'reader-navigation mahabharata-navigation' : 'reader-navigation flex flex-wrap justify-between items-center gap-2 p-3 border-t text-sm'}>
         <button aria-label="Previous" className={buttonClass} disabled={start === 0} onClick={() => goToPage(Math.max(0, start - (wide ? 2 : 1)))}><ChevronLeft size={16} /><span className="hidden sm:inline">Previous</span></button>
         <form className="flex items-center gap-2" onSubmit={event => {
           event.preventDefault();

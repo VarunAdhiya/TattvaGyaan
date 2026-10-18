@@ -72,3 +72,41 @@ test('history from a different selection cannot expand the current context', asy
   assert.equal(result.error, undefined);
   assert.deepEqual(generated.messages, [{ role: 'user', content: 'Summarize' }]);
 });
+
+test('Garuda summary and follow-up chat use the selected topic rather than the whole kanda', async () => {
+  const source = require('../../library/editions/drafts/garuda-purana-hi.json');
+  const { chapterContext } = require('../dist/services/bookLayoutService');
+  const selectedSection = { ...source.sections.find(s => s.slug === 'achara-kanda'), id: 'section', editionId: 'edition',
+    edition: { ...edition, source: source.source, language: 'hi' } };
+  replace(prisma.scriptureSection, 'findUnique', async () => selectedSection);
+  replace(prisma.scriptureEdition, 'findUnique', async () => selectedSection.edition);
+  const body = { editionId: 'edition', sectionId: 'section', chapterKey: 'pdf-20-line-23', question: 'Explain this topic' };
+  const expected = chapterContext(source.source, selectedSection, body.chapterKey);
+  const summary = await invoke('summarize', body);
+  assert.equal(summary.error, undefined);
+  assert.deepEqual(generated.passages, expected.passages);
+  const chat = await invoke('chat', body);
+  assert.equal(chat.error, undefined);
+  assert.equal(generated.scriptureContext.section, expected.title);
+  assert.equal(generated.scriptureContext.passageText, expected.passages.map(p => `${p.reference}: ${p.text}`).join('\n'));
+  for (const method of ['summarize', 'chat']) {
+    generated = null;
+    const invalid = await invoke(method, { ...body, chapterKey: 'not-a-source-topic' });
+    assert.equal(invalid.error.statusCode, 400);
+    assert.equal(generated, null);
+  }
+});
+
+test('Manusmriti summary and follow-up use all passages of the selected adhyay only', async () => {
+  const source = require('../../library/editions/drafts/manusmriti-hi.json');
+  const selected = { ...source.sections.find(s => s.slug === 'chapter-8'), id: 'section', editionId: 'edition',
+    edition: { ...edition, source: source.source, language: 'hi' } };
+  replace(prisma.scriptureSection, 'findUnique', async () => selected);
+  replace(prisma.scriptureEdition, 'findUnique', async () => selected.edition);
+  const body = { editionId: 'edition', sectionId: 'section', question: 'Explain this chapter' };
+  assert.equal((await invoke('summarize', body)).error, undefined);
+  assert.deepEqual(generated.passages, selected.passages.map(({ reference, text }) => ({ reference, text })));
+  assert.equal((await invoke('chat', body)).error, undefined);
+  assert.equal(generated.scriptureContext.section, selected.title);
+  assert.equal(generated.scriptureContext.passageText, selected.passages.map(p => `${p.reference}: ${p.text}`).join('\n'));
+});

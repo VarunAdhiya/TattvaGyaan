@@ -9,6 +9,7 @@ const ragService_1 = require("../services/ragService");
 const prisma_1 = __importDefault(require("../lib/prisma"));
 const errorHandler_1 = require("../middleware/errorHandler");
 const node_crypto_1 = require("node:crypto");
+const bookLayoutService_1 = require("../services/bookLayoutService");
 class AIController {
     async explain(req, res, next) {
         try {
@@ -64,7 +65,7 @@ class AIController {
     }
     async summarize(req, res, next) {
         try {
-            const { editionId, sectionId, responseLang } = req.body;
+            const { editionId, sectionId, responseLang, chapterKey } = req.body;
             if (!sectionId)
                 throw new errorHandler_1.AppError('Section ID is required', 400);
             const section = await prisma_1.default.scriptureSection.findUnique({
@@ -82,13 +83,14 @@ class AIController {
                 throw new errorHandler_1.AppError('Section does not belong to this edition', 400);
             if (!section.passages.length)
                 throw new errorHandler_1.AppError('No source passages are available for this section', 400);
+            const selected = (0, bookLayoutService_1.chapterContext)(section.edition.source, section, chapterKey);
             const result = await aiService_1.aiService.summarizeSection({
-                passages: section.passages.map((p) => ({
+                passages: selected.passages.map((p) => ({
                     reference: p.reference,
                     text: p.text,
                 })),
                 scriptureTitle: section.edition.scripture.title,
-                sectionTitle: section.title,
+                sectionTitle: selected.title,
                 sourceLang: section.edition.language,
                 responseLang: responseLang || 'en',
             });
@@ -100,14 +102,16 @@ class AIController {
     }
     async chat(req, res, next) {
         try {
-            const { question, conversationId, editionId, sectionId, passageId, selectedText, responseLang } = req.body;
+            const { question, conversationId, editionId, sectionId, passageId, selectedText, responseLang, chapterKey } = req.body;
+            if (chapterKey && (!sectionId || !editionId || passageId))
+                throw new errorHandler_1.AppError('Choose a source section for chapter questions', 400);
             if ((sectionId || passageId) && !editionId)
                 throw new errorHandler_1.AppError('Edition is required for selected text', 400);
             if (selectedText && !passageId)
                 throw new errorHandler_1.AppError('Select a passage before sending selected text', 400);
             if (editionId && !sectionId && !passageId)
                 throw new errorHandler_1.AppError('Select a passage or section before asking about this book', 400);
-            const contextKey = (0, node_crypto_1.createHash)('sha256').update(JSON.stringify([editionId, sectionId, passageId, selectedText])).digest('hex');
+            const contextKey = (0, node_crypto_1.createHash)('sha256').update(JSON.stringify([editionId, sectionId, passageId, selectedText, ...(chapterKey ? [chapterKey] : [])])).digest('hex');
             let conversation;
             let messages = [];
             if (conversationId) {
@@ -173,11 +177,12 @@ class AIController {
                             throw new errorHandler_1.AppError('Section does not belong to this edition', 400);
                         if (!section.passages.length)
                             throw new errorHandler_1.AppError('No source passages are available for this section', 400);
+                        const selected = (0, bookLayoutService_1.chapterContext)(edition.source, section, chapterKey);
                         scriptureContext = {
                             ...scriptureContext,
-                            section: section.title,
-                            passageText: section.passages.map(passage => `${passage.reference}: ${passage.text}`).join('\n'),
-                            passageRef: `Selected section: ${section.title}`,
+                            section: selected.title,
+                            passageText: selected.passages.map(passage => `${passage.reference}: ${passage.text}`).join('\n'),
+                            passageRef: `Selected section: ${selected.title}`,
                         };
                     }
                 }

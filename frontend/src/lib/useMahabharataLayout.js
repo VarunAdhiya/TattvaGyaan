@@ -1,5 +1,6 @@
 import { useLayoutEffect, useState } from 'react';
 import { paginateMahabharata } from './mahabharataLayout';
+import { bookTextRuns } from './bookTextRuns';
 
 export default function useMahabharataLayout(enabled, sections, fontSize, rootRef) {
   const [layout, setLayout] = useState(null);
@@ -35,19 +36,28 @@ export default function useMahabharataLayout(enabled, sections, fontSize, rootRe
       const treeHeight = Math.min(height, Math.max(320, width * .82));
       Object.assign(measurementPage.style, { width: `${width}px`, height: 'auto', fontSize: `${fontSize}px`, lineHeight: '1.9' });
       const measurements = new Map();
-      const pages = paginateMahabharata(sections, { height: height - 2, lineHeight, gap, treeHeight }, (text, continued, parts) => {
-        const key = `${continued}:${text}`;
+      const pages = paginateMahabharata(sections, { height: height - 2, lineHeight, gap, treeHeight }, (text, continued, parts, kind) => {
+        const key = `${kind}:${continued}:${text}`;
         if (measurements.has(key)) return measurements.get(key);
         measure.replaceChildren(...parts.map((part, index) => {
           const outer = document.createElement('span');
           if (index && !parts[index - 1].passage.text.trimEnd().endsWith('-')) outer.append(' ');
           const span = document.createElement('span');
           span.className = 'scripture-text';
-          span.textContent = part.passage.text.slice(part.start, part.end);
+          for (const run of bookTextRuns(part.passage.text.slice(part.start, part.end), kind)) {
+            if (!run.className) span.append(document.createTextNode(run.text));
+            else {
+              const decoration = document.createElement('span');
+              decoration.className = run.className;
+              decoration.textContent = run.text;
+              span.append(decoration);
+            }
+          }
           outer.append(span);
           return outer;
         }));
-        measure.style.textIndent = continued ? '0' : '1.25em';
+        measure.className = 'book-paragraph book-block-' + kind;
+        measure.style.textIndent = continued || kind !== 'paragraph' ? '0' : '1.25em';
         const measuredHeight = measure.getBoundingClientRect().height;
         measurements.set(key, measuredHeight);
         return measuredHeight;

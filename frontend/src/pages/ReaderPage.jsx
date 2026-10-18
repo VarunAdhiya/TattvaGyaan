@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import Reader3D from '../components/Reader3D';
 import AIAssistantDrawer from '../components/AIAssistantDrawer';
 import { api } from '../api/client';
-import { isMahabharataProse } from '../lib/mahabharataLayout';
+import { requiresBookLayout, isTypesetBook } from '../lib/mahabharataLayout';
 
 const PdfReader = React.lazy(() => import('../components/PdfReader'));
 
@@ -45,8 +45,11 @@ export default function ReaderPage() {
           api.getProgressForEdition(editionId).catch(() => ({ progress: null })),
         ]);
         if (cancelled) return;
-        const bookSections = isMahabharataProse(editionRes.edition)
+        const bookSections = isTypesetBook(editionRes.edition)
           ? await api.getBookSections(readerRes.sections, controller.signal) : readerRes.sections;
+        if (requiresBookLayout(editionRes.edition) && bookSections.some(section => !Array.isArray(section.readerBlocks))) {
+          throw new Error('The reading layout for this edition is unavailable. Please try again shortly.');
+        }
         if (cancelled) return;
         setSections(bookSections);
         setProgress(progressRes.progress);
@@ -73,8 +76,8 @@ export default function ReaderPage() {
     setAiDrawerOpen(true);
   };
 
-  const handleSummarize = (sectionId) => {
-    setAiContext({ selectedPassage: null, sectionToSummarize: { id: sectionId, title: sections.find(item => item.id === sectionId)?.title } });
+  const handleSummarize = (sectionId, chapterKey, title) => {
+    setAiContext({ selectedPassage: null, sectionToSummarize: { id: sectionId, chapterKey, title: title || sections.find(item => item.id === sectionId)?.title } });
     setAiDrawerOpen(true);
   };
 
@@ -100,7 +103,7 @@ export default function ReaderPage() {
         />
       </React.Suspense>
       {aiDrawerOpen && <AIAssistantDrawer
-        key={`${editionId}-${aiContext.selectedPassage?.id || aiContext.sectionToSummarize?.id}-${aiContext.selectedPassage?.selectedText || ''}`}
+        key={`${editionId}-${aiContext.selectedPassage?.id || aiContext.sectionToSummarize?.id}-${aiContext.sectionToSummarize?.chapterKey || ''}-${aiContext.selectedPassage?.selectedText || ''}`}
         isOpen={aiDrawerOpen}
         onClose={() => setAiDrawerOpen(false)}
         edition={edition}

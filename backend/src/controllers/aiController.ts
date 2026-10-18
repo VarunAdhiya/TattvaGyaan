@@ -5,6 +5,7 @@ import { AuthRequest } from '../middleware/auth';
 import prisma from '../lib/prisma';
 import { AppError } from '../middleware/errorHandler';
 import { createHash } from 'node:crypto';
+import { chapterContext } from '../services/bookLayoutService';
 
 export class AIController {
   async explain(req: AuthRequest, res: Response, next: NextFunction) {
@@ -68,7 +69,7 @@ export class AIController {
 
   async summarize(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const { editionId, sectionId, responseLang } = req.body;
+      const { editionId, sectionId, responseLang, chapterKey } = req.body;
 
       if (!sectionId) throw new AppError('Section ID is required', 400);
 
@@ -86,13 +87,14 @@ export class AIController {
       if (section.editionId !== editionId) throw new AppError('Section does not belong to this edition', 400);
       if (!section.passages.length) throw new AppError('No source passages are available for this section', 400);
 
+      const selected = chapterContext(section.edition.source, section, chapterKey);
       const result = await aiService.summarizeSection({
-        passages: section.passages.map((p: any) => ({
+        passages: selected.passages.map((p: any) => ({
           reference: p.reference,
           text: p.text,
         })),
         scriptureTitle: section.edition.scripture.title,
-        sectionTitle: section.title,
+        sectionTitle: selected.title,
         sourceLang: section.edition.language,
         responseLang: responseLang || 'en',
       });
@@ -105,11 +107,12 @@ export class AIController {
 
   async chat(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const { question, conversationId, editionId, sectionId, passageId, selectedText, responseLang } = req.body;
+      const { question, conversationId, editionId, sectionId, passageId, selectedText, responseLang, chapterKey } = req.body;
+      if (chapterKey && (!sectionId || !editionId || passageId)) throw new AppError('Choose a source section for chapter questions', 400);
       if ((sectionId || passageId) && !editionId) throw new AppError('Edition is required for selected text', 400);
       if (selectedText && !passageId) throw new AppError('Select a passage before sending selected text', 400);
       if (editionId && !sectionId && !passageId) throw new AppError('Select a passage or section before asking about this book', 400);
-      const contextKey = createHash('sha256').update(JSON.stringify([editionId, sectionId, passageId, selectedText])).digest('hex');
+      const contextKey = createHash('sha256').update(JSON.stringify([editionId, sectionId, passageId, selectedText, ...(chapterKey ? [chapterKey] : [])])).digest('hex');
 
       let conversation;
       let messages: { role: 'user' | 'assistant'; content: string }[] = [];
@@ -172,11 +175,12 @@ export class AIController {
             if (!section) throw new AppError('Section not found', 404);
             if (section.editionId !== editionId) throw new AppError('Section does not belong to this edition', 400);
             if (!section.passages.length) throw new AppError('No source passages are available for this section', 400);
+            const selected = chapterContext(edition.source, section, chapterKey);
             scriptureContext = {
               ...scriptureContext,
-              section: section.title,
-              passageText: section.passages.map(passage => `${passage.reference}: ${passage.text}`).join('\n'),
-              passageRef: `Selected section: ${section.title}`,
+              section: selected.title,
+              passageText: selected.passages.map(passage => `${passage.reference}: ${passage.text}`).join('\n'),
+              passageRef: `Selected section: ${selected.title}`,
             };
           }
         } else throw new AppError('Edition not found', 404);

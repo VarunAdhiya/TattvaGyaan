@@ -51,22 +51,22 @@ export declare class ScriptureService {
         page: number;
         limit: number;
     }): Promise<{
-        scriptures: ({
-            religion: {
-                id: string;
-                name: string;
-                slug: string;
-            };
+        scriptures: {
             editions: {
                 id: string;
                 title: string;
                 language: string;
+                source: string | null;
                 contentStatus: string;
                 expectedPassages: number | null;
                 isOriginal: boolean;
                 textDirection: string;
             }[];
-        } & {
+            religion: {
+                id: string;
+                name: string;
+                slug: string;
+            };
             id: string;
             createdAt: Date;
             updatedAt: Date;
@@ -80,7 +80,7 @@ export declare class ScriptureService {
             searchText: string;
             estimatedReadTime: number | null;
             availabilityStatus: string;
-        })[];
+        }[];
         pagination: {
             page: number;
             limit: number;
@@ -89,15 +89,6 @@ export declare class ScriptureService {
         };
     }>;
     getScripture(id: string): Promise<{
-        religion: {
-            id: string;
-            createdAt: Date;
-            name: string;
-            slug: string;
-            description: string | null;
-            iconUrl: string | null;
-            sortOrder: number;
-        };
         editions: ({
             _count: {
                 sections: number;
@@ -119,7 +110,15 @@ export declare class ScriptureService {
             isOriginal: boolean;
             textDirection: string;
         })[];
-    } & {
+        religion: {
+            id: string;
+            createdAt: Date;
+            name: string;
+            slug: string;
+            description: string | null;
+            iconUrl: string | null;
+            sortOrder: number;
+        };
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -308,6 +307,21 @@ export declare class ScriptureService {
         textDirection: string;
     }[]>;
     getPassagesForReader(editionId: string, includeBookText?: boolean): Promise<{
+        readerBlocks?: {
+            kind: string;
+            chapterKey?: string;
+            title?: string;
+            keepTogether?: boolean;
+            keepWithNext?: boolean;
+            pageBreakBefore?: boolean;
+            sourcePage: number;
+            printedPage?: string | null;
+            parts: {
+                reference: string;
+                start: number;
+                end: number;
+            }[];
+        }[] | undefined;
         id: string;
         _count: {
             passages: number;

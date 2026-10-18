@@ -81,6 +81,38 @@ test('content fills consistent pages with intact source text and aligned footers
   expect(state.errors).toEqual([]);
 });
 
+test('compact Mahabharat controls keep navigation below the text and preserve page jumps and themes', async ({ page }) => {
+  test.setTimeout(60000);
+  const state = await mockBook(page);
+  await page.goto('/reader/mahabharata/book?page=3');
+  for (const width of [1440, 390, 320]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await checkPages(page);
+    const dock = page.getByRole('navigation', { name: 'Page navigation' });
+    const dockBox = await dock.boundingBox();
+    expect(dockBox.width).toBeLessThan(Math.min(width, 400));
+    const bottom = await page.locator('.reader-visible-page').evaluateAll(nodes => Math.max(...nodes.map(node => node.getBoundingClientRect().bottom)));
+    expect(dockBox.y).toBeGreaterThan(bottom);
+    await expect(page.getByText('Draft text · Not fully proofread', { exact: true })).toBeVisible();
+  }
+  const field = page.getByLabel('Page', { exact: true });
+  await field.fill('6');
+  await field.press('Enter');
+  await expect(field).toHaveValue('6');
+  await expect(page.locator('.reader-book')).toHaveAttribute('data-spread-start', '5');
+  for (const theme of ['dark', 'sepia', 'light']) {
+    await page.getByLabel('Reading theme').selectOption(theme);
+    await expect(page.locator('.reader-typeset')).toHaveClass(new RegExp('theme-' + theme));
+  }
+  await field.fill('1');
+  await field.press('Enter');
+  await expect(page.getByRole('button', { name: 'Previous', exact: true })).toBeDisabled();
+  await field.fill(await field.getAttribute('max'));
+  await field.press('Enter');
+  await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeDisabled();
+  expect(state.errors).toEqual([]);
+});
+
 test('isolated chapter 3 labels form one complete family tree with working deep links', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   const state = await mockBook(page);
@@ -187,23 +219,29 @@ test('older API responses load complete sections without unbounded requests', as
   expect(state.errors).toEqual([]);
 });
 
-test('taller leaves fill chapter endings and retain the next chapter summary and contents', async ({ page }) => {
+test('adhyay 40 and 41 begin on fresh pages with working summaries and contents', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   const state = await mockBook(page);
   await page.goto('/reader/mahabharata/book?page=4');
   await checkPages(page);
   const leaf = await page.locator('.reader-visible-page').first().boundingBox();
   expect(leaf.height / leaf.width).toBeGreaterThan(1.3);
-  const chapter = page.locator('.reader-visible-page .book-chapter-heading').first();
-  await expect(chapter).toBeVisible();
-  const fill = await page.locator('.reader-visible-page .book-page-content').evaluateAll(nodes => nodes.map(node => {
-    const box = node.getBoundingClientRect();
-    return (node.lastElementChild.getBoundingClientRect().bottom - box.top) / box.height;
-  }));
-  for (const ratio of fill) expect(ratio).toBeGreaterThan(.9);
-  await chapter.getByRole('button').click();
+  for (const chapterIndex of [39, 40]) {
+    await page.getByRole('button', { name: 'Contents', exact: true }).click();
+    await page.getByRole('dialog').getByRole('button', { name: new RegExp('अध्याय ' + (chapterIndex + 1) + ':') }).click();
+    const leaf = page.locator('.reader-visible-page').filter({ has: page.locator('[data-passage-id="passage-' + chapterIndex + '-0"]') });
+    await expectBook(leaf).toBeVisible();
+    await expect(leaf.locator('.scripture-text').first()).toHaveAttribute('data-passage-id', 'passage-' + chapterIndex + '-0');
+    await expect(leaf.locator('.scripture-text').first()).toHaveAttribute('data-source-start', '0');
+    const ids = await leaf.locator('.scripture-text').evaluateAll(nodes => nodes.map(node => node.dataset.passageId));
+    expect(ids.every(id => id.startsWith('passage-' + chapterIndex + '-'))).toBe(true);
+    await expect(page.locator('.reader-visible-page .book-chapter-heading')).toHaveCount(0);
+    await checkPages(page);
+  }
+  const chapter = page.locator('.reader-visible-page').filter({ has: page.locator('[data-passage-id="passage-40-0"]') });
+  await chapter.getByRole('button', { name: 'Summarize Section' }).click();
   await expect(page.getByText('Test explanation.')).toBeVisible();
-  expect(state.ai.at(-1).sectionId).toBe('section-1');
+  expect(state.ai.at(-1).sectionId).toBe('section-40');
   expect(state.ai.at(-1).passageId).toBeUndefined();
 });
 

@@ -4,6 +4,9 @@ const fs = require('node:fs');
 
 // Add document editions without removing any existing content or annotations.
 async function syncDocuments(tx, catalog, documents) {
+  if (documents.some(document => document.scriptureSlug === 'ramayana')) {
+    await require('./consolidate-ramayan.cjs').requireRamayanConsolidation(tx);
+  }
   const religion = await tx.religion.upsert({
     where: { slug: catalog.religion.slug }, update: catalog.religion, create: catalog.religion,
   });

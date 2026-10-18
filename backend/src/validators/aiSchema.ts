@@ -12,6 +12,7 @@ export const explainSchema = z.object({
 });
 
 export const askQuestionSchema = z.object({
+  chapterKey: z.string().max(100).optional(),
   question: z.string().trim().min(1).max(2000),
   editionId: z.string().optional(),
   sectionId: z.string().optional(),
@@ -23,6 +24,7 @@ export const askQuestionSchema = z.object({
 });
 
 export const summarizeSchema = z.object({
+  chapterKey: z.string().max(100).optional(),
   editionId: z.string(),
   sectionId: z.string().min(1),
   responseLang: z.string().default('en'),

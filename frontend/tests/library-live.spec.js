@@ -13,7 +13,7 @@ test('live catalog omits Upanishads and serves the imported Purana and Ramcharit
   expect((await removed.json()).scriptures).toHaveLength(0);
   await page.goto('/dashboard');
   await expect(page.getByRole('heading', { name: 'शिव पुराण', exact: true })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'रामायण', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Ramayan', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'गरुड़ पुराण', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: /उपनिषद/ })).toHaveCount(0);
   for (const [file, query] of [['ramcharitmanas-hi', 'Ramcharitmanas'], ['shiva-purana-hi', 'Shivapuran'], ['garuda-purana-hi', 'Garudpuran']]) {
@@ -29,6 +29,7 @@ test('live catalog omits Upanishads and serves the imported Purana and Ramcharit
     expect(pdf.ok()).toBeTruthy();
     expect(createHash('sha256').update(await pdf.body()).digest('hex')).toBe(document.sha256);
     await page.goto('/scripture/' + book.id);
+    await page.getByRole('button').filter({ hasText: edition.title }).click();
     await page.getByRole('button', { name: 'Start Reading', exact: true }).click();
     await expect(page).toHaveURL(new RegExp(edition.id));
     await expect(page.getByRole('img', { name: 'Scanned page 1', exact: true })).toBeVisible();

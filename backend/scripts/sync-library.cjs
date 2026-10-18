@@ -18,6 +18,7 @@ async function syncLibrary(apply = false) {
   databaseUrl.searchParams.set('pool_timeout', '15');
   const prisma = new PrismaClient({ datasources: { db: { url: databaseUrl.toString() } } });
   try {
+    await require('./consolidate-ramayan.cjs').requireRamayanConsolidation(prisma);
     const allowedSlugs = catalog.scriptures.map(book => book.slug);
     const editions = await prisma.scriptureEdition.findMany({ include: { scripture: true } });
     const removed = editions.filter(edition => !allowedSlugs.includes(edition.scripture.slug) ||

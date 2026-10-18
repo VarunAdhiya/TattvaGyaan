@@ -1,14 +1,16 @@
 import { familyTreeNodes } from '../lib/mahabharataLayout';
+import { bookTextRuns } from '../lib/bookTextRuns';
 
 export default function ProsePage({ page, layout, focusedPassage, onSelect, onSummarize }) {
-  function text(part) {
+  function text(part, kind) {
     return <span key={`${part.passage.id}-${part.start}`} id={`text-${part.passage.id}-${part.start}`}
       data-passage-id={part.passage.id} data-source-start={part.start} data-source-end={part.end}
       className={'scripture-text' + (focusedPassage === part.passage.id ? ' book-focused-passage' : '')}
       onMouseUp={event => onSelect(part.passage, event.currentTarget)}
       onTouchEnd={event => onSelect(part.passage, event.currentTarget)}
       onKeyUp={event => onSelect(part.passage, event.currentTarget)}>
-      {part.passage.text.slice(part.start, part.end)}
+      {bookTextRuns(part.passage.text.slice(part.start, part.end), kind).map((run, index) => run.className
+        ? <span key={index} className={run.className}>{run.text}</span> : run.text)}
     </span>;
   }
   return <div className="book-page-content font-indic" lang="hi" dir="ltr">
@@ -26,9 +28,10 @@ export default function ProsePage({ page, layout, focusedPassage, onSelect, onSu
         {familyTreeNodes(block.parts.map(part => part.passage)).map((part, nodeIndex) =>
           <div key={nodeIndex} className="book-tree-label" style={{ left: `${part.x}%`, top: `${part.y}%` }}>{text(part)}</div>)}
       </figure>
-      : <p key={index} className={'book-paragraph' + (block.continued ? ' book-paragraph-continued' : '')}>
+      : <p key={index} role={block.kind === 'topic' ? 'heading' : undefined} aria-level={block.kind === 'topic' ? 3 : undefined}
+        className={'book-paragraph book-block-' + block.kind + (block.continued ? ' book-paragraph-continued' : '')}>
         {block.parts.map((part, partIndex) => <span key={`${part.passage.id}-${part.start}`}>
-          {partIndex > 0 && !block.parts[partIndex - 1].passage.text.trimEnd().endsWith('-') ? ' ' : ''}{text(part)}
+          {partIndex > 0 && !block.parts[partIndex - 1].passage.text.trimEnd().endsWith('-') ? ' ' : ''}{text(part, block.kind)}
         </span>)}
       </p>)}
   </div>;

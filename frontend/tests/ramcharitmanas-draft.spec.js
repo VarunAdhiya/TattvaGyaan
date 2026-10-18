@@ -18,13 +18,13 @@ test('live Ramcharitmanas loads database text, all kandas, and final passages wi
   const response = await request.get('/api/scriptures?search=Ramayana');
   expect(response.ok()).toBeTruthy();
   const book = (await response.json()).scriptures.find(b => b.slug === 'ramayana');
-  expect(book.editions[0].contentStatus).toBe('draft');
-  expect(book.editions[0].expectedPassages).toBe(source.expectedPassages);
+  const manas = book.editions.find(e => e.source === source.source);
+  expect(manas.contentStatus).toBe('draft');
+  expect(manas.expectedPassages).toBe(source.expectedPassages);
   expect(book.editions.some(e => e.contentStatus === 'scanned')).toBe(true);
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto(`/scripture/${book.id}`);
-  await page.getByRole('button', { name: 'Start Reading', exact: true }).click();
-  await expect(page).toHaveURL(new RegExp(book.editions[0].id));
+  await page.goto(`/reader/${book.id}/${manas.id}`);
+  await expect(page).toHaveURL(new RegExp(manas.id));
   await expect(page.getByText('Draft text · Not fully proofread', { exact: true })).toBeVisible();
 
   const sectionIndex = source.sections.findIndex(s => s.slug === 'bala-kanda');

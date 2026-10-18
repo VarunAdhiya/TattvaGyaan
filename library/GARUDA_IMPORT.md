@@ -116,7 +116,77 @@ npx.cmd playwright test tests/garuda-draft.spec.js --workers=1
 
 It checks the default draft edition, exact displayed text, source notes, the three kandas, desktop/mobile layouts, the last page, browser errors, and absence of PDF requests. Public API requests stay live; authentication and private user writes are stubbed. Also run backend tests/build, frontend lint and build as required by `AGENTS.md`. Report any failed checks honestly.
 
-## Completed import
+## Reader layout
+
+The Hindi draft shares Mahabharat's compact devotional toolbar, navigation dock,
+and measured, responsive book pages. Source topic headings start on a fresh leaf;
+Contents includes the six original sections and the detected topic headings.
+Verses retain line breaks, while running headers and footnotes use smaller type.
+
+Regenerate the presentation metadata from the unchanged draft and region audit:
+
+```powershell
+node backend/scripts/build-garuda-layout.cjs
+```
+
+Deploy `backend/data/layouts/garuda-purana.json` together with the backend build
+and restart the API so it serves the new layout metadata.
+The API verifies passage hashes before attaching layout ranges. These ranges
+preserve every source character and all 5,277 existing passage IDs; no database
+migration or content reimport is needed. Bookmarks, notes, search links and saved
+positions continue to reference the same records. Chapter summaries and follow-up
+questions use server-validated topic ranges rather than the entire kanda.
+
+The 273 detected topic headings come from the source audit, not canonical verse
+numbering. OCR text and heading recognition still require editorial review.
+Run `backend/tests/garudaLayout.test.cjs` through `npm test` and
+`npx playwright test tests/garuda-layout.spec.js tests/garuda-draft.spec.js`
+from `frontend/` (set `RUN_LIVE_LIBRARY=1` for the live API check).
+
+## Recover missing word spaces
+
+The first OCR pipeline re-extracted Tesseract's generated PDF text layer, which
+merged many adjacent Hindi words. The direct OCR pass reads `GetUTF8Text()` from
+the same masked source regions and keeps the recognized spaces. It writes new
+checkpoints; the old extraction is not overwritten.
+
+From the repository root (Windows, Python 3.12):
+
+```powershell
+backend/.venv-ocr/Scripts/python.exe -m pip install -r backend/scripts/requirements-garuda-spacing.txt
+backend/.venv-ocr/Scripts/python.exe backend/scripts/ocr-garuda-purana.py --word-spacing --workers 6
+backend/.venv-ocr/Scripts/python.exe backend/scripts/recover-garuda-spacing.py
+```
+
+Review `tmp/pdfs/garuda-reader/spacing-preview/` against the PDF. The recovery
+aligns matching characters and inserts only recognized spaces; it never replaces
+letters, punctuation, line breaks, passage references or source-page assignments.
+Unmatched OCR differences remain for editorial review. The `.spacing.json` ledger
+records old/new hashes and reversible insertion positions for each changed passage.
+
+After review, write the complete import and regenerate its layout:
+
+```powershell
+backend/.venv-ocr/Scripts/python.exe backend/scripts/recover-garuda-spacing.py --write
+node backend/scripts/build-garuda-layout.cjs
+node backend/scripts/apply-garuda-spacing.cjs
+node backend/scripts/apply-garuda-spacing.cjs --apply
+```
+
+The apply script verifies the current database text, saves a recovery snapshot in
+ignored `backend/backups/`, updates text and word counts in one transaction, remaps
+highlight offsets, and verifies the complete edition before committing. Passage
+IDs, notes, bookmarks and reading positions are retained. Restart the API after
+deploying the matching layout file and refresh the reader. This is a spacing-only
+draft correction, not certification that every OCR word or contents number is correct.
+
+The completed recovery inserts 171,414 spaces across 5,251 existing passages,
+covering all 620 OCR pages. The other 26 passages are unchanged. All 5,277
+passage references and every non-whitespace character remain intact. The reader
+displays the printed contents as 304 separate entries and retains the 273 detected
+topic headings with fresh-page starts.
+
+## Initial import record
 
 The supplied PDF was processed and imported on 2026-10-17. The output contains **5,277 reading blocks in six sections**: front matter (13), contents (68), आचारकाण्ड (3,692), धर्मकाण्ड—प्रेतकल्प (1,314), ब्रह्मकाण्ड (188), and back covers (2). Source pages 3 and 636 are blank; the other 636 pages have manually transcribed text/captions or OCR. Every stored passage matched the JSON through the API, and all 638 pages were accounted for.
 

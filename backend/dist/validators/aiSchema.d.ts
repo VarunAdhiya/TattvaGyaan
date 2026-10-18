@@ -28,6 +28,7 @@ export declare const explainSchema: z.ZodObject<{
     conversationId?: string | undefined;
 }>;
 export declare const askQuestionSchema: z.ZodObject<{
+    chapterKey: z.ZodOptional<z.ZodString>;
     question: z.ZodString;
     editionId: z.ZodOptional<z.ZodString>;
     sectionId: z.ZodOptional<z.ZodString>;
@@ -44,6 +45,7 @@ export declare const askQuestionSchema: z.ZodObject<{
     sectionId?: string | undefined;
     passageId?: string | undefined;
     selectedText?: string | undefined;
+    chapterKey?: string | undefined;
     conversationId?: string | undefined;
 }, {
     question: string;
@@ -53,9 +55,11 @@ export declare const askQuestionSchema: z.ZodObject<{
     selectedText?: string | undefined;
     responseLang?: string | undefined;
     style?: "simple" | "detailed" | "scholarly" | undefined;
+    chapterKey?: string | undefined;
     conversationId?: string | undefined;
 }>;
 export declare const summarizeSchema: z.ZodObject<{
+    chapterKey: z.ZodOptional<z.ZodString>;
     editionId: z.ZodString;
     sectionId: z.ZodString;
     responseLang: z.ZodDefault<z.ZodString>;
@@ -63,9 +67,11 @@ export declare const summarizeSchema: z.ZodObject<{
     editionId: string;
     sectionId: string;
     responseLang: string;
+    chapterKey?: string | undefined;
 }, {
     editionId: string;
     sectionId: string;
     responseLang?: string | undefined;
+    chapterKey?: string | undefined;
 }>;
 //# sourceMappingURL=aiSchema.d.ts.map

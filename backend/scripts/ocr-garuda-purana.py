@@ -34,6 +34,7 @@ RECIPE = 'garuda-curved-column-bands-rgb-300dpi-hin-best-v2'
 ILLUSTRATIONS = json.loads((ROOT / 'backend/data/transcription-manual/garuda-illustrations.json').read_text(encoding='utf8'))
 assert ILLUSTRATIONS['sourceSha256'] == SOURCE_SHA
 MASKED_CACHE = ROOT / 'backend/data/transcription-ocr/garuda-columns-v2-illustrations'
+SPACING_CACHE = ROOT / 'backend/data/transcription-ocr/garuda-word-spacing-v1'
 
 
 def checkpoint_identity(number):
@@ -130,9 +131,11 @@ def read_lines(ocr_page):
             for line in sorted(lines,key=lambda line:line['center'])]
 
 
-def process_page(number):
-    filename = checkpoint_path(number)
+def process_page(number, word_spacing=False):
+    filename = SPACING_CACHE / f'{number:04d}.json' if word_spacing else checkpoint_path(number)
     identity = checkpoint_identity(number)
+    if word_spacing:
+        identity.update({'recipe': 'garuda-direct-word-spacing-v1', 'tesserocr': '2.10.0', 'tesseract': '5.5.2'})
     if filename.exists():
         cached = json.loads(filename.read_text(encoding='utf8'))
         assert cached['identity'] == identity, 'Checkpoint settings changed'
@@ -193,12 +196,24 @@ def process_page(number):
                     ink_pixels = int((samples.mean(axis=2)<120).sum())
                     text, lines = '', []
                     if ink_pixels > 150:
-                        rgb = pymupdf.Pixmap(pymupdf.csRGB,samples.shape[1],samples.shape[0],samples.tobytes(),False)
-                        rgb.set_dpi(300,300)  # RGB required for reliable OCR here.
-                        result = rgb.pdfocr_tobytes(language='hin',tessdata=str(MODEL))
-                        with pymupdf.open('pdf',result) as recognized:
-                            lines = read_lines(recognized[0])
-                            text = '\n'.join(lines).strip()
+                        if word_spacing:
+                            import tesserocr
+                            assert tesserocr.__version__ == '2.10.0'
+                            assert tesserocr.tesseract_version().startswith('tesseract 5.5.2')
+                            with tesserocr.PyTessBaseAPI(path=str(MODEL), lang='hin') as api:
+                                api.SetImageBytes(samples.tobytes(), samples.shape[1], samples.shape[0], 3, samples.shape[1]*3)
+                                api.SetSourceResolution(300)
+                                # Keep Tesseract's own spaces. Re-extracting its PDF
+                                # text layer can merge adjacent Hindi word boxes.
+                                lines = [line.strip() for line in api.GetUTF8Text().splitlines() if line.strip()]
+                                text = '\n'.join(lines)
+                        else:
+                            rgb = pymupdf.Pixmap(pymupdf.csRGB,samples.shape[1],samples.shape[0],samples.tobytes(),False)
+                            rgb.set_dpi(300,300)  # RGB required for reliable OCR here.
+                            result = rgb.pdfocr_tobytes(language='hin',tessdata=str(MODEL))
+                            with pymupdf.open('pdf',result) as recognized:
+                                lines = read_lines(recognized[0])
+                                text = '\n'.join(lines).strip()
                     regions.append({'kind':kind,'top':round(a,2),'bottom':round(b,2),
                                     'text':text,'lines':lines,'inkPixels':ink_pixels})
     result = {'identity':identity,'reviewStatus':'unreviewed-draft','regions':regions,
@@ -213,18 +228,21 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--pages',help='Comma-separated PDF page numbers for a sample; default all OCR pages')
     parser.add_argument('--workers',type=int,default=3)
+    parser.add_argument('--word-spacing',action='store_true',help='Recover direct OCR word boundaries in separate checkpoints')
     args = parser.parse_args()
     assert hashlib.sha256(SOURCE.read_bytes()).hexdigest() == SOURCE_SHA
     assert hashlib.sha256((MODEL/'hin.traineddata').read_bytes()).hexdigest() == MODEL_SHA
     CACHE.mkdir(parents=True,exist_ok=True)
     MASKED_CACHE.mkdir(parents=True,exist_ok=True)
+    if args.word_spacing:
+        SPACING_CACHE.mkdir(parents=True,exist_ok=True)
     selected = [int(n) for n in args.pages.split(',')] if args.pages else list(range(1,639))
     selected = [n for n in selected if n not in MANUAL_PAGES]
     assert all(1 <= n <= 638 for n in selected)
     started = time.monotonic()
     failures = []
     with ProcessPoolExecutor(max_workers=args.workers) as executor:
-        pending = {executor.submit(process_page,n):n for n in selected}
+        pending = {executor.submit(process_page,n,args.word_spacing):n for n in selected}
         for index,future in enumerate(as_completed(pending),1):
             try:
                 number,characters,cached = future.result()

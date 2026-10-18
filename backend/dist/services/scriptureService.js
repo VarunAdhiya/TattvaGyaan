@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.scriptureService = exports.ScriptureService = void 0;
 const prisma_1 = __importDefault(require("../lib/prisma"));
 const errorHandler_1 = require("../middleware/errorHandler");
+const bookLayoutService_1 = require("./bookLayoutService");
+const ramayanCatalog_1 = require("./ramayanCatalog");
 class ScriptureService {
     async getReligions() {
         return prisma_1.default.religion.findMany({
@@ -51,7 +53,7 @@ class ScriptureService {
                     religion: { select: { id: true, name: true, slug: true } },
                     editions: {
                         orderBy: [{ contentStatus: 'asc' }, { isOriginal: 'desc' }],
-                        select: { id: true, title: true, language: true, isOriginal: true, textDirection: true, contentStatus: true, expectedPassages: true },
+                        select: { id: true, title: true, language: true, isOriginal: true, textDirection: true, contentStatus: true, expectedPassages: true, source: true },
                     },
                 },
                 orderBy: { title: 'asc' },
@@ -61,7 +63,7 @@ class ScriptureService {
             prisma_1.default.scripture.count({ where }),
         ]);
         return {
-            scriptures,
+            scriptures: scriptures.map(scripture => ({ ...scripture, editions: (0, ramayanCatalog_1.preferRamayanText)(scripture.editions) })),
             pagination: {
                 page: filters.page,
                 limit: filters.limit,
@@ -72,7 +74,7 @@ class ScriptureService {
     }
     async getScripture(id) {
         const scripture = await prisma_1.default.scripture.findUnique({
-            where: { id },
+            where: (0, ramayanCatalog_1.isLegacyRamayan)(id) ? { slug: 'ramayana' } : { id },
             include: {
                 religion: true,
                 editions: {
@@ -85,7 +87,7 @@ class ScriptureService {
         });
         if (!scripture)
             throw new errorHandler_1.AppError('Scripture not found', 404);
-        return scripture;
+        return { ...scripture, editions: (0, ramayanCatalog_1.preferRamayanText)(scripture.editions) };
     }
     async getEdition(id) {
         const edition = await prisma_1.default.scriptureEdition.findUnique({
@@ -151,20 +153,22 @@ class ScriptureService {
         return passage;
     }
     async getEditionsByScripture(scriptureId) {
+        if ((0, ramayanCatalog_1.isLegacyRamayan)(scriptureId)) {
+            scriptureId = (await prisma_1.default.scripture.findUniqueOrThrow({ where: { slug: 'ramayana' }, select: { id: true } })).id;
+        }
         const editions = await prisma_1.default.scriptureEdition.findMany({
             where: { scriptureId },
             orderBy: { isOriginal: 'desc' },
         });
-        return editions;
+        return (0, ramayanCatalog_1.preferRamayanText)(editions);
     }
     async getPassagesForReader(editionId, includeBookText = false) {
         const edition = await prisma_1.default.scriptureEdition.findUnique({ where: { id: editionId }, select: { id: true, source: true, language: true } });
         if (!edition)
             throw new errorHandler_1.AppError('Edition not found', 404);
-        // Only this short prose edition is laid out as a complete book in-browser.
-        // Other editions and position lookups retain their paginated API behavior.
-        const bookText = includeBookText && edition.language === 'hi' && edition.source ===
-            'urn:sha256:eb00713009dd7b6a81feec459c7518a494f851dc79d77e5d67856e4d8d70d809';
+        // Source-identified typeset editions use complete, ordered text. Position
+        // lookups and other editions keep their lightweight paginated behavior.
+        const bookText = includeBookText && edition.language === 'hi' && bookLayoutService_1.TYPESET_SOURCES.includes(edition.source || '');
         const sections = await prisma_1.default.scriptureSection.findMany({
             where: { editionId },
             orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
@@ -175,7 +179,9 @@ class ScriptureService {
                 } : false,
             },
         });
-        return sections;
+        return sections.map(section => ({ ...section,
+            ...(bookText ? { readerBlocks: (0, bookLayoutService_1.bookReadingBlocks)(edition.source, section.slug, section.passages) } : {}),
+        }));
     }
     async getPassagePosition(id) {
         const passage = await prisma_1.default.scripturePassage.findUnique({ where: { id }, include: { section: { select: { editionId: true } } } });

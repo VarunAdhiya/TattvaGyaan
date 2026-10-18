@@ -48,7 +48,7 @@
     },
     {
       "slug": "ramayana",
-      "title": "रामायण",
+      "title": "Ramayan",
       "aliases": [
         "Ramayana",
         "Ramayan",
@@ -56,13 +56,25 @@
         "Ram Charit Manas",
         "Shri Ramcharitmanas",
         "रामचरितमानस",
-        "श्रीरामचरितमानस"
+        "श्रीरामचरितमानस",
+        "वाल्मीकि रामायण और रामकीर्ति (रामकियन): एक तुलनात्मक अध्ययन",
+        "Valmiki Ramayana aur Ramakien Ek Tulnamatmak Adhyayan",
+        "Valmiki Ramayana Ramakien comparative study",
+        "Ramkirti",
+        "Ramakiyan",
+        "Karuna Sharma",
+        "करुणा शर्मा",
+        "रामायण",
+        "Valmiki Ramayana",
+        "वाल्मीकि रामायण"
       ],
       "originalLang": "Sanskrit",
-      "description": "गोस्वामी तुलसीदासकृत श्रीरामचरितमानस का गीताप्रेस संस्करण, हनुमानप्रसाद पोद्दार की टीका सहित। मूल 1,058-पृष्ठ PDF रामायण संग्रह में उपलब्ध है।",
+      "description": "रामायण संग्रह: गोस्वामी तुलसीदासकृत श्रीरामचरितमानस (गीताप्रेस, हनुमानप्रसाद पोद्दार की टीका सहित) और डॉ. करुणा शर्मा का वाल्मीकि रामायण और रामकीर्ति (रामकियन): एक तुलनात्मक अध्ययन। प्रत्येक पुस्तक का अपना शीर्षक, स्रोत और मूल PDF सुरक्षित है। तुलनात्मक अध्ययन मूल वाल्मीकि रामायण का संस्करण नहीं है।",
       "themes": [
         "धर्म",
-        "कर्तव्य"
+        "कर्तव्य",
+        "रामकथा",
+        "तुलनात्मक अध्ययन"
       ]
     },
     {
@@ -138,25 +150,6 @@
       "themes": [
         "धर्म",
         "इतिहास"
-      ]
-    },
-    {
-      "slug": "valmiki-ramayana-ramakien-study",
-      "title": "वाल्मीकि रामायण और रामकीर्ति (रामकियन): एक तुलनात्मक अध्ययन",
-      "aliases": [
-        "Valmiki Ramayana aur Ramakien Ek Tulnamatmak Adhyayan",
-        "Valmiki Ramayana Ramakien comparative study",
-        "Ramkirti",
-        "Ramakiyan",
-        "Karuna Sharma",
-        "करुणा शर्मा"
-      ],
-      "originalLang": "Hindi",
-      "description": "डॉ. करुणा शर्मा का वाल्मीकि रामायण और रामकीर्ति (रामकियन) पर तुलनात्मक अध्ययन। 266-पृष्ठ हिन्दी PDF; यह शोध-अध्ययन है, मूल रामायण का संस्करण नहीं।",
-      "themes": [
-        "तुलनात्मक अध्ययन",
-        "रामकथा",
-        "साहित्य"
       ]
     }
   ]

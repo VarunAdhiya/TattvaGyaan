@@ -1,7 +1,18 @@
 export const MAHABHARATA_SOURCE = 'urn:sha256:eb00713009dd7b6a81feec459c7518a494f851dc79d77e5d67856e4d8d70d809';
+export const GARUDA_SOURCE = 'urn:sha256:c05368e6b60c64f58b2b86b8a9375d483259cd81d6b2469faaafb4a698a6dcb0';
+export const MANUSMRITI_SOURCE = 'urn:sha256:992c71ecb2a16913c2fb578ae51f3a73d6288109f133b10b811d1b976f8698e3';
+export const RAMAYAN_SOURCE = 'urn:sha256:759f2adbfd2fc1191ff8576401d1cbc34bbfefaf79a573e8747c53d4c858af75';
 
 export function isMahabharataProse(edition) {
   return edition.language === 'hi' && edition.source === MAHABHARATA_SOURCE;
+}
+
+export function isTypesetBook(edition) {
+  return edition.language === 'hi' && [MAHABHARATA_SOURCE, GARUDA_SOURCE, MANUSMRITI_SOURCE, RAMAYAN_SOURCE].includes(edition.source);
+}
+
+export function requiresBookLayout(edition) {
+  return edition.language === 'hi' && [GARUDA_SOURCE, MANUSMRITI_SOURCE, RAMAYAN_SOURCE].includes(edition.source);
 }
 
 const treeReferences = ['3.15', '3.16', '3.17', '3.18', '3.19', '3.20', '3.21', '3.24', '3.25', '3.26', '3.27'];
@@ -24,6 +35,12 @@ export function familyTreeNodes(passages) {
 
 export function readingBlocks(section) {
   const passages = section.passages || [];
+  if (section.readerBlocks) {
+    const byReference = new Map(passages.map(passage => [passage.reference, passage]));
+    return section.readerBlocks.map(block => ({ ...block, parts: block.parts.map(part => ({
+      passage: byReference.get(part.reference), start: part.start, end: part.end,
+    })) }));
+  }
   const tree = section.slug === 'chapter-3' && treeReferences.every(ref => passages.some(p => p.reference === ref));
   const blocks = [];
   let previous;
@@ -73,31 +90,42 @@ function compact(parts) {
 // Measurement is supplied by the browser using the same font, width and CSS as
 // the visible pages. Splits retain source offsets, never rewrite scripture text.
 export function paginateMahabharata(sections, { height, lineHeight, gap, treeHeight }, measure) {
+  let blockKind = 'paragraph';
   const heightOf = (parts, continued) => {
     const compacted = compact(parts);
-    return measure(partText(compacted), continued, compacted);
+    return measure(partText(compacted), continued, compacted, blockKind);
   };
   const pages = [{ type: 'cover' }, { type: 'toc' }];
   let blocks = [];
   let used = 0;
   let pageSection;
+  let chapterKey;
+  let sectionTitle;
   const flush = () => {
     if (!blocks.length) return;
     const passages = [...new Map(blocks.flatMap(block => block.parts.map(part => [part.passage.id, part.passage]))).values()];
-    pages.push({ type: 'content', sectionId: pageSection.id, sectionTitle: pageSection.title,
+    pages.push({ type: 'content', sectionId: pageSection.id, sectionTitle, chapterKey,
+      sourcePage: blocks[0].sourcePage, printedPage: blocks[0].printedPage,
       sectionIds: [...new Set(blocks.map(block => block.sectionId))], blocks, passages });
     blocks = [];
     used = 0;
   };
   for (const section of sections) {
-    // Continue the next chapter on the same leaf, reserving its heading and
-    // at least two lines of prose so that a heading never sits alone.
-    if (blocks.length && height - used < lineHeight * 3.5 + gap * 2) flush();
-    if (blocks.length) {
-      blocks.push({ kind: 'heading', sectionId: section.id, title: section.title, parts: [] });
-      used += lineHeight * 1.5 + gap;
-    } else pageSection = section;
-    for (const block of readingBlocks(section)) {
+    // Each adhyay begins on a fresh leaf. Preserve passage IDs and offsets so
+    // contents, saved positions and annotations follow the repaginated text.
+    flush();
+    pageSection = section;
+    chapterKey = undefined;
+    sectionTitle = section.title;
+    const sectionBlocks = readingBlocks(section);
+    for (const [blockIndex, block] of sectionBlocks.entries()) {
+      if (block.pageBreakBefore) flush();
+      blockKind = block.kind;
+      if (block.kind === 'chapter') {
+        flush();
+        chapterKey = block.chapterKey;
+        sectionTitle = block.title;
+      }
       if (block.kind === 'tree') {
         if (blocks.length && used + gap + treeHeight > height) flush();
         if (!blocks.length) pageSection = section;
@@ -111,8 +139,15 @@ export function paginateMahabharata(sections, { height, lineHeight, gap, treeHei
         if (!blocks.length) pageSection = section;
         const available = height - used - (blocks.length ? gap : 0);
         const fullHeight = heightOf(remaining, continued);
+        if (blocks.length && block.keepTogether && fullHeight <= height && fullHeight > available) { flush(); continue; }
+        if (blocks.length && block.keepWithNext && sectionBlocks[blockIndex + 1]) {
+          const next = sectionBlocks[blockIndex + 1];
+          const nextHeight = measure(partText(next.parts), false, next.parts, next.kind);
+          const openingHeight = fullHeight + gap + (next.keepTogether ? nextHeight : Math.min(nextHeight, lineHeight * 2));
+          if (openingHeight <= height && openingHeight > available) { flush(); continue; }
+        }
         if (fullHeight <= available) {
-          blocks.push({ kind: 'paragraph', sectionId: section.id, parts: compact(remaining), continued });
+          blocks.push({ kind: blockKind, sourcePage: block.sourcePage, printedPage: block.printedPage, sectionId: section.id, parts: compact(remaining), continued });
           used += fullHeight + (blocks.length > 1 ? gap : 0);
           break;
         }
@@ -137,7 +172,7 @@ export function paginateMahabharata(sections, { height, lineHeight, gap, treeHei
           }
           low = lower;
         }
-        blocks.push({ kind: 'paragraph', sectionId: section.id, parts: compact(remaining.slice(0, low)), continued });
+        blocks.push({ kind: blockKind, sourcePage: block.sourcePage, printedPage: block.printedPage, sectionId: section.id, parts: compact(remaining.slice(0, low)), continued });
         remaining = remaining.slice(low);
         continued = true;
         flush();

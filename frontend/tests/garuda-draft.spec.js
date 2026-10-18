@@ -1,6 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { existsSync, readFileSync } from 'node:fs';
 
+// The complete edition is fetched from Supabase and measured after Hindi fonts load.
+test.use({ actionTimeout: 30000 });
+const ready = expect.configure({ timeout: 30000 });
+
 const draftFile = new URL('../../library/editions/drafts/garuda-purana-hi.json', import.meta.url);
 const source = existsSync(draftFile) ? JSON.parse(readFileSync(draftFile, 'utf8')) : null;
 
@@ -31,20 +35,38 @@ test('live Garuda draft renders database text, kanda navigation and final page o
   await page.goto(`/scripture/${book.id}`);
   await page.getByRole('button', { name: 'Start Reading', exact: true }).click();
   await expect(page).toHaveURL(new RegExp(book.editions[0].id));
-  await expect(page.getByText('Draft text · Not fully proofread', { exact: true })).toBeVisible();
+  await ready(page.getByText('Draft text · Not fully proofread', { exact: true })).toBeVisible();
 
   const sectionIndex = source.sections.findIndex(s => s.slug === 'achara-kanda');
   const section = source.sections[sectionIndex];
   const passageIndex = section.passages.findIndex(p => p.sourcePage === 20 && p.text.includes('सृष्टि-वर्णन'));
   expect(passageIndex).toBeGreaterThanOrEqual(0);
-  const targetPage = 3 + source.sections.slice(0, sectionIndex).reduce((sum, s) => sum + Math.ceil(s.passages.length / 2), 0) + Math.floor(passageIndex / 2);
+  const readerResponse = await request.get(`/api/passages/edition/${book.editions[0].id}?bookText=true`);
+  expect(readerResponse.ok()).toBeTruthy();
+  const reader = await readerResponse.json();
+  expect(reader.sections[sectionIndex].readerBlocks.some(b => b.chapterKey === 'pdf-20-line-23')).toBe(true);
+  const originals = Object.fromEntries(reader.sections.flatMap(s => s.passages.map(p => [p.id, p.text])));
+  async function verifyText() {
+    const parts = await page.locator('.reader-visible-page .scripture-text').evaluateAll(nodes => nodes.map(n => ({
+      id: n.dataset.passageId, start: Number(n.dataset.sourceStart), end: Number(n.dataset.sourceEnd), text: n.textContent,
+    })));
+    expect(parts.length).toBeGreaterThan(0);
+    for (const p of parts) expect(p.text).toBe(originals[p.id].slice(p.start, p.end));
+  }
+  async function openTopic() {
+    await page.getByRole('button', { name: 'Contents', exact: true }).click();
+    await page.getByRole('button', { name: /^सृष्टि-वर्णन ·/ }).click();
+    await expect(page.locator('.reader-visible-page .book-block-chapter').filter({ hasText: /^सृष्टि-वर्णन\s*$/ })).toBeVisible();
+    await verifyText();
+  }
   async function jump(number) {
     await page.getByLabel('Page', { exact: true }).fill(String(number));
     await page.getByRole('button', { name: 'Go', exact: true }).click();
   }
-  await jump(targetPage);
-  await expect(page.locator('.reader-paper .scripture-text').filter({ hasText: section.passages[passageIndex].text })).toHaveText(section.passages[passageIndex].text);
+  await openTopic();
+  await page.getByRole('button', { name: 'Passage tools', exact: true }).first().click();
   await expect(page.getByText('Source notes', { exact: true }).first()).toBeVisible();
+  await page.keyboard.press('Escape');
   await page.screenshot({ path: 'test-results/garuda-draft-desktop.png', fullPage: true });
 
   await page.getByRole('button', { name: 'Contents', exact: true }).click();
@@ -52,18 +74,17 @@ test('live Garuda draft renders database text, kanda navigation and final page o
     await expect(page.getByRole('button', { name: new RegExp(kanda.title) }).last()).toBeVisible();
   }
   await page.getByRole('button', { name: /ब्रह्मकाण्ड/ }).last().click();
-  const brahma = source.sections.find(s => s.slug === 'brahma-kanda');
-  await expect(page.locator('.reader-paper .scripture-text').filter({ hasText: brahma.passages[0].text })).toHaveText(brahma.passages[0].text);
+  await verifyText();
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await jump(targetPage);
+  await openTopic();
   await expect(page.locator('.reader-paper')).toHaveCount(1);
-  await expect(page.locator('.reader-paper .scripture-text').filter({ hasText: section.passages[passageIndex].text })).toHaveText(section.passages[passageIndex].text);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   await page.screenshot({ path: 'test-results/garuda-draft-mobile.png', fullPage: true });
-  const finalPage = 2 + source.sections.reduce((sum, s) => sum + Math.ceil(s.passages.length / 2), 0);
+  const finalPage = Number(await page.getByLabel('Page', { exact: true }).getAttribute('max'));
   await jump(finalPage);
-  await expect(page.locator('.reader-paper .scripture-text').last()).toHaveText(source.sections.at(-1).passages.at(-1).text);
+  await verifyText();
+  await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeDisabled();
   expect(pdfRequests).toEqual([]);
   expect(errors).toEqual([]);
 });

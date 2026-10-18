@@ -1,6 +1,6 @@
 # Hindi scripture catalog
 
-`catalog.json` is the editorial catalog: one tradition, eight works (including a separately identified comparative study), Hindi editions, and searchable title aliases. Application code contains no book-specific content or fallback passages. PostgreSQL is the runtime source of truth.
+`catalog.json` is the editorial catalog: one tradition, seven collections, Hindi editions, and searchable title aliases. Ramayan groups Ramcharitmanas and Dr. Karuna Sharma's comparative study under one card, with separate attributed editions. PostgreSQL is the runtime source of truth; the frontend contains no fallback scripture passages.
 
 `editions/*.json` contains attributed source imports, never AI-generated scripture. The Hindi Gita is extracted verbatim from the existing Hansi Gita Bhawan Trust snapshot (700 verses, 18 chapters). Its source URL, translator, reuse notice, and provenance are retained in the edition and reader. Other works remain partial or metadata-only until verified Hindi editions are supplied; an empty edition must not be labeled complete.
 
@@ -18,11 +18,13 @@ The document manifests preserve file checksums, page counts, printed attribution
 | --- | --- | --- |
 | `मनुस्मृति-सम्पूर्ण.pdf` | Manusmriti | 509 |
 | `ghmb101.pdf` | Bal Mahabharat Katha, under Mahabharata; a children's retelling | 96 |
-| `Valmiki Ramayana aur Ramakien Ek Tulnamatmak Adhyayan.pdf` | Dr. Karuna Sharma's comparative study, a separate work from Ramayana | 266 |
+| `Valmiki Ramayana aur Ramakien Ek Tulnamatmak Adhyayan.pdf` | Dr. Karuna Sharma's comparative study, now within the Ramayan collection | 266 |
 
-These PDFs contain text layers with extraction/legacy-font issues. They use the existing `scanned` PDF reader mode without creating passage records or enabling text-based AI and annotations. Original bytes, including blank pages, are unchanged. All supplied pages are retained, but no claim of verified textual completeness is made. The comparative study's first two PDF pages are blank; its title is on PDF page 3 (reader page 5).
+These PDFs initially used the `scanned` reader because their text layers have extraction/legacy-font issues. Separate draft text editions now provide selectable text and annotations; the original scans remain available with their bytes and blank pages unchanged. No claim of fully proofread textual completeness is made. The comparative study's first two PDF pages are blank; its title is on PDF page 3.
 
 ## Import and deployment
+
+For databases with the former separate `valmiki-ramayana-ramakien-study` collection, run the targeted [Ramayan consolidation](RAMAYAN_READER.md) before ordinary synchronization. Sync and document import refuse that old catalog state to prevent deleting or duplicating its editions and saved data.
 
 Garuda Purana has a dedicated catalog entry for the supplied 638-page `Garuda Purana Original upayogibooks.com.pdf`. Its printed title is **संक्षिप्त गरुड़पुराण**, an abridged Hindi Gita Press edition (code 1189, ISBN 81-293-0285-3). Original bytes and watermarks are retained. Its scanned text uses JBIG2 compression; the Vite configuration serves PDF.js decoder assets and their licenses from the installed package at `/pdfjs/wasm/` and emits them into production builds. Deploy this decoder directory with the PDF assets.
 
@@ -48,6 +50,10 @@ At the user's request, `editions/drafts/bal-mahabharat-katha-hi.json` can be imp
 
 `editions/drafts/manusmriti-hi.json` likewise contains a separate draft text edition: 12 printed chapters plus front matter and credits (14 sections, 1,867 passages), covering all 509 pages. It preserves Sanskrit verses and Hindi explanations. The user-selected `frontend/dist/library/manusmriti-sampurna.pdf` matches the original catalog PDF checksum. Incorrect PDF Unicode mappings were decoded from Nirmala UI glyph IDs using font cmap/GSUB data; all seven embedded font subsets were checked against the installed font's outlines. The output retains source-page references, printed verse labels and unverified attribution/reuse status. It is not fully proofread and does not mark the work complete. Use the same explicit importer below with `../library/editions/drafts/manusmriti-hi.json` to restore this edition.
 
+Manusmriti now uses the same responsive typeset reader as Mahabharat and Garuda,
+with source-verified verse/explanation boundaries and fresh chapter starts.
+See [Manusmriti reader layout](MANUSMRITI_READER.md) for regeneration and deployment.
+
 From `backend/`, validate with `node scripts/import-draft-edition.cjs ../library/editions/drafts/bal-mahabharat-katha-hi.json`; append `--apply` to import into the configured database. The import checks source identity and PDF checksum, writes a recovery snapshot, creates the edition/chapters/passages in one transaction, and verifies the stored text before committing. Identical reruns preserve IDs and annotations; changed existing content is rejected. No schema migration is needed. Ordinary catalog sync preserves this separate edition but does not automatically import drafts; run this explicit command when restoring a fresh database. This path does not attest review, activate a reviewed transcription, or remove PDFs.
 
 For replacing PDF editions with corrected database text, follow [Corrected text imports](transcriptions/README.md). All source pages must be reviewed before activating a reviewed transcription. Draft extraction never activates that migration; explicitly imported draft editions use the separate path above.
@@ -72,6 +78,8 @@ The extractor uses PyMuPDF and the checked-in `backend/data/font-maps/shiva-pura
 For the 638-page Garuda Purana scan, see [Garuda PDF → text/JSON → Supabase](GARUDA_IMPORT.md). Its dedicated OCR/export scripts produced 5,277 reading blocks in six sections; all 638 source pages are accounted for. The text remains an unreviewed OCR draft. The existing full-page scratch OCR interleaves columns and should not be imported.
 
 ### Ramcharitmanas draft
+
+The collection is now named **Ramayan**. The newly supplied comparative study is its preferred reader edition; Ramcharitmanas remains available with its existing IDs and content. See [Ramayan reader and consolidation](RAMAYAN_READER.md).
 
 `editions/drafts/ramcharitmanas-hi.json` contains the user-selected Gita Press **Shri Ramcharitmanas**, with Hanumanprasad Poddar's commentary, under the existing `ramayana` book. It is not Valmiki Ramayana. Its 14 sections contain seven kandas plus front matter, contents, recitation guidance, arati, biography, and the closing question table: **12,821 reading passages**, not individually numbered canonical verses. All 1,058 source pages are accounted for, including three visually checked blank pages (2, 4, 1058). The original PDF remains available.
 

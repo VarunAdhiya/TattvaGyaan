@@ -49,24 +49,25 @@ test('column continuations join and the family tree follows its introductory par
   assert.equal(isMahabharataProse({ ...source, source: '/library/ramcharitmanas.pdf' }), false);
 });
 
-test('short chapters share a leaf without orphan headings or losing chapter navigation', async () => {
+test('every chapter starts on a new leaf without losing chapter navigation', async () => {
   const { paginateMahabharata, pageForPassage } = await import('../../frontend/src/lib/mahabharataLayout.js');
   const chapters = Array.from({ length: 12 }, (_, index) => ({ id: `chapter-${index}`, title: `Chapter ${index}`,
     passages: [{ id: `short-${index}`, sectionId: `chapter-${index}`, text: 'A complete short paragraph.' }] }));
   const pages = paginateMahabharata(chapters, { height: 420, lineHeight: 36, gap: 12, treeHeight: 320 }, () => 36);
-  assert.ok(pages.length < chapters.length + 2, 'Chapter endings should not force mostly blank pages');
+  assert.equal(pages.length, chapters.length + 2, 'Each chapter needs its own leaf');
   for (const page of pages.slice(2)) {
     assert.notEqual(page.blocks.at(-1).kind, 'heading');
     assert.notEqual(page.blocks[0].kind, 'heading', 'The existing running header labels the first chapter');
   }
   for (const chapter of chapters) {
     const page = pages[pageForPassage(pages, chapter.passages[0].id)];
-    assert.ok(page.sectionIds.includes(chapter.id));
-    assert.ok(page.sectionId === chapter.id || page.blocks.some(block => block.kind === 'heading' && block.sectionId === chapter.id));
+    assert.deepEqual(page.sectionIds, [chapter.id]);
+    assert.equal(page.sectionId, chapter.id);
+    assert.equal(page.blocks[0].parts[0].passage.id, chapter.passages[0].id);
   }
 });
 
-test('complete reader text is limited to Mahabharata and position lookups remain lightweight', async () => {
+test('complete reader text is limited to supported typeset sources and position lookups remain lightweight', async () => {
   const prisma = require('../dist/lib/prisma').default;
   const { scriptureService } = require('../dist/services/scriptureService');
   const originalEdition = prisma.scriptureEdition.findUnique;
@@ -81,6 +82,12 @@ test('complete reader text is limited to Mahabharata and position lookups remain
     assert.deepEqual(query.select.passages.orderBy, [{ sortOrder: 'asc' }, { id: 'asc' }]);
     await scriptureService.getPassagesForReader('book');
     assert.equal(query.select.passages, false);
+    edition = { ...edition, source: require('../dist/services/bookLayoutService').GARUDA_SOURCE };
+    await scriptureService.getPassagesForReader('book', true);
+    assert.equal(query.select.passages.select.text, true);
+    edition = { ...edition, source: require('../dist/services/bookLayoutService').MANUSMRITI_SOURCE };
+    await scriptureService.getPassagesForReader('book', true);
+    assert.equal(query.select.passages.select.text, true);
     edition = { ...edition, source: '/library/other-book.pdf' };
     await scriptureService.getPassagesForReader('book', true);
     assert.equal(query.select.passages, false);

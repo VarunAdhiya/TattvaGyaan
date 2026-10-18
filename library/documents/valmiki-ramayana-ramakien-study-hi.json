@@ -1,5 +1,5 @@
 {
-  "scriptureSlug": "valmiki-ramayana-ramakien-study",
+  "scriptureSlug": "ramayana",
   "title": "वाल्मीकि रामायण और रामकीर्ति (रामकियन): एक तुलनात्मक अध्ययन — हिन्दी PDF",
   "language": "hi",
   "script": "Devanagari",
@@ -7,7 +7,7 @@
   "textDirection": "ltr",
   "source": "/library/valmiki-ramayana-ramakien-study.pdf",
   "license": "Copyright Dr. Karuna Sharma, as printed on PDF page 4. User-supplied PDF; additional reuse permission unverified.",
-  "provenance": "Original file: Valmiki Ramayana aur Ramakien Ek Tulnamatmak Adhyayan.pdf, supplied by the user on 2026-10-13. All 266 PDF pages, including leading and trailing blank pages, are preserved byte-for-byte. PDF page 3 identifies वाल्मीकि रामायण और रामकीर्ति (रामकियन), एक तुलनात्मक अध्ययन, by डॉ. करुणा शर्मा. Page 4 credits publication/printing to the Embassy of India, Bangkok, states copyright Dr. Karuna Sharma, and gives ISBN 978-616-423-555-7. Cataloged as a separate comparative study, not as a primary Ramayana edition. Sampled text extraction uses legacy font encoding; no OCR or generated passage records were added. Textual completeness has not been independently verified.",
+  "provenance": "Original file: Valmiki Ramayana aur Ramakien Ek Tulnamatmak Adhyayan.pdf, supplied by the user on 2026-10-13. All 266 PDF pages, including leading and trailing blank pages, are preserved byte-for-byte. PDF page 3 identifies वाल्मीकि रामायण और रामकीर्ति (रामकियन), एक तुलनात्मक अध्ययन, by डॉ. करुणा शर्मा. Page 4 credits publication/printing to the Embassy of India, Bangkok, states copyright Dr. Karuna Sharma, and gives ISBN 978-616-423-555-7. Cataloged as a separate comparative study, not as a primary Ramayana edition. Sampled text extraction uses legacy font encoding; no OCR or generated passage records were added. Textual completeness has not been independently verified.\n2026-10-18: grouped into the single Ramayan collection. Original PDF preserved; a separately labeled draft text edition provides page-linked reading. This is a comparative study, not the primary Valmiki Ramayana.",
   "pageCount": 266,
   "sha256": "759f2adbfd2fc1191ff8576401d1cbc34bbfefaf79a573e8747c53d4c858af75"
 }
