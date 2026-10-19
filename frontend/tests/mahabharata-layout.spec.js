@@ -67,16 +67,50 @@ async function checkPages(page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize().width);
 }
 
+for (const width of [1440, 390]) {
+  test(`saved passages highlight the exact book text at width ${width}`, async ({ page }) => {
+    test.setTimeout(60000);
+    await page.setViewportSize({ width, height: 1000 });
+    const state = await mockBook(page);
+    const bookmarked = sections[20].passages[1];
+    const noted = sections[40].passages[0];
+    state.bookmarks.push({ id: 'saved-bookmark', passageId: bookmarked.id, passage: bookmarked });
+    state.notes.push({ id: 'saved-note', passageId: noted.id, passage: noted, content: 'Saved paragraph' });
+    await page.goto('/reader/mahabharata/book?passage=passage-0-0');
+    await checkPages(page);
+    for (const [theme, color] of [['light', 'rgb(254, 240, 138)'], ['sepia', 'rgb(255, 225, 156)'], ['dark', 'rgb(133, 77, 14)']]) {
+      await page.getByLabel('Reading theme').selectOption(theme);
+      for (const [panel, passage] of [['Bookmarks 1', bookmarked], ['Notes 1', noted]]) {
+        await page.getByRole('button', { name: panel, exact: true }).click();
+        await page.locator('.reader-saved-link').click();
+        const target = page.locator(`.reader-visible-page [data-passage-id="${passage.id}"]`).first();
+        await expect(page.locator('.reader-turn-sheet')).toHaveCount(0);
+        await expectBook(target).toHaveClass(/book-focused-passage/);
+        await expect(target).toHaveCSS('background-color', color);
+        await expect(target).toBeInViewport();
+        const highlightedIds = await page.locator('.reader-visible-page .book-focused-passage').evaluateAll(nodes => nodes.map(node => node.dataset.passageId));
+        expect(highlightedIds.every(id => id === passage.id)).toBe(true);
+        await checkPages(page);
+      }
+    }
+    await page.screenshot({ path: `test-results/book-saved-highlight-${width}.png` });
+    expect(state.errors).toEqual([]);
+  });
+}
+
 test('content fills consistent pages with intact source text and aligned footers', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   const state = await mockBook(page);
-  await page.goto('/reader/mahabharata/book?page=4');
+  await page.goto('/reader/mahabharata/book?passage=passage-0-0');
+  await checkPages(page);
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
   await checkPages(page);
   for (const text of await page.locator('.reader-visible-page .book-page-content').allTextContents()) expect(text.length).toBeGreaterThan(250);
   const footers = await page.locator('.reader-visible-page .reader-page-number').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top));
   expect(Math.abs(footers[0] - footers[1])).toBeLessThan(1);
   await page.screenshot({ path: 'test-results/mahabharata-book-desktop.png', fullPage: true });
-  await expect.poll(() => state.saves.at(-1)?.pageIndex).toBe(3);
+  const current = Number(await page.getByLabel('Page', { exact: true }).inputValue()) - 1;
+  await expect.poll(() => state.saves.at(-1)?.pageIndex).toBe(current);
   expect(state.requests).toEqual([]);
   expect(state.errors).toEqual([]);
 });
@@ -84,7 +118,7 @@ test('content fills consistent pages with intact source text and aligned footers
 test('compact Mahabharat controls keep navigation below the text and preserve page jumps and themes', async ({ page }) => {
   test.setTimeout(60000);
   const state = await mockBook(page);
-  await page.goto('/reader/mahabharata/book?page=3');
+  await page.goto('/reader/mahabharata/book?passage=passage-0-0');
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 1000 });
     await checkPages(page);
@@ -93,7 +127,7 @@ test('compact Mahabharat controls keep navigation below the text and preserve pa
     expect(dockBox.width).toBeLessThan(Math.min(width, 400));
     const bottom = await page.locator('.reader-visible-page').evaluateAll(nodes => Math.max(...nodes.map(node => node.getBoundingClientRect().bottom)));
     expect(dockBox.y).toBeGreaterThan(bottom);
-    await expect(page.getByText('Draft text · Not fully proofread', { exact: true })).toBeVisible();
+    await expect(page.getByText('Draft text · Not fully proofread', { exact: true })).toHaveCount(0);
   }
   const field = page.getByLabel('Page', { exact: true });
   await field.fill('6');
@@ -135,7 +169,9 @@ test('font and viewport changes repaginate without clipping and resume the saved
   test.setTimeout(90000);
   await page.setViewportSize({ width: 1440, height: 1000 });
   const state = await mockBook(page);
-  await page.goto('/reader/mahabharata/book?page=4');
+  await page.goto('/reader/mahabharata/book?passage=passage-0-0');
+  await checkPages(page);
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
   await checkPages(page);
   const count = Number(await page.getByLabel('Page', { exact: true }).getAttribute('max'));
   for (let index = 0; index < 5; index += 1) await page.getByRole('button', { name: 'Increase font size' }).click();
@@ -166,7 +202,7 @@ test('font and viewport changes repaginate without clipping and resume the saved
 test('selection, AI, notes, bookmarks and chapter navigation keep original passage identities', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const state = await mockBook(page);
-  await page.goto('/reader/mahabharata/book?page=3');
+  await page.goto('/reader/mahabharata/book?passage=passage-0-0');
   const text = page.locator('.reader-visible-page [data-passage-id="passage-0-0"]');
   await expectBook(text).toBeVisible();
   const original = originals['passage-0-0'];
@@ -201,18 +237,19 @@ test('selection, AI, notes, bookmarks and chapter navigation keep original passa
   await expect(page.locator('.reader-visible-page [data-passage-id="passage-40-0"]')).toBeVisible();
   await expect.poll(() => state.saves.at(-1)?.sectionId).toBe('section-40');
   await checkPages(page);
-  await page.getByRole('button', { name: 'Notes', exact: true }).click();
+  await page.getByRole('button', { name: /^Notes \d+$/ }).click();
   await page.getByRole('button', { name: /Layout regression note/ }).click();
   await expect(text).toBeVisible();
+  const next = Number(await page.getByLabel('Page', { exact: true }).inputValue()) + 1;
   await page.getByRole('button', { name: 'Next', exact: true }).click();
-  await expect(page.getByLabel('Page', { exact: true })).toHaveValue('4');
+  await expect(page.getByLabel('Page', { exact: true })).toHaveValue(String(next));
   await checkPages(page);
   expect(state.errors).toEqual([]);
 });
 
 test('older API responses load complete sections without unbounded requests', async ({ page }) => {
   const state = await mockBook(page, true);
-  await page.goto('/reader/mahabharata/book?page=3');
+  await page.goto('/reader/mahabharata/book?passage=passage-0-0');
   await checkPages(page);
   expect(state.requests).toHaveLength(sections.length);
   expect(state.requests.every(limit => limit === 100)).toBe(true);
@@ -222,7 +259,9 @@ test('older API responses load complete sections without unbounded requests', as
 test('adhyay 40 and 41 begin on fresh pages with working summaries and contents', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   const state = await mockBook(page);
-  await page.goto('/reader/mahabharata/book?page=4');
+  await page.goto('/reader/mahabharata/book?passage=passage-0-0');
+  await checkPages(page);
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
   await checkPages(page);
   const leaf = await page.locator('.reader-visible-page').first().boundingBox();
   expect(leaf.height / leaf.width).toBeGreaterThan(1.3);
@@ -249,7 +288,9 @@ test('curved sheets show both faces, clean up after interruption, and respect re
   test.setTimeout(60000);
   await page.setViewportSize({ width: 1440, height: 1000 });
   const state = await mockBook(page);
-  await page.goto('/reader/mahabharata/book?page=4');
+  await page.goto('/reader/mahabharata/book?passage=passage-0-0');
+  await checkPages(page);
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
   await checkPages(page);
   const book = page.locator('.reader-book');
   await page.getByRole('button', { name: 'Next', exact: true }).click();

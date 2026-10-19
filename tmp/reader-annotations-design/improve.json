@@ -1,0 +1,58 @@
+{
+  "version": 2,
+  "scope": "page",
+  "createdAt": "2026-10-19T16:10:31.176Z",
+  "runDir": "C:\\Users\\HP\\Desktop\\Build_In_Public\\TattvaGyaan\\tmp\\reader-annotations-design",
+  "input": {
+    "kind": "image",
+    "value": "C:\\Users\\HP\\Desktop\\Build_In_Public\\TattvaGyaan\\tmp\\reader-notes-before.png",
+    "sha256": "3ea59087dd6aaaa4ac5568896d9cc67552a402743aa4b26b21c93f80f8ebdee8"
+  },
+  "concept": "Refine only the saved notes drawer. Keep the reader unchanged. Each saved item needs a clear verse reference, three lines of the original verse, a distinct personal note below, and compact edit and delete actions. Match the existing warm paper palette. Use a tidy reading list with thin separators and generous line spacing. Preserve current controls. Redesign this existing product interface. Its layout, composition, section order, and proportions are yours to rework: this should read as a new design of the same product, not a retouch of the one it has. Work inside its existing visual language: its palette, typography voice, and image treatment stay, and everything around them is sharpened - spacing rhythm, alignment, surfaces, control affordances, ink, and type rendering. Keep the product's logo, wordmark, and brand imagery as they are. Keep every real piece of content, data, and control the page carries: say the same things, in whatever arrangement serves them best, and invent nothing. These are conservation defaults, not a freeze: the brief above outranks them, and they outrank the page as it stands.",
+  "direction": "Refine only the saved notes drawer. Keep the reader unchanged. Each saved item needs a clear verse reference, three lines of the original verse, a distinct personal note below, and compact edit and delete actions. Match the existing warm paper palette. Use a tidy reading list with thin separators and generous line spacing. Preserve current controls.",
+  "candidates": 4,
+  "retain": {
+    "include": [
+      "assets",
+      "content",
+      "style"
+    ],
+    "exclude": [
+      "layout"
+    ]
+  },
+  "retainFlag": "content,assets,style",
+  "conversionModel": "standard",
+  "responsiveQuality": "standard",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "fullPage": false,
+  "bootstrap": [],
+  "bootstrapSha256": [],
+  "kitIgnore": {
+    "state": "not-ignored",
+    "relativeOutDir": "tmp/reader-annotations-design"
+  },
+  "planSourceConvert": false,
+  "pageLimit": 5,
+  "requestedPages": [],
+  "pageConcurrency": 3,
+  "referenceOrder": "current-first",
+  "pages": [],
+  "stages": {
+    "capture": {
+      "settledAt": "2026-10-19T16:10:31.290Z",
+      "replayCount": 0,
+      "priceCeilingUsd": 0,
+      "outcome": "settled"
+    }
+  },
+  "capture": {
+    "sourceImage": "C:\\Users\\HP\\Desktop\\Build_In_Public\\TattvaGyaan\\tmp\\reader-annotations-design\\source.png",
+    "sha256": "86d205c18d866dcb51767999e022d1c028903435e9a9a057c90f085678331a70",
+    "width": 1280,
+    "height": 1011
+  }
+}

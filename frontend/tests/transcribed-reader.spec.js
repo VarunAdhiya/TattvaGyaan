@@ -31,7 +31,7 @@ test('a reviewed transcription reads API text without requesting the original PD
     return route.fulfill({ json });
   });
   await page.goto('/scripture/book');
-  await expect(page.getByText('Reviewed transcription · 1 source page with text')).toBeVisible();
+  await expect(page.getByText('Partial text', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Create Reading Plan' })).toBeEnabled();
   await expect(page.locator('a[href="/library/test-book.pdf"]')).toHaveCount(0);
   await page.goto('/reader/book/transcribed?page=3');

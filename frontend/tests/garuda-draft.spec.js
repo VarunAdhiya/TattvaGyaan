@@ -36,7 +36,7 @@ test('live Garuda draft renders database text, kanda navigation and final page o
   await page.goto(`/scripture/${book.id}`);
   await page.getByRole('button', { name: 'Start Reading', exact: true }).click();
   await expect(page).toHaveURL(new RegExp(book.editions[0].id));
-  await ready(page.getByText('Draft text · Not fully proofread', { exact: true })).toBeVisible();
+  await ready(page.getByText('Draft text · Not fully proofread', { exact: true })).toHaveCount(0);
 
   const sectionIndex = source.sections.findIndex(s => s.slug === 'achara-kanda');
   const section = source.sections[sectionIndex];

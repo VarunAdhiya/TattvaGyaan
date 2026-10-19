@@ -63,6 +63,7 @@
   gap: 4px;
 }
 .mahabharata-reading-tools { justify-content: flex-end; }
+.mahabharata-library-tools { flex-wrap: wrap; min-width: 0; }
 .mahabharata-title { text-align: center; }
 .mahabharata-title-line { display: flex; align-items: center; justify-content: center; gap: 18px; }
 .mahabharata-title-line svg { color: var(--reader-brass); flex: none; }

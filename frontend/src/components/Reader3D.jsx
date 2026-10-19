@@ -6,6 +6,7 @@ import { buildReaderPages, spreadStart } from '../lib/readerPages';
 import useBookFlip from '../lib/useBookFlip';
 import { GARUDA_SOURCE, MANUSMRITI_SOURCE, RAMAYAN_SOURCE, isTypesetBook, pageForPassage } from '../lib/mahabharataLayout';
 import useMahabharataLayout from '../lib/useMahabharataLayout';
+import useReaderContents from '../lib/useReaderContents';
 import ProsePage from './ProsePage';
 import BookStand from './BookStand';
 import '../mahabharata-reader.css';
@@ -20,7 +21,8 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
   const bookLayout = useMahabharataLayout(reflowProse, sections, fontSize, rootRef);
   const previousLayout = useRef(null);
   const standardPages = useMemo(() => buildReaderPages(sections), [sections]);
-  const pages = bookLayout?.pages || standardPages;
+  const sourcePages = bookLayout?.pages || standardPages;
+  const { pages, contents, contentsReady } = useReaderContents(sections, sourcePages, rootRef, bookLayout);
   const [currentPage, setCurrentPage] = useState(() => Math.max(0, Math.min(initialPageIndex, pages.length - 1)));
   const [pageInput, setPageInput] = useState(String(currentPage + 1));
   const [wide, setWide] = useState(() => window.innerWidth >= 900);
@@ -41,8 +43,8 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
   const [selection, setSelection] = useState(null);
   const [fetchedPages, setLoadedPages] = useState({});
   const loadedPages = useMemo(() => bookLayout
-    ? Object.fromEntries(bookLayout.pages.map((page, index) => [index, page.passages || []]))
-    : fetchedPages, [bookLayout, fetchedPages]);
+    ? Object.fromEntries(pages.map((page, index) => [index, page.passages || []]))
+    : fetchedPages, [bookLayout, pages, fetchedPages]);
   const [pageFailure, setPageFailure] = useState(null);
   const [pageRetry, setPageRetry] = useState(0);
   const [resolving, setResolving] = useState(Boolean(initialPassageId));
@@ -51,13 +53,6 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
   const visibleKey = visibleIndices.join(',');
   const { bookRef, layerRef, prepareTurn } = useBookFlip(visibleKey, `${wide}:${theme}:${fontSize}:${bookLayout?.width}:${bookLayout?.height}`, reflowProse);
   const pageError = pageFailure?.key === visibleKey + ':' + pageRetry ? pageFailure.message : '';
-  const contents = useMemo(() => sections.flatMap(section => [{
-      ...section, pageIndex: pages.findIndex(page => page.sectionId === section.id || page.sectionIds?.includes(section.id)),
-    }, ...(section.readerBlocks || []).filter(block => block.kind === 'chapter').map(block => ({
-      id: section.id + '-' + block.chapterKey, title: block.title,
-      pageIndex: pages.findIndex(page => page.sectionId === section.id && page.chapterKey === block.chapterKey),
-      passageId: section.passages?.find(passage => passage.reference === block.parts[0]?.reference)?.id,
-    }))]), [sections, pages]);
 
   const goToPage = useCallback(index => {
     if (!Number.isInteger(index) || index < 0 || index >= pages.length) return;
@@ -76,24 +71,26 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
   }
 
   useLayoutEffect(() => {
-    if (!bookLayout || previousLayout.current === bookLayout) return;
+    if (!contentsReady || (reflowProse && !bookLayout)) return;
+    if (previousLayout.current?.pages === pages) return;
     const previous = previousLayout.current;
     const previousPage = previous?.pages[currentPage];
     const anchor = previousPage?.blocks?.flatMap(block => block.parts).find(part => part.passage.id === focusedPassage)
       || previousPage?.blocks?.[0]?.parts[0];
     let target = anchor ? pageForPassage(pages, anchor.passage.id, anchor.start)
-      : !previous && initialPassageId ? pageForPassage(pages, initialPassageId) : currentPage;
+      : !previous && initialPassageId && bookLayout ? pageForPassage(pages, initialPassageId)
+        : previousPage?.type === 'content' ? pages.findIndex(page => page === previousPage) : currentPage;
     if (target < 0) {
       target = 2;
       if (!previous && initialPassageId) setNotice('This passage is not available in this edition.');
     }
     target = Math.max(0, Math.min(target, pages.length - 1));
-    previousLayout.current = bookLayout;
+    previousLayout.current = { pages };
     setCurrentPage(target);
     setPageInput(String(target + 1));
     setSelection(null);
-    setResolving(false);
-  }, [bookLayout, pages, currentPage, initialPassageId, focusedPassage]);
+    if (bookLayout) setResolving(false);
+  }, [bookLayout, pages, currentPage, initialPassageId, focusedPassage, contentsReady, reflowProse]);
 
   useEffect(() => {
     const resize = () => setWide(window.innerWidth >= 900);
@@ -116,19 +113,19 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
   }, [edition.id, annotationRetry]);
 
   useEffect(() => {
-    if (!initialPassageId) return;
+    if (!initialPassageId || !contentsReady) return;
     if (reflowProse) return;
     let active = true;
     api.getPassagePosition(initialPassageId).then(position => {
       if (position.editionId !== edition.id) throw new Error('This passage belongs to another edition.');
-      if (active) goToPage(position.pageIndex);
+      if (active) goToPage(position.pageIndex + pages.length - sourcePages.length);
     }).catch(error => { if (active) setNotice(error.message); })
       .finally(() => { if (active) setResolving(false); });
     return () => { active = false; };
-  }, [initialPassageId, edition.id, goToPage, reflowProse]);
+  }, [initialPassageId, edition.id, goToPage, reflowProse, pages.length, sourcePages.length, contentsReady]);
 
   useEffect(() => {
-    if (reflowProse) return;
+    if (reflowProse || !contentsReady) return;
     const controller = new AbortController();
     const indices = visibleKey.split(',').map(Number);
     Promise.all(indices.map(async index => {
@@ -142,12 +139,13 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
       if (!controller.signal.aborted) { setLoadedPages({}); setPageFailure({ key: visibleKey + ':' + pageRetry, message: error.message || 'Unable to load this page.' }); }
     });
     return () => controller.abort();
-  }, [visibleKey, pages, pageRetry, reflowProse]);
+  }, [visibleKey, pages, pageRetry, reflowProse, contentsReady]);
 
   useEffect(() => {
-    if (!focusedPassage) return;
-    if (!reflowProse) document.getElementById('passage-' + focusedPassage)?.scrollIntoView({ block: 'nearest' });
-  }, [focusedPassage, loadedPages, reflowProse]);
+    if (!focusedPassage || drawer) return;
+    const target = rootRef.current?.querySelector('.reader-visible-page .book-focused-passage');
+    target?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  }, [focusedPassage, loadedPages, drawer]);
 
   useEffect(() => {
     const capture = () => {
@@ -165,8 +163,8 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
   }, [loadedPages, reflowProse]);
 
   useEffect(() => {
-    if (resolving || pageError) return;
-    if (reflowProse && (!bookLayout || previousLayout.current !== bookLayout)) return;
+    if (resolving || pageError || !contentsReady) return;
+    if (reflowProse && (!bookLayout || previousLayout.current?.pages !== pages)) return;
     const page = pages[currentPage];
     if (!page) return;
     const passages = loadedPages[currentPage];
@@ -177,7 +175,7 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
       percentage: Math.round(currentPage / Math.max(1, pages.length - 1) * 100),
     }), 400);
     return () => clearTimeout(timer);
-  }, [currentPage, loadedPages, pages, onProgressUpdate, focusedPassage, resolving, pageError, reflowProse, bookLayout]);
+  }, [currentPage, loadedPages, pages, onProgressUpdate, focusedPassage, resolving, pageError, reflowProse, bookLayout, contentsReady]);
 
   useEffect(() => {
     const onKey = event => {
@@ -208,7 +206,7 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
 
   async function jumpToPassage(passageId, passage) {
     try {
-      const localPage = bookLayout ? pageForPassage(bookLayout.pages, passageId) : -1;
+      const localPage = bookLayout ? pageForPassage(pages, passageId) : -1;
       if (localPage >= 0) {
         goToPage(localPage);
         setFocusedPassage(passageId);
@@ -220,7 +218,7 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
         navigate('/reader/' + detail.scriptureId + '/' + position.editionId + '?passage=' + encodeURIComponent(passageId));
       } else {
         if (reflowProse) throw new Error('This passage is not available in the current book layout.');
-        goToPage(position.pageIndex);
+        goToPage(position.pageIndex + pages.length - sourcePages.length);
         setFocusedPassage(passageId);
       }
     } catch (error) { setNotice(error.message); }
@@ -280,12 +278,11 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
       <header className={reflowProse ? 'mahabharata-toolbar' : 'flex flex-wrap items-center justify-between gap-2 border-b p-3 text-sm'}>
         <div className={reflowProse ? 'mahabharata-library-tools' : 'flex flex-wrap gap-1'}>
           <button className={buttonClass} onClick={() => setDrawer('contents')}><List size={16} />Contents</button>
-          <button className={buttonClass} onClick={() => setDrawer('bookmarks')}><Bookmark size={16} />Bookmarks</button>
-          <button className={buttonClass} onClick={() => setDrawer('notes')}><MessageSquare size={16} />Notes</button>
+          <button className={buttonClass} onClick={() => setDrawer('bookmarks')}><Bookmark size={16} />Bookmarks <span className="reader-saved-count">{bookmarks.length}</span></button>
+          <button className={buttonClass} onClick={() => setDrawer('notes')}><MessageSquare size={16} />Notes <span className="reader-saved-count">{notes.length}</span></button>
         </div>
         {reflowProse ? <div className="mahabharata-title">
           <div className="mahabharata-title-line"><Flower2 size={23} strokeWidth={1.4} aria-hidden="true" /><h1 lang="hi">{edition.scripture?.title || edition.title}</h1><Flower2 size={23} strokeWidth={1.4} aria-hidden="true" /></div>
-          {edition.contentStatus === 'draft' && <p>Draft text · Not fully proofread</p>}
         </div> : <h1 className="font-serif font-bold truncate max-w-full">{edition.scripture?.title || edition.title}</h1>}
         <div className={reflowProse ? 'mahabharata-reading-tools' : 'flex gap-2 items-center'}>
           <select aria-label="Reading theme" value={theme} onChange={event => setTheme(event.target.value)} className="reader-control rounded p-2">
@@ -301,7 +298,6 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
           }}><Maximize2 size={16} /></button>
         </div>
       </header>
-      {!reflowProse && edition.contentStatus === 'draft' && <p className="px-4 py-2 text-sm border-b">Draft text · Not fully proofread</p>}
       {selection && <div className="reader-control fixed bottom-24 left-1/2 -translate-x-1/2 z-40 max-w-[95vw] flex flex-wrap gap-3 items-center p-3 border rounded-xl shadow-xl text-sm" role="status">
         <span>Selected text · {selection.reference}</span>
         <button className={buttonClass} onClick={() => onAskAI(selection)}><Sparkles size={16} />Ask AI about selected text</button>
@@ -315,16 +311,17 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
           {visibleIndices.map((index, side) => {
             const page = pages[index];
             const ready = page.type === 'content' ? Boolean(loadedPages[index] && !pageError) : true;
-            return <article key={index} data-page-ready={ready} data-prose-content={Boolean(bookLayout && page.type === 'content')} aria-label={'Page ' + (index + 1)} className={'reader-paper reader-visible-page ' + (side === 0 && visibleIndices.length === 2 ? '--left' : '--right')}>
+            return <article key={index} data-page-ready={ready} data-contents-page={page.type === 'toc' || undefined} data-prose-content={Boolean(bookLayout && page.type === 'content')} aria-label={'Page ' + (index + 1)} className={'reader-paper reader-visible-page ' + (side === 0 && visibleIndices.length === 2 ? '--left' : '--right')}>
               {page.type === 'cover' ? <div className="flex flex-col justify-center items-center text-center h-full gap-6">
                 <BookOpen size={48} /><h2 className="font-serif text-3xl">{edition.scripture?.title || edition.title}</h2>
                 <p>{edition.title}</p><p>{edition.translator}</p><p className="text-xs whitespace-pre-wrap">{edition.provenance}</p>
                 {edition.source && /^https?:\/\//.test(edition.source) && <a className="underline" href={edition.source} target="_blank" rel="noreferrer">Source and attribution</a>}
                 <p className="text-xs">{edition.license}</p>
               </div> : page.type === 'toc' ? <>
-                <h2 className="text-2xl font-serif mb-5">Table of Contents</h2>
-                <ul>{contents.map(section => <li key={section.id}>
-                  <button className="w-full flex justify-between text-left gap-4 py-3 border-b disabled:opacity-50" disabled={section.pageIndex < 0} onClick={() => goToSection(section)}>
+                <h2 className="reader-contents-title">Table of Contents</h2>
+                {page.contentsTotal > 1 && <p className="reader-contents-part">Contents · {page.contentsPage} of {page.contentsTotal}</p>}
+                <ul>{page.contents.map(section => <li key={section.id}>
+                  <button className="reader-contents-row" disabled={section.pageIndex < 0} onClick={() => goToSection(section)}>
                     <span>{section.title}</span><span>{section.pageIndex >= 0 ? section.pageIndex + 1 : 'Unavailable'}</span>
                   </button>
                 </li>)}</ul>
@@ -353,7 +350,7 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
                           <button className={buttonClass} onClick={() => onAskAI(selection?.id === passage.id ? selection : passage)}><Sparkles size={14} />Ask AI</button>
                         </div>
                       </div>
-                      <div id={'text-' + passage.id} className="scripture-text font-indic whitespace-pre-wrap" dir={edition.textDirection || 'ltr'} lang={edition.language}
+                      <div id={'text-' + passage.id} className={'scripture-text font-indic whitespace-pre-wrap' + (focusedPassage === passage.id ? ' book-focused-passage' : '')} dir={edition.textDirection || 'ltr'} lang={edition.language}
                         style={{ fontSize, lineHeight: 1.9 }} onMouseUp={() => captureSelection(passage)} onTouchEnd={() => captureSelection(passage)} onKeyUp={() => captureSelection(passage)}>
                         {passage.text}
                       </div>
@@ -413,12 +410,16 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
             {toolPassage.sourceNotes && <details className="mt-5 text-sm"><summary>Source notes</summary><p className="mt-2">{toolPassage.sourceNotes}</p></details>}
           </> : drawer === 'contents' ? contents.map(section => <button key={section.id} disabled={section.pageIndex < 0} className="block w-full text-left border-b py-3 disabled:opacity-50" onClick={() => goToSection(section)}>{section.title} · {section.pageIndex >= 0 ? section.pageIndex + 1 : 'Unavailable'}</button>)
             : (drawer === 'notes' ? notes : bookmarks).length === 0 ? <p>No {drawer} saved yet.</p>
-            : (drawer === 'notes' ? notes : bookmarks).map(item => <div key={item.id} className="border rounded-lg p-3 mb-3">
-              <div className="flex gap-2">
-                <button className="flex-1 text-left whitespace-pre-wrap" onClick={() => jumpToPassage(item.passageId, item.passage)}>
-                  <span className="block font-semibold mb-2">{item.passage?.reference || 'Passage'}</span>
-                  <span>{item.content || item.label || item.passage?.text}</span><span className="block text-xs underline mt-2">Go to passage</span>
+            : (drawer === 'notes' ? notes : bookmarks).map(item => <div key={item.id} className="reader-saved-item">
+                <button className="reader-saved-link" onClick={() => jumpToPassage(item.passageId, item.passage)}>
+                  <span className="reader-saved-reference">{item.passage?.reference || item.label || 'Passage'}</span>
+                  {item.passage?.section?.edition?.scripture?.title && <span className="reader-saved-book">{item.passage.section.edition.scripture.title}</span>}
+                  <span className="reader-saved-excerpt font-indic" lang={item.passage?.section?.edition?.language || edition.language}
+                    dir={item.passage?.section?.edition?.textDirection || edition.textDirection || 'ltr'}>{item.passage?.text || 'Open passage to read the verse.'}</span>
+                  {drawer === 'notes' && <span className="reader-saved-note"><span className="reader-saved-note-label">Your note</span>{item.content}</span>}
+                  <span className="reader-saved-open">Go to passage <ChevronRight size={14} aria-hidden="true" /></span>
                 </button>
+              <div className="reader-saved-actions">
                 {drawer === 'notes' && <button aria-label="Edit Note" className={buttonClass} onClick={() => editNote(item.passage || { id: item.passageId }, item)}><Pencil size={16} /></button>}
                 <button aria-label={drawer === 'notes' ? 'Delete Note' : 'Delete Bookmark'} disabled={Boolean(busy)} className={buttonClass} onClick={() => runAction(item.id, async () => {
                   if (drawer === 'notes') { await api.removeNote(item.id); setNotes(items => items.filter(note => note.id !== item.id)); }

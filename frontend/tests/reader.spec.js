@@ -14,7 +14,7 @@ function passage(section, index) {
   };
 }
 
-async function mockReader(page) {
+async function mockReader(page, bookSections = sections) {
   const state = { ai: [], pageRequests: [], bookmarks: [], notes: [{ id: 'note-1', passageId: 'passage-3-4', content: 'Saved reflection', passage: passage(3, 4) }] };
   await page.route(url => url.pathname.startsWith('/api/'), async route => {
     const url = new URL(route.request().url());
@@ -23,7 +23,7 @@ async function mockReader(page) {
     let body = { progress: null };
     if (pathname === '/api/auth/me') body = { user: { id: 'test-user', username: 'reader' } };
     else if (pathname === '/api/scripture-editions/edition-test') body = { edition };
-    else if (pathname === '/api/passages/edition/edition-test') body = { sections };
+    else if (pathname === '/api/passages/edition/edition-test') body = { sections: bookSections };
     else if (pathname.startsWith('/api/passages/section/')) {
       state.pageRequests.push(url.searchParams.get('limit'));
       const section = Number(pathname.split('-').at(-1));
@@ -90,7 +90,13 @@ test('bookmark clicks preserve the page and can be toggled', async ({ page }) =>
   await expect(page.locator('#passage-passage-0-0').getByRole('button', { name: 'Remove bookmark' })).toHaveAttribute('aria-pressed', 'true');
   await expect(pageNumber).toHaveValue('3');
   expect(state.bookmarks).toHaveLength(1);
+  await page.getByRole('button', { name: 'Bookmarks 1', exact: true }).click();
+  await expect(page.locator('.reader-saved-excerpt')).toHaveText(passage(0, 0).text);
+  await expect(page.locator('.reader-saved-reference')).toHaveText('1.1');
+  await page.screenshot({ path: 'test-results/reader-bookmarks-desktop.png', fullPage: true });
+  await page.getByRole('button', { name: 'Close panel' }).click();
   await page.locator('#passage-passage-0-0').getByRole('button', { name: 'Remove bookmark' }).click();
+  await expect(page.getByRole('button', { name: 'Bookmarks 0', exact: true })).toBeVisible();
   await expect(pageNumber).toHaveValue('3');
 });
 
@@ -123,20 +129,89 @@ test('dragging text does not turn pages and sends only the selection to AI', asy
 test('notes navigate to a paragraph; pencil edits and trash deletes without navigation', async ({ page }) => {
   await mockReader(page);
   await page.goto('/reader/book-test/edition-test');
-  await page.getByRole('button', { name: 'Notes', exact: true }).click();
+  await page.getByRole('button', { name: 'Notes 1', exact: true }).click();
+  await expect(page.locator('.reader-saved-excerpt')).toHaveText(passage(3, 4).text);
+  await page.screenshot({ path: 'test-results/reader-notes-desktop.png', fullPage: true });
+  await page.getByRole('button', { name: 'Close panel' }).click();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByLabel('Reading theme').selectOption('dark');
+  await page.getByRole('button', { name: 'Notes 1', exact: true }).click();
+  await page.screenshot({ path: 'test-results/reader-notes-mobile-dark.png', fullPage: true });
   await page.getByRole('button', { name: /Saved reflection/ }).click();
   await expect(page.getByLabel('Page', { exact: true })).toHaveValue('50');
   await expect(page.locator('#passage-passage-3-4')).toBeVisible();
-  await page.getByRole('button', { name: 'Notes', exact: true }).click();
+  await page.getByRole('button', { name: 'Notes 1', exact: true }).click();
   await page.getByRole('button', { name: 'Edit Note', exact: true }).click();
   await page.getByLabel('Note text').fill('Updated reflection');
   await page.getByRole('button', { name: 'Save note' }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
   await expect(page.getByLabel('Page', { exact: true })).toHaveValue('50');
-  await page.getByRole('button', { name: 'Notes', exact: true }).click();
+  await page.getByRole('button', { name: 'Notes 1', exact: true }).click();
   await expect(page.getByText('Updated reflection')).toBeVisible();
   await page.getByRole('button', { name: 'Delete Note', exact: true }).click();
   await expect(page.getByText('No notes saved yet.')).toBeVisible();
+  await page.getByRole('button', { name: 'Close panel' }).click();
+  await expect(page.getByRole('button', { name: 'Notes 0', exact: true })).toBeVisible();
+});
+
+test('bookmarks and notes visibly highlight their exact paragraph in every theme', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const state = await mockReader(page);
+  state.bookmarks.push({ id: 'saved-bookmark', passageId: 'passage-0-5', passage: passage(0, 5) });
+  await page.goto('/reader/book-test/edition-test');
+  for (const [theme, color] of [['light', 'rgb(254, 240, 138)'], ['sepia', 'rgb(255, 225, 156)'], ['dark', 'rgb(133, 77, 14)']]) {
+    await page.getByLabel('Reading theme').selectOption(theme);
+    for (const [panel, id] of [['Bookmarks 1', 'passage-0-5'], ['Notes 1', 'passage-3-4']]) {
+      await page.getByRole('button', { name: panel, exact: true }).click();
+      await page.locator('.reader-saved-link').click();
+      const target = page.locator('#text-' + id);
+      await expect(target).toHaveClass(/book-focused-passage/);
+      await expect(target).toHaveCSS('background-color', color);
+      await expect(target).toBeInViewport();
+      await expect(page.locator('.reader-visible-page .book-focused-passage')).toHaveCount(1);
+      await expect(page.locator('.reader-turn-sheet')).toHaveCount(0);
+    }
+  }
+  await page.screenshot({ path: 'test-results/saved-paragraph-highlight-mobile.png' });
+});
+
+test('long contents flow across pages without scrolling and retain every chapter link', async ({ page }) => {
+  const longSections = Array.from({ length: 45 }, (_, index) => ({ ...sections[0], id: 'section-' + index,
+    title: `अध्याय ${index + 1}: धर्म और जीवन के बारे में विचार और विस्तृत चर्चा`, slug: 'section-' + index }));
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await mockReader(page, longSections);
+  await page.goto('/reader/book-test/edition-test');
+  await expect(page.locator('.reader-contents-part')).toContainText('Contents · 1 of');
+  const seen = [];
+  const total = Number((await page.locator('.reader-contents-part').textContent()).split(' of ')[1]);
+  expect(total).toBeGreaterThan(1);
+  for (let index = 0; index < total; index++) {
+    const paper = page.locator('.reader-visible-page[data-contents-page]');
+    await expect(paper.locator('.reader-contents-part')).toHaveText(`Contents · ${index + 1} of ${total}`);
+    expect(await paper.evaluate(node => node.scrollHeight <= node.clientHeight && getComputedStyle(node).overflowY === 'hidden')).toBe(true);
+    seen.push(...await paper.locator('.reader-contents-row > span:first-child').allTextContents());
+    if (index === total - 1) {
+      await page.screenshot({ path: 'test-results/reader-contents-mobile.png', fullPage: true });
+      const last = paper.locator('.reader-contents-row').last();
+      const target = await last.locator('span').last().textContent();
+      await last.click();
+      await expect(page.getByLabel('Page', { exact: true })).toHaveValue(target);
+      await expect(page.locator('#text-passage-44-0')).toBeVisible();
+    } else await page.getByRole('button', { name: 'Next', exact: true }).click();
+  }
+  expect(seen).toEqual(longSections.map(section => section.title));
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await expect(page.locator('#text-passage-44-0')).toBeVisible();
+  await page.getByLabel('Page', { exact: true }).fill('2');
+  await page.getByRole('button', { name: 'Go', exact: true }).click();
+  const leaves = page.locator('.reader-visible-page[data-contents-page]');
+  await expect(leaves).toHaveCount(2);
+  expect(await leaves.evaluateAll(nodes => nodes.every(node => node.scrollHeight <= node.clientHeight))).toBe(true);
+  await page.screenshot({ path: 'test-results/reader-contents-desktop.png', fullPage: true });
+  // Passage positions from the API exclude the extra contents leaves.
+  await page.goto('/reader/book-test/edition-test?passage=passage-44-0');
+  await expect(page.locator('#text-passage-44-0')).toBeVisible();
 });
 
 test('selected section summary and follow-up chat retain section context', async ({ page }) => {

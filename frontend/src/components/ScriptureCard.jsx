@@ -40,7 +40,7 @@ export default function ScriptureCard({ scripture }) {
         {/* Title */}
         <div>
           <h3 className="font-serif text-xl font-bold text-stone-900 group-hover:text-amber-900 transition-colors">
-            {scripture.title}
+            {['ramayana', 'ramayan'].includes(scripture.slug) ? 'रामायण' : scripture.title}
           </h3>
           <div className="flex items-center gap-3 text-xs text-stone-500 mt-1 font-sans">
             <span className="flex items-center gap-1">
