@@ -57,3 +57,4 @@ scripts/apply-issue-*.cjs
 tmp/pdfs/garuda-reader/
 tmp/pdfs/manusmriti-reader/
 tmp/pdfs/ramayan-reader/
+tmp/devotionals/

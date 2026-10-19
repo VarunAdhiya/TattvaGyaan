@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, Check, Copy, Maximize2, Minimize2, Minus, Plus } from 'lucide-react';
 import { api } from '../api/client';
-import { devotionalSections, DevotionalState, SourceLink } from '../components/DevotionalShared';
+import { devotionalSections, DevotionalState } from '../components/DevotionalShared';
 
 export default function DevotionalDetail({ category }) {
   const { slug } = useParams();
@@ -40,8 +40,7 @@ export default function DevotionalDetail({ category }) {
               <span className="dev-prayer-om" aria-hidden="true">ॐ</span>
               {result.text[language].split(/\n\n+/).map((verse, i) => <p key={i}>{verse}</p>)}
             </div>
-          </> : <div className="dev-source-only"><h2>Read this bhajan at the source</h2><p>The complete lyrics are linked from Hindu Aarti. A copy is not available here.</p><SourceLink href={result.text.sourceUrl}>Open lyrics on Hindu Aarti</SourceLink></div>}
-          <footer className="dev-attribution"><p>{result.text.attribution}</p><SourceLink href={result.text.sourceUrl}>View original source</SourceLink></footer>
+          </> : <div className="dev-source-only"><h2>Lyrics unavailable</h2><p>This bhajan is listed in the collection, but its lyrics are not available in TattvaGyaan.</p></div>}
         </article>
         {!reading && <aside className="dev-related"><h2>More {section.title.toLowerCase()}</h2>{result.related.map(text => <Link key={text.id} to={`${section.path}/${text.slug}`}><span>{text.title}</span><small lang="hi">{text.titleHindi}</small></Link>)}<button className="dev-button" onClick={copyLink}>{copied === 'Link copied' ? <Check size={16} /> : <Copy size={16} />}Copy link</button><p role="status" className="dev-footnote">{copied}</p></aside>}
       </div>

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { CalendarDays, ChevronLeft, ChevronRight, Sunrise, Sunset } from 'lucide-react';
 import { api } from '../api/client';
-import { DevotionalState, SourceLink } from '../components/DevotionalShared';
+import { DevotionalState } from '../components/DevotionalShared';
 
 const indiaToday = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
 const dateLabel = date => new Date(`${date}T12:00:00Z`).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' });
@@ -10,8 +10,8 @@ const dateLabel = date => new Date(`${date}T12:00:00Z`).toLocaleDateString('en-I
 export default function HinduCalendar() {
   const [params, setParams] = useSearchParams();
   const today = indiaToday();
-  const year = Number(params.get('year')) || Number(today.slice(0, 4));
-  const month = Number(params.get('month')) || Number(today.slice(5, 7));
+  const year = Number(params.get('year') ?? today.slice(0, 4));
+  const month = Number(params.get('month') ?? today.slice(5, 7));
   const validMonth = Number.isInteger(year) && year >= 2000 && year <= 2100 && Number.isInteger(month) && month >= 1 && month <= 12;
   const selectedDate = params.get('day') || (today.startsWith(`${year}-${String(month).padStart(2, '0')}`) ? today : `${year}-${String(month).padStart(2, '0')}-01`);
   const [result, setResult] = useState(null);
@@ -32,7 +32,7 @@ export default function HinduCalendar() {
   const selected = result?.days.find(day => day.date === selectedDate) || result?.days[0];
   const festivalDays = result?.days.filter(day => day.data.festivals.length) || [];
   return <div className="dev-page">
-    <header className="dev-heading"><div><p className="dev-eyebrow">Days of celebration & reflection</p><h1>Hindu Calendar</h1><p lang="hi" className="dev-hindi-subtitle">हिन्दू पंचांग</p><p className="dev-description">Explore daily tithi, nakshatra, and festivals. Select a date to see its Panchang and timings.</p></div><div className="dev-source-note"><CalendarDays size={44} strokeWidth={1} /><span>New Delhi · India Standard Time</span><SourceLink href="https://www.hinduaarti.com/hindu-calendar" /></div></header>
+    <header className="dev-heading"><div><p className="dev-eyebrow">Days of celebration & reflection</p><h1>Hindu Calendar</h1><p lang="hi" className="dev-hindi-subtitle">हिन्दू पंचांग</p><p className="dev-description">Explore daily tithi, nakshatra, and festivals. Select a date to see its Panchang and timings.</p></div><div className="dev-source-note"><CalendarDays size={44} strokeWidth={1} /><span>New Delhi · India Standard Time</span></div></header>
     {!validMonth && <button className="dev-button" onClick={() => setParams({})}>Return to this month</button>}
     {!result || error ? <DevotionalState loading={!error} error={error} onRetry={() => setRetry(r => r + 1)} /> : <>
       <div className="dev-calendar-toolbar"><h2>{monthName}</h2><div><button className="dev-button" aria-label="Previous month" disabled={!validMonth || (result.availableFrom && `${year}-${String(month).padStart(2, '0')}-01` <= result.availableFrom)} onClick={() => changeMonth(-1)}><ChevronLeft size={18} /></button><button className="dev-button" onClick={() => setParams({ year: today.slice(0, 4), month: Number(today.slice(5, 7)), day: today })}>Today</button><button className="dev-button" aria-label="Next month" disabled={!validMonth || (result.availableTo && `${year}-${String(month).padStart(2, '0')}` >= result.availableTo.slice(0, 7))} onClick={() => changeMonth(1)}><ChevronRight size={18} /></button></div></div>
@@ -53,7 +53,7 @@ export default function HinduCalendar() {
           <dl>{[['Tithi', 'tithi'], ['Nakshatra', 'nakshatra'], ['Yoga', 'yoga'], ['Karana', 'karana']].map(([label, key]) => selected.data[key] && <div key={key}><dt>{label}</dt><dd>{selected.data[key].name}<span lang="hi">{selected.data[key].hindi}</span><small>Until {selected.data[key].endsAt} · then {selected.data[key].next}</small></dd></div>)}</dl>
           <div className="dev-sun-times"><div><Sunrise size={19} /><small>Sunrise</small><strong>{selected.data.sunrise}</strong></div><div><Sunset size={19} /><small>Sunset</small><strong>{selected.data.sunset}</strong></div></div>
           <dl>{[['Moonrise', 'moonrise'], ['Moonset', 'moonset'], ['Rahu kaal', 'rahuKaal'], ['Yamaganda', 'yamaganda'], ['Gulika kaal', 'gulikaKaal']].map(([label, key]) => <div key={key}><dt>{label}</dt><dd>{selected.data[key]?.trim() === '-' ? 'Not listed' : selected.data[key] || 'Not listed'}</dd></div>)}</dl>
-          <SourceLink href={selected.sourceUrl}>Calendar source</SourceLink><p className="dev-footnote">Imported {new Date(selected.fetchedAt).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })} · Timings for New Delhi.</p>
+          <p className="dev-footnote">Timings for New Delhi · India Standard Time.</p>
         </aside>}
       </div>}
     </>}

@@ -2,40 +2,42 @@
 
 ## Project Structure & Module Organization
 
-- `frontend/src/`: React pages, components, context, and `api/client.js`. Store assets in `src/assets/` or `frontend/public/`.
-- `backend/src/`: Express TypeScript routes, controllers, services, middleware, and Zod validators. Keep business logic in services.
+TattvaGyaan provides a Hindi scripture library, 3D reader, and AI explanations.
+
+- `frontend/src/`: React pages, components, context, and `api/client.js`; assets in `src/assets/`.
+- `backend/src/`: Express TypeScript routes, controllers, services, middleware, and Zod validators. Put business logic in services.
 - `backend/prisma/`: database schema, migrations, and seeds.
-- `library/`: catalog, attributed imports, and PDF manifests. Store PDFs in `frontend/public/library/`.
-- `backend/tests/` and `frontend/tests/`: automated tests. Root `test-e2e.js` is a separate authentication smoke script.
+- `library/`: catalog, attributed edition JSON, source manifests, and editorial guides. `backend/data/reader-editions.json` selects the six published text sources; `backend/data/layouts/` holds reader layouts.
+- `backend/tests/` and `frontend/tests/`: automated checks.
 
 ## Build, Test, and Development Commands
 
-Run `npm install` separately in `backend/` and `frontend/`. Run commands from the indicated directory.
+Run `npm install` separately in `backend/` and `frontend/`; there is no root package.
 
 | Directory | Command | Purpose |
 | --- | --- | --- |
-| Both | `npm run dev` | Start the respective development server. |
+| Both | `npm run dev` | Start the development server. |
 | Both | `npm run build` | Compile backend TypeScript or build frontend assets. |
 | Backend | `npm start` | Run the compiled API. |
-| Backend | `npm test` | Build and run Node's test runner. |
+| Backend | `npm test` | Build and run Node tests. |
 | Backend | `npm run prisma:migrate -- --name <change>` | Create and apply development migrations. |
 | Backend | `npm run prisma:generate` | Regenerate the Prisma client. |
 | Frontend | `npm run lint` | Run Oxlint. |
-| Frontend | `npm run check:pdfs` | Verify PDF assets; also runs before builds. |
+| Frontend | `npm run check:library` | Validate text sources; also runs before builds. |
 | Frontend | `npx playwright test` | Run browser tests using installed Chrome and Vite on port 5174. |
 
 ## Coding Style & Naming Conventions
 
-Use two-space indentation and match surrounding quotes and semicolons. Backend TypeScript uses strict checking. Name React files in PascalCase (`Reader3D.jsx`) and services in camelCase (`readingPlanService.ts`). Put request schemas in `validators/` and frontend API calls in `api/client.js`.
+Use two-space indentation and match surrounding punctuation. TypeScript uses strict checking. Name React files in PascalCase (`Reader3D.jsx`) and services in camelCase (`scriptureService.ts`). Keep requests in `api/client.js` and schemas in `validators/`.
 
 ## Testing Guidelines
 
-Name backend tests `*.test.cjs` and Playwright tests `*.spec.js`. No coverage threshold is configured. For code changes, run both builds, frontend lint, backend tests, and relevant browser tests. Manually verify affected authentication, reader, saved-progress, reading-plan, and AI flows.
+Use `*.test.cjs` for Node tests and `*.spec.js` for Playwright. No coverage threshold is configured. For code changes, run both builds, backend tests, frontend lint, and relevant browser tests. Set `RUN_LIVE_LIBRARY=1` with the API running for live-library checks. Verify affected reader navigation, saved progress, annotations, reading plans, and AI selection.
 
 ## Commit & Pull Request Guidelines
 
-Recent commits use informal summaries such as "added shiv puran." Prefer concise, imperative, scoped messages. PRs should explain behavior changes, link relevant issues, report validation, include screenshots for UI changes, and document migration or configuration steps.
+History uses informal summaries such as “added garud puran.” Prefer concise, imperative, scoped messages. PRs should describe behavior changes, link issues, report validation, include UI screenshots, and explain migration or configuration steps.
 
 ## Security & Content Integrity
 
-Follow `SETUP.md` for local configuration. Keep credentials uncommitted and AI provider calls server-side. Preserve scripture, provenance, checksums, language direction, and accurate availability labels. Never fabricate passages. Consult `library/README.md` and `backend/data/SOURCES.md` before content imports.
+Keep credentials and `backend/backups/` private. Preserve source text, attribution, checksums, direction, IDs, and draft labels; never fabricate passages. Consult `library/README.md` before imports. Publish one text edition per book. Public PDFs are retired; optional extraction originals belong in ignored `backend/data/source-pdfs/`.

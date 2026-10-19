@@ -13,7 +13,7 @@ const textSchema = z.object({
   contentStatus: z.enum(['source_text', 'source_link']), sourceUrl, attribution: z.string().min(1), checksum: z.string().length(64),
 });
 const panchangSchema = z.object({
-  date: z.string(), location: z.string().min(1),
+  date: z.string(), location: z.literal('New Delhi, India (times in IST)'),
   tithi: z.object({ name: z.string().min(1), hindi: z.string(), endsAt: z.string(), next: z.string() }),
   nakshatra: z.object({ name: z.string().min(1), hindi: z.string(), endsAt: z.string(), next: z.string() }),
   sunrise: z.string().min(1), sunset: z.string().min(1), festivals: z.array(z.string()),
@@ -86,7 +86,7 @@ if (require.main === module) {
     require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
     const { PrismaClient } = require('@prisma/client');
     const { createDatabaseConfig } = require('../dist/config/database');
-    const prisma = new PrismaClient({ datasources: { db: { url: createDatabaseConfig(process.env).url } } });
+    const prisma = new PrismaClient({ datasources: { db: { url: createDatabaseConfig(process.env).prismaUrl } } });
     importSnapshot(prisma, snapshot).then(result => console.log(JSON.stringify(result)))
       .catch(error => { console.error(error.message); process.exitCode = 1; }).finally(() => prisma.$disconnect());
   }

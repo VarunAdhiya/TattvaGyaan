@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { api } from '../api/client';
-import { devotionalSections, DevotionalCard, DevotionalState, SourceLink } from '../components/DevotionalShared';
+import { devotionalSections, DevotionalCard, DevotionalState } from '../components/DevotionalShared';
 
 export default function DevotionalCollection({ category }) {
   const section = devotionalSections[category];
@@ -25,13 +25,16 @@ export default function DevotionalCollection({ category }) {
 
   function update(values) {
     const next = new URLSearchParams(params);
-    for (const [key, value] of Object.entries(values)) value ? next.set(key, String(value)) : next.delete(key);
+    for (const [key, value] of Object.entries(values)) {
+      if (value) next.set(key, String(value));
+      else next.delete(key);
+    }
     setParams(next);
   }
   return <div className="dev-page">
     <header className="dev-heading">
       <div><p className="dev-eyebrow">A moment for devotion</p><h1>{section.title}</h1><p lang="hi" className="dev-hindi-subtitle">{section.hindi}</p><p className="dev-description">{section.description}</p></div>
-      <div className="dev-source-note"><span className="dev-om" aria-hidden="true">ॐ</span><span>Collection sourced from</span><SourceLink /></div>
+      <div className="dev-source-note" aria-hidden="true"><span className="dev-om">ॐ</span></div>
     </header>
     <form className="dev-search" onSubmit={event => { event.preventDefault(); update({ search: query.trim(), page: null }); }}>
       <Search size={20} aria-hidden="true" /><input aria-label={`Search ${section.title.toLowerCase()}`} placeholder="Search in Hindi or English…" maxLength={100} value={query} onChange={event => setQuery(event.target.value)} />
@@ -52,7 +55,7 @@ export default function DevotionalCollection({ category }) {
         <span>Page {page} of {result.pages}</span>
         <button className="dev-button" disabled={page >= result.pages} onClick={() => update({ page: page + 1 })}>Next<ChevronRight size={16} /></button>
       </nav>}
-      <p className="dev-footnote">Hindi text and Roman transliteration are shown as supplied by the source. Entries marked “View source details” link to the original lyrics.</p>
+      <p className="dev-footnote">Read available prayers in Hindi or Roman transliteration. Entries without text are marked “Lyrics unavailable”.</p>
     </>}
   </div>;
 }

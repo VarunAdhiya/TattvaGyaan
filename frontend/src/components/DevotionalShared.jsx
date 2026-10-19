@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, ArrowRight, RefreshCw } from 'lucide-react';
+import { ArrowRight, RefreshCw } from 'lucide-react';
 
 export const devotionalSections = {
   chalisa: { title: 'Chalisas', hindi: 'चालीसा संग्रह', path: '/chalisas', description: 'Devotional hymns for your daily practice. Find a prayer, settle in, and read at your own pace.' },
@@ -7,16 +7,12 @@ export const devotionalSections = {
   mantra: { title: 'Mantras', hindi: 'मंत्र संग्रह', path: '/mantras', description: 'Sacred words for quiet reflection. Browse the collection and keep your chosen mantra close.' },
 };
 
-export function SourceLink({ href = 'https://www.hinduaarti.com/', children = 'Hindu Aarti', className = '' }) {
-  return <a href={href} target="_blank" rel="noopener noreferrer" className={`dev-source ${className}`}>{children}<ArrowUpRight size={14} aria-hidden="true" /></a>;
-}
-
 export function DevotionalCard({ text }) {
   return <Link to={`${devotionalSections[text.category].path}/${text.slug}`} className="dev-card">
     <span className="dev-card-deity">{text.deity}</span>
     <h2>{text.title}</h2>
     <p lang="hi" className="dev-card-hindi">{text.titleHindi}</p>
-    <span className="dev-card-foot">{text.contentStatus === 'source_link' ? 'View source details' : 'Read prayer'}<ArrowRight size={17} aria-hidden="true" /></span>
+    <span className="dev-card-foot">{text.contentStatus === 'source_link' ? 'Lyrics unavailable' : 'Read prayer'}<ArrowRight size={17} aria-hidden="true" /></span>
   </Link>;
 }
 

@@ -12,8 +12,6 @@
 .dev-description { margin-top: 12px; max-width: 620px; color: #70665b; font-size: 15px; line-height: 1.8; }
 .dev-source-note { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 200px; color: #8c6036; font-size: 12px; text-align: center; }
 .dev-om { font-family: Georgia, serif; font-size: 58px; line-height: 1.4; color: #b77b38; }
-.dev-source { color: #92400e; display: inline-flex; align-items: center; gap: 4px; text-decoration: underline; text-underline-offset: 4px; font-size: 13px; }
-.dev-source:hover { color: #451a03; }
 .dev-search { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid #ded6ca; border-radius: 10px; padding: 8px 10px 8px 18px; color: #8a7662; }
 .dev-search input { flex: 1; min-width: 0; padding: 8px 0; color: #292524; font-size: 15px; outline: none; }
 .dev-search:focus-within { outline: 2px solid #b45309; outline-offset: 2px; }
@@ -57,8 +55,6 @@
 .dev-prayer-text p { white-space: pre-wrap; margin-top: 28px; }
 .dev-prayer-text[lang=hi] { font-family: 'Noto Serif Devanagari', 'Nirmala UI', serif; }
 .dev-prayer-om { font-size: 38px; color: #ba8c49; }
-.dev-attribution { border-top: 1px solid #e8dfd1; background: #faf5ec; padding: 20px 24px; font-size: 12px; line-height: 1.8; color: #796e62; }
-.dev-attribution p { margin-bottom: 6px; }
 .dev-related { border-top: 2px solid #c6a77c; padding-top: 20px; }
 .dev-related h2 { font-size: 23px; color: #432818; margin-bottom: 12px; }
 .dev-related > a { display: flex; flex-direction: column; gap: 5px; border-bottom: 1px solid #e8dfd1; padding: 16px 0; color: #65442d; font-size: 14px; }
@@ -107,7 +103,8 @@
 @media (max-width: 1000px) { .dev-calendar-layout { grid-template-columns: minmax(0, 1fr); } .dev-panchang { max-width: none; } .dev-panchang dl { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; } }
 @media (max-width: 800px) { .dev-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .dev-detail-layout { grid-template-columns: minmax(0, 1fr); } .dev-source-note { min-width: 150px; } }
 @media (max-width: 560px) {
-  .section-navigation-inner { padding: 0 16px; gap: 18px; } .section-link { font-size: 12px; gap: 5px; min-height: 48px; }
+  .section-navigation-inner { padding: 0 8px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+  .section-link { flex-direction: column; justify-content: center; font-size: 11px; gap: 4px; min-height: 58px; padding: 7px 0; }
   .dev-page { padding: 28px 16px 48px; } .dev-heading { gap: 16px; flex-direction: column; align-items: flex-start; padding-bottom: 24px; margin-bottom: 24px; }
   .dev-source-note { flex-direction: row; align-items: center; flex-wrap: wrap; text-align: left; font-size: 11px; } .dev-om { font-size: 24px; } .dev-source-note > svg { width: 22px; height: 22px; }
   .dev-description { font-size: 14px; } .dev-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; } .dev-card { min-height: 190px; padding: 22px; }
