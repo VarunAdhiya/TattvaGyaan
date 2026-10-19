@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { BookOpen, AlertCircle } from 'lucide-react';
+import AuthScenery from '../components/AuthScenery';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -27,8 +28,9 @@ function Login() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-gradient-to-br from-amber-50 via-stone-50 to-amber-50/50 px-4 py-8">
-      <div className="w-full max-w-md">
+    <div className="auth-layout">
+      <AuthScenery />
+      <div className="auth-panel w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">

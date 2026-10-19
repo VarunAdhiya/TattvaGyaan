@@ -97,10 +97,10 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="sacred-page profile-page max-w-4xl mx-auto px-4 py-8">
       <div className="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-amber-50 to-orange-50 px-6 py-8">
+        <div className="profile-header px-6 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 bg-amber-800 rounded-full flex items-center justify-center text-white text-xl font-semibold">
@@ -224,7 +224,7 @@ export default function ProfilePage() {
                 Reading Statistics
               </h2>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="profile-statistics grid grid-cols-2 gap-4">
                 <div className="bg-amber-50 rounded-lg p-4 text-center">
                   <Target className="w-8 h-8 text-amber-800 mx-auto mb-2" />
                   <div className="text-2xl font-bold text-amber-900">{stats.readingPlansCompleted}</div>
@@ -243,10 +243,10 @@ export default function ProfilePage() {
                   <div className="text-sm text-green-700">Notes Created</div>
                 </div>
 
-                <div className="bg-purple-50 rounded-lg p-4 text-center">
-                  <Clock className="w-8 h-8 text-purple-800 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-purple-900">{stats.scriptsRead}</div>
-                  <div className="text-sm text-purple-700">Scriptures Read</div>
+                <div className="bg-amber-50 rounded-lg p-4 text-center">
+                  <Clock className="w-8 h-8 text-amber-800 mx-auto mb-2" />
+                  <div className="text-2xl font-bold text-amber-900">{stats.scriptsRead}</div>
+                  <div className="text-sm text-amber-700">Scriptures Read</div>
                 </div>
               </div>
 

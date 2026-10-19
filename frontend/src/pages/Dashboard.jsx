@@ -33,8 +33,8 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
+    <div className="library-page max-w-7xl mx-auto px-4 py-8">
+      <div className="library-banner flex flex-col md:flex-row justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-serif font-bold text-stone-900">Scripture Library</h1>
           <p className="text-stone-600 text-sm mt-1">Explore Hindi editions, their sources, and available chapters.</p>

@@ -35,7 +35,7 @@ export default function ScriptureDetail() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-amber-50">
         <div className="text-center">
-          <BookOpen className="w-12 h-12 text-amber-700 mx-auto mb-4 animate-bounce" />
+          <BookOpen className="w-12 h-12 text-amber-700 mx-auto mb-4 animate-pulse" />
           <p className="text-stone-600">Loading scripture...</p>
         </div>
       </div>
@@ -50,7 +50,7 @@ export default function ScriptureDetail() {
           <h1 className="text-xl font-serif font-bold text-stone-900 mb-2 text-center">Error</h1>
           <p className="text-stone-600 text-center mb-6">{error}</p>
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/library')}
             className="w-full px-4 py-2.5 bg-gradient-to-r from-amber-700 to-amber-900 text-amber-50 rounded-lg font-medium hover:from-amber-800 hover:to-amber-950 transition"
           >
             Back to Dashboard
@@ -85,14 +85,14 @@ export default function ScriptureDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-stone-50 to-amber-50/50">
+    <div className="scripture-detail-page min-h-screen bg-gradient-to-br from-amber-50 via-stone-50 to-amber-50/50">
       {/* Header */}
       <div className="border-b border-stone-200/80 bg-white/50 backdrop-blur sticky top-16 z-30">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/library')}
             className="p-2 hover:bg-stone-100 rounded-lg transition"
-            title="Back to dashboard"
+            title="Back to library"
           >
             <ArrowLeft className="w-5 h-5 text-stone-600" />
           </button>

@@ -1,0 +1,566 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-19T17:21:06.425836+00:00",
+  "title": "Design System: TattvaGyaan",
+  "extensions": {
+    "colorMeta": {
+      "temple-green": {
+        "role": "primary",
+        "displayName": "Temple Green",
+        "tonalRamp": [
+          "oklch(15.00% 0.0504 185.055)",
+          "oklch(26.43% 0.0504 185.055)",
+          "oklch(37.86% 0.0504 185.055)",
+          "oklch(49.29% 0.0504 185.055)",
+          "oklch(60.71% 0.0504 185.055)",
+          "oklch(72.14% 0.0504 185.055)",
+          "oklch(83.57% 0.0504 185.055)",
+          "oklch(95.00% 0.0504 185.055)"
+        ]
+      },
+      "vermilion": {
+        "role": "primary",
+        "displayName": "Vermilion",
+        "tonalRamp": [
+          "oklch(15.00% 0.1453 32.692)",
+          "oklch(26.43% 0.1453 32.692)",
+          "oklch(37.86% 0.1453 32.692)",
+          "oklch(49.29% 0.1453 32.692)",
+          "oklch(60.71% 0.1453 32.692)",
+          "oklch(72.14% 0.1453 32.692)",
+          "oklch(83.57% 0.1453 32.692)",
+          "oklch(95.00% 0.1453 32.692)"
+        ]
+      },
+      "vermilion-hover": {
+        "role": "primary",
+        "displayName": "Vermilion Hover",
+        "tonalRamp": [
+          "oklch(15.00% 0.1199 29.475)",
+          "oklch(26.43% 0.1199 29.475)",
+          "oklch(37.86% 0.1199 29.475)",
+          "oklch(49.29% 0.1199 29.475)",
+          "oklch(60.71% 0.1199 29.475)",
+          "oklch(72.14% 0.1199 29.475)",
+          "oklch(83.57% 0.1199 29.475)",
+          "oklch(95.00% 0.1199 29.475)"
+        ]
+      },
+      "ceremonial-red": {
+        "role": "primary",
+        "displayName": "Ceremonial Red",
+        "tonalRamp": [
+          "oklch(15.00% 0.1183 31.642)",
+          "oklch(26.43% 0.1183 31.642)",
+          "oklch(37.86% 0.1183 31.642)",
+          "oklch(49.29% 0.1183 31.642)",
+          "oklch(60.71% 0.1183 31.642)",
+          "oklch(72.14% 0.1183 31.642)",
+          "oklch(83.57% 0.1183 31.642)",
+          "oklch(95.00% 0.1183 31.642)"
+        ]
+      },
+      "saffron": {
+        "role": "secondary",
+        "displayName": "Saffron",
+        "tonalRamp": [
+          "oklch(15.00% 0.1412 76.929)",
+          "oklch(26.43% 0.1412 76.929)",
+          "oklch(37.86% 0.1412 76.929)",
+          "oklch(49.29% 0.1412 76.929)",
+          "oklch(60.71% 0.1412 76.929)",
+          "oklch(72.14% 0.1412 76.929)",
+          "oklch(83.57% 0.1412 76.929)",
+          "oklch(95.00% 0.1412 76.929)"
+        ]
+      },
+      "hero-saffron": {
+        "role": "secondary",
+        "displayName": "Hero Saffron",
+        "tonalRamp": [
+          "oklch(15.00% 0.1450 75.626)",
+          "oklch(26.43% 0.1450 75.626)",
+          "oklch(37.86% 0.1450 75.626)",
+          "oklch(49.29% 0.1450 75.626)",
+          "oklch(60.71% 0.1450 75.626)",
+          "oklch(72.14% 0.1450 75.626)",
+          "oklch(83.57% 0.1450 75.626)",
+          "oklch(95.00% 0.1450 75.626)"
+        ]
+      },
+      "canvas": {
+        "role": "neutral",
+        "displayName": "Canvas",
+        "tonalRamp": [
+          "oklch(15.00% 0.0270 85.665)",
+          "oklch(26.43% 0.0270 85.665)",
+          "oklch(37.86% 0.0270 85.665)",
+          "oklch(49.29% 0.0270 85.665)",
+          "oklch(60.71% 0.0270 85.665)",
+          "oklch(72.14% 0.0270 85.665)",
+          "oklch(83.57% 0.0270 85.665)",
+          "oklch(95.00% 0.0270 85.665)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "tonalRamp": [
+          "oklch(15.00% 0.0142 84.583)",
+          "oklch(26.43% 0.0142 84.583)",
+          "oklch(37.86% 0.0142 84.583)",
+          "oklch(49.29% 0.0142 84.583)",
+          "oklch(60.71% 0.0142 84.583)",
+          "oklch(72.14% 0.0142 84.583)",
+          "oklch(83.57% 0.0142 84.583)",
+          "oklch(95.00% 0.0142 84.583)"
+        ]
+      },
+      "card-paper": {
+        "role": "neutral",
+        "displayName": "Card Paper",
+        "tonalRamp": [
+          "oklch(15.00% 0.0148 94.193)",
+          "oklch(26.43% 0.0148 94.193)",
+          "oklch(37.86% 0.0148 94.193)",
+          "oklch(49.29% 0.0148 94.193)",
+          "oklch(60.71% 0.0148 94.193)",
+          "oklch(72.14% 0.0148 94.193)",
+          "oklch(83.57% 0.0148 94.193)",
+          "oklch(95.00% 0.0148 94.193)"
+        ]
+      },
+      "form-paper": {
+        "role": "neutral",
+        "displayName": "Form Paper",
+        "tonalRamp": [
+          "oklch(15.00% 0.0082 91.480)",
+          "oklch(26.43% 0.0082 91.480)",
+          "oklch(37.86% 0.0082 91.480)",
+          "oklch(49.29% 0.0082 91.480)",
+          "oklch(60.71% 0.0082 91.480)",
+          "oklch(72.14% 0.0082 91.480)",
+          "oklch(83.57% 0.0082 91.480)",
+          "oklch(95.00% 0.0082 91.480)"
+        ]
+      },
+      "field-paper": {
+        "role": "neutral",
+        "displayName": "Field Paper",
+        "tonalRamp": [
+          "oklch(15.00% 0.0110 89.720)",
+          "oklch(26.43% 0.0110 89.720)",
+          "oklch(37.86% 0.0110 89.720)",
+          "oklch(49.29% 0.0110 89.720)",
+          "oklch(60.71% 0.0110 89.720)",
+          "oklch(72.14% 0.0110 89.720)",
+          "oklch(83.57% 0.0110 89.720)",
+          "oklch(95.00% 0.0110 89.720)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.0333 171.197)",
+          "oklch(26.43% 0.0333 171.197)",
+          "oklch(37.86% 0.0333 171.197)",
+          "oklch(49.29% 0.0333 171.197)",
+          "oklch(60.71% 0.0333 171.197)",
+          "oklch(72.14% 0.0333 171.197)",
+          "oklch(83.57% 0.0333 171.197)",
+          "oklch(95.00% 0.0333 171.197)"
+        ]
+      },
+      "heading-ink": {
+        "role": "neutral",
+        "displayName": "Heading Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.0567 170.273)",
+          "oklch(26.43% 0.0567 170.273)",
+          "oklch(37.86% 0.0567 170.273)",
+          "oklch(49.29% 0.0567 170.273)",
+          "oklch(60.71% 0.0567 170.273)",
+          "oklch(72.14% 0.0567 170.273)",
+          "oklch(83.57% 0.0567 170.273)",
+          "oklch(95.00% 0.0567 170.273)"
+        ]
+      },
+      "muted-ink": {
+        "role": "neutral",
+        "displayName": "Muted Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.0430 71.777)",
+          "oklch(26.43% 0.0430 71.777)",
+          "oklch(37.86% 0.0430 71.777)",
+          "oklch(49.29% 0.0430 71.777)",
+          "oklch(60.71% 0.0430 71.777)",
+          "oklch(72.14% 0.0430 71.777)",
+          "oklch(83.57% 0.0430 71.777)",
+          "oklch(95.00% 0.0430 71.777)"
+        ]
+      },
+      "gold-line": {
+        "role": "secondary",
+        "displayName": "Gold Line",
+        "tonalRamp": [
+          "oklch(15.00% 0.0570 83.920)",
+          "oklch(26.43% 0.0570 83.920)",
+          "oklch(37.86% 0.0570 83.920)",
+          "oklch(49.29% 0.0570 83.920)",
+          "oklch(60.71% 0.0570 83.920)",
+          "oklch(72.14% 0.0570 83.920)",
+          "oklch(83.57% 0.0570 83.920)",
+          "oklch(95.00% 0.0570 83.920)"
+        ]
+      },
+      "focus": {
+        "role": "secondary",
+        "displayName": "Focus",
+        "tonalRamp": [
+          "oklch(15.00% 0.1498 56.288)",
+          "oklch(26.43% 0.1498 56.288)",
+          "oklch(37.86% 0.1498 56.288)",
+          "oklch(49.29% 0.1498 56.288)",
+          "oklch(60.71% 0.1498 56.288)",
+          "oklch(72.14% 0.1498 56.288)",
+          "oklch(83.57% 0.1498 56.288)",
+          "oklch(95.00% 0.1498 56.288)"
+        ]
+      },
+      "button-text": {
+        "role": "neutral",
+        "displayName": "Button Text",
+        "tonalRamp": [
+          "oklch(15.00% 0.0300 83.635)",
+          "oklch(26.43% 0.0300 83.635)",
+          "oklch(37.86% 0.0300 83.635)",
+          "oklch(49.29% 0.0300 83.635)",
+          "oklch(60.71% 0.0300 83.635)",
+          "oklch(72.14% 0.0300 83.635)",
+          "oklch(83.57% 0.0300 83.635)",
+          "oklch(95.00% 0.0300 83.635)"
+        ]
+      },
+      "nav-paper": {
+        "role": "neutral",
+        "displayName": "Nav Paper",
+        "tonalRamp": [
+          "oklch(15.00% 0.0268 85.664)",
+          "oklch(26.43% 0.0268 85.664)",
+          "oklch(37.86% 0.0268 85.664)",
+          "oklch(49.29% 0.0268 85.664)",
+          "oklch(60.71% 0.0268 85.664)",
+          "oklch(72.14% 0.0268 85.664)",
+          "oklch(83.57% 0.0268 85.664)",
+          "oklch(95.00% 0.0268 85.664)"
+        ]
+      },
+      "nav-text": {
+        "role": "neutral",
+        "displayName": "Nav Text",
+        "tonalRamp": [
+          "oklch(15.00% 0.0306 157.190)",
+          "oklch(26.43% 0.0306 157.190)",
+          "oklch(37.86% 0.0306 157.190)",
+          "oklch(49.29% 0.0306 157.190)",
+          "oklch(60.71% 0.0306 157.190)",
+          "oklch(72.14% 0.0306 157.190)",
+          "oklch(83.57% 0.0306 157.190)",
+          "oklch(95.00% 0.0306 157.190)"
+        ]
+      },
+      "nav-active": {
+        "role": "neutral",
+        "displayName": "Nav Active",
+        "tonalRamp": [
+          "oklch(15.00% 0.1459 31.531)",
+          "oklch(26.43% 0.1459 31.531)",
+          "oklch(37.86% 0.1459 31.531)",
+          "oklch(49.29% 0.1459 31.531)",
+          "oklch(60.71% 0.1459 31.531)",
+          "oklch(72.14% 0.1459 31.531)",
+          "oklch(83.57% 0.1459 31.531)",
+          "oklch(95.00% 0.1459 31.531)"
+        ]
+      },
+      "card-sage": {
+        "role": "tertiary",
+        "displayName": "Card Sage",
+        "tonalRamp": [
+          "oklch(15.00% 0.0202 118.933)",
+          "oklch(26.43% 0.0202 118.933)",
+          "oklch(37.86% 0.0202 118.933)",
+          "oklch(49.29% 0.0202 118.933)",
+          "oklch(60.71% 0.0202 118.933)",
+          "oklch(72.14% 0.0202 118.933)",
+          "oklch(83.57% 0.0202 118.933)",
+          "oklch(95.00% 0.0202 118.933)"
+        ]
+      },
+      "card-peach": {
+        "role": "tertiary",
+        "displayName": "Card Peach",
+        "tonalRamp": [
+          "oklch(15.00% 0.0321 76.456)",
+          "oklch(26.43% 0.0321 76.456)",
+          "oklch(37.86% 0.0321 76.456)",
+          "oklch(49.29% 0.0321 76.456)",
+          "oklch(60.71% 0.0321 76.456)",
+          "oklch(72.14% 0.0321 76.456)",
+          "oklch(83.57% 0.0321 76.456)",
+          "oklch(95.00% 0.0321 76.456)"
+        ]
+      },
+      "success-paper": {
+        "role": "tertiary",
+        "displayName": "Success Paper",
+        "tonalRamp": [
+          "oklch(15.00% 0.0520 163.051)",
+          "oklch(26.43% 0.0520 163.051)",
+          "oklch(37.86% 0.0520 163.051)",
+          "oklch(49.29% 0.0520 163.051)",
+          "oklch(60.71% 0.0520 163.051)",
+          "oklch(72.14% 0.0520 163.051)",
+          "oklch(83.57% 0.0520 163.051)",
+          "oklch(95.00% 0.0520 163.051)"
+        ]
+      },
+      "success-ink": {
+        "role": "tertiary",
+        "displayName": "Success Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.0950 166.913)",
+          "oklch(26.43% 0.0950 166.913)",
+          "oklch(37.86% 0.0950 166.913)",
+          "oklch(49.29% 0.0950 166.913)",
+          "oklch(60.71% 0.0950 166.913)",
+          "oklch(72.14% 0.0950 166.913)",
+          "oklch(83.57% 0.0950 166.913)",
+          "oklch(95.00% 0.0950 166.913)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Dashboard hero; responsive mobile override."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Ceremonial collection headers."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Devotional collection card titles."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Collection descriptions; supporting prose has local variants."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Form labels and interface navigation."
+      },
+      "prayer": {
+        "displayName": "Prayer",
+        "purpose": "Preserved Hindi prayer text; size is user-adjustable."
+      },
+      "scripture": {
+        "displayName": "Scripture",
+        "purpose": "Preserved Indic book text; size and pagination are calibrated."
+      }
+    },
+    "shadows": [
+      {
+        "name": "form-ambient",
+        "value": "0 14px 36px -25px #38251266",
+        "purpose": "Authentication form panel."
+      },
+      {
+        "name": "scripture-card-hover",
+        "value": "0 15px 28px -21px #2b261e88",
+        "purpose": "Scripture collection hover only."
+      },
+      {
+        "name": "dashboard-mobile-menu",
+        "value": "0 18px 36px #0d160d40",
+        "purpose": "Inherited landing menu elevation."
+      }
+    ],
+    "motion": [
+      {
+        "name": "page-arrival",
+        "value": "550ms cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "Opacity .65 to 1 and translateY(10px) to zero on collection, library, form and personal pages."
+      },
+      {
+        "name": "action-transition",
+        "value": "200ms ease",
+        "purpose": "Background, text and border-color transitions; account button adds 1px hover lift."
+      },
+      {
+        "name": "collection-hover",
+        "value": "250ms ease",
+        "purpose": "4px upward devotional-card lift and border-color transition."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "none",
+        "purpose": "prefers-reduced-motion disables application animations, transitions and smooth scrolling; reader flip layer is hidden."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "dashboard-large-min",
+        "value": "1600px"
+      },
+      {
+        "name": "reader-header-max",
+        "value": "1199px"
+      },
+      {
+        "name": "navigation-spacing-max",
+        "value": "1100px"
+      },
+      {
+        "name": "calendar-stack-max",
+        "value": "1000px"
+      },
+      {
+        "name": "dashboard-menu-max",
+        "value": "900px"
+      },
+      {
+        "name": "collection-and-dashboard-stack-max",
+        "value": "800px"
+      },
+      {
+        "name": "sacred-mobile-max",
+        "value": "700px"
+      },
+      {
+        "name": "reader-stand-max",
+        "value": "639px"
+      },
+      {
+        "name": "reader-prose-max",
+        "value": "599px"
+      },
+      {
+        "name": "collection-single-max",
+        "value": "560px"
+      },
+      {
+        "name": "dashboard-small-max",
+        "value": "520px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary account button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Vermilion authentication action with hover lift and a disabled state.",
+      "html": "<button class=\"ds-primary\">Sign In</button>",
+      "css": ".ds-primary{font-family:'Sacred Hind', 'Nirmala UI', sans-serif;font-size:16px;font-weight:500;min-height:49px;padding:10px 24px;border:0;border-radius:5px;background:#a53a26;color:#fff4df;cursor:pointer;transition:background .2s,transform .2s}.ds-primary:hover:not(:disabled){background:#7a251c;transform:translateY(-1px)}.ds-primary:disabled{opacity:.5;cursor:not-allowed}.ds-primary:focus-visible,.ds-secondary:focus-visible,.ds-hero:focus-visible{outline:3px solid #d17219;outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}"
+    },
+    {
+      "name": "Secondary account action",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Pale sage outlined account alternative.",
+      "html": "<a class=\"ds-secondary\" href=\"#create-account\">Create Account</a>",
+      "css": ".ds-secondary{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 16px;font-family:'Sacred Hind', 'Nirmala UI', sans-serif;font-size:16px;font-weight:500;text-decoration:none;border:1px solid #a5b6a3;border-radius:5px;background:#f3f6e9;color:#174b3b;transition:background-color .2s}.ds-secondary:hover{background:#e4ebd7}.ds-primary:focus-visible,.ds-secondary:focus-visible,.ds-hero:focus-visible{outline:3px solid #d17219;outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-secondary{transition:none}}"
+    },
+    {
+      "name": "Hero action",
+      "kind": "button",
+      "refersTo": "button-hero",
+      "description": "The dashboard saffron action; background stays saffron in the final cascade.",
+      "html": "<a class=\"ds-hero\" href=\"#library\">Explore scriptures <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a>",
+      "css": ".ds-hero{display:inline-flex;align-items:center;gap:20px;min-height:50px;padding:14px 22px;background:#f6b244;color:#30251b;border-radius:5px;text-decoration:none;font-family:'Sacred Hind', 'Nirmala UI', sans-serif;font-size:15px;font-weight:600}.ds-hero:hover{background:#f6b244}.ds-primary:focus-visible,.ds-secondary:focus-visible,.ds-hero:focus-visible{outline:3px solid #d17219;outline-offset:4px;}"
+    },
+    {
+      "name": "Account field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Visible label, warm field and gold focus treatment.",
+      "html": "<label class=\"ds-field-label\" for=\"ds-email\">Email Address</label><input class=\"ds-field\" id=\"ds-email\" type=\"email\" placeholder=\"your@email.com\"/>",
+      "css": ".ds-field-label{display:block;margin-bottom:8px;font:500 15px/1.5 'Sacred Hind', 'Nirmala UI', sans-serif;color:#244d3e}.ds-field{font:400 16px/1.5 'Sacred Hind', 'Nirmala UI', sans-serif;min-height:48px;padding:10px 16px;background:#fffcf4;border:1px solid #d8c5a8;border-radius:5px;color:#1c1917;caret-color:#9b3225}.ds-field::placeholder{color:#786a54;opacity:1}.ds-field:focus,.ds-field:focus-visible{border-color:#b64b29;outline:2px solid #edc17b;outline-offset:2px;box-shadow:0 0 0 2px oklch(66.6% .179 58.318)}"
+    },
+    {
+      "name": "Devotional navigation",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Cream strip with a red current-page rule.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Devotional sections\"><a class=\"ds-tab\" href=\"#chalisas\" aria-current=\"page\">Chalisas</a><a class=\"ds-tab\" href=\"#bhajans\">Bhajans</a><a class=\"ds-tab\" href=\"#mantras\">Mantras</a></nav>",
+      "css": ".ds-nav{display:flex;gap:30px;background:#fff6e3;border-bottom:1px solid #dcc9a7;padding:0 18px}.ds-tab{display:inline-flex;align-items:center;min-height:58px;padding:0 4px;border-bottom:3px solid transparent;color:#45584c;text-decoration:none;font:400 15px/1.5 'Sacred Hind', 'Nirmala UI', sans-serif;transition:color .2s,border-color .2s}.ds-tab:hover,.ds-tab[aria-current]{color:#a43827}.ds-tab[aria-current]{border-color:#b03d28;font-weight:600}.ds-tab:focus-visible{outline:2px solid #b45309;outline-offset:3px}@media(prefers-reduced-motion:reduce){.ds-tab{transition:none}}"
+    },
+    {
+      "name": "Complete availability badge",
+      "kind": "chip",
+      "refersTo": "chip-complete",
+      "description": "Retained semantic Tailwind badge for a complete edition.",
+      "html": "<span class=\"ds-complete\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m8 12 3 3 5-6\"/></svg>Complete</span>",
+      "css": ".ds-complete{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border:1px solid oklch(90.5% .093 164.15);border-radius:9999px;background:oklch(95% .052 163.051);color:oklch(43.2% .095 166.913);font:500 12px/1.333333 'Sacred Hind', 'Nirmala UI', sans-serif}.ds-complete svg{color:oklch(59.6% .145 163.225)}"
+    },
+    {
+      "name": "Devotional collection card",
+      "kind": "card",
+      "refersTo": "card-devotional",
+      "description": "Title-led paper card with metadata below and a separated reading action.",
+      "html": "<a class=\"ds-card\" href=\"#prayer\"><h2>Hanuman Chalisa</h2><p class=\"ds-hindi\" lang=\"hi\">?????? ??????</p><span class=\"ds-meta\">Hanuman</span><span class=\"ds-card-foot\">Read prayer <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></span></a>",
+      "css": ".ds-card{display:flex;flex-direction:column;position:relative;overflow:hidden;min-height:238px;padding:27px;background:#fffcf1;border:1px solid #cfbb94;border-radius:12px;text-decoration:none;font-family:'Sacred Hind', 'Nirmala UI', sans-serif;transition:transform .25s,border-color .25s}.ds-card h2{margin:0;color:#174638;font:500 23px/1.4 'Sacred Cinzel','Sacred Hind',serif}.ds-hindi{margin:8px 0 22px;color:#7e4828;font-size:21px;line-height:1.7}.ds-meta{margin-top:13px;color:#9a4225;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}.ds-card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:15px;border-top:1px solid #dcc7a7;color:#a43a25;font-size:14px;font-weight:500}.ds-card:hover{transform:translateY(-4px);border-color:#a95c29}.ds-card:focus-visible{outline:2px solid #b45309;outline-offset:3px}@media(prefers-reduced-motion:reduce){.ds-card{transition:none}}"
+    },
+    {
+      "name": "Prayer language selection",
+      "kind": "custom",
+      "refersTo": "reader-language-selected",
+      "description": "Saffron selected language on a dark prayer toolbar.",
+      "html": "<div class=\"ds-languages\" role=\"group\" aria-label=\"Prayer language\"><button class=\"ds-language\" aria-pressed=\"true\">??????</button><button class=\"ds-language\" aria-pressed=\"false\">Transliteration</button></div>",
+      "css": ".ds-languages{display:flex;gap:4px;padding:16px 22px;background:#123f37;border:1px solid #295749}.ds-language{padding:9px 14px;border:0;border-radius:6px;background:transparent;color:#fff1cc;font:400 15px/1.5 'Sacred Hind', 'Nirmala UI', sans-serif;cursor:pointer;transition:background-color .2s,color .2s}.ds-language[aria-pressed=true]{background:#f2b952;color:#1f392e}.ds-language:hover{color:#fff1cc}.ds-language[aria-pressed=true]:hover{color:#1f392e}.ds-language:focus-visible{outline:2px solid #b45309;outline-offset:3px}@media(prefers-reduced-motion:reduce){.ds-language{transition:none}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Temple Reading Sanctuary",
+    "overview": "A saturated temple-green and vermilion interface frames warm paper, saffron accents, and the supplied temple, river, Himalayan mountain and sage artwork. Cinzel gives navigation and headings a ceremonial character; Hind keeps controls and bilingual interface copy approachable. Collection screens carry ornament at their edges while scripture remains on quiet, selectable paper.\n\nThis is the implemented October 2026 visual system, extracted from the final CSS cascade rather than the earlier restrained landing concept. The illustration establishes atmosphere at entrances; fine gold borders, lotus geometry and carefully limited lift carry that character into everyday tools. Reading has its own calibrated type and user-selected paper themes.",
+    "keyCharacteristics": [
+      "Bold temple green, vermilion and saffron against cream paper.",
+      "Ceremonial display type paired with clear Hindi-capable interface text.",
+      "Supplied artwork and peripheral lotus geometry; quiet reading surfaces.",
+      "Fine borders, restrained hover lift and reduced-motion support."
+    ],
+    "rules": [
+      {
+        "name": "The Quiet Paper Rule",
+        "body": "Keep sustained scripture and prayer reading on its own paper surface; place saturated color and ornament around the reading area.",
+        "section": "colors"
+      },
+      {
+        "name": "The Reading Type Rule",
+        "body": "Preserve the reader font stacks, user size controls, line heights and pagination measurements independently of interface typography.",
+        "section": "typography"
+      },
+      {
+        "name": "The Material Depth Rule",
+        "body": "Use fine borders and tonal contrast for ordinary panels; reserve dimensional paper, binding and stand effects for the book reader.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use the supplied temple artwork and original lotus ornament with the source record in frontend/src/assets/landing/README.md.",
+      "Do retain distinct display, interface, prayer and scripture type roles.",
+      "Do keep metadata below titles and retain truthful availability labels.",
+      "Do provide visible keyboard focus, readable selected states and the reduced-motion behavior already implemented.",
+      "Do inspect the final CSS cascade before extending components that still carry Tailwind utilities."
+    ],
+    "donts": [
+      "Don't apply interface fonts or a global color override to calibrated scripture pages.",
+      "Don't treat the old Cormorant landing declarations or generic amber gradients as the new interface default.",
+      "Don't place decorative artwork behind sustained scripture text.",
+      "Don't turn remaining ornamental glyphs or legacy eyebrow selectors into reusable navigation icons or heading patterns."
+    ]
+  }
+}

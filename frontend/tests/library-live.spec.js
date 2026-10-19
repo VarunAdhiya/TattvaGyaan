@@ -37,7 +37,7 @@ test('live catalog contains six single text editions and retired content cannot 
     expect((await request.get('/api/scripture-editions/' + id)).status()).toBe(404);
     expect((await request.get('/api/passages/edition/' + id)).status()).toBe(404);
   }
-  await page.goto('/dashboard');
+  await page.goto('/library');
   await expect(page.getByRole('link', { name: 'View Details' })).toHaveCount(6);
   await expect(page.getByRole('heading', { name: 'वेद', exact: true })).toHaveCount(0);
   await page.screenshot({ path: 'test-results/single-edition-library.png', fullPage: true });
@@ -67,7 +67,9 @@ test('live single-edition details open retained readers on desktop and mobile wi
     await expect(page).toHaveURL(new RegExp(book.editions[0].id));
     const field = page.getByLabel('Page', { exact: true });
     await expect(field).toBeVisible({ timeout: 30000 });
-    await field.fill('3'); await field.press('Enter');
+    // Contents can span multiple leaves as the viewport and fonts change.
+    await field.fill('2'); await field.press('Enter');
+    await page.locator('.reader-visible-page .reader-contents-row').first().click();
     await expect(page.locator('.reader-visible-page .scripture-text').first()).toBeVisible({ timeout: 30000 });
     await expect(page.locator('canvas, iframe, a[href$=".pdf"]')).toHaveCount(0);
     await page.screenshot({ path: `test-results/single-edition-${slug}.png`, fullPage: true });

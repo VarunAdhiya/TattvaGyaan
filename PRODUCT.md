@@ -1,4 +1,4 @@
-# Product
+﻿# Product
 
 <!-- impeccable:product-schema 1 -->
 
@@ -9,26 +9,27 @@ web
 ## Product Purpose
 
 TattvaGyaan is a Hindi scripture library with a book reader, passage explanations,
-reading plans, and personal notes. Public devotional sections provide Chalisas,
-Bhajans, Mantras, and a Hindu calendar.
+reading plans, and personal notes. Its signed-in devotional sections provide
+Chalisas, Bhajans, Mantras, and a Hindu calendar.
 
 ## Capabilities and Constraints
 
-The existing React/Vite frontend uses an Express/Prisma backend. The library has
-six retained text editions. Reading and personal features require sign-in;
-devotional collections and the landing page are public. Calendar availability
-depends on imported dates, with New Delhi timings in IST. Source text, IDs,
-draft labels, provenance, and existing reader behavior must be preserved.
+The React/Vite frontend uses an Express/Prisma backend and six retained text
+editions. Login and registration are public; the landing page at `/dashboard`,
+book library at `/library`, devotional collections and personal features require
+sign-in. Calendar coverage depends on imported dates with New Delhi timings in
+IST. Preserve source text, IDs, draft labels, provenance, and reader behavior.
 
 ## Brand Commitments
 
-The user requested a religious Hindu landing page and supplied the temple,
-river, Himalayan mountain, and sage artwork as its background. The existing
-identity uses warm cream, brown and saffron. Source-provider branding is not
-displayed in the devotional UI, as requested by the user.
+The user requested a complete Hindu/Sanatan visual redesign with bold religious
+colors and supplied the temple, river, Himalayan mountain and sage artwork.
+The interface uses deep temple green, vermilion, saffron, cream paper, Cinzel
+headings and Hind interface text. Book typesetting keeps its established fonts.
+Source-provider branding is not displayed in the devotional UI as requested.
 
 ## Evidence on Hand
 
 The library catalog and devotional snapshots contain the published content.
-The background and its origin are recorded in `frontend/src/assets/landing/`.
+The background and font origins are recorded in `frontend/src/assets/landing/`.
 No testimonials, usage statistics, or efficacy claims have been provided.

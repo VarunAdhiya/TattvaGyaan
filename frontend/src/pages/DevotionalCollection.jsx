@@ -33,7 +33,7 @@ export default function DevotionalCollection({ category }) {
   }
   return <div className="dev-page">
     <header className="dev-heading">
-      <div><p className="dev-eyebrow">A moment for devotion</p><h1>{section.title}</h1><p lang="hi" className="dev-hindi-subtitle">{section.hindi}</p><p className="dev-description">{section.description}</p></div>
+      <div><h1>{section.title}</h1><p className="dev-eyebrow">A moment for devotion</p><p lang="hi" className="dev-hindi-subtitle">{section.hindi}</p><p className="dev-description">{section.description}</p></div>
       <div className="dev-source-note" aria-hidden="true"><span className="dev-om">ॐ</span></div>
     </header>
     <form className="dev-search" onSubmit={event => { event.preventDefault(); update({ search: query.trim(), page: null }); }}>

@@ -54,7 +54,7 @@ export default function ReadingPlansPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 font-sans">
+    <div className="sacred-page max-w-6xl mx-auto px-4 py-8 font-sans">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-serif font-bold text-stone-900 mb-2">Reading Plans</h1>

@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 const snapshot = JSON.parse(readFileSync(new URL('../../library/devotionals/hinduaarti-2026.json', import.meta.url), 'utf8'));
 
 test('collection errors can be retried without losing the selected section', async ({ page }) => {
-  await page.route('**/api/auth/me', route => route.fulfill({ status: 401, json: { error: 'Not signed in' } }));
+  await page.route('**/api/auth/me', route => route.fulfill({ json: { user: { id: 'reader', username: 'reader' } } }));
   let available = false;
   await page.route('**/api/devotionals?*', route => {
     return route.fulfill(!available
@@ -22,8 +22,8 @@ test('collection errors can be retried without losing the selected section', asy
 test.describe('imported devotional sections', () => {
   test.skip(!process.env.RUN_LIVE_DEVOTIONALS, 'Requires the local API and imported devotional snapshot.');
   test.beforeEach(async ({ page }) => {
-    // Public devotionals should work without a signed-in session.
-    await page.route('**/api/auth/me', route => route.fulfill({ status: 401, json: { error: 'Not signed in' } }));
+    // Collections and devotional readers are available after sign-in.
+    await page.route('**/api/auth/me', route => route.fulfill({ json: { user: { id: 'reader', username: 'reader' } } }));
   });
   test.afterEach(async ({ page }) => {
     await expect(page.locator('body')).not.toContainText(/hindu\s*aarti/i);
@@ -48,7 +48,7 @@ test.describe('imported devotional sections', () => {
     const deity = snapshot.texts.find(text => text.slug === 'shiv-chalisa').deity;
     await page.getByRole('combobox', { name: 'Deity', exact: true }).selectOption(deity);
     await expect(page.locator('.dev-card-deity').first()).toHaveText(deity);
-    await expect(page.getByRole('navigation', { name: 'Explore sections' }).getByRole('link', { name: 'Library', exact: true })).toHaveAttribute('href', '/dashboard');
+    await expect(page.getByRole('navigation', { name: 'Explore sections' }).getByRole('link', { name: 'Library', exact: true })).toHaveAttribute('href', '/library');
     await page.screenshot({ path: 'test-results/devotional-collection.png', fullPage: true });
   });
 

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import AuthScenery from '../components/AuthScenery';
 import { useAuth } from '../context/AuthContext';
 import { BookOpen, AlertCircle, CheckCircle2 } from 'lucide-react';
 
@@ -51,8 +52,9 @@ function Register() {
   const passwordsMatch = password && confirmPassword && password === confirmPassword;
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-gradient-to-br from-amber-50 via-stone-50 to-amber-50/50 px-4 py-8">
-      <div className="w-full max-w-md">
+    <div className="auth-layout auth-register">
+      <AuthScenery />
+      <div className="auth-panel w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">

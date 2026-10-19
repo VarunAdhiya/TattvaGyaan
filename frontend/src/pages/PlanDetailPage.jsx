@@ -69,7 +69,7 @@ export default function PlanDetailPage() {
   const progressPercentage = plan.items.length > 0 ? Math.round((completedItems / plan.items.length) * 100) : 0;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 font-sans">
+    <div className="sacred-page max-w-4xl mx-auto px-4 py-8 font-sans">
       {/* Header */}
       <div className="mb-8">
         <button
@@ -98,7 +98,7 @@ export default function PlanDetailPage() {
         {/* Progress Bar */}
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-semibold text-stone-700">Progress</span>
+            <span className="text-sm font-semibold text-amber-950">Progress</span>
             <span className="text-sm font-mono text-stone-600">
               {completedItems}/{plan.items.length} days
             </span>
@@ -121,7 +121,7 @@ export default function PlanDetailPage() {
 
       {/* Daily Items */}
       {plan.analysis && (
-        <div className="mb-6 p-4 rounded-lg bg-amber-50 border border-amber-200 text-sm text-stone-700">
+        <div className="mb-6 p-4 rounded-lg bg-amber-50 border border-amber-200 text-sm text-amber-950">
           <p className="font-semibold mb-2">How your reading plan was calculated</p>
           <p>{plan.analysis.summary}</p>
           <p className="mt-2">Estimated pace: {Math.round(plan.analysis.wordsPerMinute)} words/minute, with {plan.analysis.reflectionPercent}% extra reflection time. About {plan.minutesPerDay} minutes per day.</p>
@@ -163,7 +163,7 @@ export default function PlanDetailPage() {
                 {plan.edition && (
                   <button
                     onClick={() => navigate(`/reader/${plan.edition.scriptureId}/${plan.editionId}?passage=${encodeURIComponent(item.passageIds[0])}`)}
-                    className="px-3 py-2 border border-stone-300 text-stone-700 hover:bg-stone-50 rounded-lg text-sm font-medium transition flex items-center gap-1.5"
+                    className="px-3 py-2 border border-stone-300 text-amber-950 hover:bg-stone-50 rounded-lg text-sm font-medium transition flex items-center gap-1.5"
                     title="Open in Reader"
                   >
                     <BookOpen className="w-4 h-4 text-amber-800" />

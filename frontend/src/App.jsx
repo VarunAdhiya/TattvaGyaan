@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
@@ -10,7 +10,7 @@ import PlanDetailPage from './pages/PlanDetailPage';
 import ProfilePage from './pages/ProfilePage';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import SectionNavigation from './components/SectionNavigation';
 import DevotionalCollection from './pages/DevotionalCollection';
@@ -18,29 +18,44 @@ import DevotionalDetail from './pages/DevotionalDetail';
 import HinduCalendar from './pages/HinduCalendar';
 import LandingPage from './pages/LandingPage';
 import './devotionals.css';
+import './sacred-theme.css';
 
 function SiteNavigation() {
   const { pathname } = useLocation();
-  return pathname === '/' ? null : <><Navbar /><SectionNavigation /></>;
+  const { user } = useAuth();
+  return pathname === '/dashboard' && user ? null : <><Navbar /><SectionNavigation /></>;
+}
+
+function EntryRoute() {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="sacred-loading" role="status">Opening TattvaGyaan…</div>;
+  return <Navigate to={user ? '/dashboard' : '/login'} replace />;
+}
+
+function GuestRoute({ children }) {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="sacred-loading" role="status">Opening TattvaGyaan?</div>;
+  return user ? <Navigate to="/dashboard" replace /> : children;
 }
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <div className="flex flex-col min-h-screen">
+        <div className="sacred-app flex flex-col min-h-screen">
           <SiteNavigation />
           <main className="flex-1">
             <Routes>
               {['chalisa', 'bhajan', 'mantra'].map(category => <React.Fragment key={category}>
-                <Route path={`/${category}s`} element={<DevotionalCollection key={category} category={category} />} />
-                <Route path={`/${category}s/:slug`} element={<DevotionalDetail key={category} category={category} />} />
+                <Route path={`/${category}s`} element={<ProtectedRoute><DevotionalCollection key={category} category={category} /></ProtectedRoute>} />
+                <Route path={`/${category}s/:slug`} element={<ProtectedRoute><DevotionalDetail key={category} category={category} /></ProtectedRoute>} />
               </React.Fragment>)}
-              <Route path="/calendar" element={<HinduCalendar />} />
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/calendar" element={<ProtectedRoute><HinduCalendar /></ProtectedRoute>} />
+              <Route path="/" element={<EntryRoute />} />
+              <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
+              <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
+              <Route path="/dashboard" element={<ProtectedRoute><LandingPage /></ProtectedRoute>} />
+              <Route path="/library" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/scripture/:scriptureId" element={<ProtectedRoute><ScriptureDetail /></ProtectedRoute>} />
               <Route path="/reader/:scriptureId/:editionId" element={<ProtectedRoute><ReaderPage /></ProtectedRoute>} />
               <Route path="/reading-plans" element={<ProtectedRoute><ReadingPlansPage /></ProtectedRoute>} />

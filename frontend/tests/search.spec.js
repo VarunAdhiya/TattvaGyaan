@@ -11,7 +11,7 @@ test('search calls the server, shows errors, and recovers', async ({ page }) => 
     const scriptures = query === 'unknown' ? [] : [{ id: 'book', title: query || 'Test book', availabilityStatus: 'metadata_only', editions: [] }];
     await route.fulfill({ json: { scriptures, pagination: { total: scriptures.length, totalPages: 1 } } });
   });
-  await page.goto('/dashboard');
+  await page.goto('/library');
   const input = page.getByRole('searchbox', { name: 'Search books' });
   await input.fill('गीता');
   await expect(page.getByRole('heading', { name: 'गीता', exact: true })).toBeVisible();

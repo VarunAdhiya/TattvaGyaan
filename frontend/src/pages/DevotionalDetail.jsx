@@ -28,7 +28,7 @@ export default function DevotionalDetail({ category }) {
   return <div className={`dev-page ${reading ? 'dev-reading-mode' : ''}`}>
     <Link to={section.path} className="dev-back"><ArrowLeft size={16} />All {section.title.toLowerCase()}</Link>
     {!result || error ? <DevotionalState loading={!error} error={error} onRetry={() => setRetry(r => r + 1)} /> : <>
-      <header className="dev-detail-heading"><span className="dev-eyebrow">{section.title} · {result.text.deity}</span><h1>{result.text.title}</h1><p lang="hi" className="dev-hindi-subtitle">{result.text.titleHindi}</p></header>
+      <header className="dev-detail-heading"><h1>{result.text.title}</h1><p lang="hi" className="dev-hindi-subtitle">{result.text.titleHindi}</p><p className="dev-detail-meta">{section.title} · {result.text.deity}</p></header>
       <div className="dev-detail-layout">
         <article className="dev-prayer">
           {result.text.contentStatus === 'source_text' ? <>

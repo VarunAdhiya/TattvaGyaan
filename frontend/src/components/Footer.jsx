@@ -4,7 +4,7 @@ import { BookOpen } from 'lucide-react';
 export default function Footer() {
   const [year] = React.useState(() => new Date().getFullYear());
   return (
-    <footer className="bg-amber-950 text-amber-100/80 border-t border-amber-900/40 py-10 px-4 mt-auto font-sans">
+    <footer className="sacred-footer bg-amber-950 text-amber-100/80 border-t border-amber-900/40 py-10 px-4 mt-auto font-sans">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
           <div className="flex items-center gap-2 mb-3">
