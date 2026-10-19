@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
@@ -16,15 +16,20 @@ import SectionNavigation from './components/SectionNavigation';
 import DevotionalCollection from './pages/DevotionalCollection';
 import DevotionalDetail from './pages/DevotionalDetail';
 import HinduCalendar from './pages/HinduCalendar';
+import LandingPage from './pages/LandingPage';
 import './devotionals.css';
+
+function SiteNavigation() {
+  const { pathname } = useLocation();
+  return pathname === '/' ? null : <><Navbar /><SectionNavigation /></>;
+}
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <div className="flex flex-col min-h-screen">
-          <Navbar />
-          <SectionNavigation />
+          <SiteNavigation />
           <main className="flex-1">
             <Routes>
               {['chalisa', 'bhajan', 'mantra'].map(category => <React.Fragment key={category}>
@@ -32,7 +37,7 @@ function App() {
                 <Route path={`/${category}s/:slug`} element={<DevotionalDetail key={category} category={category} />} />
               </React.Fragment>)}
               <Route path="/calendar" element={<HinduCalendar />} />
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
