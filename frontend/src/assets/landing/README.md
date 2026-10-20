@@ -5,6 +5,11 @@
   Dashboard background; copied without resizing or recompression. The full
   composition retains its aspect ratio with no blur or cropping.
 
+- `durga-temple.png`: exact, unedited 1408 × 768 PNG supplied by the user on
+  20 October 2026, originally `Gemini_Generated_Image_o9ops9o9ops9o9op.png`.
+  Dashboard background; copied without resizing or recompression. The full
+  composition retains its aspect ratio with no blur or cropping.
+
 - `temple-river.png`: exact, unedited image supplied by the user on 19 October
   2026, originally `codex-clipboard-XQmk9N.png` (1024 × 559). Retained by other
   existing surfaces. No generation prompt; user-provided artwork.

@@ -24,8 +24,10 @@ IST. Preserve source text, IDs, draft labels, provenance, and reader behavior.
 
 The user requested a complete Hindu/Sanatan visual redesign with bold religious
 colors and supplied the temple, river, Himalayan mountain and sage artwork.
-The interface uses deep temple green, vermilion, saffron, cream paper, Cinzel
-headings and Hind interface text. Book typesetting keeps its established fonts.
+Most routes use deep temple green, vermilion, saffron, cream paper, Cinzel
+headings and Hind interface text. The dashboard uses continuous warm charcoal,
+gold accents, sentence-case Cormorant headings and complete deity illustrations.
+Book typesetting keeps its established fonts.
 Source-provider branding is not displayed in the devotional UI as requested.
 
 ## Evidence on Hand

@@ -62,6 +62,8 @@ test('signed-in home uses the supplied background, real Panchang and library des
   await expect(page.getByRole('region', { name: "Today's Panchang" })).toContainText('6:24 AM');
   await expect(page.locator('.landing-backdrop')).toHaveJSProperty('naturalWidth', 1408);
   await expect(page.locator('.landing-backdrop')).toHaveJSProperty('naturalHeight', 768);
+  await expect(page.locator('.landing-backdrop')).toHaveJSProperty('naturalWidth', 1408);
+  await expect(page.locator('.landing-backdrop')).toHaveJSProperty('naturalHeight', 768);
   for (const [label, path] of [['Library', '/library'], ['Chalisas', '/chalisas'], ['Bhajans', '/bhajans'], ['Mantras', '/mantras'], ['Calendar', '/calendar']]) {
     await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: label, exact: true })).toHaveAttribute('href', path);
   }
@@ -81,6 +83,7 @@ test('signed-in home uses the supplied background, real Panchang and library des
   const dimensions = await journeyImage.boundingBox();
   expect(dimensions.width / dimensions.height).toBeCloseTo(1.5, 2);
   await expect(page.locator('body')).not.toContainText(/hindu\s*aarti/i);
+  await page.evaluate(() => scrollTo(0, 0));
   await page.evaluate(() => scrollTo(0, 0));
   await capture(page, 'dashboard-desktop');
   await page.getByRole('link', { name: 'Explore the library', exact: true }).click();

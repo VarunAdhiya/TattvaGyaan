@@ -60,6 +60,7 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <SiteFrame>
+        <SiteFrame>
           <SiteNavigation />
           <main className="flex-1">
             <Routes>

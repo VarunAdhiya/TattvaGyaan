@@ -4,11 +4,15 @@ import { ArrowDown, ArrowRight, BookOpen, CalendarDays, Menu, Sunrise, X, LogOut
 import { useAuth } from '../context/AuthContext';
 import { api } from '../api/client';
 import durgaTemple from '../assets/landing/durga-temple.png';
+import durgaTemple from '../assets/landing/durga-temple.png';
 import '../landing.css';
 import '../journeys.css';
 
 const navigation = [['Library', '/library'], ['Chalisas', '/chalisas'], ['Bhajans', '/bhajans'], ['Mantras', '/mantras'], ['Calendar', '/calendar'], ['Journeys', '/journeys']];
 const collections = [
+  { title: 'Hanuman Chalisa', hindi: 'हनुमान चालीसा', path: '/chalisas/hanuman-chalisa', category: 'Chalisas', browse: '/chalisas', image: '/journeys/hanuman.png', alt: 'Hanuman holding his gada in a temple landscape', description: 'A devotional hymn in praise of Hanuman.' },
+  { title: 'Achyutam Keshavam', hindi: 'अच्युतम् केशवम्', path: '/bhajans/achyutam-keshavam', category: 'Bhajans', browse: '/bhajans', image: '/journeys/krishna.png', alt: 'Krishna playing his flute beside a cow', description: 'A bhajan celebrating Krishna and his divine names.' },
+  { title: 'Mahamrityunjay Mantra', hindi: 'महामृत्युंजय मंत्र', path: '/mantras/mahamrityunjay-mantra', category: 'Mantras', browse: '/mantras', image: '/journeys/shiva.png', alt: 'Shiva meditating beside Nandi in the Himalayas', description: 'A sacred invocation to Shiva, also called Tryambaka.' },
   { title: 'Hanuman Chalisa', hindi: 'हनुमान चालीसा', path: '/chalisas/hanuman-chalisa', category: 'Chalisas', browse: '/chalisas', image: '/journeys/hanuman.png', alt: 'Hanuman holding his gada in a temple landscape', description: 'A devotional hymn in praise of Hanuman.' },
   { title: 'Achyutam Keshavam', hindi: 'अच्युतम् केशवम्', path: '/bhajans/achyutam-keshavam', category: 'Bhajans', browse: '/bhajans', image: '/journeys/krishna.png', alt: 'Krishna playing his flute beside a cow', description: 'A bhajan celebrating Krishna and his divine names.' },
   { title: 'Mahamrityunjay Mantra', hindi: 'महामृत्युंजय मंत्र', path: '/mantras/mahamrityunjay-mantra', category: 'Mantras', browse: '/mantras', image: '/journeys/shiva.png', alt: 'Shiva meditating beside Nandi in the Himalayas', description: 'A sacred invocation to Shiva, also called Tryambaka.' },
@@ -53,6 +57,7 @@ export default function LandingPage() {
   return <div className="landing-page">
     <a className="landing-skip" href="#landing-content">Skip to content</a>
     <section className="landing-hero" aria-labelledby="landing-title">
+      <img className="landing-backdrop" src={durgaTemple} width="1408" height="768" alt="" fetchPriority="high" />
       <img className="landing-backdrop" src={durgaTemple} width="1408" height="768" alt="" fetchPriority="high" />
       <div className="landing-shade" />
       <header className="landing-header">
@@ -102,6 +107,7 @@ export default function LandingPage() {
       </article>)}</div>
     </section>
     <section className="landing-scriptures" aria-labelledby="scriptures-title"><div className="landing-section landing-scriptures-inner">
+      <div className="landing-section-intro"><BookOpen className="landing-book-symbol" size={30} strokeWidth={1.3} aria-hidden="true" /><h2 id="scriptures-title">Explore the scripture library</h2><p>Read the available Hindi editions, save your place, and keep notes on passages that stay with you.</p><Link className="landing-primary landing-light-button" to="/library">Enter the scripture library <ArrowRight size={18} aria-hidden="true" /></Link><span className="landing-account-note">Edition details and source information are included with each book.</span></div>
       <div className="landing-section-intro"><BookOpen className="landing-book-symbol" size={30} strokeWidth={1.3} aria-hidden="true" /><h2 id="scriptures-title">Explore the scripture library</h2><p>Read the available Hindi editions, save your place, and keep notes on passages that stay with you.</p><Link className="landing-primary landing-light-button" to="/library">Enter the scripture library <ArrowRight size={18} aria-hidden="true" /></Link><span className="landing-account-note">Edition details and source information are included with each book.</span></div>
       <div className="landing-book-list">{books.map(book => <Link className="landing-book" key={book.title} to={`/library?search=${encodeURIComponent(book.title)}`}><div><span lang="hi">{book.hindi}</span><h3>{book.title}</h3><p>{book.description}</p></div><ArrowRight size={22} strokeWidth={1.4} aria-hidden="true" /></Link>)}<Link className="landing-all-books" to="/library">Explore all books <ArrowRight size={17} aria-hidden="true" /></Link></div>
     </div></section>

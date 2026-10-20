@@ -33,11 +33,23 @@ colors:
   success-ink: "oklch(43.2% 0.095 166.913)"
 typography:
   display:
-    fontFamily: "'Sacred Cinzel', Georgia, serif"
-    fontSize: "clamp(42px, 4.9vw, 70px)"
+    fontFamily: "'Tattva Cormorant', Georgia, serif"
+    fontSize: "clamp(48px, 4.6vw, 72px)"
     fontWeight: 500
-    lineHeight: 1.17
-    letterSpacing: "-.025em"
+    lineHeight: 1.03
+    letterSpacing: "0"
+  dashboard-headline:
+    fontFamily: "'Tattva Cormorant', Georgia, serif"
+    fontSize: "38px"
+    fontWeight: 500
+    lineHeight: 1.15
+    letterSpacing: "0"
+  dashboard-title:
+    fontFamily: "'Tattva Cormorant', Georgia, serif"
+    fontSize: "29px"
+    fontWeight: 500
+    lineHeight: 1.15
+    letterSpacing: "0"
   headline:
     fontFamily: "'Sacred Cinzel', 'Sacred Hind', serif"
     fontSize: "clamp(30px, 3.5vw, 46px)"
@@ -102,11 +114,16 @@ components:
     padding: "10px 16px"
     height: "48px"
   button-hero:
-    backgroundColor: "{colors.hero-saffron}"
-    textColor: "#30251b"
+    backgroundColor: "{colors.dashboard-gold}"
+    textColor: "#302116"
     rounded: "{rounded.control}"
     padding: "14px 22px"
     height: "50px"
+  button-hero-hover:
+    backgroundColor: "#f6d69f"
+  card-dashboard:
+    backgroundColor: "{colors.dashboard-card}"
+    rounded: "{rounded.panel}"
   input:
     backgroundColor: "{colors.field-paper}"
     rounded: "{rounded.control}"
@@ -140,15 +157,16 @@ components:
 
 A saturated temple-green and vermilion interface frames warm paper, saffron accents, and the supplied temple, river, Himalayan mountain and sage artwork. Cinzel gives navigation and headings a ceremonial character; Hind keeps controls and bilingual interface copy approachable. Collection screens carry ornament at their edges while scripture remains on quiet, selectable paper.
 
-This is the implemented October 2026 visual system, extracted from the final CSS cascade rather than the earlier restrained landing concept. The illustration establishes atmosphere at entrances; fine gold borders, lotus geometry and carefully limited lift carry that character into everyday tools. Reading has its own calibrated type and user-selected paper themes.
+This is the implemented October 2026 visual system. The dashboard has a distinct continuous warm-charcoal treatment, sentence-case Cormorant headings, Hind interface text and complete deity illustrations. Its restrained gold accents connect it to the other routes without changing their green, vermilion and paper palette. Reading has its own calibrated type and user-selected paper themes.
 
 **Key Characteristics:**
 - Bold temple green, vermilion and saffron against cream paper.
 - Ceremonial display type paired with clear Hindi-capable interface text.
 - Supplied artwork and peripheral lotus geometry; quiet reading surfaces.
 - Fine borders, restrained hover lift and reduced-motion support.
+- A route-scoped charcoal dashboard with sentence-case Cormorant and uncropped artwork.
 
-The normative implementation is `frontend/src/sacred-theme.css`, layered over `landing.css`, `devotionals.css`, `index.css` and existing Tailwind utilities. Tokens above summarize reused implemented values; they are not a claim that every value is centralized in CSS custom properties. The six `--sacred-*` declarations are only a partial palette, and most theme rules currently use literals. The sidecar extends these tokens with motion, breakpoints and isolated component previews.
+The normative implementation is `frontend/src/sacred-theme.css`, layered over `landing.css`, `devotionals.css`, `index.css` and existing Tailwind utilities, with `frontend/src/dashboard-theme.css` defining the dashboard variation. Tokens above summarize reused implemented values; they are not a claim that every value is centralized in CSS custom properties. The six `--sacred-*` declarations are only a partial palette, and most theme rules currently use literals. The sidecar extends these tokens with motion, breakpoints and isolated component previews.
 
 ## Colors
 
@@ -198,9 +216,10 @@ Cinzel's engraved capitals mark entry points and English collection titles; Hind
 
 ### Hierarchy
 
-- **Display:** the frontmatter display role is the desktop dashboard heading. At 700px and below it becomes `clamp(35px, 9.5vw, 53px)`.
+- **Display:** the frontmatter display role is the desktop dashboard heading. At 700px and below it becomes `clamp(42px, 11vw, 56px)`. Dashboard headings use sentence case and zero letter spacing.
+- **Dashboard headline / title:** section headings use the dashboard-headline role, reducing to 32px on mobile; the Ganesha heading uses `clamp(32px, 3vw, 44px)` and 34px on mobile. Prayer-card titles use dashboard-title, 25px from 701–1000px and 30px at 700px and below.
 - **Headline:** collection headers use the recorded headline role; mobile collection titles are 30px. Personal pages use 36px titles, reduced to 28px on mobile. Authentication titles are 32px, reduced to 28px.
-- **Title:** devotional cards use the recorded title role. Hindi card labels use Hind at 21px; scripture titles use Hind at 24px. Dashboard collection names use Cinzel at 29px, reduced to 25px on mobile.
+- **Title:** devotional collection cards on other routes use the recorded title role. Their Hindi card labels use Hind at 21px; scripture titles use Hind at 24px. Dashboard card Hindi labels use Hind at 18px.
 - **Body:** collection descriptions use 16px and 1.75 line height; dashboard and supporting prose vary from 14?17px with 1.8?1.9 line height. This is a role-based hierarchy, not a single mathematical type scale.
 - **Label:** form labels and navigation are approximately 15px. Card footers and metadata use 12?14px. Calendar figures and profile statistics use tabular numerals.
 - **Prayer:** Hindi prayer text retains Noto Serif Devanagari / Nirmala UI / serif, starting at 22px with 1.95 line height and user adjustment from 18?34px.
@@ -208,17 +227,23 @@ Cinzel's engraved capitals mark entry points and English collection titles; Hind
 
 **The Reading Type Rule.** Preserve the reader font stacks, user size controls, line heights and pagination measurements independently of interface typography.
 
-Explicit Nirmala UI styling remains on several dashboard Hindi labels, and the earlier Cormorant face remains on limited unoverridden landing details. These are implementation exceptions; the redesigned interface heading default is Cinzel. Inherited Georgia reader contents and utility serif badges are likewise not a new display system.
+Explicit Nirmala UI styling remains on the dashboard hero Hindi line and some inherited landing labels. The dashboard brand retains Cinzel; its content headings deliberately use Cormorant. Inherited Georgia reader contents and utility serif badges do not change either route's display system.
 
 ## Layout
 
+The dashboard hero preserves the supplied image's full 1408:768 composition.
+Desktop copy sits left of the central sculpture, with localized warm shading.
+At 1000px and below, text sits below the complete image. Never blur or crop this
+asset to fill the viewport; the surrounding charcoal surface accommodates
+different screen proportions.
+
 The application navbar is sticky, with a maximum inner width of 1360px, 82px minimum height and 28px horizontal padding. Devotional content is centered within 1280px, with 32px desktop gutters and 38px top spacing. Its three-column collection grid uses a 20px gap, changes to two columns at 800px and one at 560px. The 700px sacred override sets collection gutters to 18px and top spacing to 24px; do not read the older base media queries in isolation.
 
-The dashboard uses 90% width sections capped at 1280px and hero content capped at 1320px. Its two-column sections stack at 800px. Desktop section vertical padding is 85?105px, reduced to 64px when stacked. Below 520px, section width becomes 88%; the image crop shifts to 63% horizontally and a 245px upper hero inset leaves the temple scene visible before the text. The 1600px rule caps large-screen header alignment through a 1440px measure.
+Dashboard content sections and Panchang share `min(88%, 1240px)`. The hero copy keeps its separate 90% width (88% below 520px), with no maximum-width cap; the inherited 1600px header rule uses a 1440px measure. Ganesha copy and complete illustration form a .85fr / 1.15fr grid with a 48px gap. Prayer cards use three equal columns and 24px gaps. At 1000px the journey becomes equal columns with a 28px gap; at 700px journey, prayer cards and the scripture section stack. The Ganesha illustration precedes its copy on mobile. Main section vertical padding ranges from 52–64px on desktop and 36–40px on mobile.
 
 Account pages use full-width, uncropped artwork behind a transparent form and an overlaid header. Localized warm shading supplies contrast without blurring the image. The form caps at 440px with 32px padding; at 1000px and below the full artwork stacks above a centered form capped at 500px. Mobile form padding is 32px 26px 40px. Registration pairs fields on desktop only.
 
-The general account menu collapses at 700px; the dashboard menu collapses at 900px. Mobile devotional navigation remains a six-column row with icon above label, 62px minimum height and 11px labels. Desktop nav search disappears at 900px. Calendar content stacks at 1000px. Book layout retains its own 599px, 639px and 1199px adjustments and measurement-driven page geometry.
+The general account menu collapses at 700px; the dashboard menu collapses at 1100px. Mobile devotional navigation remains a six-column row with icon above label, 62px minimum height and 11px labels. Desktop nav search disappears at 900px. Calendar content stacks at 1000px. Book layout retains its own 599px, 639px and 1199px adjustments and measurement-driven page geometry.
 
 Spacing follows recurring 8, 12, 16, 20, 24 and 28px gaps rather than an enforced global scale. Larger header and page spacing are explicitly component-specific.
 
@@ -256,6 +281,8 @@ Complete / Partial / Metadata Only badges communicate actual edition availabilit
 
 ### Cards / Containers
 
+Dashboard prayer cards use dark brown fill, fine translucent gold borders and 12px corners. Their full 3:2 artwork uses contain sizing, followed by 22px by 24px by 20px content padding and a separate collection-browse row. Prayer title hover warms the text; focus within outlines the card in gold. These cards do not inherit the collection cards' hover lift or cream surfaces.
+
 Devotional cards use cream, sage or peach paper with a gold border, 27px padding and 238px minimum height. At 700px they use 25px padding and 215px minimum height. Titles lead; deity metadata sits below the title and Hindi label. The footer sits at the bottom behind a fine divider. Hover lifts the whole card; keyboard focus remains visible.
 
 Scripture cards pair a saturated book-cover panel with cream content, 25px padding and 12px corners. Cover colors cycle red, green and brown; fine gold frames and a low-opacity lotus establish their material. Availability, language and reading-time metadata remain readable. Account panels and workspace cards retain some Tailwind layout, border and spacing utilities under sacred overrides.
@@ -280,10 +307,12 @@ The prayer toolbar is dark green with light labels and saffron selected language
 - **Do** keep metadata below titles and retain truthful availability labels.
 - **Do** provide visible keyboard focus, readable selected states and the reduced-motion behavior already implemented.
 - **Do** inspect the final CSS cascade before extending components that still carry Tailwind utilities.
+- **Do** preserve the dashboard's complete Durga, Ganesha and prayer illustrations without blur, recompression or cover cropping.
 
 ### Don't:
 - **Don't** apply interface fonts or a global color override to calibrated scripture pages.
-- **Don't** treat the old Cormorant landing declarations or generic amber gradients as the new interface default.
+- **Don't** extend the dashboard's Cormorant and charcoal palette to other routes without a separate design decision.
+- **Don't** reintroduce oversized all-capital dashboard headings, cropped Ganesha artwork or cream section slabs.
 - **Don't** place decorative artwork behind sustained scripture text.
 - **Don't** turn remaining ornamental glyphs or legacy eyebrow selectors into reusable navigation icons or heading patterns.
 

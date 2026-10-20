@@ -364,7 +364,7 @@
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "Dashboard hero; responsive mobile override."
+        "purpose": "Sentence-case Cormorant dashboard hero; responsive mobile override."
       },
       "headline": {
         "displayName": "Headline",
@@ -389,6 +389,14 @@
       "scripture": {
         "displayName": "Scripture",
         "purpose": "Preserved Indic book text; size and pagination are calibrated."
+      },
+      "dashboard-headline": {
+        "displayName": "Dashboard headline",
+        "purpose": "Sentence-case Cormorant section headings on the charcoal dashboard."
+      },
+      "dashboard-title": {
+        "displayName": "Dashboard title",
+        "purpose": "Cormorant dashboard prayer-card titles; other collection routes retain Cinzel."
       }
     },
     "shadows": [
@@ -449,10 +457,10 @@
       },
       {
         "name": "dashboard-menu-max",
-        "value": "900px"
+        "value": "1100px"
       },
       {
-        "name": "collection-and-dashboard-stack-max",
+        "name": "collection-two-columns-max",
         "value": "800px"
       },
       {
@@ -474,6 +482,14 @@
       {
         "name": "dashboard-small-max",
         "value": "520px"
+      },
+      {
+        "name": "dashboard-hero-copy-below-max",
+        "value": "1000px"
+      },
+      {
+        "name": "dashboard-content-stack-max",
+        "value": "700px"
       }
     ]
   },
@@ -498,9 +514,9 @@
       "name": "Hero action",
       "kind": "button",
       "refersTo": "button-hero",
-      "description": "The dashboard saffron action; background stays saffron in the final cascade.",
-      "html": "<a class=\"ds-hero\" href=\"#library\">Explore scriptures <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a>",
-      "css": ".ds-hero{display:inline-flex;align-items:center;gap:20px;min-height:50px;padding:14px 22px;background:#f6b244;color:#30251b;border-radius:5px;text-decoration:none;font-family:'Sacred Hind', 'Nirmala UI', sans-serif;font-size:15px;font-weight:600}.ds-hero:hover{background:#f6b244}.ds-primary:focus-visible,.ds-secondary:focus-visible,.ds-hero:focus-visible{outline:3px solid #d17219;outline-offset:4px;}"
+      "description": "Dashboard lamp-gold action with dark text and a lighter hover state.",
+      "html": "<a class=\"ds-hero\" href=\"#library\">Explore the library <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a>",
+      "css": ".ds-hero{display:inline-flex;align-items:center;gap:20px;min-height:50px;padding:14px 22px;background:#e9bc77;color:#302116;border-radius:5px;text-decoration:none;font-family:'Sacred Hind', 'Nirmala UI', sans-serif;font-size:15px;font-weight:600;transition:background .2s}.ds-hero:hover{background:#f6d69f}.ds-primary:focus-visible,.ds-secondary:focus-visible,.ds-hero:focus-visible{outline:3px solid #d17219;outline-offset:4px;}"
     },
     {
       "name": "Account field",
@@ -553,12 +569,13 @@
   ],
   "narrative": {
     "northStar": "The Temple Reading Sanctuary",
-    "overview": "A saturated temple-green and vermilion interface frames warm paper, saffron accents, and the supplied temple, river, Himalayan mountain and sage artwork. Cinzel gives navigation and headings a ceremonial character; Hind keeps controls and bilingual interface copy approachable. Collection screens carry ornament at their edges while scripture remains on quiet, selectable paper.\n\nThis is the implemented October 2026 visual system, extracted from the final CSS cascade rather than the earlier restrained landing concept. The illustration establishes atmosphere at entrances; fine gold borders, lotus geometry and carefully limited lift carry that character into everyday tools. Reading has its own calibrated type and user-selected paper themes.",
+    "overview": "A saturated temple-green and vermilion interface frames warm paper, saffron accents, and the supplied temple, river, Himalayan mountain and sage artwork. Cinzel gives navigation and headings a ceremonial character; Hind keeps controls and bilingual interface copy approachable. Collection screens carry ornament at their edges while scripture remains on quiet, selectable paper.\n\nThis is the implemented October 2026 visual system. The dashboard has a distinct continuous warm-charcoal treatment, sentence-case Cormorant headings, Hind interface text and complete deity illustrations. Its restrained gold accents connect it to the other routes without changing their green, vermilion and paper palette. Reading has its own calibrated type and user-selected paper themes.",
     "keyCharacteristics": [
       "Bold temple green, vermilion and saffron against cream paper.",
       "Ceremonial display type paired with clear Hindi-capable interface text.",
       "Supplied artwork and peripheral lotus geometry; quiet reading surfaces.",
-      "Fine borders, restrained hover lift and reduced-motion support."
+      "Fine borders, restrained hover lift and reduced-motion support.",
+      "A route-scoped charcoal dashboard with sentence-case Cormorant and uncropped artwork."
     ],
     "rules": [
       {
@@ -582,11 +599,13 @@
       "Do retain distinct display, interface, prayer and scripture type roles.",
       "Do keep metadata below titles and retain truthful availability labels.",
       "Do provide visible keyboard focus, readable selected states and the reduced-motion behavior already implemented.",
-      "Do inspect the final CSS cascade before extending components that still carry Tailwind utilities."
+      "Do inspect the final CSS cascade before extending components that still carry Tailwind utilities.",
+      "Do preserve the dashboard's complete Durga, Ganesha and prayer illustrations without blur, recompression or cover cropping."
     ],
     "donts": [
       "Don't apply interface fonts or a global color override to calibrated scripture pages.",
-      "Don't treat the old Cormorant landing declarations or generic amber gradients as the new interface default.",
+      "Don't extend the dashboard's Cormorant and charcoal palette to other routes without a separate design decision.",
+      "Don't reintroduce oversized all-capital dashboard headings, cropped Ganesha artwork or cream section slabs.",
       "Don't place decorative artwork behind sustained scripture text.",
       "Don't turn remaining ornamental glyphs or legacy eyebrow selectors into reusable navigation icons or heading patterns."
     ]
