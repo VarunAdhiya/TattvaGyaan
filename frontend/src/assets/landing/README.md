@@ -1,5 +1,12 @@
 # Landing assets
 
+- `temple-river-full.png` and `shiva-mountains.png`: original 1408 × 768 PNGs
+  supplied by the user on 20 October 2026 (`Gemini_Generated_Image_hdnhd2hdnhd2hdnh.png`
+  and `Gemini_Generated_Image_cr9uf1cr9uf1cr9u.png`). Used for login and registration
+  respectively, copied byte-for-byte without resizing or recompression. Account
+  backgrounds use `object-fit: contain` and no blur; compact screens show the
+  complete artwork above the form.
+
 - `temple-river.png`: exact, unedited image supplied by the user on 19 October
   2026, originally `codex-clipboard-XQmk9N.png` (1024 × 559). Used as the landing
   hero background. No generation prompt; user-provided artwork.

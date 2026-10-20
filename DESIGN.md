@@ -2,6 +2,11 @@
 name: "TattvaGyaan"
 description: "A temple-inspired Hindi scripture and devotional reading sanctuary."
 colors:
+  auth-red: "#c13321"
+  auth-red-hover: "#982516"
+  auth-charcoal: "#28201e"
+  auth-cream: "#fff4df"
+  auth-gold: "#ffd18b"
   temple-green: "#103f3a"
   vermilion: "#a53a26"
   vermilion-hover: "#7a251c"
@@ -77,6 +82,11 @@ spacing:
   form-panel: "28px"
   collection-header: "38px 42px"
 components:
+  auth-submit:
+    backgroundColor: "{colors.auth-red}"
+    textColor: "{colors.auth-cream}"
+    rounded: "4px"
+    height: "54px"
   button-primary:
     backgroundColor: "{colors.vermilion}"
     textColor: "{colors.button-text}"
@@ -142,6 +152,11 @@ The normative implementation is `frontend/src/sacred-theme.css`, layered over `l
 
 ## Colors
 
+Account routes override the green interface palette with auth charcoal, cream,
+gold and red. Their header and form share the artwork through translucent warm
+shading; inputs have dark translucent fills and gold outlines. The broader
+library and reading palette remains unchanged.
+
 The palette combines dark vegetal green, red temple pigment, lamp-like saffron and warm cream rather than a neutral application shell.
 
 ### Primary
@@ -173,6 +188,10 @@ Reader themes remain scoped. The sacred layer changes light-reader background/pa
 
 ## Typography
 
+Account headings use the self-hosted Cormorant Garamond Medium face at 44px
+(43px on phones), with Hind for labels and controls. This account-specific
+exception follows the user's red, gold and charcoal devotional entrance direction.
+
 **Display Font:** self-hosted Cinzel Medium, registered as Sacred Cinzel, with Georgia fallback. **Body Font:** self-hosted Hind Regular and Medium, registered as Sacred Hind, with Nirmala UI fallback. Font files and licenses are recorded in the landing asset README.
 
 Cinzel's engraved capitals mark entry points and English collection titles; Hind supports the practical interface and Hindi card titles. The supplied Hind Medium file is registered for weights 500?900; this is one medium font file, not a set of distinct bold masters. Do not infer additional font assets from utility weights.
@@ -197,7 +216,7 @@ The application navbar is sticky, with a maximum inner width of 1360px, 82px min
 
 The dashboard uses 90% width sections capped at 1280px and hero content capped at 1320px. Its two-column sections stack at 800px. Desktop section vertical padding is 85?105px, reduced to 64px when stacked. Below 520px, section width becomes 88%; the image crop shifts to 63% horizontally and a 245px upper hero inset leaves the temple scene visible before the text. The 1600px rule caps large-screen header alignment through a 1440px measure.
 
-Account pages divide scenery and form at 1.1fr / .9fr, with a minimum 420px form column. At 900px the balance becomes .8fr / 1fr with a 370px form minimum; at 700px the scene stacks above the form and becomes 280px tall. The form panel caps at 490px and uses 28px card padding, reduced to 24px on mobile.
+Account pages use full-width, uncropped artwork behind a transparent form and an overlaid header. Localized warm shading supplies contrast without blurring the image. The form caps at 440px with 32px padding; at 1000px and below the full artwork stacks above a centered form capped at 500px. Mobile form padding is 32px 26px 40px. Registration pairs fields on desktop only.
 
 The general account menu collapses at 700px; the dashboard menu collapses at 900px. Mobile devotional navigation remains a six-column row with icon above label, 62px minimum height and 11px labels. Desktop nav search disappears at 900px. Calendar content stacks at 1000px. Book layout retains its own 599px, 639px and 1199px adjustments and measurement-driven page geometry.
 
@@ -227,7 +246,7 @@ Gold borders are usually 1px; the selected devotional navigation tab has a 3px b
 
 ### Buttons
 
-Account primary actions use vermilion, light text, a 49px minimum height and 5px corners. Hover deepens the red and lifts the button by 1px; disabled opacity is .5. Secondary account actions use pale sage and a green border, with 48px minimum height. Dashboard hero actions use saffron, dark text, 50px minimum height and 14px by 22px padding; mobile padding becomes 12px by 18px. The sacred selector fixes the hero's background, so the earlier lower-specificity hover background in landing.css is not an effective theme variant.
+Account primary actions use auth red, cream text, a 54px minimum height and 4px corners. Hover deepens the red; disabled actions use opaque muted brown. Secondary account actions are underlined gold links. Dashboard hero actions use saffron, dark text, 50px minimum height and 14px by 22px padding; mobile padding becomes 12px by 18px. The sacred selector fixes the hero's background, so the earlier lower-specificity hover background in landing.css is not an effective theme variant.
 
 Devotional actions use 8px by 14px padding, 44px minimum height and 7px corners. Their primary hover is `#7f281e`, distinct from account buttons. General application focus uses a 3px warm orange outline and 4px offset; devotional page rules retain a 2px outline and 3px offset through greater specificity. Preserve both visible focus treatments when extending those components.
 
