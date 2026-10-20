@@ -4,7 +4,6 @@ import { ArrowDown, ArrowRight, BookOpen, CalendarDays, Menu, Sunrise, X, LogOut
 import { useAuth } from '../context/AuthContext';
 import { api } from '../api/client';
 import durgaTemple from '../assets/landing/durga-temple.png';
-import durgaTemple from '../assets/landing/durga-temple.png';
 import '../landing.css';
 import '../journeys.css';
 
