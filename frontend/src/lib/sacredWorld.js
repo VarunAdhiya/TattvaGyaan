@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { ganeshaLevels } from '../data/divineJourneys';
+import { createDioramaBuilder } from './sacredDioramas';
 
 // The same continuous world is retained while the camera travels between stops.
 const stops = [
@@ -11,17 +12,25 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'low-power' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.setClearColor('#a8c9bf');
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.autoUpdate = false;
+  renderer.setClearColor('#b4dcf0');
   host.prepend(renderer.domElement);
   renderer.domElement.setAttribute('aria-label', 'Interactive 3D sacred islands. Drag to look around; use the level buttons to travel.');
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#a8c9bf');
-  scene.fog = new THREE.Fog('#a8c9bf', 72, 230);
+  scene.background = new THREE.Color('#b4dcf0');
+  scene.fog = new THREE.Fog('#b4dcf0', 100, 260);
   const camera = new THREE.PerspectiveCamera(43, 1, 0.1, 500);
-  scene.add(new THREE.HemisphereLight('#fff3d1', '#31584b', 2.7));
-  const sun = new THREE.DirectionalLight('#ffe2a3', 3.2);
+  scene.add(new THREE.HemisphereLight('#fff3e3', '#31516a', 1.9));
+  const sun = new THREE.DirectionalLight('#ffe2b8', 2.5);
   sun.position.set(-30, 65, 40);
-  scene.add(sun);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(1024, 1024);
+  Object.assign(sun.shadow.camera, { left: -17, right: 17, top: 17, bottom: -17, near: 1, far: 90 });
+  sun.shadow.normalBias = 0.05;
+  sun.shadow.bias = -0.0002;
+  scene.add(sun, sun.target);
 
   let disposed = false;
   let active = 0;
@@ -40,11 +49,8 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
   let sceneTime = 0;
   const geometryCache = new Map();
   const materials = new Set();
-  const textures = new Map();
-  const imageStates = new Map();
   const flameMeshes = [];
   const waterRings = [];
-  const cloudGroups = [];
   const targets = [];
   const look = new THREE.Vector3();
   const cameraEnd = new THREE.Vector3();
@@ -68,10 +74,8 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
   const snow = material('#f3efdc');
   const mountain = material('#66887d');
   const pink = material('#e5a5a1');
-  const roof = material('#944a2e');
   const flame = new THREE.MeshBasicMaterial({ color: '#ffe59a' });
-  const cloudMaterial = new THREE.MeshBasicMaterial({ color: '#e2ebe1', transparent: true, opacity: 0.35, depthWrite: false });
-  materials.add(flame); materials.add(cloudMaterial);
+  materials.add(flame);
 
   function geometry(kind, args) {
     const key = `${kind}:${args.join(',')}`;
@@ -81,6 +85,8 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
   function mesh(parent, kind, args, surface, x = 0, y = 0, z = 0) {
     const object = new THREE.Mesh(geometry(kind, args), surface);
     object.position.set(x, y, z);
+    object.castShadow = true;
+    object.receiveShadow = true;
     parent.add(object);
     return object;
   }
@@ -106,6 +112,7 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
     }
   }
 
+  const buildDiorama = createDioramaBuilder({ mesh, material, geometryCache });
   const islands = positions.map((point, index) => {
     const island = new THREE.Group();
     island.position.copy(point); island.userData.level = index; scene.add(island);
@@ -114,26 +121,14 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
     targets.push(ground);
     mesh(island, 'CylinderGeometry', [8.8, 5.5, 2.5, 14], darkStone, 0, -1.8);
     mesh(island, 'ConeGeometry', [5.5, 3.2, 10], darkStone, 0, -4.5).rotation.z = Math.PI;
-    for (let step = 0; step < 4; step++) {
-      mesh(island, 'BoxGeometry', [10.7 - step * 0.5, 0.22, 4.7 - step * 0.65], stone, 0, 0.55 + step * 0.22, 1.6 - step * 0.3);
+    // Open sculpture gardens replace the picture planes, pillars and roofs.
+    const diorama = buildDiorama(island, index);
+    for (let r = 0; r < 9; r++) {
+      const angle = r / 9 * Math.PI * 2;
+      const rock = mesh(island, 'DodecahedronGeometry', [1, 0], r % 2 ? stone : darkStone, Math.cos(angle) * 8.7, -0.7, Math.sin(angle) * 8.7);
+      rock.scale.set(1.4, 1.1, 1.25);
+      rock.rotation.y = angle;
     }
-    // The retained illustrations are large sacred tableaux inside real 3D shrines.
-    const artMaterial = new THREE.MeshBasicMaterial({ color: '#f4e8c9' });
-    materials.add(artMaterial);
-    mesh(island, 'BoxGeometry', [12.4, 8.3, 0.45], darkStone, 0, 5.1, -1.6);
-    mesh(island, 'BoxGeometry', [11.9, 7.9, 0.12], gold, 0, 5.1, -1.33);
-    const art = mesh(island, 'PlaneGeometry', [11.5, 7.66], artMaterial, 0, 5.1, -1.24);
-    targets.push(art);
-    for (const x of [-6.4, 6.4]) {
-      mesh(island, 'CylinderGeometry', [0.34, 0.42, 8.2, 10], stone, x, 4.8, -0.6);
-      for (const y of [1, 1.45, 8.1, 8.6]) mesh(island, 'CylinderGeometry', [0.54, 0.54, 0.22, 10], gold, x, y, -0.6);
-      lamp(island, x, 2.7, 1.15);
-    }
-    mesh(island, 'BoxGeometry', [14.2, 0.45, 3.6], stone, 0, 9.1, -1.3);
-    const canopy = mesh(island, 'ConeGeometry', [9.9, 2.2, 4], roof, 0, 10.4, -1.3);
-    canopy.rotation.y = Math.PI / 4; canopy.scale.z = 0.34;
-    mesh(island, 'SphereGeometry', [0.27, 10, 8], gold, 0, 11.7, -1.3);
-    mesh(island, 'ConeGeometry', [0.12, 0.7, 8], gold, 0, 12.1, -1.3);
     for (let t = 0; t < 5; t++) {
       const angle = 0.1 + t * Math.PI / 4;
       tree(island, Math.cos(angle) * 8.2, -3.2 - Math.sin(angle) * 3.8, 0.7 + (t % 3) * 0.15, index);
@@ -166,7 +161,7 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
     materials.add(ringMaterial);
     const ring = mesh(scene, 'RingGeometry', [10, 10.09, 64], ringMaterial, point.x, -6.7, point.z);
     ring.rotation.x = -Math.PI / 2; waterRings.push(ring);
-    return { group: island, artMaterial, art, point };
+    return { group: island, diorama, point };
   });
 
   const routePoints = positions.map(point => point.clone().add(new THREE.Vector3(0, 1, 6.4)));
@@ -185,19 +180,66 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
   traveller.position.copy(curve.getPoint(0));
 
   const waterMaterial = new THREE.ShaderMaterial({
-    uniforms: { time: { value: 0 } },
-    vertexShader: 'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
-    fragmentShader: 'varying vec2 vUv; uniform float time; void main(){float w=sin(vUv.x*370.0+time*.35)*sin(vUv.y*310.0-time*.25);float line=smoothstep(.93,1.0,w);vec3 color=mix(vec3(.20,.43,.39),vec3(.44,.65,.57),vUv.y);gl_FragColor=vec4(color+line*.09,1.0);}',
+    uniforms: {
+      time: { value: 0 },
+      shores: { value: positions.map(point => new THREE.Vector2(point.x, point.z)) },
+      hazeRange: { value: new THREE.Vector2(90, 235) },
+    },
+    vertexShader: `
+      uniform float time;
+      varying vec3 vWorld;
+      varying vec3 vNormal;
+      varying float vCrest;
+      void main() {
+        vec3 p = position;
+        float a = p.x * .34 + p.y * .15 + time * 1.3;
+        float b = p.x * -.18 + p.y * .48 - time * 1.65;
+        float c = p.x * .76 + p.y * .56 + time * 2.05;
+        p.z = .52 * sin(a) + .26 * sin(b) + .10 * sin(c);
+        float dx = .52 * .34 * cos(a) - .26 * .18 * cos(b) + .10 * .76 * cos(c);
+        float dy = .52 * .15 * cos(a) + .26 * .48 * cos(b) + .10 * .56 * cos(c);
+        vNormal = normalize(mat3(modelMatrix) * vec3(-dx, -dy, 1.0));
+        vCrest = p.z;
+        vec4 world = modelMatrix * vec4(p, 1.0);
+        vWorld = world.xyz;
+        gl_Position = projectionMatrix * viewMatrix * world;
+      }`,
+    fragmentShader: `
+      uniform float time;
+      uniform vec2 shores[8];
+      uniform vec2 hazeRange;
+      varying vec3 vWorld;
+      varying vec3 vNormal;
+      varying float vCrest;
+      void main() {
+        vec3 normal = normalize(vNormal);
+        vec3 view = normalize(cameraPosition - vWorld);
+        vec3 light = normalize(vec3(-.45, .8, .3));
+        float fresnel = pow(1.0 - max(dot(normal, view), 0.0), 3.0);
+        float diffuse = max(dot(normal, light), 0.0);
+        float specular = pow(max(dot(normal, normalize(light + view)), 0.0), 85.0);
+        vec3 color = mix(vec3(.015, .16, .43), vec3(.02, .43, .72), diffuse * .7 + .22);
+        color = mix(color, vec3(.28, .68, .86), fresnel * .65);
+        float foam = smoothstep(.53, .82, vCrest) * .25;
+        for (int i = 0; i < 8; i++) {
+          float distanceToShore = length(vWorld.xz - shores[i]);
+          float band = smoothstep(5.5, 7.0, distanceToShore) * (1.0 - smoothstep(9.0, 14.0, distanceToShore));
+          float ripple = smoothstep(.72, 1.0, sin(distanceToShore * 3.2 - time * 1.8));
+          foam += band * ripple * .35;
+        }
+        color = mix(color, vec3(.7, .91, 1.0), min(foam, .65));
+        color += vec3(.65, .83, 1.0) * specular * .7;
+        float haze = smoothstep(hazeRange.x, hazeRange.y, length(cameraPosition - vWorld));
+        color = mix(color, vec3(.46, .70, .84), haze);
+        gl_FragColor = vec4(color, 1.0);
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }`,
   });
   materials.add(waterMaterial);
-  const water = mesh(scene, 'PlaneGeometry', [600, 600], waterMaterial, 0, -6.9, 0);
+  const water = mesh(scene, 'PlaneGeometry', [500, 500, 256, 256], waterMaterial, 0, -6.9, 0);
   water.rotation.x = -Math.PI / 2;
-  // Slow cloud banks give the camera journey a sense of distance.
-  for (let c = 0; c < 12; c++) {
-    const group = new THREE.Group(); group.position.set((c % 4 - 1.5) * 39, -3 + c % 3, Math.floor(c / 4) * 48 - 65);
-    for (let part = 0; part < 3; part++) mesh(group, 'SphereGeometry', [3.2, 8, 6], cloudMaterial, part * 3, 0, 0).scale.set(2.8, 0.4, 1.4);
-    scene.add(group); cloudGroups.push(group);
-  }
+  water.castShadow = false;
   const particlesGeometry = new THREE.BufferGeometry();
   const particlePositions = new Float32Array(180 * 3);
   for (let p = 0; p < 180; p++) {
@@ -211,39 +253,18 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
   materials.add(particlesMaterial);
   const particles = new THREE.Points(particlesGeometry, particlesMaterial); scene.add(particles);
 
-  const loader = new THREE.TextureLoader();
-  function loadArt(index) {
-    const url = ganeshaLevels[index].image;
-    if (imageStates.has(url)) return;
-    imageStates.set(url, 'loading');
-    loader.load(url, texture => {
-      if (disposed) { texture.dispose(); return; }
-      texture.colorSpace = THREE.SRGBColorSpace;
-      texture.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 4);
-      textures.set(url, texture); imageStates.set(url, 'loaded');
-      islands.forEach((island, i) => {
-        if (ganeshaLevels[i].image === url) { island.artMaterial.map = texture; island.artMaterial.color.set('#ffffff'); island.artMaterial.needsUpdate = true; }
-      });
-      dirty = true;
-      if (ganeshaLevels[active].image === url) onReady(true);
-    }, undefined, () => {
-      if (disposed) return;
-      imageStates.set(url, 'failed');
-      if (ganeshaLevels[active].image === url) onReady(false);
-    });
-  }
   function destinations() {
     const mobile = width < 700;
     if (overview) {
       lookEnd.set(0, 0, -10);
-      const distance = mobile ? 175 : 100;
+      const distance = mobile ? 280 : 100;
       cameraEnd.set(5, distance * 0.82, distance * 0.7);
     } else {
       const point = positions[active];
-      const distance = (mobile ? 35 : 25) + zoom;
-      // Slightly offset the stage to keep the shrine clear of the story HUD.
-      lookEnd.copy(point).add(new THREE.Vector3(mobile ? 0 : -2.8, 3.9, 0));
-      cameraEnd.copy(point).add(new THREE.Vector3(Math.sin(orbit + 0.12) * distance, 12 + elevation, Math.cos(orbit + 0.12) * distance));
+      const distance = (mobile ? 39 : 28) + zoom;
+      // Reserve space beside the sculpture for its world-anchored story.
+      lookEnd.copy(point).add(new THREE.Vector3(mobile ? 0 : 5.1, mobile ? 1.2 : 2, 0));
+      cameraEnd.copy(point).add(new THREE.Vector3(Math.sin(orbit + 0.2) * distance, (mobile ? 23 : 17) + elevation, Math.cos(orbit + 0.2) * distance));
     }
   }
   function setDestination(index, showMap, pauseMotion) {
@@ -260,10 +281,16 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
       }
       onTravel(!still);
     }
-    islands.forEach((island, i) => { island.group.visible = overview || Math.abs(i - active) <= 1; });
-    if (overview) islands.forEach((_, i) => loadArt(i));
-    else [active, active - 1, active + 1].filter(i => i >= 0 && i < islands.length).forEach(loadArt);
-    onReady(imageStates.get(ganeshaLevels[active].image) === 'loaded');
+    islands.forEach((island, i) => { island.group.visible = overview || i === active; });
+    sun.position.copy(positions[active]).add(new THREE.Vector3(-18, 35, 22));
+    sun.target.position.copy(positions[active]);
+    renderer.shadowMap.needsUpdate = true;
+    scene.fog.near = overview ? 260 : 100;
+    scene.fog.far = overview ? 580 : 260;
+    waterMaterial.uniforms.hazeRange.value.set(overview ? 260 : 90, overview ? 600 : 235);
+    onReady(true);
+    host.dataset.sceneKind = 'sculptural-diorama';
+    host.dataset.chapter = ganeshaLevels[active].id;
     loaded = true; dirty = true;
   }
   function resize() {
@@ -278,10 +305,24 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
   function updatePins() {
     markerElements.forEach((element, index) => {
       if (!overview) { element.hidden = true; return; }
-      projected.copy(positions[index]).add(new THREE.Vector3(0, 13, 0)).project(camera);
+      projected.copy(positions[index]).add(new THREE.Vector3(0, 8.5, 0)).project(camera);
       element.hidden = projected.z > 1 || Math.abs(projected.x) > 1.1 || Math.abs(projected.y) > 1.1;
-      element.style.transform = `translate(${(projected.x * 0.5 + 0.5) * width}px, ${(-projected.y * 0.5 + 0.5) * height}px) translate(-50%, -100%)`;
+      const halfWidth = element.offsetWidth / 2 + 6;
+      const x = THREE.MathUtils.clamp((projected.x * 0.5 + 0.5) * width, halfWidth, width - halfWidth);
+      element.style.transform = `translate(${x}px, ${(-projected.y * 0.5 + 0.5) * height}px) translate(-50%, -100%)`;
     });
+    const story = host.parentElement.querySelector('[data-world-story]');
+    const leader = host.parentElement.querySelector('[data-world-leader]');
+    if (!story || overview || width <= 700) return;
+    projected.copy(positions[active]).add(new THREE.Vector3(7, 2.3, 1.5)).project(camera);
+    const anchorX = (projected.x * 0.5 + 0.5) * width;
+    const anchorY = (-projected.y * 0.5 + 0.5) * height;
+    const storyWidth = story.offsetWidth, storyHeight = story.offsetHeight;
+    const x = THREE.MathUtils.clamp(anchorX + 32, width * 0.55, Math.max(width * 0.55, width - storyWidth - 28));
+    const y = THREE.MathUtils.clamp(anchorY - storyHeight * 0.55, 148, Math.max(148, height - storyHeight - 235));
+    story.style.setProperty('--story-x', `${x}px`);
+    story.style.setProperty('--story-y', `${y}px`);
+    if (leader) leader.setAttribute('d', `M ${anchorX} ${anchorY} Q ${x - 22} ${anchorY} ${x} ${y + storyHeight * 0.55}`);
   }
   function frame(now) {
     if (!visible || disposed || (!dirty && still && !journey)) return;
@@ -289,7 +330,9 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
     const dt = Math.min((now - lastFrame) / 1000, 0.05); lastFrame = now;
     if (!still) sceneTime += dt;
     if (journey) {
-      const fraction = still ? 1 : Math.min((now - journey.start) / journey.duration, 1);
+      // A queued animation frame can predate a newly selected destination.
+      // Keep both camera interpolation and curve sampling inside their domains.
+      const fraction = still ? 1 : THREE.MathUtils.clamp((now - journey.start) / journey.duration, 0, 1);
       const eased = fraction < 0.5 ? 4 * fraction ** 3 : 1 - (-2 * fraction + 2) ** 3 / 2;
       camera.position.lerpVectors(journey.from, cameraEnd, eased);
       look.lerpVectors(journey.lookFrom, lookEnd, eased);
@@ -300,20 +343,21 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
       look.lerp(lookEnd, still ? 1 : 0.16);
     }
     camera.lookAt(look);
-    traveller.position.copy(curve.getPoint(travellerT));
+    traveller.position.copy(curve.getPoint(THREE.MathUtils.clamp(travellerT, 0, 1)));
     traveller.position.y += 0.5 + (still ? 0 : Math.sin(sceneTime * 2.2) * 0.16);
     travellerFlame.scale.y = 2.3 + (still ? 0 : Math.sin(sceneTime * 8) * 0.25);
     travellerHalo.rotation.z = sceneTime * 0.4;
     waterMaterial.uniforms.time.value = sceneTime;
+    islands.forEach(island => { if (island.group.visible) island.diorama.update(sceneTime); });
     particles.position.y = still ? 0 : Math.sin(sceneTime * 0.16) * 0.7;
     flameMeshes.forEach((item, i) => { item.scale.y = 2.2 + (still ? 0 : Math.sin(sceneTime * 6 + i) * 0.3); });
     waterRings.forEach((item, i) => { item.scale.setScalar(1 + (still ? 0 : (Math.sin(sceneTime * 0.7 + i) + 1) * 0.1)); });
-    cloudGroups.forEach((item, i) => { item.position.x = (i % 4 - 1.5) * 39 + (still ? 0 : Math.sin(sceneTime * 0.06 + i) * 3); });
     updatePins();
     renderer.render(scene, camera);
     host.dataset.cameraPosition = `${camera.position.x.toFixed(2)},${camera.position.y.toFixed(2)},${camera.position.z.toFixed(2)}`;
     host.dataset.moving = journey ? 'true' : 'false';
     host.dataset.motion = still ? 'paused' : 'playing';
+    host.dataset.waterTime = sceneTime.toFixed(3);
     dirty = !still && camera.position.distanceTo(cameraEnd) > 0.01;
   }
   renderer.setAnimationLoop(frame);
@@ -330,7 +374,7 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
     if (Math.abs(dx) + Math.abs(dy) > 5) down.dragged = true;
     if (!down.dragged) return;
     journey = null; onTravel(false);
-    orbit = THREE.MathUtils.clamp(down.orbit - dx * 0.003, -0.65, 0.65);
+    orbit = THREE.MathUtils.clamp(down.orbit - dx * 0.004, -Math.PI, Math.PI);
     elevation = THREE.MathUtils.clamp(down.elevation + dy * 0.035, -3, 8);
     destinations(); dirty = true;
   }
@@ -377,7 +421,7 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
       canvas.removeEventListener('webglcontextlost', contextLost);
       geometryCache.forEach(value => value.dispose());
       materials.forEach(value => value.dispose());
-      textures.forEach(value => value.dispose());
+      sun.shadow.map?.dispose();
       renderer.dispose(); canvas.remove();
     },
   };

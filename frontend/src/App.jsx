@@ -21,11 +21,14 @@ const DivineJourneys = React.lazy(() => import('./pages/DivineJourneys'));
 import './devotionals.css';
 import './sacred-theme.css';
 import './auth.css';
+// Route-specific themes must follow the shared sacred theme.
+import './dashboard-theme.css';
 
 function SiteFrame({ children }) {
   const { pathname } = useLocation();
   const isAccountPage = pathname === '/login' || pathname === '/register';
-  return <div className={`sacred-app flex flex-col min-h-screen${isAccountPage ? ' auth-route' : ''}`}>{children}</div>;
+  const isDashboardPage = pathname === '/dashboard';
+  return <div className={`sacred-app flex flex-col min-h-screen${isAccountPage ? ' auth-route' : ''}${isDashboardPage ? ' dashboard-route' : ''}`}>{children}</div>;
 }
 
 function SiteNavigation() {

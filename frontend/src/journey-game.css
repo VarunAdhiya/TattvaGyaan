@@ -2,7 +2,7 @@
   --game-paper: #fff6e3;
   --game-ink: #173b32;
   position: fixed; inset: 0; z-index: 70; overflow: hidden;
-  color: var(--game-ink); background: #a8c9bf;
+  color: var(--game-ink); background: #176da7;
   font-family: 'Sacred Hind', 'Nirmala UI', sans-serif;
 }
 .journey-game button { cursor: pointer; touch-action: manipulation; }
@@ -25,7 +25,9 @@
 .game-location > span:first-child { width: 6px; height: 6px; background: #8f422e; border-radius: 50%; }
 .game-location > span.is-travelling { animation: travel-beacon .65s ease-in-out infinite alternate; }
 @keyframes travel-beacon { to { opacity: .3; transform: scale(.6); } }
-.game-story { position: absolute; z-index: 2; left: 28px; bottom: 120px; width: min(370px, 31vw); max-height: calc(100svh - 290px); overflow: auto; padding: 23px 25px 18px; border-radius: 12px; background: #fff6e3f5; box-shadow: 0 12px 30px -14px #183b3566; scrollbar-width: thin; scrollbar-color: #bba474 #fff6e3; animation: story-arrive .4s cubic-bezier(.16,1,.3,1); }
+.game-story { position: absolute; z-index: 2; left: var(--story-x, calc(100% - 390px)); top: var(--story-y, 30%); width: min(350px, 30vw); max-height: calc(100svh - 385px); overflow: auto; padding: 23px 25px 18px; border-radius: 12px; background: #fff6e3f5; box-shadow: 0 12px 30px -14px #183b3566; scrollbar-width: thin; scrollbar-color: #bba474 #fff6e3; animation: story-arrive .4s cubic-bezier(.16,1,.3,1); }
+.game-story-tether { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
+.game-story-tether path { fill: none; stroke: #fff6e3; stroke-width: 2; stroke-linecap: round; }
 @keyframes story-arrive { from { clip-path: inset(0 0 12% 0 round 12px); transform: translateY(10px); } to { clip-path: inset(0 round 12px); transform: translateY(0); } }
 .game-story-heading { display: flex; gap: 9px; align-items: center; color: #8b3d24; font-size: 13px; margin-bottom: 13px; }
 .game-level-number { display: flex; width: 28px; height: 28px; flex-shrink: 0; align-items: center; justify-content: center; background: #a53a26; color: #fff6e3; border-radius: 50%; font-variant-numeric: tabular-nums; }
@@ -69,7 +71,7 @@
 .game-map-intro { position: absolute; top: 155px; left: 30px; pointer-events: none; max-width: 300px; }
 .game-map-intro h1 { font-family: 'Sacred Cinzel', Georgia, serif; font-size: 28px; line-height: 1.2; font-weight: 500; margin-bottom: 12px; }
 .game-map-intro p { font-size: 14px; line-height: 1.7; }
-.world-loading { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 15px; align-items: center; justify-content: center; background: #b8cec0; }
+.world-loading { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 15px; align-items: center; justify-content: center; background: #b4dcf0; }
 .world-loading svg { animation: compass-turn 5s linear infinite; }
 @keyframes compass-turn { to { transform: rotate(360deg); } }
 .world-fallback-scene { position: absolute; inset: 0; }
@@ -83,7 +85,7 @@
 .game-art-close { position: absolute; top: 12px; right: 12px; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #173b32; background: #fff6e3; }
 .journey-game.is-still *, .journey-game.is-still *::before, .journey-game.is-still *::after { animation: none !important; transition: none !important; }
 @media (max-width: 1050px) and (min-width: 701px) {
-  .game-story { width: 330px; padding: 18px; }
+  .game-story { width: min(330px, 36vw); padding: 18px; }
   .game-next { min-width: 205px; max-width: 240px; gap: 12px; }
   .game-trail { gap: 12px; padding: 12px; }
   .game-trail-summary small { display: none; }
@@ -91,7 +93,7 @@
   .game-trail button > strong { font-size: 9px; }
 }
 @media (max-width: 700px) {
-  .sacred-world { bottom: 38%; }
+  .sacred-world { bottom: 30%; }
   .game-header { top: 12px; left: 12px; right: 12px; gap: 6px; flex-wrap: wrap; }
   .game-brand { position: absolute; top: 51px; left: 0; padding: 6px 9px; gap: 6px; }
   .game-brand > svg { width: 17px; }
@@ -105,7 +107,8 @@
   .game-scene-actions { top: 107px; right: 12px; bottom: auto; font-size: 10px; gap: 6px; }
   .game-scene-actions > span { display: none; }
   .game-scene-actions > button { min-height: 35px; }
-  .game-story { left: 12px; right: 12px; bottom: 153px; width: auto; padding: 14px 18px 9px; max-height: 33svh; border-radius: 12px; }
+  .game-story { left: 12px; right: 12px; top: auto; bottom: 153px; width: auto; padding: 14px 18px 9px; max-height: 33svh; border-radius: 12px; }
+  .game-story-tether { display: none; }
   .game-story-heading { font-size: 11px; margin-bottom: 8px; }
   .game-level-number { width: 23px; height: 23px; font-size: 12px; }
   .game-visited { font-size: 10px; }
@@ -141,7 +144,7 @@
   .game-header { top: 12px; }
   .game-brand { padding-block: 5px; }
   .game-location { top: 80px; }
-  .game-story { bottom: 96px; max-height: calc(100svh - 220px); padding: 15px 18px; }
+  .game-story { max-height: calc(100svh - 330px); padding: 15px 18px; }
   .game-story h1 { font-size: 24px; }
   .game-story > p { font-size: 13px; }
   .game-navigation { bottom: 99px; }

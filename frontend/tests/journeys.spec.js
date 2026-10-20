@@ -8,116 +8,123 @@ test.beforeEach(async ({ page }) => {
   await page.route('**/api/auth/me', route => route.fulfill({ json: { user } }));
 });
 
+async function settled(page) {
+  const world = page.locator('.sacred-world');
+  await expect(world).toHaveAttribute('data-ready', 'true', { timeout: 30000 });
+  await expect(world).toHaveAttribute('data-moving', 'false', { timeout: 15000 });
+  return world;
+}
+
 async function capture(page, name) {
   await page.evaluate(() => document.fonts.ready);
-  await expect(page.locator('.journey-scene > img')).toHaveClass('is-loaded');
-  await page.evaluate(() => window.scrollTo(0, 0));
-  await page.screenshot({ path: `../.impeccable/review/${name}.png`, fullPage: true, animations: 'disabled' });
+  await settled(page);
+  await page.screenshot({ path: `../.impeccable/review/${name}.png` });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 }
 
-test('all chapters unlock, navigation persists, and completion can be revisited', async ({ page }) => {
+test('all sculptural chapters are open, descriptions follow the island, and navigation persists', async ({ page }) => {
+  test.setTimeout(120000);
   const errors = [];
-  page.on('pageerror', error => errors.push(error.message));
+  page.on('pageerror', error => errors.push(error.stack || error.message));
+  page.on('console', message => { if (message.type() === 'error' && /shader|webgl/i.test(message.text())) errors.push(message.text()); });
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto('/journeys');
-  await expect(page).toHaveURL(/\/journeys\/ganesha$/);
-  await expect(page.getByRole('button', { name: /Level 2:/ })).toBeDisabled();
-  await capture(page, 'journey-entrance-desktop');
-  await page.getByRole('button', { name: 'Enter the journey', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Previous', exact: true })).toBeDisabled();
-  await capture(page, 'journey-birth-desktop');
+  await page.goto('/journeys/ganesha?level=1');
+  const world = await settled(page);
+  await expect(world).toHaveAttribute('data-scene-kind', 'sculptural-diorama');
+  await expect(page.getByRole('button', { name: /^Collect/ })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Previous chapter' })).toBeDisabled();
   for (let index = 0; index < titles.length; index++) {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[index]);
-    const next = page.getByRole('button', { name: index === 7 ? 'Complete journey' : 'Next chapter' });
-    await expect(next).toBeDisabled();
-    await page.getByRole('button', { name: /^Collect the/ }).click();
-    await expect(page.getByRole('button', { name: /petal collected$/ })).toBeDisabled();
-    await expect(next).toBeEnabled();
-    if (index === 1) {
-      await page.reload();
-      await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[1]);
-      await page.getByRole('button', { name: 'Previous', exact: true }).click();
-      await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[0]);
-      await page.getByRole('button', { name: 'Next chapter' }).click();
-      await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[1]);
-      await page.getByRole('button', { name: 'Your journey map' }).click();
-      await expect(page.getByRole('button', { name: /Level 1:.*completed/ })).toBeEnabled();
-      await expect(page.getByRole('button', { name: /Level 4:/ })).toBeDisabled();
-    }
-    if (index === 4) await capture(page, 'journey-family-desktop');
-    await next.click();
+    await settled(page);
+    await expect(page.locator('[data-world-story]')).toBeVisible();
+    await expect(page.locator('[data-world-leader]')).toHaveAttribute('d', /^M /);
+    if ([0, 2, 5, 7].includes(index)) await capture(page, `sculpture-chapter-${index + 1}`);
+    await page.getByRole('button', { name: index === 7 ? 'Finish journey' : 'Next chapter', exact: true }).click();
   }
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('The journey stayswith you.');
-  await capture(page, 'journey-complete-desktop');
-  await page.reload();
   await expect(page.locator('.journey-collected-petals > span')).toHaveCount(8);
   await page.getByRole('button', { name: 'Walk the path again' }).click();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[0]);
-  await expect(page.getByRole('progressbar')).toHaveAttribute('value', '8');
+  await settled(page);
+  await page.getByRole('button', { name: `Level 6: ${titles[5]}`, exact: true }).click();
+  await page.reload();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[5]);
+  await settled(page);
   expect(errors).toEqual([]);
 });
 
-test('mobile deity selection, reading, reduced motion and browser history work', async ({ page }) => {
+test('water moves, pause freezes the scene, and dragging changes the 3D view', async ({ page }) => {
+  test.setTimeout(60000);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/journeys/ganesha?level=7');
+  const world = await settled(page);
+  const firstTime = await world.getAttribute('data-water-time');
+  await expect.poll(() => world.getAttribute('data-water-time')).not.toBe(firstTime);
+  await page.getByRole('button', { name: 'Pause scene motion' }).click();
+  await expect(world).toHaveAttribute('data-motion', 'paused');
+  const pausedTime = await world.getAttribute('data-water-time');
+  await page.waitForTimeout(200);
+  await expect(world).toHaveAttribute('data-water-time', pausedTime);
+  const cameraBefore = await world.getAttribute('data-camera-position');
+  await page.mouse.move(460, 420);
+  await page.mouse.down();
+  await page.mouse.move(750, 420, { steps: 12 });
+  await page.mouse.up();
+  await expect.poll(() => world.getAttribute('data-camera-position')).not.toBe(cameraBefore);
+  await capture(page, 'sculpture-orbit');
+  await page.getByRole('button', { name: 'Enable scene motion' }).click();
+  await expect.poll(() => world.getAttribute('data-water-time')).not.toBe(pausedTime);
+});
+
+test('mobile chapters, map, sources and browser history remain usable with reduced motion', async ({ page }) => {
+  test.setTimeout(90000);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/journeys/ganesha');
-  await expect(page.getByRole('button', { name: 'Enable scene motion' })).toHaveAttribute('aria-pressed', 'true');
-  await capture(page, 'journey-entrance-mobile');
-  for (const [name, path] of [['Shiva', 'shiva'], ['Krishna', 'krishna'], ['Hanuman', 'hanuman']]) {
-    await page.getByRole('group', { name: 'Choose a deity' }).getByRole('button', { name: new RegExp(name) }).click();
-    await expect(page).toHaveURL(new RegExp(`/journeys/${path}$`));
-    await expect(page.getByRole('heading', { level: 1 })).toContainText(name);
-    await expect(page.locator('.journey-coming')).toBeVisible();
-    await expect(page.locator('.journey-entrance .journey-primary')).toHaveAttribute('href', /\/(mantras|bhajans|chalisas)/);
-  }
-  await page.getByRole('group', { name: 'Choose a deity' }).getByRole('button', { name: /Ganesha/ }).click();
-  await page.getByRole('button', { name: 'Enter the journey', exact: true }).click();
-  await capture(page, 'journey-birth-mobile');
-  await page.getByRole('button', { name: /^Collect the/ }).click();
-  await page.getByRole('button', { name: 'Next chapter' }).click();
+  await page.goto('/journeys/ganesha?level=1');
+  const world = await settled(page);
+  await expect(world).toHaveAttribute('data-motion', 'paused');
+  await capture(page, 'sculpture-mobile');
+  const story = await page.locator('[data-world-story]').boundingBox();
+  const next = await page.getByRole('button', { name: 'Next chapter', exact: true }).boundingBox();
+  expect(story.y + story.height).toBeLessThanOrEqual(next.y);
+  await page.getByRole('button', { name: 'Next chapter', exact: true }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[1]);
   await page.goBack();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[0]);
-  await page.getByText('About this telling', { exact: true }).click();
+  await page.getByRole('button', { name: 'Reflection & story source' }).click();
   await expect(page.getByRole('link', { name: /Amritapuri/ })).toBeVisible();
-  await page.getByRole('button', { name: 'Your journey map' }).click();
-  await capture(page, 'journey-map-mobile');
-  await page.getByRole('button', { name: 'Ring temple bell' }).click();
-  await expect(page.locator('.journey-sr-only')).toContainText(/Temple bell/);
+  await page.getByRole('button', { name: 'Explore world map' }).click();
+  await capture(page, 'sculpture-map-mobile');
+  await page.getByRole('button', { name: `Level 8: ${titles[7]}`, exact: true }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[7]);
+  await page.getByRole('button', { name: 'View illustration' }).click();
+  await expect(page.locator('.game-art-dialog')).toBeVisible();
+  await page.getByRole('button', { name: 'Close scene' }).click();
+  await expect(page.getByRole('button', { name: 'View illustration' })).toBeFocused();
 });
 
-test('corrupt saves, locked deep links, unknown deities and missing images recover', async ({ page }) => {
-  await page.addInitScript(key => localStorage.setItem(key, '{"version":1,"current":100,"completed":["presence","fake"]}'), progressKey);
-  await page.goto('/journeys/ganesha?level=8');
-  await expect(page).toHaveURL(/level=1$/);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[0]);
-  await page.goto('/journeys/unknown');
-  await expect(page.getByRole('heading', { name: 'Choose a divine journey' })).toBeVisible();
-  await page.route('**/journeys/ganesha.png', route => route.abort());
-  await page.goto('/journeys/ganesha');
-  await expect(page.getByText('The scene could not load. Your story is still available.')).toBeVisible();
-  await page.getByRole('button', { name: 'Enter the journey', exact: true }).click();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[0]);
-});
-
-test('unavailable storage does not block the journey and accounts have separate progress', async ({ page }) => {
+test('no WebGL and unavailable storage still allow direct chapter navigation', async ({ page }) => {
   await page.addInitScript(() => {
+    const getContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (kind, ...args) {
+      return kind.includes('webgl') ? null : getContext.call(this, kind, ...args);
+    };
     Storage.prototype.setItem = () => { throw new DOMException('Storage unavailable', 'QuotaExceededError'); };
   });
-  await page.goto('/journeys/ganesha');
-  await expect(page.getByRole('status').filter({ hasText: 'Browser storage is unavailable' })).toBeVisible();
-  await page.getByRole('button', { name: 'Enter the journey', exact: true }).click();
-  await page.getByRole('button', { name: /^Collect the/ }).click();
-  await page.getByRole('button', { name: 'Next chapter' }).click();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[1]);
-  await page.route('**/api/auth/me', route => route.fulfill({ json: { user: { ...user, id: 'another-reader' } } }));
-  await page.reload();
-  await expect(page).toHaveURL(/level=1$/);
-  await expect(page.getByRole('button', { name: 'Next chapter' })).toBeDisabled();
+  await page.goto('/journeys/ganesha?level=6');
+  await expect(page.getByText('3D is unavailable in this browser. You can still explore every chapter.')).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[5]);
+  await page.getByRole('button', { name: 'Next chapter', exact: true }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[6]);
 });
 
-test('journeys preserve the account gate', async ({ page }) => {
+test('progress remains account-specific and journeys preserve the account gate', async ({ page }) => {
+  await page.addInitScript(key => localStorage.setItem(key, JSON.stringify({ version: 1, current: 5, completed: ['birth', 'scribe'] })), progressKey);
+  await page.goto('/journeys/ganesha');
+  await page.getByRole('button', { name: 'Continue your journey', exact: true }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[5]);
+  await page.route('**/api/auth/me', route => route.fulfill({ json: { user: { ...user, id: 'another-reader' } } }));
+  await page.goto('/journeys/ganesha');
+  await expect(page.getByRole('button', { name: 'Enter the journey', exact: true })).toBeVisible();
   await page.route('**/api/auth/me', route => route.fulfill({ status: 401, json: { error: 'Not signed in' } }));
   await page.goto('/journeys/ganesha?level=3');
   await expect(page).toHaveURL(/\/login$/);

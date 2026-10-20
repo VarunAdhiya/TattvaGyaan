@@ -60,12 +60,28 @@ test('signed-in home uses the supplied background, real Panchang and library des
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Where wisdommeets devotion.');
   await expect(page.getByRole('region', { name: "Today's Panchang" })).toContainText('Shukla Ashtami');
   await expect(page.getByRole('region', { name: "Today's Panchang" })).toContainText('6:24 AM');
-  expect(await page.locator('.landing-backdrop').evaluate(image => image.complete && image.naturalWidth === 1024)).toBe(true);
+  await expect(page.locator('.landing-backdrop')).toHaveJSProperty('naturalWidth', 1408);
+  await expect(page.locator('.landing-backdrop')).toHaveJSProperty('naturalHeight', 768);
   for (const [label, path] of [['Library', '/library'], ['Chalisas', '/chalisas'], ['Bhajans', '/bhajans'], ['Mantras', '/mantras'], ['Calendar', '/calendar']]) {
     await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: label, exact: true })).toHaveAttribute('href', path);
   }
   await expect(page.getByRole('link', { name: 'Read Hanuman Chalisa' })).toHaveAttribute('href', '/chalisas/hanuman-chalisa');
+  for (const link of await page.locator('.dashboard-prayer-main').all()) {
+    const href = await link.getAttribute('href');
+    const [category, slug] = href.slice(1).split('/');
+    const source = snapshot.texts.find(text => text.category === category.slice(0, -1) && text.slug === slug);
+    expect(source).toBeTruthy();
+    await expect(link.locator('h3')).toHaveText(source.title);
+    await expect(link.locator('[lang="hi"]')).toHaveText(source.titleHindi);
+    await expect(link.locator('img')).toHaveAttribute('alt', new RegExp(source.deity));
+  }
+  const journeyImage = page.locator('.dashboard-journey-art img');
+  await journeyImage.scrollIntoViewIfNeeded();
+  await expect(journeyImage).toHaveJSProperty('naturalWidth', 1536);
+  const dimensions = await journeyImage.boundingBox();
+  expect(dimensions.width / dimensions.height).toBeCloseTo(1.5, 2);
   await expect(page.locator('body')).not.toContainText(/hindu\s*aarti/i);
+  await page.evaluate(() => scrollTo(0, 0));
   await capture(page, 'dashboard-desktop');
   await page.getByRole('link', { name: 'Explore the library', exact: true }).click();
   await expect(page).toHaveURL(/\/library$/);

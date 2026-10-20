@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight, Check, ChevronDown, Compass, Expand, Flower2, Ma
 import { ganeshaLevels, journeySources } from '../data/divineJourneys';
 import '../journey-game.css';
 
-function SacredWorld({ current, overview, still, onChoose, onTravel }) {
+function SacredWorld({ current, overview, still, layoutKey, onChoose, onTravel }) {
   const host = useRef(null);
   const world = useRef(null);
   const settings = useRef({ current, overview, still });
@@ -16,7 +16,7 @@ function SacredWorld({ current, overview, still, onChoose, onTravel }) {
   useEffect(() => {
     settings.current = { current, overview, still };
     world.current?.setDestination(current, overview, still);
-  }, [current, overview, still]);
+  }, [current, overview, still, layoutKey]);
   useEffect(() => {
     let cancelled = false;
     const container = host.current;
@@ -38,7 +38,7 @@ function SacredWorld({ current, overview, still, onChoose, onTravel }) {
     {ganeshaLevels.map((level, index) => <button key={level.id} data-world-pin={index} className={`world-pin ${index === current ? 'is-active' : ''}`} hidden={!overview || failed} onClick={() => onChoose(index)} aria-label={`Visit ${level.title}`}><span>{index + 1}</span><strong>{level.title}</strong></button>)}
     {!ready && !failed && <div className="world-loading" role="status"><Compass size={30} /><p>Opening the gates of Kailash…</p></div>}
     {failed && <div className="world-fallback-scene"><img key={current} src={ganeshaLevels[current].image} alt={ganeshaLevels[current].alt} /><p>3D is unavailable in this browser. You can still explore every chapter.</p></div>}
-    <span className="journey-sr-only">{ganeshaLevels[current].alt}</span>
+    <span className="journey-sr-only">A three-dimensional artistic interpretation of {ganeshaLevels[current].title}, with sculpted figures on an island surrounded by blue waves.</span>
   </div>;
 }
 
@@ -63,7 +63,7 @@ export default function JourneyGame({ current, visited, still, setStill, visit, 
   }, [artOpen]);
   useEffect(() => {
     function keydown(event) {
-      if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.target.closest('input, textarea, select, summary, dialog') || artOpen) return;
+      if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.target.closest?.('input, textarea, select, summary, dialog') || artOpen) return;
       if (event.key === 'ArrowRight' && current < 7) { event.preventDefault(); choose(current + 1); }
       if (event.key === 'ArrowLeft' && current > 0) { event.preventDefault(); choose(current - 1); }
       if (event.key === 'Escape') { setOverview(false); setDetails(false); }
@@ -74,7 +74,7 @@ export default function JourneyGame({ current, visited, still, setStill, visit, 
   function closeArt() { setArtOpen(false); artButton.current?.focus(); }
 
   return <section className={`journey-game ${overview ? 'is-overview' : ''} ${still ? 'is-still' : ''}`} aria-label="Ganesha interactive journey">
-    <SacredWorld current={current} overview={overview} still={still || artOpen} onChoose={choose} onTravel={setTravelling} />
+    <SacredWorld current={current} overview={overview} still={still || artOpen} layoutKey={details} onChoose={choose} onTravel={setTravelling} />
     <header className="game-header">
       <Link className="game-home" to="/journeys/ganesha"><ArrowLeft size={18} /><span>All deities</span></Link>
       <div className="game-brand"><Flower2 size={22} /><span>Ganesha’s world<small lang="hi">श्री गणेश की यात्रा</small></span></div>
@@ -88,10 +88,11 @@ export default function JourneyGame({ current, visited, still, setStill, visit, 
     <div className="game-location" aria-live="polite"><span className={travelling ? 'is-travelling' : ''} /><span>{overview ? 'Eight sacred places. Choose where to go.' : travelling ? `Travelling to ${level.title}…` : level.place}</span></div>
     {overview ? <div className="game-map-intro"><h1>Follow your curiosity.</h1><p>Choose an island or any chapter below.<br />Every part of the journey is open to you.</p></div> : <>
       <div className="game-scene-actions">
-        <span><Move size={15} />Drag to look around</span>
-        <button ref={artButton} onClick={() => setArtOpen(true)}><Expand size={16} />View the scene</button>
+        <span><Move size={15} />Drag to explore in 3D</span>
+        <button ref={artButton} onClick={() => setArtOpen(true)}><Expand size={16} />View illustration</button>
       </div>
-      <article className="game-story" key={level.id}>
+      <svg className="game-story-tether" aria-hidden="true"><path data-world-leader /></svg>
+      <article className="game-story" data-world-story key={level.id}>
         <div className="game-story-heading"><span className="game-level-number">{String(current + 1).padStart(2, '0')}</span><span lang="hi">{level.hindi}</span><span className="game-visited"><Check size={12} />Visited</span></div>
         <h1 ref={title} tabIndex={-1}>{level.title}</h1>
         <p>{level.story}</p>

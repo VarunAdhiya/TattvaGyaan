@@ -1,15 +1,13 @@
 # Landing assets
 
-- `temple-river-full.png` and `shiva-mountains.png`: original 1408 × 768 PNGs
-  supplied by the user on 20 October 2026 (`Gemini_Generated_Image_hdnhd2hdnhd2hdnh.png`
-  and `Gemini_Generated_Image_cr9uf1cr9uf1cr9u.png`). Used for login and registration
-  respectively, copied byte-for-byte without resizing or recompression. Account
-  backgrounds use `object-fit: contain` and no blur; compact screens show the
-  complete artwork above the form.
+- `durga-temple.png`: exact, unedited 1408 × 768 PNG supplied by the user on
+  20 October 2026, originally `Gemini_Generated_Image_o9ops9o9ops9o9op.png`.
+  Dashboard background; copied without resizing or recompression. The full
+  composition retains its aspect ratio with no blur or cropping.
 
 - `temple-river.png`: exact, unedited image supplied by the user on 19 October
-  2026, originally `codex-clipboard-XQmk9N.png` (1024 × 559). Used as the landing
-  hero background. No generation prompt; user-provided artwork.
+  2026, originally `codex-clipboard-XQmk9N.png` (1024 × 559). Retained by other
+  existing surfaces. No generation prompt; user-provided artwork.
 - `cormorant-garamond-medium.ttf`: Cormorant Garamond Medium, retrieved from
   Google Fonts (`fonts.gstatic.com/s/cormorantgaramond/v21/`) on 19 October 2026.
   Self-hosted to avoid third-party font requests. License: accompanying `OFL.txt`.
@@ -24,6 +22,7 @@
 - `lotus-seal.svg`: original geometric ornament made from circles and eight
   rotated ellipses; used decoratively with no scripture or religious claims.
 
-The supplied temple image also appears on login/registration and the library
+`temple-river-full.png` and `shiva-mountains.png` remain the login and registration
+backgrounds, respectively. The supplied temple image also appears in the library
 header. The redesign uses Cinzel and Hind for the interface; calibrated book
 reader fonts remain unchanged.

@@ -1,0 +1,177 @@
+/* Reference-informed devotional layout; original artwork and project content. */
+.dashboard-route {
+  --dashboard-stone: #1d1a17;
+  --dashboard-paper: #191715;
+  --dashboard-ink: #f5ead8;
+  --dashboard-gold: #e9bc77;
+  background: var(--dashboard-stone);
+  scrollbar-color: #a9875d #241d18;
+}
+.dashboard-route .landing-page {
+  --landing-paper: var(--dashboard-paper);
+  --landing-ink: var(--dashboard-ink);
+  background: var(--dashboard-paper);
+  color: var(--dashboard-ink);
+}
+.dashboard-route .landing-page :is(h1, h2, h3) {
+  font-family: 'Tattva Cormorant', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.dashboard-route .landing-section { width: min(88%, 1240px); }
+.dashboard-route .landing-page h2 { font-size: 38px; line-height: 1.15; }
+.dashboard-route .landing-hero {
+  min-height: max(780px, calc(100vw * 768 / 1408));
+  background: #1b1714;
+}
+.dashboard-route .landing-backdrop {
+  height: auto;
+  object-fit: contain;
+  object-position: center top;
+  filter: none;
+  transform: none;
+  mask-image: linear-gradient(180deg, #000 calc(100% - 32px), transparent);
+}
+.dashboard-route .landing-shade {
+  pointer-events: none;
+  background: linear-gradient(90deg, #18120ee8, #18120ed1 22%, #18120e55 39%, #18120e00 60%),
+    linear-gradient(180deg, #18120ec9, #18120e00 18%, #18120e00 85%, #18120e80);
+}
+.dashboard-route .landing-header {
+  background: transparent;
+  border-color: #e9bc772e;
+  padding-block: 24px;
+  gap: 22px;
+}
+.dashboard-route .landing-brand > svg,
+.dashboard-route .landing-brand small,
+.dashboard-route .landing-plans-link,
+.dashboard-route .landing-user-actions > button { color: #f1cb92; }
+.dashboard-route .landing-account { border-color: #d9b98470; background: #241d1855; }
+.dashboard-route .landing-mobile-nav { background: #2c231cf7; border-color: #b89663; }
+.dashboard-route .landing-hero-content { max-width: none; padding-block: 62px; }
+.dashboard-route .landing-hero h1 {
+  max-width: 470px;
+  font-size: clamp(48px, 4.6vw, 72px);
+  line-height: 1.03;
+}
+.dashboard-route .landing-hero h1 em { color: #f1c783; }
+.dashboard-route .landing-hero-hindi { max-width: 400px; font-size: 21px; color: #f2d8b0; }
+.dashboard-route .landing-hero-description { max-width: 385px; font-size: 16px; color: #f0e0cc; }
+.dashboard-route .landing-hero-actions { max-width: 430px; gap: 14px; flex-direction: column; align-items: flex-start; }
+.dashboard-route .landing-primary { background: var(--dashboard-gold); color: #302116; }
+.dashboard-route .landing-primary:hover { background: #f6d69f; }
+.dashboard-route .landing-secondary:hover { color: #f6d69f; }
+.dashboard-route .landing-panchang { width: min(88%, 1240px); margin-inline: auto; padding: 28px 0; background: transparent; border-color: #dec18a2e; color: #fff1dc; }
+.dashboard-route .landing-panchang-date h2 { font-size: 26px; }
+.dashboard-route .landing-panchang :is(p, dt, svg, a) { color: #f1cf9b; }
+.dashboard-route .landing-text-link { color: #e9bc77; border-color: #e9bc7755; font-size: 15px; }
+.dashboard-route .landing-text-link:hover { color: #ffe0ac; border-color: #ffe0ac; }
+.dashboard-route .landing-scriptures { background: var(--dashboard-stone); border-block: 1px solid #dec18a20; }
+.dashboard-route .landing-scriptures-inner { padding-block: 64px; gap: 80px; grid-template-columns: .9fr 1.1fr; }
+.dashboard-route .landing-section-intro h2 { font-size: 38px; max-width: 380px; }
+.dashboard-route .landing-scriptures .landing-section-intro > p,
+.dashboard-route .landing-book p,
+.dashboard-route .landing-account-note { color: #e1cdb2; }
+.dashboard-route .landing-book h3 { font-size: 29px; }
+.dashboard-route .landing-book { padding-block: 20px; }
+.dashboard-route .landing-book-symbol { margin-bottom: 16px; }
+.dashboard-route .landing-account-note { max-width: 340px; font-size: 13px; }
+.dashboard-route .landing-closing { padding-block: 52px; }
+.dashboard-route .landing-closing h2 { font-size: 34px; }
+.dashboard-route .landing-closing::before { content: none; }
+.dashboard-route .landing-closing > p[lang] { color: #e9bc77; margin-top: 12px; }
+.dashboard-route .landing-closing-description { color: #cbbbA4; font-size: 15px; margin-top: 12px; }
+.dashboard-route .sacred-footer { background: #1b1714; border-color: #9b78484d; }
+.dashboard-route .sacred-footer :is(p, li) { color: #dfcdb3; }
+.dashboard-route .sacred-footer :is(h4, .font-serif) { color: #f1cb92; }
+.dashboard-route .sacred-footer h4 { font-family: 'Sacred Hind', sans-serif; font-size: 15px; }
+
+.dashboard-journey {
+  display: grid;
+  grid-template-columns: .85fr 1.15fr;
+  gap: 48px;
+  align-items: center;
+  padding-block: 60px;
+}
+.dashboard-route .dashboard-journey-copy h2 { font-size: clamp(32px, 3vw, 44px); line-height: 1.12; }
+.dashboard-journey-copy > p:not([lang]) { max-width: 410px; color: #d5c7b3; font-size: 16px; line-height: 1.8; margin-top: 18px; }
+.dashboard-journey-copy .landing-primary { margin-top: 24px; }
+.dashboard-journey-copy > .dashboard-story-note { font-size: 12px; color: #bba98e; max-width: 360px; margin-top: 16px; }
+.dashboard-route .dashboard-hindi { font-family: 'Sacred Hind', 'Nirmala UI', sans-serif; color: #e4b875; font-size: 18px; line-height: 1.6; margin-top: 12px; }
+.dashboard-journey-art { display: block; border-radius: 12px; overflow: hidden; }
+.dashboard-journey-art img { display: block; position: static; width: 100%; height: auto; object-fit: contain; }
+.dashboard-devotion { padding-block: 16px 64px; scroll-margin-top: 28px; }
+.dashboard-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 28px; }
+.dashboard-section-heading p { color: #d5c7b3; font-size: 16px; line-height: 1.7; margin-top: 12px; }
+.dashboard-section-heading .landing-text-link { flex-shrink: 0; margin: 0 0 4px; }
+.dashboard-prayers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.dashboard-prayer { display: flex; flex-direction: column; background: #24201b; border: 1px solid #d6b77e29; border-radius: 12px; overflow: hidden; }
+.dashboard-prayer-main { display: flex; flex-direction: column; flex: 1; }
+.dashboard-prayer-main img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: contain; }
+.dashboard-prayer-main > div { display: flex; flex-direction: column; flex: 1; padding: 22px 24px 20px; }
+.dashboard-route .dashboard-prayer h3 { font-size: 29px; line-height: 1.15; color: #fff0d8; }
+.dashboard-route .dashboard-prayer .dashboard-hindi { font-size: 18px; margin-top: 8px; }
+.dashboard-prayer-main p:not([lang]) { font-size: 15px; line-height: 1.65; color: #d5c7b3; margin: 14px 0 20px; }
+.dashboard-read-link { display: flex; align-items: center; gap: 10px; color: #efc789; font-size: 14px; margin-top: auto; }
+.dashboard-browse-link { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 24px; border-top: 1px solid #d6b77e29; color: #d5c7b3; font-size: 13px; }
+.dashboard-prayer-main:hover h3, .dashboard-browse-link:hover { color: #ffd492; }
+.dashboard-prayer:focus-within { outline: 2px solid #e9bc77; outline-offset: 4px; }
+
+@media (max-width: 1100px) {
+  .dashboard-route .landing-desktop-nav { display: none; }
+  .dashboard-route .landing-menu-toggle { display: inline-flex; padding: 10px; }
+  .dashboard-route .landing-mobile-nav {
+    display: flex;
+    position: absolute;
+    top: calc(100% - 6px);
+    left: 5%;
+    right: 5%;
+    padding: 18px 24px;
+    flex-direction: column;
+    z-index: 50;
+    border: 1px solid #b89663;
+  }
+  .dashboard-route .landing-mobile-nav a { display: flex; justify-content: space-between; padding: 13px 0; }
+}
+@media (max-width: 1000px) {
+  .dashboard-route .landing-hero { min-height: 0; }
+  .dashboard-route .landing-header { position: absolute; top: 0; z-index: 2; border: 0; }
+  .dashboard-route .landing-shade { background: linear-gradient(180deg, #18120ed9, #18120e00 100px); }
+  .dashboard-route .landing-hero-content {
+    padding-top: calc(100vw * 768 / 1408 + 26px);
+    padding-bottom: 38px;
+    margin-top: 0;
+  }
+  .dashboard-route .landing-hero h1 { max-width: 600px; }
+  .dashboard-route .landing-hero-description { max-width: 560px; }
+  .dashboard-route .landing-hero-actions { max-width: none; flex-direction: row; align-items: center; gap: 24px; }
+  .dashboard-journey { grid-template-columns: 1fr 1fr; gap: 28px; padding-block: 44px; }
+  .dashboard-section-heading { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .dashboard-prayers { gap: 16px; }
+  .dashboard-prayer-main > div { padding: 18px; }
+  .dashboard-route .dashboard-prayer h3 { font-size: 25px; }
+  .dashboard-browse-link { padding-inline: 18px; }
+}
+@media (max-width: 700px) {
+  .dashboard-route .landing-header { padding: 18px 6%; }
+  .dashboard-route .landing-hero h1 { font-size: clamp(42px, 11vw, 56px); }
+  .dashboard-route .landing-hero-hindi { font-size: 19px; }
+  .dashboard-route .landing-hero-actions { gap: 12px; }
+  .dashboard-route .landing-page h2 { font-size: 32px; }
+  .dashboard-route .landing-panchang-date h2 { font-size: 26px; }
+  .dashboard-route .landing-panchang { padding-block: 24px; gap: 20px; }
+  .dashboard-route .landing-panchang-facts { border-color: #dec18a2e; }
+  .dashboard-journey { grid-template-columns: 1fr; gap: 24px; padding-block: 36px; }
+  .dashboard-journey-art { grid-row: 1; }
+  .dashboard-journey-copy h2 br { display: none; }
+  .dashboard-route .dashboard-journey-copy h2 { font-size: 34px; }
+  .dashboard-journey-copy > p:not([lang]) { font-size: 15px; }
+  .dashboard-journey-copy > .dashboard-story-note { font-size: 12px; }
+  .dashboard-devotion { padding-block: 20px 40px; }
+  .dashboard-prayers { grid-template-columns: 1fr; gap: 24px; }
+  .dashboard-route .dashboard-prayer h3 { font-size: 30px; }
+  .dashboard-prayer-main > div { padding: 22px; }
+  .dashboard-route .landing-scriptures-inner { grid-template-columns: 1fr; gap: 36px; padding-block: 40px; }
+  .dashboard-route .landing-closing { padding-block: 40px; }
+}
