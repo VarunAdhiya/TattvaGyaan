@@ -20,6 +20,12 @@ import LandingPage from './pages/LandingPage';
 const DivineJourneys = React.lazy(() => import('./pages/DivineJourneys'));
 import './devotionals.css';
 import './sacred-theme.css';
+import './dashboard-theme.css';
+
+function SiteFrame({ children }) {
+  const { pathname } = useLocation();
+  return <div className={`sacred-app flex flex-col min-h-screen${pathname === '/dashboard' ? ' dashboard-route' : ''}`}>{children}</div>;
+}
 
 function SiteNavigation() {
   const { pathname, search } = useLocation();
@@ -49,7 +55,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <div className="sacred-app flex flex-col min-h-screen">
+        <SiteFrame>
           <SiteNavigation />
           <main className="flex-1">
             <Routes>
@@ -73,7 +79,7 @@ function App() {
             </Routes>
           </main>
           <SiteFooter />
-        </div>
+        </SiteFrame>
       </BrowserRouter>
     </AuthProvider>
   );
