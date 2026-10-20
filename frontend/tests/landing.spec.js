@@ -84,7 +84,7 @@ test('mobile and tablet home navigation fits and supports keyboard dismissal', a
     await capture(page, width === 390 ? 'dashboard-mobile' : 'dashboard-tablet');
     await page.getByRole('button', { name: 'Open navigation' }).click();
     const nav = page.getByRole('navigation', { name: 'Mobile navigation' });
-    await expect(nav.getByRole('link')).toHaveCount(7);
+    await expect(nav.getByRole('link')).toHaveCount(8);
     await nav.getByRole('link', { name: 'Library', exact: true }).focus();
     await page.keyboard.press('Escape');
     await expect(nav).toHaveCount(0);

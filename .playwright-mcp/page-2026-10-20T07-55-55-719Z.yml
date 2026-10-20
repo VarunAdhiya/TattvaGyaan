@@ -1,0 +1,73 @@
+- generic [active]:
+  - link "Skip to content" [ref=e1] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - link "Harshita Jogi, the island" [ref=e5] [cursor=pointer]:
+          - /url: /
+        - link "Island" [ref=e9] [cursor=pointer]:
+          - /url: /
+          - generic [aria-hidden] [ref=e10]: ←
+      - navigation "Primary" [ref=e12]:
+        - button "Turn sound and music off" [pressed] [ref=e13]
+        - button "Passport, 0 of 5 stamps" [ref=e17]:
+          - generic [ref=e24]: Passport
+          - generic [ref=e25]: 0/5
+        - button "Menu, Ctrl K" [ref=e26]:
+          - generic [ref=e27]: Menu
+        - link "Resume , PDF, opens in a new tab" [ref=e28] [cursor=pointer]:
+          - /url: /Harshita_Jogi_Resume.pdf
+          - text: Resume
+          - generic [aria-hidden] [ref=e29]: ↓
+          - generic [ref=e30]: ", PDF, opens in a new tab"
+  - generic [aria-hidden]:
+    - generic:
+      - paragraph: Back to
+  - main:
+    - generic [ref=e36]:
+      - paragraph [ref=e39]:
+        - generic [ref=e41]: 01 · Education · 2020 to 2027
+      - heading "Education." [level=1] [ref=e42]
+      - paragraph [ref=e43]: Electronics in Mumbai, then computer science in Boston.
+      - button "Passport stamp Finish Education to earn it" [ref=e44]:
+        - img [aria-hidden] [ref=e46]:
+          - generic [ref=e49]: EDUCATION · EDUCATION ·
+        - generic [ref=e55]:
+          - generic [ref=e56]: Passport stamp
+          - generic [ref=e57]: Finish Education to earn it
+      - list [ref=e58]:
+        - listitem [ref=e59]:
+          - button "1 University of Mumbai Bachelor of Engineering in Electronics 2020" [ref=e60]:
+            - generic [ref=e61]: "1"
+            - generic [ref=e62]:
+              - generic [ref=e63]: University of Mumbai
+              - generic [ref=e64]: Bachelor of Engineering in Electronics
+            - generic [ref=e65]: "2020"
+            - generic [aria-hidden] [ref=e66]: →
+        - listitem [ref=e67]:
+          - button "2 Northeastern University Master of Science in Computer Science 2025" [ref=e68]:
+            - generic [ref=e69]: "2"
+            - generic [ref=e70]:
+              - generic [ref=e71]: Northeastern University
+              - generic [ref=e72]: Master of Science in Computer Science
+            - generic [ref=e73]: "2025"
+            - generic [aria-hidden] [ref=e74]: →
+  - generic:
+    - button "Back" [ref=e75]:
+      - generic [aria-hidden] [ref=e79]: Back
+    - button "Stop 1 of 2 Next" [ref=e82]:
+      - generic [ref=e85]:
+        - generic [ref=e86]: Stop 1 of 2
+        - generic [ref=e87]: Next
+  - navigation "Education, steps" [ref=e91]:
+    - list [ref=e92]:
+      - listitem [ref=e94]:
+        - button "Start" [ref=e95]
+      - listitem [ref=e98]:
+        - button "U of Mumbai" [ref=e99]
+      - listitem [ref=e102]:
+        - button "Northeastern" [ref=e103]
+      - listitem [ref=e106]:
+        - button "Next world" [ref=e107]
+  - alert [ref=e110]

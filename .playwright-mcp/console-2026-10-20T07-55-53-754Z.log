@@ -1,0 +1,6 @@
+[    1720ms] [LOG] %cHi. You opened the console, so you are my kind of person.%c
+This site is open source: https://github.com/HarshitaJogi/portfolio
+If something looks broken, tell me: harshitajogi2001@gmail.com
+Harshita font: 20px Georgia, serif; color: #9e2a2b; padding: 6px 0; font: 13px ui-monospace, monospace; line-height: 1.7; @ https://harshita-jogi-portfolio.vercel.app/_next/static/immutable/chunks/2q_16fy-55inl.js:0
+[    2342ms] [WARNING] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead. @ https://harshita-jogi-portfolio.vercel.app/_next/static/immutable/chunks/28s-d3wiyi2la.js:0
+[    3441ms] [WARNING] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead. @ https://harshita-jogi-portfolio.vercel.app/_next/static/immutable/chunks/28s-d3wiyi2la.js:0

@@ -1,11 +1,12 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { BookOpen, Flower2, Music2, Sparkles, CalendarDays, House } from 'lucide-react';
+import { BookOpen, Flower2, Music2, Sparkles, CalendarDays, House, Map } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const sections = [
   ['/dashboard', 'Home', House], ['/library', 'Library', BookOpen], ['/chalisas', 'Chalisas', Flower2],
   ['/bhajans', 'Bhajans', Music2], ['/mantras', 'Mantras', Sparkles],
   ['/calendar', 'Calendar', CalendarDays],
+  ['/journeys', 'Journeys', Map],
 ];
 
 export default function SectionNavigation() {

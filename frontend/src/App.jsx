@@ -17,13 +17,20 @@ import DevotionalCollection from './pages/DevotionalCollection';
 import DevotionalDetail from './pages/DevotionalDetail';
 import HinduCalendar from './pages/HinduCalendar';
 import LandingPage from './pages/LandingPage';
+const DivineJourneys = React.lazy(() => import('./pages/DivineJourneys'));
 import './devotionals.css';
 import './sacred-theme.css';
 
 function SiteNavigation() {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const { user } = useAuth();
+  if (user && pathname === '/journeys/ganesha' && new URLSearchParams(search).has('level')) return null;
   return pathname === '/dashboard' && user ? null : <><Navbar /><SectionNavigation /></>;
+}
+
+function SiteFooter() {
+  const { pathname, search } = useLocation();
+  return pathname === '/journeys/ganesha' && new URLSearchParams(search).has('level') ? null : <Footer />;
 }
 
 function EntryRoute() {
@@ -51,6 +58,8 @@ function App() {
                 <Route path={`/${category}s/:slug`} element={<ProtectedRoute><DevotionalDetail key={category} category={category} /></ProtectedRoute>} />
               </React.Fragment>)}
               <Route path="/calendar" element={<ProtectedRoute><HinduCalendar /></ProtectedRoute>} />
+              <Route path="/journeys" element={<ProtectedRoute><Navigate to="/journeys/ganesha" replace /></ProtectedRoute>} />
+              <Route path="/journeys/:deityId" element={<ProtectedRoute><React.Suspense fallback={<div className="sacred-loading" role="status">Opening the sacred world…</div>}><DivineJourneys /></React.Suspense></ProtectedRoute>} />
               <Route path="/" element={<EntryRoute />} />
               <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
               <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
@@ -63,7 +72,7 @@ function App() {
               <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
             </Routes>
           </main>
-          <Footer />
+          <SiteFooter />
         </div>
       </BrowserRouter>
     </AuthProvider>

@@ -5,8 +5,9 @@ import { useAuth } from '../context/AuthContext';
 import { api } from '../api/client';
 import templeRiver from '../assets/landing/temple-river.png';
 import '../landing.css';
+import '../journeys.css';
 
-const navigation = [['Library', '/library'], ['Chalisas', '/chalisas'], ['Bhajans', '/bhajans'], ['Mantras', '/mantras'], ['Calendar', '/calendar']];
+const navigation = [['Library', '/library'], ['Chalisas', '/chalisas'], ['Bhajans', '/bhajans'], ['Mantras', '/mantras'], ['Calendar', '/calendar'], ['Journeys', '/journeys']];
 const collections = [
   { title: 'Chalisas', hindi: 'चालीसा', path: '/chalisas', description: 'Pause with hymns of praise and devotion.' },
   { title: 'Bhajans', hindi: 'भजन', path: '/bhajans', description: 'Find words that bring you closer to the divine.' },
@@ -75,6 +76,10 @@ export default function LandingPage() {
       <div className="landing-hero-bottom"><p>A little time for the eternal.</p><a href="#daily-devotion">Discover TattvaGyaan <ArrowDown size={17} aria-hidden="true" /></a></div>
     </section>
     <DailyPanchang />
+    <Link to="/journeys/ganesha" className="journey-home-link">
+      <img src="/journeys/ganesha.png" alt="" loading="lazy" width="1536" height="1024" />
+      <div><h2>Step into a<br />sacred story.</h2><p>Journey through Ganesha’s world, from the quiet of Kailash to the glow of a thousand lamps. Discover a little wisdom at every level.</p><span>Explore Divine Journeys <ArrowRight size={19} aria-hidden="true" /></span></div>
+    </Link>
     <section id="daily-devotion" className="landing-devotion landing-section" aria-labelledby="devotion-title">
       <div className="landing-section-intro"><h2 id="devotion-title">Make room<br />for the <em>sacred.</em></h2><p>Let devotion become part of your everyday. Find a familiar prayer or discover a new one, with Hindi text and Roman transliteration to guide your reading.</p><Link className="landing-text-link" to="/mantras/gayatri-mantra">Begin with the Gayatri Mantra <ArrowRight size={18} aria-hidden="true" /></Link></div>
       <div className="landing-collection-list">{collections.map(collection => <Link key={collection.path} to={collection.path} className="landing-collection"><span className="landing-collection-hindi" lang="hi">{collection.hindi}</span><div><h3>{collection.title}</h3><p>{collection.description}</p></div><ArrowRight size={22} strokeWidth={1.4} aria-hidden="true" /></Link>)}</div>
