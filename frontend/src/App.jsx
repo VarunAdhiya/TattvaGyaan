@@ -20,6 +20,13 @@ import LandingPage from './pages/LandingPage';
 const DivineJourneys = React.lazy(() => import('./pages/DivineJourneys'));
 import './devotionals.css';
 import './sacred-theme.css';
+import './auth.css';
+
+function SiteFrame({ children }) {
+  const { pathname } = useLocation();
+  const isAccountPage = pathname === '/login' || pathname === '/register';
+  return <div className={`sacred-app flex flex-col min-h-screen${isAccountPage ? ' auth-route' : ''}`}>{children}</div>;
+}
 
 function SiteNavigation() {
   const { pathname, search } = useLocation();
@@ -49,7 +56,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <div className="sacred-app flex flex-col min-h-screen">
+        <SiteFrame>
           <SiteNavigation />
           <main className="flex-1">
             <Routes>
@@ -72,8 +79,8 @@ function App() {
               <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
             </Routes>
           </main>
-          <SiteFooter />
-        </div>
+          <Footer />
+        </SiteFrame>
       </BrowserRouter>
     </AuthProvider>
   );

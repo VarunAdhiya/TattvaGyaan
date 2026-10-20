@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-19T17:21:06.425836+00:00",
+  "generatedAt": "2026-10-20T12:24:07.735Z",
   "title": "Design System: TattvaGyaan",
   "extensions": {
     "colorMeta": {
@@ -339,6 +339,26 @@
           "oklch(83.57% 0.0950 166.913)",
           "oklch(95.00% 0.0950 166.913)"
         ]
+      },
+      "auth-red": {
+        "displayName": "Account Vermilion",
+        "role": "primary"
+      },
+      "auth-red-hover": {
+        "displayName": "Account Vermilion Hover",
+        "role": "primary"
+      },
+      "auth-charcoal": {
+        "displayName": "Account Charcoal",
+        "role": "neutral"
+      },
+      "auth-cream": {
+        "displayName": "Account Cream",
+        "role": "neutral"
+      },
+      "auth-gold": {
+        "displayName": "Account Gold",
+        "role": "secondary"
       }
     },
     "typographyMeta": {
@@ -521,6 +541,14 @@
       "description": "Saffron selected language on a dark prayer toolbar.",
       "html": "<div class=\"ds-languages\" role=\"group\" aria-label=\"Prayer language\"><button class=\"ds-language\" aria-pressed=\"true\">??????</button><button class=\"ds-language\" aria-pressed=\"false\">Transliteration</button></div>",
       "css": ".ds-languages{display:flex;gap:4px;padding:16px 22px;background:#123f37;border:1px solid #295749}.ds-language{padding:9px 14px;border:0;border-radius:6px;background:transparent;color:#fff1cc;font:400 15px/1.5 'Sacred Hind', 'Nirmala UI', sans-serif;cursor:pointer;transition:background-color .2s,color .2s}.ds-language[aria-pressed=true]{background:#f2b952;color:#1f392e}.ds-language:hover{color:#fff1cc}.ds-language[aria-pressed=true]:hover{color:#1f392e}.ds-language:focus-visible{outline:2px solid #b45309;outline-offset:3px}@media(prefers-reduced-motion:reduce){.ds-language{transition:none}}"
+    },
+    {
+      "name": "Account submit",
+      "kind": "button",
+      "refersTo": "auth-submit",
+      "description": "Vermilion action over the unblurred devotional account artwork.",
+      "html": "<button class=\"auth-submit\">Sign In</button>",
+      "css": ".auth-submit{background:#c13321;color:#fffaf2;min-height:54px;padding:14px 28px;border:0;border-radius:4px;font:500 17px \"Sacred Hind\",sans-serif;cursor:pointer}.auth-submit:hover{background:#982516}.auth-submit:focus-visible{outline:2px solid #ffd18b;outline-offset:3px}.auth-submit:disabled{background:#615044;color:#eee0cf;cursor:default}"
     }
   ],
   "narrative": {

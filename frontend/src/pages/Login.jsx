@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { BookOpen, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import AuthScenery from '../components/AuthScenery';
+import AuthPanelHeading from '../components/AuthPanelHeading';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -31,20 +32,11 @@ function Login() {
     <div className="auth-layout">
       <AuthScenery />
       <div className="auth-panel w-full max-w-md">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center text-amber-100 shadow-md">
-              <BookOpen className="w-7 h-7" />
-            </div>
-          </div>
-          <h1 className="text-3xl font-serif font-bold text-stone-900 mb-2">Welcome Back</h1>
-          <p className="text-sm text-stone-600">Access your personal scripture library</p>
-        </div>
+        <AuthPanelHeading />
 
         {/* Error Alert */}
         {error && (
-          <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-xl flex gap-3">
+          <div role="alert" className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-xl flex gap-3">
             <AlertCircle className="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5" />
             <p className="text-sm text-rose-700">{error}</p>
           </div>
@@ -59,6 +51,7 @@ function Login() {
             </label>
             <input
               id="email"
+              autoComplete="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -75,6 +68,7 @@ function Login() {
             </label>
             <input
               id="password"
+              autoComplete="current-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
