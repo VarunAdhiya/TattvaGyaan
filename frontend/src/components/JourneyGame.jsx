@@ -38,7 +38,8 @@ function SacredWorld({ current, overview, still, layoutKey, onChoose, onTravel }
     {ganeshaLevels.map((level, index) => <button key={level.id} data-world-pin={index} className={`world-pin ${index === current ? 'is-active' : ''}`} hidden={!overview || failed} onClick={() => onChoose(index)} aria-label={`Visit ${level.title}`}><span>{index + 1}</span><strong>{level.title}</strong></button>)}
     {!ready && !failed && <div className="world-loading" role="status"><Compass size={30} /><p>Opening the gates of Kailash…</p></div>}
     {failed && <div className="world-fallback-scene"><img key={current} src={ganeshaLevels[current].image} alt={ganeshaLevels[current].alt} /><p>3D is unavailable in this browser. You can still explore every chapter.</p></div>}
-    <span className="journey-sr-only">A three-dimensional artistic interpretation of {ganeshaLevels[current].title}, with sculpted figures on an island surrounded by blue waves.</span>
+    {ready && !artReady && !failed && <p className="world-art-loading" role="status">Preparing this chapter’s scene…</p>}
+    <span className="journey-sr-only">{ganeshaLevels[current].sceneAlt} Realistic devotional artwork set among explorable 3D islands and blue waves.</span>
   </div>;
 }
 
@@ -110,7 +111,7 @@ export default function JourneyGame({ current, visited, still, setStill, visit, 
     </nav>
     <dialog ref={artDialog} className="game-art-dialog" onCancel={event => { event.preventDefault(); closeArt(); }} onClick={event => { if (event.target === event.currentTarget) closeArt(); }}>
       <button className="game-art-close" onClick={closeArt} aria-label="Close scene"><X size={22} /></button>
-      <img src={level.image} alt={level.alt} />
+      <img src={level.sceneImage} alt={level.sceneAlt} />
       <div><strong>{level.title}</strong><span>{level.place}</span></div>
     </dialog>
   </section>;

@@ -12,6 +12,7 @@ async function settled(page) {
   const world = page.locator('.sacred-world');
   await expect(world).toHaveAttribute('data-ready', 'true', { timeout: 30000 });
   await expect(world).toHaveAttribute('data-moving', 'false', { timeout: 15000 });
+  await expect(world).toHaveAttribute('data-art-ready', 'true', { timeout: 30000 });
   return world;
 }
 
@@ -22,7 +23,7 @@ async function capture(page, name) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 }
 
-test('all sculptural chapters are open, descriptions follow the island, and navigation persists', async ({ page }) => {
+test('all illustrated chapters are open, neighbouring islands persist, and navigation saves progress', async ({ page }) => {
   test.setTimeout(120000);
   const errors = [];
   page.on('pageerror', error => errors.push(error.stack || error.message));
@@ -30,12 +31,13 @@ test('all sculptural chapters are open, descriptions follow the island, and navi
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/journeys/ganesha?level=1');
   const world = await settled(page);
-  await expect(world).toHaveAttribute('data-scene-kind', 'sculptural-diorama');
+  await expect(world).toHaveAttribute('data-scene-kind', 'devotional-tableau');
   await expect(page.getByRole('button', { name: /^Collect/ })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Previous chapter' })).toBeDisabled();
   for (let index = 0; index < titles.length; index++) {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[index]);
     await settled(page);
+    await expect(world).toHaveAttribute('data-visible-islands', '8');
     await expect(page.locator('[data-world-story]')).toBeVisible();
     await expect(page.locator('[data-world-leader]')).toHaveAttribute('d', /^M /);
     if ([0, 2, 5, 7].includes(index)) await capture(page, `sculpture-chapter-${index + 1}`);
@@ -70,6 +72,7 @@ test('water moves, pause freezes the scene, and dragging changes the 3D view', a
   await page.mouse.move(750, 420, { steps: 12 });
   await page.mouse.up();
   await expect.poll(() => world.getAttribute('data-camera-position')).not.toBe(cameraBefore);
+  await expect(world).toHaveAttribute('data-visible-islands', '8');
   await capture(page, 'sculpture-orbit');
   await page.getByRole('button', { name: 'Enable scene motion' }).click();
   await expect.poll(() => world.getAttribute('data-water-time')).not.toBe(pausedTime);

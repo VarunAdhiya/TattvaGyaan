@@ -18,3 +18,16 @@ the idea of visiting successive places; none of its artwork or source was copied
 
 Story provenance is attached to each chapter in `src/data/divineJourneys.js`.
 The interface explicitly labels narrative variation and artistic interpretation.
+
+## Realistic island scenes (22 October 2026)
+
+`realistic/` contains eight original, transparent photographic-style devotional
+illustrations generated with the built-in OpenAI image tool. Each chapter has a
+distinct composition matched to its existing retelling. The complete prompt set
+and generation method are recorded in `realistic/prompts.json`.
+
+The illustrations replace the procedural toy-like figures. They are displayed as
+camera-facing tableaux with organic contours inside the Three.js island world,
+and in the expanded illustration viewer. They are not historical photographs or
+fully modeled 3D characters. No external art or third-party model was used.
+Original scenic images above remain available as WebGL/texture fallbacks.

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { ganeshaLevels } from '../data/divineJourneys';
-import { createDioramaBuilder } from './sacredDioramas';
+import { createTableauBuilder } from './sacredTableaux';
 
 // The same continuous world is retained while the camera travels between stops.
 const stops = [
@@ -49,6 +49,7 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
   let sceneTime = 0;
   const geometryCache = new Map();
   const materials = new Set();
+  const textures = new Set();
   const flameMeshes = [];
   const waterRings = [];
   const targets = [];
@@ -65,14 +66,28 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
     materials.add(value);
     return value;
   }
-  const stone = material('#d9b67b');
-  const darkStone = material('#95764b');
+  // Deterministic mineral grain adds surface detail to the real 3D terrain.
+  const grainCanvas = document.createElement('canvas');
+  grainCanvas.width = 128; grainCanvas.height = 128;
+  const grainContext = grainCanvas.getContext('2d');
+  const grainPixels = grainContext.createImageData(128, 128);
+  for (let i = 0; i < grainPixels.data.length; i += 4) {
+    const noise = Math.sin(i * 0.127 + 0.7) * 43758.5453;
+    const value = 95 + (noise - Math.floor(noise)) * 85;
+    grainPixels.data[i] = value; grainPixels.data[i + 1] = value; grainPixels.data[i + 2] = value; grainPixels.data[i + 3] = 255;
+  }
+  grainContext.putImageData(grainPixels, 0, 0);
+  const grain = new THREE.CanvasTexture(grainCanvas);
+  grain.wrapS = grain.wrapT = THREE.RepeatWrapping;
+  grain.repeat.set(7, 7); textures.add(grain);
+  const stone = material('#a4977f', { bumpMap: grain, bumpScale: 0.14 });
+  const darkStone = material('#716c5d', { bumpMap: grain, bumpScale: 0.22 });
   const gold = material('#d9a644', { metalness: 0.5, roughness: 0.4 });
   const trunk = material('#74533b');
   const leaf = material('#276651');
   const leafLight = material('#4c8a57');
   const snow = material('#f3efdc');
-  const mountain = material('#66887d');
+  const mountain = material('#718380', { bumpMap: grain, bumpScale: 0.22 });
   const pink = material('#e5a5a1');
   const flame = new THREE.MeshBasicMaterial({ color: '#ffe59a' });
   materials.add(flame);
@@ -104,28 +119,43 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
     const group = new THREE.Group(); group.position.set(x, 0.5, z); group.scale.setScalar(scale); parent.add(group);
     mesh(group, 'CylinderGeometry', [0.15, 0.26, 2.1, 6], trunk, 0, 1);
     if (index < 4) {
-      mesh(group, 'ConeGeometry', [1.3, 2.8, 7], leaf, 0, 2.8);
-      mesh(group, 'ConeGeometry', [0.9, 2.2, 7], leafLight, 0, 3.8);
+      for (let tier = 0; tier < 5; tier++) {
+        const crown = mesh(group, 'ConeGeometry', [1.35 - tier * 0.2, 1.4, 18], tier % 2 ? leafLight : leaf, 0, 1.9 + tier * 0.5);
+        crown.rotation.y = tier * 0.6;
+      }
     } else {
-      mesh(group, 'IcosahedronGeometry', [1.4, 1], leaf, 0, 3);
-      mesh(group, 'IcosahedronGeometry', [1.0, 1], leafLight, 0.7, 3.3);
+      for (let branch = 0; branch < 5; branch++) {
+        const angle = branch * 2.4;
+        const crown = mesh(group, 'SphereGeometry', [0.85, 16, 12], branch % 2 ? leafLight : leaf, Math.sin(angle) * 0.7, 2.8 + branch * 0.16, Math.cos(angle) * 0.6);
+        crown.scale.set(1.2, 0.85, 1);
+      }
     }
   }
 
-  const buildDiorama = createDioramaBuilder({ mesh, material, geometryCache });
+  function artworkChanged(index) {
+    dirty = true;
+    if (index === active) {
+      onReady(islands[index].diorama.state.ready);
+      if (islands[index].diorama.state.failed) onFailure();
+    }
+  }
+  const buildTableau = createTableauBuilder({
+    mesh, material, geometryCache, materials, textures,
+    onChange: artworkChanged, isDisposed: () => disposed,
+    anisotropy: Math.min(4, renderer.capabilities.getMaxAnisotropy()),
+  });
   const islands = positions.map((point, index) => {
     const island = new THREE.Group();
     island.position.copy(point); island.userData.level = index; scene.add(island);
-    const grass = material(['#65855a', '#577554', '#6b8d62', '#6f8f5c', '#68834e', '#3a6c58', '#668853', '#788f55'][index]);
-    const ground = mesh(island, 'CylinderGeometry', [9.8, 8.8, 1.3, 14], grass, 0, -0.1);
+    const grass = material(['#697760', '#5e7059', '#718066', '#768366', '#6b7958', '#506f5d', '#6b7e60', '#807e64'][index], { bumpMap: grain, bumpScale: 0.11 });
+    const ground = mesh(island, 'CylinderGeometry', [9.8, 8.8, 1.3, 64], grass, 0, -0.1);
     targets.push(ground);
-    mesh(island, 'CylinderGeometry', [8.8, 5.5, 2.5, 14], darkStone, 0, -1.8);
-    mesh(island, 'ConeGeometry', [5.5, 3.2, 10], darkStone, 0, -4.5).rotation.z = Math.PI;
-    // Open sculpture gardens replace the picture planes, pillars and roofs.
-    const diorama = buildDiorama(island, index);
+    mesh(island, 'CylinderGeometry', [8.8, 5.5, 2.5, 48], darkStone, 0, -1.8);
+    mesh(island, 'ConeGeometry', [5.5, 3.2, 48], darkStone, 0, -4.5).rotation.z = Math.PI;
+    const diorama = buildTableau(island, index);
     for (let r = 0; r < 9; r++) {
       const angle = r / 9 * Math.PI * 2;
-      const rock = mesh(island, 'DodecahedronGeometry', [1, 0], r % 2 ? stone : darkStone, Math.cos(angle) * 8.7, -0.7, Math.sin(angle) * 8.7);
+      const rock = mesh(island, 'DodecahedronGeometry', [1, 1], r % 2 ? stone : darkStone, Math.cos(angle) * 8.7, -0.7, Math.sin(angle) * 8.7);
       rock.scale.set(1.4, 1.1, 1.25);
       rock.rotation.y = angle;
     }
@@ -135,8 +165,10 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
     }
     if (index < 3) {
       for (let m = 0; m < 3; m++) {
-        mesh(island, 'ConeGeometry', [2.4, 5.5 + m, 5], mountain, -5 + m * 4.5, 2.9, -6.4);
-        mesh(island, 'ConeGeometry', [0.96, 2.2 + m * 0.4, 5], snow, -5 + m * 4.5, 5 + m * 0.28, -6.4);
+        const peak = mesh(island, 'ConeGeometry', [2.7, 6.2 + m, 15], mountain, -5 + m * 4.5, 2.9, -6.4);
+        peak.scale.z = 0.65; peak.rotation.y = m * 0.7;
+        const cap = mesh(island, 'ConeGeometry', [0.9, 2.05 + m * 0.3, 15], snow, -5 + m * 4.5, 5.05 + m * 0.35, -6.4);
+        cap.scale.z = 0.65; cap.rotation.y = m * 0.7;
       }
     }
     for (let l = 0; l < 6; l++) lamp(island, -6.5 + l * 2.6, 5.9, 0.5);
@@ -166,7 +198,7 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
 
   const routePoints = positions.map(point => point.clone().add(new THREE.Vector3(0, 1, 6.4)));
   const curve = new THREE.CatmullRomCurve3(routePoints, false, 'catmullrom', 0.3);
-  const routeGeometry = new THREE.TubeGeometry(curve, 220, 0.1, 6, false);
+  const routeGeometry = new THREE.TubeGeometry(curve, 220, 0.045, 6, false);
   geometryCache.set('route', routeGeometry);
   scene.add(new THREE.Mesh(routeGeometry, gold));
   // A small floating diya is the traveller, following the continuous route.
@@ -261,10 +293,10 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
       cameraEnd.set(5, distance * 0.82, distance * 0.7);
     } else {
       const point = positions[active];
-      const distance = (mobile ? 39 : 28) + zoom;
-      // Reserve space beside the sculpture for its world-anchored story.
+      const distance = (mobile ? 44 : 37) + zoom;
+      // Leave room for the neighbouring islands beyond the active tableau.
       lookEnd.copy(point).add(new THREE.Vector3(mobile ? 0 : 5.1, mobile ? 1.2 : 2, 0));
-      cameraEnd.copy(point).add(new THREE.Vector3(Math.sin(orbit + 0.2) * distance, (mobile ? 23 : 17) + elevation, Math.cos(orbit + 0.2) * distance));
+      cameraEnd.copy(point).add(new THREE.Vector3(Math.sin(orbit + 0.2) * distance, (mobile ? 24 : 19) + elevation, Math.cos(orbit + 0.2) * distance));
     }
   }
   function setDestination(index, showMap, pauseMotion) {
@@ -281,15 +313,19 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
       }
       onTravel(!still);
     }
-    islands.forEach((island, i) => { island.group.visible = overview || i === active; });
+    // Every stage stays in the same world during chapter focus, orbit and travel.
+    // Frustum culling handles off-screen terrain; never hide neighbouring stages.
+    islands.forEach(island => { island.group.visible = true; });
     sun.position.copy(positions[active]).add(new THREE.Vector3(-18, 35, 22));
     sun.target.position.copy(positions[active]);
     renderer.shadowMap.needsUpdate = true;
     scene.fog.near = overview ? 260 : 100;
     scene.fog.far = overview ? 580 : 260;
     waterMaterial.uniforms.hazeRange.value.set(overview ? 260 : 90, overview ? 600 : 235);
-    onReady(true);
-    host.dataset.sceneKind = 'sculptural-diorama';
+    onReady(islands[active].diorama.state.ready);
+    if (islands[active].diorama.state.failed) onFailure();
+    host.dataset.sceneKind = 'devotional-tableau';
+    host.dataset.visibleIslands = String(islands.filter(island => island.group.visible).length);
     host.dataset.chapter = ganeshaLevels[active].id;
     loaded = true; dirty = true;
   }
@@ -348,7 +384,7 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
     travellerFlame.scale.y = 2.3 + (still ? 0 : Math.sin(sceneTime * 8) * 0.25);
     travellerHalo.rotation.z = sceneTime * 0.4;
     waterMaterial.uniforms.time.value = sceneTime;
-    islands.forEach(island => { if (island.group.visible) island.diorama.update(sceneTime); });
+    islands.forEach(island => island.diorama.update(camera));
     particles.position.y = still ? 0 : Math.sin(sceneTime * 0.16) * 0.7;
     flameMeshes.forEach((item, i) => { item.scale.y = 2.2 + (still ? 0 : Math.sin(sceneTime * 6 + i) * 0.3); });
     waterRings.forEach((item, i) => { item.scale.setScalar(1 + (still ? 0 : (Math.sin(sceneTime * 0.7 + i) + 1) * 0.1)); });
@@ -393,7 +429,7 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
   function pointerCancel() { down = null; }
   function wheel(event) {
     if (overview) return;
-    event.preventDefault(); zoom = THREE.MathUtils.clamp(zoom + event.deltaY * 0.008, -3, 9);
+    event.preventDefault(); zoom = THREE.MathUtils.clamp(zoom + event.deltaY * 0.008, -7, 32);
     destinations(); dirty = true;
   }
   function visibility() { visible = !document.hidden; dirty = true; lastFrame = performance.now(); }
@@ -421,6 +457,7 @@ export function createSacredWorld(host, { onReady, onFailure, onSelect, onTravel
       canvas.removeEventListener('webglcontextlost', contextLost);
       geometryCache.forEach(value => value.dispose());
       materials.forEach(value => value.dispose());
+      textures.forEach(value => value.dispose());
       sun.shadow.map?.dispose();
       renderer.dispose(); canvas.remove();
     },
