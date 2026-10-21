@@ -16,7 +16,7 @@ test('collection errors can be retried without losing the selected section', asy
   available = true;
   await page.getByRole('button', { name: 'Try again' }).click();
   await expect(page.getByRole('heading', { name: 'No prayers found' })).toBeVisible();
-  await expect(page.getByRole('navigation', { name: 'Explore sections' }).getByRole('link', { name: 'Chalisas' })).toHaveAttribute('aria-current', 'page');
+  await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Chalisas' })).toHaveAttribute('aria-current', 'page');
 });
 
 test.describe('imported devotional sections', () => {
@@ -48,7 +48,7 @@ test.describe('imported devotional sections', () => {
     const deity = snapshot.texts.find(text => text.slug === 'shiv-chalisa').deity;
     await page.getByRole('combobox', { name: 'Deity', exact: true }).selectOption(deity);
     await expect(page.locator('.dev-card-deity').first()).toHaveText(deity);
-    await expect(page.getByRole('navigation', { name: 'Explore sections' }).getByRole('link', { name: 'Library', exact: true })).toHaveAttribute('href', '/library');
+    await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Library', exact: true })).toHaveAttribute('href', '/library');
     await page.screenshot({ path: 'test-results/devotional-collection.png', fullPage: true });
   });
 
@@ -104,9 +104,12 @@ test.describe('imported devotional sections', () => {
       await page.goto(path);
       await expect(page.locator('.dev-card, .dev-prayer-text, .dev-calendar-day').first()).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-      const calendarLink = page.getByRole('navigation', { name: 'Explore sections' }).getByRole('link', { name: 'Calendar', exact: true });
+      await page.getByRole('button', { name: 'Open navigation' }).click();
+      const calendarLink = page.getByRole('navigation', { name: 'Mobile navigation' }).getByRole('link', { name: 'Calendar', exact: true });
       const bounds = await calendarLink.boundingBox();
       expect(bounds.x + bounds.width).toBeLessThanOrEqual(390);
+      await calendarLink.focus();
+      await page.keyboard.press('Escape');
       await page.screenshot({ path: `test-results/devotional-mobile-${path.split('/')[1].split('?')[0]}.png`, fullPage: true });
     }
     expect(errors).toEqual([]);

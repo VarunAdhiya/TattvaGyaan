@@ -1,6 +1,6 @@
 .journey-game {
-  --game-paper: #fff6e3;
-  --game-ink: #173b32;
+  --game-paper: var(--site-surface);
+  --game-ink: var(--site-text);
   position: fixed; inset: 0; z-index: 70; overflow: hidden;
   color: var(--game-ink); background: #176da7;
   font-family: 'Sacred Hind', 'Nirmala UI', sans-serif;
@@ -83,6 +83,28 @@
 .game-art-dialog > div { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 16px 22px; font-size: 14px; }
 .game-art-dialog > div span { color: #f1d296; }
 .game-art-close { position: absolute; top: 12px; right: 12px; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #173b32; background: #fff6e3; }
+/* Match the application chrome while retaining the illustrated 3D world. */
+.journey-game { background: var(--site-canvas); }
+.journey-game :focus-visible { outline-color: var(--site-gold); }
+.game-home, .game-tools button, .game-back, .world-pin { border-color: var(--site-control-line); }
+.game-home:hover, .game-tools button:hover { background: var(--site-raised); }
+.game-brand, .game-location, .game-story, .game-scene-actions > span,
+.game-scene-actions > button, .world-pin, .world-fallback-scene > p,
+.game-art-close, .world-loading { background: var(--site-surface); color: var(--site-text); }
+.game-story { scrollbar-color: #a9875d var(--site-surface); box-shadow: 0 12px 30px -14px #211a1480; }
+.game-brand > span, .game-story h1, .game-next strong, .game-map-intro h1 { font-family: 'Tattva Cormorant', 'Sacred Hind', Georgia, serif; }
+.game-brand small, .game-story-heading, .game-visited, .game-details-toggle,
+.game-story-details a { color: var(--site-gold); }
+.game-story-details { border-color: var(--site-line); }
+.game-back, .game-scene-actions { color: var(--site-text); }
+.game-next { color: var(--site-canvas); background: var(--site-gold); box-shadow: none; }
+.game-tools button[aria-pressed=true], .world-pin.is-active { background: var(--site-gold); color: var(--site-canvas); }
+.game-trail, .game-art-dialog { background: var(--site-stone); }
+.game-trail button > span { background: var(--site-surface); }
+.game-trail button.was-visited > span, .game-trail button[aria-current=step] > span,
+.game-trail button:hover > span { color: var(--site-canvas); }
+.game-art-dialog::backdrop { background: #191715d9; }
+.game-map-intro { background: var(--site-surface); padding: 16px; border-radius: 12px; }
 .journey-game.is-still *, .journey-game.is-still *::before, .journey-game.is-still *::after { animation: none !important; transition: none !important; }
 @media (max-width: 1050px) and (min-width: 701px) {
   .game-story { width: min(330px, 36vw); padding: 18px; }

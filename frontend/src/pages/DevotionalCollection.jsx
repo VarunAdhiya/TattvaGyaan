@@ -4,6 +4,12 @@ import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { api } from '../api/client';
 import { devotionalSections, DevotionalCard, DevotionalState } from '../components/DevotionalShared';
 
+const collectionArtwork = {
+  chalisa: { src: '/journeys/hanuman.png', alt: 'Hanuman holding his gada in a temple landscape' },
+  bhajan: { src: '/journeys/krishna.png', alt: 'Krishna playing his flute beside a cow' },
+  mantra: { src: '/journeys/shiva.png', alt: 'Shiva meditating beside Nandi in the Himalayas' },
+};
+
 export default function DevotionalCollection({ category }) {
   const section = devotionalSections[category];
   const [params, setParams] = useSearchParams();
@@ -32,9 +38,9 @@ export default function DevotionalCollection({ category }) {
     setParams(next);
   }
   return <div className="dev-page">
-    <header className="dev-heading">
-      <div><h1>{section.title}</h1><p className="dev-eyebrow">A moment for devotion</p><p lang="hi" className="dev-hindi-subtitle">{section.hindi}</p><p className="dev-description">{section.description}</p></div>
-      <div className="dev-source-note" aria-hidden="true"><span className="dev-om">ॐ</span></div>
+    <header className="dev-heading dev-collection-heading">
+      <div><h1>{section.title}</h1><p lang="hi" className="dev-hindi-subtitle">{section.hindi}</p><p className="dev-description">{section.description}</p></div>
+      <img className="dev-collection-art" src={collectionArtwork[category].src} alt={collectionArtwork[category].alt} width="1536" height="1024" fetchPriority="high" />
     </header>
     <form className="dev-search" onSubmit={event => { event.preventDefault(); update({ search: query.trim(), page: null }); }}>
       <Search size={20} aria-hidden="true" /><input aria-label={`Search ${section.title.toLowerCase()}`} placeholder="Search in Hindi or English…" maxLength={100} value={query} onChange={event => setQuery(event.target.value)} />

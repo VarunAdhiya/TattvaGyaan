@@ -62,12 +62,13 @@ test('signed-in home uses the supplied background, real Panchang and library des
   await expect(page.getByRole('region', { name: "Today's Panchang" })).toContainText('6:24 AM');
   await expect(page.locator('.landing-backdrop')).toHaveJSProperty('naturalWidth', 1408);
   await expect(page.locator('.landing-backdrop')).toHaveJSProperty('naturalHeight', 768);
-  await expect(page.locator('.landing-backdrop')).toHaveJSProperty('naturalWidth', 1408);
-  await expect(page.locator('.landing-backdrop')).toHaveJSProperty('naturalHeight', 768);
   for (const [label, path] of [['Library', '/library'], ['Chalisas', '/chalisas'], ['Bhajans', '/bhajans'], ['Mantras', '/mantras'], ['Calendar', '/calendar']]) {
     await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: label, exact: true })).toHaveAttribute('href', path);
   }
   await expect(page.getByRole('link', { name: 'Read Hanuman Chalisa' })).toHaveAttribute('href', '/chalisas/hanuman-chalisa');
+  await expect(page.locator('.dashboard-prayer')).toHaveCount(3);
+  await expect(page.getByRole('heading', { name: 'Explore the scripture library', exact: true })).toHaveCount(1);
+  await expect(page.locator('.landing-backdrop')).toHaveCount(1);
   for (const link of await page.locator('.dashboard-prayer-main').all()) {
     const href = await link.getAttribute('href');
     const [category, slug] = href.slice(1).split('/');
@@ -83,7 +84,6 @@ test('signed-in home uses the supplied background, real Panchang and library des
   const dimensions = await journeyImage.boundingBox();
   expect(dimensions.width / dimensions.height).toBeCloseTo(1.5, 2);
   await expect(page.locator('body')).not.toContainText(/hindu\s*aarti/i);
-  await page.evaluate(() => scrollTo(0, 0));
   await page.evaluate(() => scrollTo(0, 0));
   await capture(page, 'dashboard-desktop');
   await page.getByRole('link', { name: 'Explore the library', exact: true }).click();

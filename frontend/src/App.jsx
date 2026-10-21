@@ -12,7 +12,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import SectionNavigation from './components/SectionNavigation';
+import SiteHeader from './components/SiteHeader';
 import DevotionalCollection from './pages/DevotionalCollection';
 import DevotionalDetail from './pages/DevotionalDetail';
 import HinduCalendar from './pages/HinduCalendar';
@@ -20,22 +20,26 @@ import LandingPage from './pages/LandingPage';
 const DivineJourneys = React.lazy(() => import('./pages/DivineJourneys'));
 import './devotionals.css';
 import './sacred-theme.css';
+import './site-theme.css';
 import './auth.css';
 // Route-specific themes must follow the shared sacred theme.
 import './dashboard-theme.css';
+import './interface-polish.css';
 
 function SiteFrame({ children }) {
   const { pathname } = useLocation();
   const isAccountPage = pathname === '/login' || pathname === '/register';
   const isDashboardPage = pathname === '/dashboard';
-  return <div className={`sacred-app flex flex-col min-h-screen${isAccountPage ? ' auth-route' : ''}${isDashboardPage ? ' dashboard-route' : ''}`}>{children}</div>;
+  const isWorkspacePage = !isAccountPage && !isDashboardPage && !pathname.startsWith('/reader/') && !pathname.startsWith('/journeys');
+  return <div className={`sacred-app flex flex-col min-h-screen${isAccountPage ? ' auth-route' : ''}${isDashboardPage ? ' dashboard-route' : ''}${isWorkspacePage ? ' workspace-route' : ''}`}>{children}</div>;
 }
 
 function SiteNavigation() {
   const { pathname, search } = useLocation();
   const { user } = useAuth();
   if (user && pathname === '/journeys/ganesha' && new URLSearchParams(search).has('level')) return null;
-  return pathname === '/dashboard' && user ? null : <><Navbar /><SectionNavigation /></>;
+  if (pathname === '/dashboard' && user) return null;
+  return user && !pathname.startsWith('/reader/') ? <SiteHeader key={pathname} /> : <Navbar />;
 }
 
 function SiteFooter() {
@@ -82,7 +86,7 @@ function App() {
               <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
             </Routes>
           </main>
-          <Footer />
+          <SiteFooter />
         </SiteFrame>
       </BrowserRouter>
     </AuthProvider>

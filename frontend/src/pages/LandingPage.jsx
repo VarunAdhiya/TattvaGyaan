@@ -1,17 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ArrowDown, ArrowRight, BookOpen, CalendarDays, Menu, Sunrise, X, LogOut, BookMarked } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
+import { ArrowDown, ArrowRight, BookOpen, CalendarDays, Sunrise } from 'lucide-react';
+import SiteHeader from '../components/SiteHeader';
 import { api } from '../api/client';
 import durgaTemple from '../assets/landing/durga-temple.png';
 import '../landing.css';
 import '../journeys.css';
 
-const navigation = [['Library', '/library'], ['Chalisas', '/chalisas'], ['Bhajans', '/bhajans'], ['Mantras', '/mantras'], ['Calendar', '/calendar'], ['Journeys', '/journeys']];
 const collections = [
-  { title: 'Hanuman Chalisa', hindi: 'हनुमान चालीसा', path: '/chalisas/hanuman-chalisa', category: 'Chalisas', browse: '/chalisas', image: '/journeys/hanuman.png', alt: 'Hanuman holding his gada in a temple landscape', description: 'A devotional hymn in praise of Hanuman.' },
-  { title: 'Achyutam Keshavam', hindi: 'अच्युतम् केशवम्', path: '/bhajans/achyutam-keshavam', category: 'Bhajans', browse: '/bhajans', image: '/journeys/krishna.png', alt: 'Krishna playing his flute beside a cow', description: 'A bhajan celebrating Krishna and his divine names.' },
-  { title: 'Mahamrityunjay Mantra', hindi: 'महामृत्युंजय मंत्र', path: '/mantras/mahamrityunjay-mantra', category: 'Mantras', browse: '/mantras', image: '/journeys/shiva.png', alt: 'Shiva meditating beside Nandi in the Himalayas', description: 'A sacred invocation to Shiva, also called Tryambaka.' },
   { title: 'Hanuman Chalisa', hindi: 'हनुमान चालीसा', path: '/chalisas/hanuman-chalisa', category: 'Chalisas', browse: '/chalisas', image: '/journeys/hanuman.png', alt: 'Hanuman holding his gada in a temple landscape', description: 'A devotional hymn in praise of Hanuman.' },
   { title: 'Achyutam Keshavam', hindi: 'अच्युतम् केशवम्', path: '/bhajans/achyutam-keshavam', category: 'Bhajans', browse: '/bhajans', image: '/journeys/krishna.png', alt: 'Krishna playing his flute beside a cow', description: 'A bhajan celebrating Krishna and his divine names.' },
   { title: 'Mahamrityunjay Mantra', hindi: 'महामृत्युंजय मंत्र', path: '/mantras/mahamrityunjay-mantra', category: 'Mantras', browse: '/mantras', image: '/journeys/shiva.png', alt: 'Shiva meditating beside Nandi in the Himalayas', description: 'A sacred invocation to Shiva, also called Tryambaka.' },
@@ -45,32 +41,12 @@ function DailyPanchang() {
 }
 
 export default function LandingPage() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-  const [logoutError, setLogoutError] = useState('');
-  async function signOut() {
-    try { await logout(); navigate('/login'); }
-    catch { setLogoutError('Unable to sign out. Please try again.'); }
-  }
-  const [menuOpen, setMenuOpen] = useState(false);
   return <div className="landing-page">
     <a className="landing-skip" href="#landing-content">Skip to content</a>
     <section className="landing-hero" aria-labelledby="landing-title">
       <img className="landing-backdrop" src={durgaTemple} width="1408" height="768" alt="" fetchPriority="high" />
-      <img className="landing-backdrop" src={durgaTemple} width="1408" height="768" alt="" fetchPriority="high" />
       <div className="landing-shade" />
-      <header className="landing-header">
-        <Link to="/dashboard" className="landing-brand" aria-label="TattvaGyaan home"><BookOpen size={26} strokeWidth={1.4} aria-hidden="true" /><span>TattvaGyaan<small>ज्ञान से आत्मबोध तक</small></span></Link>
-        <nav className="landing-desktop-nav" aria-label="Main navigation">{navigation.map(([label, path]) => <Link to={path} key={path}>{label}</Link>)}</nav>
-        <div className="landing-user-actions"><Link className="landing-plans-link" to="/reading-plans" aria-label="Reading Plans" title="Reading Plans"><BookMarked size={20} /></Link><Link className="landing-account" to="/profile">{user?.displayName || user?.username || 'My profile'}<ArrowRight size={16} aria-hidden="true" /></Link><button onClick={signOut} aria-label="Log out" title="Log out"><LogOut size={19} /></button></div>
-        <button className="landing-menu-toggle" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={menuOpen} aria-controls="landing-mobile-navigation" onClick={() => setMenuOpen(open => !open)}>{menuOpen ? <X size={23} /> : <Menu size={23} />}</button>
-        {menuOpen && <nav id="landing-mobile-navigation" className="landing-mobile-nav" aria-label="Mobile navigation" onKeyDown={event => { if (event.key === 'Escape') { setMenuOpen(false); document.querySelector('.landing-menu-toggle')?.focus(); } }}>
-          {navigation.map(([label, path]) => <Link to={path} key={path} onClick={() => setMenuOpen(false)}>{label}<ArrowRight size={16} aria-hidden="true" /></Link>)}
-          <Link to={user ? '/profile' : '/login'} onClick={() => setMenuOpen(false)}>{user ? 'My profile' : 'Sign in'}</Link>
-          <Link to="/reading-plans" onClick={() => setMenuOpen(false)}>Reading Plans</Link><button onClick={signOut}>Log out</button>
-        </nav>}
-      </header>
-      {logoutError && <p className="landing-logout-error" role="alert">{logoutError}</p>}
+      <SiteHeader overlay />
       <div className="landing-hero-content" id="landing-content">
         <h1 id="landing-title">Where wisdom<br />meets <em>devotion.</em></h1>
         <p className="landing-hero-hindi" lang="hi">ज्ञान, भक्ति और आत्मचिंतन की एक यात्रा।</p>
@@ -106,7 +82,6 @@ export default function LandingPage() {
       </article>)}</div>
     </section>
     <section className="landing-scriptures" aria-labelledby="scriptures-title"><div className="landing-section landing-scriptures-inner">
-      <div className="landing-section-intro"><BookOpen className="landing-book-symbol" size={30} strokeWidth={1.3} aria-hidden="true" /><h2 id="scriptures-title">Explore the scripture library</h2><p>Read the available Hindi editions, save your place, and keep notes on passages that stay with you.</p><Link className="landing-primary landing-light-button" to="/library">Enter the scripture library <ArrowRight size={18} aria-hidden="true" /></Link><span className="landing-account-note">Edition details and source information are included with each book.</span></div>
       <div className="landing-section-intro"><BookOpen className="landing-book-symbol" size={30} strokeWidth={1.3} aria-hidden="true" /><h2 id="scriptures-title">Explore the scripture library</h2><p>Read the available Hindi editions, save your place, and keep notes on passages that stay with you.</p><Link className="landing-primary landing-light-button" to="/library">Enter the scripture library <ArrowRight size={18} aria-hidden="true" /></Link><span className="landing-account-note">Edition details and source information are included with each book.</span></div>
       <div className="landing-book-list">{books.map(book => <Link className="landing-book" key={book.title} to={`/library?search=${encodeURIComponent(book.title)}`}><div><span lang="hi">{book.hindi}</span><h3>{book.title}</h3><p>{book.description}</p></div><ArrowRight size={22} strokeWidth={1.4} aria-hidden="true" /></Link>)}<Link className="landing-all-books" to="/library">Explore all books <ArrowRight size={17} aria-hidden="true" /></Link></div>
     </div></section>

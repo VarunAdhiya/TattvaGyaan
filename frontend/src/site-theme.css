@@ -1,0 +1,154 @@
+/* Shared temple-stone palette. Reader paper and account artwork keep their own themes. */
+:root {
+  --site-canvas: #191715;
+  --site-stone: #1d1a17;
+  --site-surface: #24201b;
+  --site-raised: #302820;
+  --site-text: #f5ead8;
+  --site-muted: #d5c7b3;
+  --site-gold: #e9bc77;
+  --site-line: #594a37;
+  --site-control-line: #958064;
+  --site-red: #a73826;
+}
+body, .sacred-app { background: var(--site-canvas); color: var(--site-text); }
+.sacred-app { scrollbar-color: #a9875d var(--site-stone); }
+.sacred-app ::selection { background: var(--site-gold); color: var(--site-canvas); }
+.sacred-app :focus-visible { outline-color: var(--site-gold); }
+.sacred-app input { caret-color: var(--site-gold); }
+.sacred-app input::placeholder, .sacred-app textarea::placeholder { color: #b9aa95; }
+.sacred-app .sacred-navbar { background: var(--site-stone); border-color: var(--site-line); color: var(--site-text); }
+.sacred-app .sacred-brand > span:last-child { font-family: 'Tattva Cormorant', 'Sacred Hind', Georgia, serif; font-size: 28px; }
+.sacred-app .sacred-brand small { color: var(--site-gold); }
+.sacred-app .sacred-brand-symbol { color: var(--site-gold); border-color: #a9875d; }
+.sacred-app .sacred-nav-search { background: var(--site-surface); border-color: var(--site-control-line); }
+.sacred-app .sacred-nav-search input { color: var(--site-text); }
+.sacred-app .sacred-account-nav .sacred-nav-join { background: var(--site-gold); color: var(--site-canvas); }
+.sacred-app .sacred-mobile-menu { background: var(--site-surface); color: var(--site-text); }
+.sacred-app .section-navigation { background: var(--site-stone); border-color: var(--site-line); }
+.sacred-app .section-link { color: var(--site-muted); }
+.sacred-app .section-link svg { color: #c5a575; }
+.sacred-app .section-link:hover, .sacred-app .section-link.is-active,
+.sacred-app .section-link.is-active svg { color: var(--site-gold); }
+.sacred-app .section-link.is-active { border-color: var(--site-gold); }
+.sacred-app .sacred-footer { background: var(--site-stone); border-color: var(--site-line); }
+.sacred-app .sacred-footer :is(p, li) { color: var(--site-muted); }
+.sacred-app .sacred-footer :is(h4, .font-serif) { color: var(--site-gold); }
+.sacred-app .sacred-footer h4 { font-family: 'Sacred Hind', sans-serif; }
+
+/* Collections and prayer reading: quiet surfaces, warm gold wayfinding. */
+.sacred-app .dev-page { color: var(--site-text); }
+.sacred-app .dev-page :is(h1, h2, h3),
+.sacred-app :is(.library-banner, .sacred-page, .scripture-detail-page) :is(h1, h2, h3) {
+  font-family: 'Tattva Cormorant', 'Sacred Hind', Georgia, serif;
+  color: var(--site-text);
+  font-weight: 500;
+  text-wrap: balance;
+}
+.sacred-app .dev-heading { background: var(--site-surface); border: 1px solid var(--site-line); }
+.sacred-app .dev-heading::after { opacity: .14; }
+.sacred-app .dev-heading h1 { font-size: clamp(36px, 4vw, 48px); }
+.sacred-app .dev-page :is(.dev-description, .dev-filters, .dev-footnote, .dev-state, .dev-pagination, .dev-detail-meta) { color: var(--site-muted); }
+.sacred-app .dev-page :is(.dev-hindi-subtitle, .dev-eyebrow, .dev-source-note, .dev-om, .dev-back, .dev-text-button) { color: var(--site-gold); }
+.sacred-app .dev-search { background: var(--site-surface); border-color: var(--site-control-line); color: var(--site-gold); }
+.sacred-app .dev-search input { color: var(--site-text); background: transparent; }
+.sacred-app .dev-button, .sacred-app .dev-filters select {
+  background: var(--site-surface); border-color: var(--site-control-line); color: var(--site-text); color-scheme: dark;
+}
+.sacred-app .dev-button:hover:not(:disabled) { background: var(--site-raised); border-color: var(--site-gold); }
+.sacred-app .dev-button-primary, .sacred-app .dev-button-primary:hover:not(:disabled) { background: var(--site-gold); border-color: var(--site-gold); color: var(--site-canvas); }
+.sacred-app .dev-button-primary:hover:not(:disabled) { background: #f4d29b; }
+.sacred-app .dev-card { background: var(--site-surface); border-color: var(--site-line); }
+.sacred-app .dev-card:hover { background: #2c251e; border-color: #a9875d; transform: translateY(-2px); }
+.sacred-app .dev-card::before { opacity: .25; }
+.sacred-app .dev-card h2 { font-size: 29px; }
+.sacred-app .dev-card-hindi { color: var(--site-muted); }
+.sacred-app .dev-card-deity { color: #c9b597; letter-spacing: .04em; }
+.sacred-app .dev-card-foot { color: var(--site-gold); border-color: var(--site-line); }
+.sacred-app .dev-detail-heading, .sacred-app .dev-related, .sacred-app .dev-related > a { border-color: var(--site-line); }
+.sacred-app .dev-detail-heading h1 { font-size: clamp(34px, 4vw, 46px); }
+.sacred-app .dev-prayer { background: var(--site-surface); border-color: var(--site-line); }
+.sacred-app .dev-reader-toolbar { background: var(--site-stone); border-color: var(--site-line); }
+.sacred-app .dev-language button { color: var(--site-muted); }
+.sacred-app .dev-language button[aria-pressed=true] { background: var(--site-gold); color: var(--site-canvas); }
+.sacred-app .dev-reader-actions, .sacred-app .dev-prayer-om { color: var(--site-gold); }
+.sacred-app .dev-prayer-text { color: var(--site-text); }
+.sacred-app .dev-prayer-text p { max-width: 65ch; margin-inline: auto; }
+.sacred-app .dev-related > a { color: var(--site-text); }
+.sacred-app .dev-related small, .sacred-app .dev-source-only p { color: var(--site-muted); }
+.sacred-app .dev-related > a:hover { color: var(--site-gold); }
+.sacred-app .dev-loading { border-color: var(--site-line); border-top-color: var(--site-gold); }
+
+/* Panchang: a selected date has a gold outline as well as a tonal fill. */
+.sacred-app .dev-calendar-grid { background: var(--site-surface); border-color: var(--site-line); }
+.sacred-app :is(.dev-weekday, .dev-empty-day, .dev-calendar-day) { border-color: var(--site-line); }
+.sacred-app .dev-weekday { background: var(--site-stone); color: var(--site-gold); }
+.sacred-app .dev-calendar-day { color: var(--site-text); }
+.sacred-app .dev-calendar-day:hover { background: var(--site-raised); }
+.sacred-app .dev-calendar-day[aria-pressed=true] { background: #3d3021; box-shadow: inset 0 0 0 2px var(--site-gold); }
+.sacred-app .dev-calendar-day[aria-current=date] .dev-day-number { background: var(--site-gold); color: var(--site-canvas); }
+.sacred-app :is(.dev-day-tithi, .dev-day-hindi) { color: var(--site-muted); }
+.sacred-app .dev-day-festival { color: var(--site-gold); }
+.sacred-app .dev-calendar-day.has-festival::after { background: var(--site-gold); }
+.sacred-app .dev-panchang { background: var(--site-surface); border-color: var(--site-line); }
+.sacred-app .dev-panchang dl > div { border-color: var(--site-line); }
+.sacred-app .dev-panchang dt { color: var(--site-gold); }
+.sacred-app .dev-panchang dd, .sacred-app .dev-sun-times strong { color: var(--site-text); }
+.sacred-app .dev-panchang dd :is(span, small), .sacred-app .dev-sun-times small { color: var(--site-muted); }
+.sacred-app .dev-selected-festival, .sacred-app .dev-festival-date { background: #3d3021; color: var(--site-gold); }
+.sacred-app .dev-sun-times { background: var(--site-stone); color: var(--site-gold); }
+.sacred-app .dev-month-festivals > button { color: var(--site-text); border-color: var(--site-line); }
+.sacred-app .dev-month-festivals > button:hover { color: var(--site-gold); }
+
+/* Existing utility-based workspaces share these roles; never target reader pages. */
+.workspace-route { color-scheme: dark; }
+.workspace-route main :is([class*='text-stone-'], [class*='text-gray-']) { color: var(--site-muted); }
+.workspace-route main :is(.text-stone-900, .text-stone-800) { color: var(--site-text); }
+.workspace-route main [class*='text-amber-'] { color: var(--site-gold); }
+.workspace-route main :is([class*='bg-white'], .bg-stone-50, .bg-stone-100, .bg-amber-50, [class*='bg-amber-100']) { background: var(--site-surface); }
+.workspace-route main :is([class*='border-stone-'], [class*='border-amber-']) { border-color: var(--site-line); }
+.workspace-route main :is(input, select, textarea) { background: var(--site-stone); color: var(--site-text); border-color: var(--site-control-line); accent-color: var(--site-gold); }
+.workspace-route main :is(button, a):is([class*='bg-gradient-to-r'], .bg-amber-700, .bg-amber-800) { background: var(--site-gold); color: var(--site-canvas); box-shadow: none; }
+.workspace-route main :is(button, a):is([class*='bg-gradient-to-r'], .bg-amber-700, .bg-amber-800):hover:not(:disabled) { background: #f4d29b; }
+.workspace-route main :is([class*='hover:bg-stone-'], [class*='hover:bg-amber-']):hover { background: var(--site-raised); }
+.workspace-route main :is(.bg-stone-200, .bg-stone-300) { background: var(--site-line); }
+.workspace-route main :is(.bg-emerald-50, .bg-emerald-100, [class*='bg-emerald-50/'], .bg-green-50) { background: #3d3021; }
+.workspace-route main :is([class*='text-emerald-'], [class*='text-green-']) { color: var(--site-gold); }
+.workspace-route main [class*='border-emerald-'] { border-color: #a9875d; }
+.workspace-route main :is(.bg-rose-50, .bg-red-50) { background: #47251f; }
+.workspace-route main :is([class*='text-rose-'], [class*='text-red-']) { color: #ffb9a7; }
+.workspace-route main :is([class*='border-rose-'], [class*='border-red-']) { border-color: #b86854; }
+.workspace-route main .bg-blue-50 { background: var(--site-raised); }
+.workspace-route main [class*='text-blue-'] { color: var(--site-gold); }
+.sacred-app .library-banner {
+  background: linear-gradient(90deg, #211a14f5, #211a14d9), url('./assets/landing/temple-river-full.png') center 48% / cover;
+  border: 1px solid var(--site-line);
+}
+.sacred-app .library-banner h1 { font-size: clamp(34px, 4vw, 44px); }
+.sacred-app .library-banner p { color: var(--site-muted); }
+.sacred-app .scripture-card { background: var(--site-surface); border-color: var(--site-line); }
+.sacred-app .scripture-card h3 { color: var(--site-text); }
+.sacred-app .scripture-card h3 { font-family: 'Tattva Cormorant', 'Sacred Hind', Georgia, serif; font-size: 28px; font-weight: 500; }
+.sacred-app .scripture-card p { color: var(--site-muted); }
+.sacred-app .scripture-card:hover { border-color: #a9875d; box-shadow: none; transform: translateY(-2px); }
+.sacred-app .scripture-cover { background: #673021; color: #f3ce95; }
+.sacred-app .scripture-card:nth-child(3n + 2) .scripture-cover { background: #443728; }
+.sacred-app .scripture-card:nth-child(3n) .scripture-cover { background: #553522; }
+.sacred-app .scripture-card > div:last-child a { background: var(--site-gold); color: var(--site-canvas); }
+.sacred-app .sacred-page > div:first-child { border-color: var(--site-line); }
+.sacred-app .scripture-detail-page { background: var(--site-canvas); }
+.sacred-app .scripture-detail-page > div:first-child { background: var(--site-stone); border-color: var(--site-line); }
+.workspace-route .profile-header { background: var(--site-stone); }
+.workspace-route .profile-statistics > div { background: var(--site-raised); }
+.workspace-route .profile-header h1 { overflow-wrap: anywhere; }
+.sacred-app .sacred-page .border-dashed { background: var(--site-surface); border-color: var(--site-line); }
+.workspace-route .profile-header button:hover { color: var(--site-canvas); background: var(--site-gold); }
+.workspace-route main .bg-emerald-600 { background: #705232; color: var(--site-text); }
+.workspace-route main .bg-emerald-600:hover { background: #85643e; }
+
+@media (max-width: 700px) {
+  .sacred-app .sacred-brand > span:last-child { font-size: 25px; }
+  .sacred-app .section-navigation-inner { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; padding-inline: 8px; }
+  .sacred-app .section-link { min-width: 0; font-size: 11px; }
+  .sacred-app .dev-heading h1 { font-size: 36px; }
+}

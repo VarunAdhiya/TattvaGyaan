@@ -12,7 +12,7 @@ export default function ReadingPlanCard({ plan, onDelete, onClick }) {
   );
 
   return (
-    <div className="rounded-2xl border border-stone-200/80 shadow-xs p-6 hover:shadow-lg transition-all cursor-pointer group">
+    <div className="reading-plan-card rounded-2xl border border-stone-200/80 p-6 cursor-pointer group">
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1" onClick={onClick}>
           <h3 className="font-serif font-bold text-lg text-stone-900 group-hover:text-amber-900 transition">

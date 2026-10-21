@@ -2,35 +2,20 @@
 name: "TattvaGyaan"
 description: "A temple-inspired Hindi scripture and devotional reading sanctuary."
 colors:
+  canvas: "#191715"
+  temple-stone: "#1d1a17"
+  surface: "#24201b"
+  raised-surface: "#302820"
+  ink: "#f5ead8"
+  muted-ink: "#d5c7b3"
+  gold: "#e9bc77"
+  gold-line: "#594a37"
+  control-line: "#958064"
+  vermilion: "#a73826"
   auth-red: "#c13321"
-  auth-red-hover: "#982516"
   auth-charcoal: "#28201e"
   auth-cream: "#fff4df"
   auth-gold: "#ffd18b"
-  temple-green: "#103f3a"
-  vermilion: "#a53a26"
-  vermilion-hover: "#7a251c"
-  ceremonial-red: "#883426"
-  saffron: "#f4b449"
-  hero-saffron: "#f6b244"
-  canvas: "#f4ebd8"
-  paper: "#fffaf0"
-  card-paper: "#fffcf1"
-  form-paper: "#fffdf7"
-  field-paper: "#fffcf4"
-  ink: "#243c34"
-  heading-ink: "#174638"
-  muted-ink: "#68553e"
-  gold-line: "#cfbb94"
-  focus: "#d17219"
-  button-text: "#fff4df"
-  nav-paper: "#fff6e3"
-  nav-text: "#45584c"
-  nav-active: "#a43827"
-  card-sage: "#f1f5e6"
-  card-peach: "#fff0db"
-  success-paper: "oklch(95% 0.052 163.051)"
-  success-ink: "oklch(43.2% 0.095 166.913)"
 typography:
   display:
     fontFamily: "'Tattva Cormorant', Georgia, serif"
@@ -51,13 +36,13 @@ typography:
     lineHeight: 1.15
     letterSpacing: "0"
   headline:
-    fontFamily: "'Sacred Cinzel', 'Sacred Hind', serif"
-    fontSize: "clamp(30px, 3.5vw, 46px)"
+    fontFamily: "'Tattva Cormorant', 'Sacred Hind', Georgia, serif"
+    fontSize: "clamp(36px, 4vw, 48px)"
     fontWeight: 500
     lineHeight: 1.16
   title:
-    fontFamily: "'Sacred Cinzel', 'Sacred Hind', serif"
-    fontSize: "23px"
+    fontFamily: "'Sacred Hind', 'Nirmala UI', sans-serif"
+    fontSize: "21px"
     fontWeight: 500
     lineHeight: 1.4
   body:
@@ -92,7 +77,7 @@ spacing:
   grid-gap: "20px"
   mobile-panel: "24px"
   form-panel: "28px"
-  collection-header: "38px 42px"
+  collection-header: "0; 48px column gap"
 components:
   auth-submit:
     backgroundColor: "{colors.auth-red}"
@@ -100,21 +85,21 @@ components:
     rounded: "4px"
     height: "54px"
   button-primary:
-    backgroundColor: "{colors.vermilion}"
-    textColor: "{colors.button-text}"
+    backgroundColor: "{colors.gold}"
+    textColor: "{colors.canvas}"
     rounded: "{rounded.control}"
     padding: "10px 0"
     height: "49px"
   button-primary-hover:
-    backgroundColor: "{colors.vermilion-hover}"
+    backgroundColor: "{colors.gold}"
   button-secondary:
-    backgroundColor: "#f3f6e9"
-    textColor: "#174b3b"
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
     rounded: "{rounded.control}"
     padding: "10px 16px"
     height: "48px"
   button-hero:
-    backgroundColor: "{colors.dashboard-gold}"
+    backgroundColor: "{colors.gold}"
     textColor: "#302116"
     rounded: "{rounded.control}"
     padding: "14px 22px"
@@ -122,26 +107,26 @@ components:
   button-hero-hover:
     backgroundColor: "#f6d69f"
   card-dashboard:
-    backgroundColor: "{colors.dashboard-card}"
+    backgroundColor: "{colors.surface}"
     rounded: "{rounded.panel}"
   input:
-    backgroundColor: "{colors.field-paper}"
+    backgroundColor: "{colors.temple-stone}"
     rounded: "{rounded.control}"
     padding: "10px 16px"
     height: "48px"
   navigation:
-    backgroundColor: "{colors.nav-paper}"
-    textColor: "{colors.nav-text}"
-    height: "58px"
+    backgroundColor: "#1b1714"
+    textColor: "{colors.ink}"
+    height: "96px; 78px on mobile"
   chip-complete:
-    backgroundColor: "{colors.success-paper}"
-    textColor: "{colors.success-ink}"
+    backgroundColor: "{colors.raised-surface}"
+    textColor: "{colors.gold}"
     rounded: "{rounded.pill}"
     padding: "4px 10px"
   card-devotional:
-    backgroundColor: "{colors.card-paper}"
+    backgroundColor: "#211e19"
     rounded: "{rounded.panel}"
-    padding: "27px"
+    padding: "24px; 22px on mobile"
   reader-language-selected:
     backgroundColor: "#f2b952"
     textColor: "#1f392e"
@@ -155,71 +140,40 @@ components:
 
 **Creative North Star: "The Temple Reading Sanctuary"**
 
-A saturated temple-green and vermilion interface frames warm paper, saffron accents, and the supplied temple, river, Himalayan mountain and sage artwork. Cinzel gives navigation and headings a ceremonial character; Hind keeps controls and bilingual interface copy approachable. Collection screens carry ornament at their edges while scripture remains on quiet, selectable paper.
+Warm charcoal and temple-stone surfaces frame cream text, gold accents and the supplied devotional artwork. Cormorant gives headings a quiet literary character; Hind keeps Hindi and interface controls approachable. Collection introductions pair clear titles with complete devotional illustrations; cards and sustained reading stay free of decoration.
 
-This is the implemented October 2026 visual system. The dashboard has a distinct continuous warm-charcoal treatment, sentence-case Cormorant headings, Hind interface text and complete deity illustrations. Its restrained gold accents connect it to the other routes without changing their green, vermilion and paper palette. Reading has its own calibrated type and user-selected paper themes.
+The dashboard, collections, calendar and personal workspaces share one palette. Account pages retain their full-frame artwork and warm translucent controls. The book reader retains its calibrated typography and user-selected paper themes.
 
-**Key Characteristics:**
-- Bold temple green, vermilion and saffron against cream paper.
-- Ceremonial display type paired with clear Hindi-capable interface text.
-- Supplied artwork and peripheral lotus geometry; quiet reading surfaces.
-- Fine borders, restrained hover lift and reduced-motion support.
-- A route-scoped charcoal dashboard with sentence-case Cormorant and uncropped artwork.
-
-The normative implementation is `frontend/src/sacred-theme.css`, layered over `landing.css`, `devotionals.css`, `index.css` and existing Tailwind utilities, with `frontend/src/dashboard-theme.css` defining the dashboard variation. Tokens above summarize reused implemented values; they are not a claim that every value is centralized in CSS custom properties. The six `--sacred-*` declarations are only a partial palette, and most theme rules currently use literals. The sidecar extends these tokens with motion, breakpoints and isolated component previews.
+The shared implementation is `frontend/src/site-theme.css`, layered after `sacred-theme.css`. Account and dashboard styles load afterward. Journey styles use the same semantic tokens. Older palette literals are superseded by this layer; new application surfaces should use the shared roles.
 
 ## Colors
 
-Account routes override the green interface palette with auth charcoal, cream,
-gold and red. Their header and form share the artwork through translucent warm
-shading; inputs have dark translucent fills and gold outlines. The broader
-library and reading palette remains unchanged.
+- **Canvas / temple stone:** dark warm backgrounds for pages, navigation and footer.
+- **Surface / raised surface:** brown layers for cards, prayer text, forms and menus.
+- **Ink / muted ink:** cream titles and softer cream supporting text.
+- **Gold:** primary actions, current tabs, links, selected dates and keyboard focus.
+- **Gold line / control line:** quiet separators and higher-contrast interactive borders.
+- **Vermilion:** account actions and warm emphasis; error states use coral text on dark red.
 
-The palette combines dark vegetal green, red temple pigment, lamp-like saffron and warm cream rather than a neutral application shell.
-
-### Primary
-
-- **Temple green:** navigation, scripture section backgrounds and the dark frame around account and reading tools.
-- **Vermilion:** primary form and collection actions. The deeper hover color belongs to authentication buttons; devotional primary buttons retain their own deeper red hover.
-- **Ceremonial red:** broad devotional collection headers, with pale text and a low-opacity lotus at the edge.
-
-### Secondary
-
-- **Saffron:** selection, highlights and warm emphasis; the hero action has its own slightly stronger saffron.
-- **Gold line:** thin separators, card borders and field outlines.
-
-### Tertiary
-
-- **Card sage / card peach:** alternating devotional card surfaces, in a three-card sequence with card paper.
-- **Success paper / success ink:** the retained Tailwind availability badge for complete editions. Partial and metadata-only badges remain their existing amber and stone utilities; these are semantic status exceptions, not the core brand palette.
-
-### Neutral
-
-- **Canvas:** the warm page ground.
-- **Paper / card paper / form paper / field paper:** subtly distinct surfaces for tools, collections, forms and inputs.
-- **Ink / heading ink / muted ink:** green-brown text hierarchy on light paper.
-- **Navigation paper / navigation text / navigation active:** the light devotional navigation strip and its red selected state.
-
-**The Quiet Paper Rule.** Keep sustained scripture and prayer reading on its own paper surface; place saturated color and ornament around the reading area.
+Status labels and icons retain their meaning without relying on green. Availability badges use gold or muted cream on brown. Inputs, placeholders and body copy must meet 4.5:1 contrast; large display text must meet 3:1.
 
 Reader themes remain scoped. The sacred layer changes light-reader background/paper/accent to `#eaddc1` / `#fffbea` / `#923821` and sepia accent to `#8c3824`. Other sepia values remain `#f4ecd8` background, `#fbf0d9` paper, `#432818` text and `#e0d0b1` border. Dark mode retains `#121316` background, `#1c1e24` paper, `#e2e8f0` text, `#2d3139` border and `#f59e0b` accent. Reader selection highlights, scan filters and book material effects remain controlled by the reader, not the application palette.
 
 ## Typography
 
 Account headings use the self-hosted Cormorant Garamond Medium face at 44px
-(43px on phones), with Hind for labels and controls. This account-specific
-exception follows the user's red, gold and charcoal devotional entrance direction.
+(43px on phones), with Hind for labels and controls. This entrance treatment follows the user's red, gold and charcoal devotional entrance direction.
 
-**Display Font:** self-hosted Cinzel Medium, registered as Sacred Cinzel, with Georgia fallback. **Body Font:** self-hosted Hind Regular and Medium, registered as Sacred Hind, with Nirmala UI fallback. Font files and licenses are recorded in the landing asset README.
+**Display Font:** self-hosted Cormorant Garamond Medium, registered as Tattva Cormorant, with Hind for Hindi and Georgia fallback. **Body Font:** self-hosted Hind Regular and Medium, registered as Sacred Hind, with Nirmala UI fallback. Font files and licenses are recorded in the landing asset README.
 
-Cinzel's engraved capitals mark entry points and English collection titles; Hind supports the practical interface and Hindi card titles. The supplied Hind Medium file is registered for weights 500?900; this is one medium font file, not a set of distinct bold masters. Do not infer additional font assets from utility weights.
+Cormorant supplies English headings; Hind supports the practical interface and Hindi card titles. The supplied Hind Medium file is registered for weights 500?900; this is one medium font file, not a set of distinct bold masters. Do not infer additional font assets from utility weights.
 
 ### Hierarchy
 
 - **Display:** the frontmatter display role is the desktop dashboard heading. At 700px and below it becomes `clamp(42px, 11vw, 56px)`. Dashboard headings use sentence case and zero letter spacing.
-- **Dashboard headline / title:** section headings use the dashboard-headline role, reducing to 32px on mobile; the Ganesha heading uses `clamp(32px, 3vw, 44px)` and 34px on mobile. Prayer-card titles use dashboard-title, 25px from 701–1000px and 30px at 700px and below.
-- **Headline:** collection headers use the recorded headline role; mobile collection titles are 30px. Personal pages use 36px titles, reduced to 28px on mobile. Authentication titles are 32px, reduced to 28px.
-- **Title:** devotional collection cards on other routes use the recorded title role. Their Hindi card labels use Hind at 21px; scripture titles use Hind at 24px. Dashboard card Hindi labels use Hind at 18px.
+- **Dashboard headline / title:** section headings use the dashboard-headline role, reducing to 32px on mobile. Prayer cards use Hind at 21px, weight 500, and 1.4 line height at every breakpoint.
+- **Headline:** collection introductions use Cormorant at `clamp(42px, 4.5vw, 58px)`, 42px on mobile, with 1.05 line height. Personal pages use 36px titles, reduced to 28px on mobile. Authentication titles retain their existing sizing.
+- **Title:** devotional, scripture and dashboard prayer cards use Hind at 21px. Cream title text (`#f0e8dc`) leads; 18px Hindi labels use muted `#c3b9a8`. Metadata uses 13px `#bbae99` and reading links use 14px gold.
 - **Body:** collection descriptions use 16px and 1.75 line height; dashboard and supporting prose vary from 14?17px with 1.8?1.9 line height. This is a role-based hierarchy, not a single mathematical type scale.
 - **Label:** form labels and navigation are approximately 15px. Card footers and metadata use 12?14px. Calendar figures and profile statistics use tabular numerals.
 - **Prayer:** Hindi prayer text retains Noto Serif Devanagari / Nirmala UI / serif, starting at 22px with 1.95 line height and user adjustment from 18?34px.
@@ -229,6 +183,22 @@ Cinzel's engraved capitals mark entry points and English collection titles; Hind
 
 Explicit Nirmala UI styling remains on the dashboard hero Hindi line and some inherited landing labels. The dashboard brand retains Cinzel; its content headings deliberately use Cormorant. Inherited Georgia reader contents and utility serif badges do not change either route's display system.
 
+## Shared application theme (21 October 2026)
+
+The dashboard palette now applies to Library, Chalisas, Bhajans, Mantras,
+Calendar, scripture details, reading plans, profile, and Journey controls.
+`frontend/src/site-theme.css` owns the shared semantic roles and loads after
+`sacred-theme.css`, before the account and dashboard overrides. The
+`.workspace-route` class scopes legacy utility remapping away from scripture
+readers and the immersive Journey. `journeys.css` and `journey-game.css` use
+the same tokens; their photographic and 3D scenes retain their original colors.
+
+Use Cormorant for English display headings and Hind for Hindi and controls.
+Gold identifies links, selected tabs, keyboard focus and primary actions.
+Error surfaces use warm red with light coral text. Preserve explicit status
+labels and icons. Reader light, sepia and dark paper modes remain independent.
+Never apply workspace color remapping to the reader's calibrated pages.
+
 ## Layout
 
 The dashboard hero preserves the supplied image's full 1408:768 composition.
@@ -237,35 +207,35 @@ At 1000px and below, text sits below the complete image. Never blur or crop this
 asset to fill the viewport; the surrounding charcoal surface accommodates
 different screen proportions.
 
-The application navbar is sticky, with a maximum inner width of 1360px, 82px minimum height and 28px horizontal padding. Devotional content is centered within 1280px, with 32px desktop gutters and 38px top spacing. Its three-column collection grid uses a 20px gap, changes to two columns at 800px and one at 560px. The 700px sacred override sets collection gutters to 18px and top spacing to 24px; do not read the older base media queries in isolation.
+The signed-in `SiteHeader` is a single row shared by the dashboard and content pages. Its inner width is 90%, capped at 1600px, with 96px minimum height (78px on mobile). Collections remain centered within 1280px, with 32px desktop gutters and 38px top spacing. Their introductions pair copy and a complete 3:2 image in a 1.35fr / 1fr grid with 48px gap, stacking below 700px. The three-column card grid becomes two columns at 800px and one at 560px; mobile gutters are 18px.
 
-Dashboard content sections and Panchang share `min(88%, 1240px)`. The hero copy keeps its separate 90% width (88% below 520px), with no maximum-width cap; the inherited 1600px header rule uses a 1440px measure. Ganesha copy and complete illustration form a .85fr / 1.15fr grid with a 48px gap. Prayer cards use three equal columns and 24px gaps. At 1000px the journey becomes equal columns with a 28px gap; at 700px journey, prayer cards and the scripture section stack. The Ganesha illustration precedes its copy on mobile. Main section vertical padding ranges from 52–64px on desktop and 36–40px on mobile.
+Dashboard content sections and Panchang share `min(88%, 1240px)`. The hero copy keeps its separate 90% width (88% below 520px), with no maximum-width cap; the shared header caps at 1600px. Ganesha copy and complete illustration form a .85fr / 1.15fr grid with a 48px gap. Prayer cards use three equal columns and 24px gaps. At 1000px the journey becomes equal columns with a 28px gap; at 700px journey, prayer cards and the scripture section stack. The Ganesha illustration precedes its copy on mobile. Main section vertical padding ranges from 52–64px on desktop and 36–40px on mobile.
 
 Account pages use full-width, uncropped artwork behind a transparent form and an overlaid header. Localized warm shading supplies contrast without blurring the image. The form caps at 440px with 32px padding; at 1000px and below the full artwork stacks above a centered form capped at 500px. Mobile form padding is 32px 26px 40px. Registration pairs fields on desktop only.
 
-The general account menu collapses at 700px; the dashboard menu collapses at 1100px. Mobile devotional navigation remains a six-column row with icon above label, 62px minimum height and 11px labels. Desktop nav search disappears at 900px. Calendar content stacks at 1000px. Book layout retains its own 599px, 639px and 1199px adjustments and measurement-driven page geometry.
+Signed-in navigation collapses into an expandable two-column menu at 1200px. Search is available from an icon on content pages and opens a labeled, focused search field; Escape dismisses it and restores focus. Mobile account actions move into the navigation menu. Calendar content stacks at 1000px. The account and book-reader headers retain their specialized layouts.
 
 Spacing follows recurring 8, 12, 16, 20, 24 and 28px gaps rather than an enforced global scale. Larger header and page spacing are explicitly component-specific.
 
 ## Elevation & Depth
 
-Most surfaces use fine warm borders and tonal layers. Devotional cards lift by 4px without a shadow; scripture cards add a soft hover shadow. Forms have a restrained ambient shadow. The book reader intentionally uses layered paper edges, spine gradients, a wooden stand, beads and a ribbon; preserve that material treatment as a reader-specific exception.
+Most surfaces use fine warm borders and tonal layers. Interactive devotional, scripture, dashboard prayer and reading-plan cards lift by 4px on fine pointers with brighter borders and warmer fill. The book reader retains layered paper edges, spine gradients, a wooden stand, beads and a ribbon.
 
 ### Shadow Vocabulary
 
 - **Form ambient:** `0 14px 36px -25px #38251266`.
-- **Scripture card hover:** `0 15px 28px -21px #2b261e88`.
+- **Interactive card hover:** no shadow; `#2b241c` fill and `#c6a36e` border.
 - **Dashboard mobile menu:** `0 18px 36px #0d160d40` inherited from the landing component.
 
 **The Material Depth Rule.** Use fine borders and tonal contrast for ordinary panels; reserve dimensional paper, binding and stand effects for the book reader.
 
-Page arrival fades from .65 opacity while moving upward 10px over .55s with `cubic-bezier(.16, 1, .3, 1)`. Action color transitions take .2s; devotional card lift and border transitions take .25s. Reduced-motion preference disables application animation, transition and smooth scrolling. Reader page-turn timing and geometry remain its own subsystem.
+Collection and library pages appear without entrance motion. Card transform transitions take 280ms with `cubic-bezier(.16, 1, .3, 1)`; border, background and title colors transition over 220ms. Hover also moves reading arrows 4px. Reduced-motion preference removes transforms, transitions and smooth scrolling. Reader page-turn timing and geometry remain independent.
 
 ## Shapes
 
 Containers, form cards and collection banners use soft 12px corners; search surfaces use 6?8px corners; primary account and dashboard actions use 5px corners. Devotional actions retain 7px corners, and language tabs use 6px corners. Availability badges are pills. Brand medallions are circular. Lotus ornaments are original geometric SVGs clipped into peripheral corners, never substitutes for interaction icons.
 
-Gold borders are usually 1px; the selected devotional navigation tab has a 3px bottom rule. Book pages retain their asymmetric corners and inset double border. The system has no blanket prohibition on gradients: photo shading and dimensional paper use them intentionally.
+Gold borders are usually 1px; the active desktop navigation link has a 1px underline. Book pages retain their asymmetric corners and inset double border.
 
 ## Components
 
@@ -273,31 +243,31 @@ Gold borders are usually 1px; the selected devotional navigation tab has a 3px b
 
 Account primary actions use auth red, cream text, a 54px minimum height and 4px corners. Hover deepens the red; disabled actions use opaque muted brown. Secondary account actions are underlined gold links. Dashboard hero actions use saffron, dark text, 50px minimum height and 14px by 22px padding; mobile padding becomes 12px by 18px. The sacred selector fixes the hero's background, so the earlier lower-specificity hover background in landing.css is not an effective theme variant.
 
-Devotional actions use 8px by 14px padding, 44px minimum height and 7px corners. Their primary hover is `#7f281e`, distinct from account buttons. General application focus uses a 3px warm orange outline and 4px offset; devotional page rules retain a 2px outline and 3px offset through greater specificity. Preserve both visible focus treatments when extending those components.
+Devotional actions use 8px by 14px padding, 44px minimum height and 7px corners. Primary actions use gold with dark text; hover lightens the gold to `#f4d29b`. General application focus uses a 3px gold outline and 4px offset; devotional page rules retain a 2px outline and 3px offset through greater specificity. Preserve both visible focus treatments when extending those components.
 
 ### Chips
 
-Complete / Partial / Metadata Only badges communicate actual edition availability and retain their emerald / amber / stone Tailwind colors. Complete badges use a check-circle SVG plus text, 12px type, 4px by 10px padding and pill corners. Theme tags remain small, quiet stone utility labels. These are informational, not clickable filter pills.
+Complete / Partial / Metadata Only badges communicate actual edition availability with text and icons, styled in gold and muted cream on brown surfaces. Complete badges use a check-circle SVG plus text, 12px type, 4px by 10px padding and pill corners. Theme tags remain small, quiet stone utility labels. These are informational, not clickable filter pills.
 
 ### Cards / Containers
 
-Dashboard prayer cards use dark brown fill, fine translucent gold borders and 12px corners. Their full 3:2 artwork uses contain sizing, followed by 22px by 24px by 20px content padding and a separate collection-browse row. Prayer title hover warms the text; focus within outlines the card in gold. These cards do not inherit the collection cards' hover lift or cream surfaces.
+Dashboard prayer cards use dark brown fill, fine translucent gold borders and 12px corners. Their full 3:2 artwork uses contain sizing, followed by 22px by 24px by 20px content padding and a separate collection-browse row. Prayer title hover warms the text; focus within outlines the card in gold. These cards preserve their full illustration and separate collection-browse link.
 
-Devotional cards use cream, sage or peach paper with a gold border, 27px padding and 238px minimum height. At 700px they use 25px padding and 215px minimum height. Titles lead; deity metadata sits below the title and Hindi label. The footer sits at the bottom behind a fine divider. Hover lifts the whole card; keyboard focus remains visible.
+Devotional cards use `#211e19` surfaces, 24px padding and 192px minimum height; mobile uses 22px and 180px. Compact Hind titles, muted Hindi labels and deity metadata lead into a bottom reading action behind a fine divider. Hover moves smoothly in both directions; focus-within outlines cards in gold. There are no corner ornaments on these cards.
 
-Scripture cards pair a saturated book-cover panel with cream content, 25px padding and 12px corners. Cover colors cycle red, green and brown; fine gold frames and a low-opacity lotus establish their material. Availability, language and reading-time metadata remain readable. Account panels and workspace cards retain some Tailwind layout, border and spacing utilities under sacred overrides.
+Scripture cards pair a warm book-cover panel with dark brown content, 25px padding and 12px corners. Cover colors cycle vermilion, bronze and brown; fine gold frames and a low-opacity lotus establish their material. Availability, language and reading-time metadata remain readable. Account panels and workspace cards retain some Tailwind layout, border and spacing utilities under sacred overrides.
 
 ### Inputs / Fields
 
-Authentication inputs have warm near-white fill, a gold border, 5px corners, 16px type and 48px minimum height. Focus shifts the border and adds a 2px gold outline offset by 2px; existing Tailwind focus ring utilities remain layered underneath. Labels are visible above fields. The collection search is a larger, 60px minimum-height composite with an 8px radius; the dark navbar search uses translucent fill, a gold border and a 2px gold focus-within outline. Error blocks retain the existing rose utility treatment, not the ceremonial red header treatment.
+Authentication inputs have dark translucent fill, a gold border, 4px corners, 16px type and 54px minimum height (48px in registration). Focus shifts the border and adds a 2px gold outline offset by 2px; existing Tailwind focus ring utilities remain layered underneath. Labels are visible above fields. The collection search is a larger, 60px minimum-height composite with an 8px radius; the dark navbar search uses translucent fill, a gold border and a 2px gold focus-within outline. Error blocks retain the existing rose utility treatment, not the ceremonial red header treatment.
 
 ### Navigation
 
-A dark green sticky navbar holds the medallion brand, desktop search and account actions. Below it, a cream devotional strip uses green-gray labels, red active text and a red bottom rule. The active tab also has medium-heavy text and a corresponding icon color. Mobile menus are expandable and keyboard-dismissable; retain those behaviors and current route indicators. The dashboard has a separate image-overlay header, using the same brand and menu grammar.
+`SiteHeader` provides one consistent brand, six section links and account actions. The dashboard version overlays its supplied image; other signed-in pages use a warm charcoal background. The current section has gold text and a thin underline. Search, mobile menus, reading plans, profile and logout remain available. Mobile menus support Escape and restore focus; route navigation closes open panels.
 
 ### Prayer toolbar and book reader
 
-The prayer toolbar is dark green with light labels and saffron selected language buttons. The selected state uses `aria-pressed`, reinforced by color. Size, reading-mode and link controls use real SVG icons. Prayer copy remains on cream paper with generous vertical spacing and preserved line breaks. Book reading retains light, sepia and dark choices, selectable passages, navigation, saved notes and its calibrated page-turn surface.
+The prayer toolbar is dark stone with cream labels and gold selected language buttons. The selected state uses `aria-pressed`, reinforced by color. Size, reading-mode and link controls use real SVG icons. Prayer copy uses cream text on a dark brown reading surface, with generous vertical spacing and preserved line breaks. Book reading retains light, sepia and dark choices, selectable passages, navigation, saved notes and its calibrated page-turn surface.
 
 ## Do's and Don'ts
 
@@ -311,7 +281,7 @@ The prayer toolbar is dark green with light labels and saffron selected language
 
 ### Don't:
 - **Don't** apply interface fonts or a global color override to calibrated scripture pages.
-- **Don't** extend the dashboard's Cormorant and charcoal palette to other routes without a separate design decision.
+- **Do** use the shared charcoal, cream, and gold palette on all application routes; keep scripture paper themes scoped to the reader.
 - **Don't** reintroduce oversized all-capital dashboard headings, cropped Ganesha artwork or cream section slabs.
 - **Don't** place decorative artwork behind sustained scripture text.
 - **Don't** turn remaining ornamental glyphs or legacy eyebrow selectors into reusable navigation icons or heading patterns.

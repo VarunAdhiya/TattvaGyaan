@@ -16,6 +16,7 @@ test('search calls the server, shows errors, and recovers', async ({ page }) => 
   await input.fill('गीता');
   await expect(page.getByRole('heading', { name: 'गीता', exact: true })).toBeVisible();
   expect(queries).toContain('गीता');
+  await page.getByRole('button', { name: 'Search scriptures' }).click();
   await page.getByRole('textbox', { name: 'Search library' }).fill('Bhagwadgeeta');
   await page.getByRole('textbox', { name: 'Search library' }).press('Enter');
   await expect(input).toHaveValue('Bhagwadgeeta');
