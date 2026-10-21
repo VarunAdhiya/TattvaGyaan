@@ -41,8 +41,8 @@ typography:
     fontWeight: 500
     lineHeight: 1.16
   title:
-    fontFamily: "'Sacred Hind', 'Nirmala UI', sans-serif"
-    fontSize: "21px"
+    fontFamily: "'Tattva Cormorant', 'Sacred Hind', Georgia, serif"
+    fontSize: "28px"
     fontWeight: 500
     lineHeight: 1.4
   body:
@@ -124,9 +124,9 @@ components:
     rounded: "{rounded.pill}"
     padding: "4px 10px"
   card-devotional:
-    backgroundColor: "#211e19"
-    rounded: "{rounded.panel}"
-    padding: "24px; 22px on mobile"
+    backgroundColor: "#292019"
+    rounded: "14px"
+    padding: "0; body 23px 25px 18px"
   reader-language-selected:
     backgroundColor: "#f2b952"
     textColor: "#1f392e"
@@ -171,9 +171,9 @@ Cormorant supplies English headings; Hind supports the practical interface and H
 ### Hierarchy
 
 - **Display:** the frontmatter display role is the desktop dashboard heading. At 700px and below it becomes `clamp(42px, 11vw, 56px)`. Dashboard headings use sentence case and zero letter spacing.
-- **Dashboard headline / title:** section headings use the dashboard-headline role, reducing to 32px on mobile. Prayer cards use Hind at 21px, weight 500, and 1.4 line height at every breakpoint.
+- **Dashboard headline / title:** section headings use the dashboard-headline role, reducing to 32px on mobile. Prayer cards use Cormorant at 28px (27px on mobile), weight 500, and 1.16 line height.
 - **Headline:** collection introductions use Cormorant at `clamp(42px, 4.5vw, 58px)`, 42px on mobile, with 1.05 line height. Personal pages use 36px titles, reduced to 28px on mobile. Authentication titles retain their existing sizing.
-- **Title:** devotional, scripture and dashboard prayer cards use Hind at 21px. Cream title text (`#f0e8dc`) leads; 18px Hindi labels use muted `#c3b9a8`. Metadata uses 13px `#bbae99` and reading links use 14px gold.
+- **Title:** devotional, scripture, reading-plan and dashboard prayer cards use Cormorant at 28px with Hind fallback. Cream title text (`#fff0d8`) leads; 19px Hindi labels use warm `#dfbd88`. Metadata uses 13px `#d1bfa7` and reading links use 15px gold.
 - **Body:** collection descriptions use 16px and 1.75 line height; dashboard and supporting prose vary from 14?17px with 1.8?1.9 line height. This is a role-based hierarchy, not a single mathematical type scale.
 - **Label:** form labels and navigation are approximately 15px. Card footers and metadata use 12?14px. Calendar figures and profile statistics use tabular numerals.
 - **Prayer:** Hindi prayer text retains Noto Serif Devanagari / Nirmala UI / serif, starting at 22px with 1.95 line height and user adjustment from 18?34px.
@@ -224,7 +224,7 @@ Most surfaces use fine warm borders and tonal layers. Interactive devotional, sc
 ### Shadow Vocabulary
 
 - **Form ambient:** `0 14px 36px -25px #38251266`.
-- **Interactive card hover:** no shadow; `#2b241c` fill and `#c6a36e` border.
+- **Interactive card hover:** no shadow; `#35271c` fill and `#d9b376` border. The reading arrow gains a gold background; imagery stays still and sharp.
 - **Dashboard mobile menu:** `0 18px 36px #0d160d40` inherited from the landing component.
 
 **The Material Depth Rule.** Use fine borders and tonal contrast for ordinary panels; reserve dimensional paper, binding and stand effects for the book reader.
@@ -253,7 +253,7 @@ Complete / Partial / Metadata Only badges communicate actual edition availabilit
 
 Dashboard prayer cards use dark brown fill, fine translucent gold borders and 12px corners. Their full 3:2 artwork uses contain sizing, followed by 22px by 24px by 20px content padding and a separate collection-browse row. Prayer title hover warms the text; focus within outlines the card in gold. These cards preserve their full illustration and separate collection-browse link.
 
-Devotional cards use `#211e19` surfaces, 24px padding and 192px minimum height; mobile uses 22px and 180px. Compact Hind titles, muted Hindi labels and deity metadata lead into a bottom reading action behind a fine divider. Hover moves smoothly in both directions; focus-within outlines cards in gold. There are no corner ornaments on these cards.
+Devotional cards lead with full, uncropped artwork in a 3:2 frame. Each prayer slug selects its own photographic-style generated illustration from `frontend/src/data/devotional-artwork.json`; broad deity tags do not determine the image. The subject and generation prompt are recorded in `library/devotionals/artwork-plan.json`. These illustrations are not documentary photographs. Images load lazily at their original resolution. A fine inset gold frame connects the image to a warm `#292019` body, 14px corners, and 23px 25px 18px content padding (22px 22px 18px on mobile). The title, Hindi label and deity remain intact. A divider and circular gold arrow finish the reading action. The entire card remains one accessible link, with a gold focus outline and reduced-motion support.
 
 Scripture cards pair a warm book-cover panel with dark brown content, 25px padding and 12px corners. Cover colors cycle vermilion, bronze and brown; fine gold frames and a low-opacity lotus establish their material. Availability, language and reading-time metadata remain readable. Account panels and workspace cards retain some Tailwind layout, border and spacing utilities under sacred overrides.
 

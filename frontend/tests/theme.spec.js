@@ -87,7 +87,7 @@ for (const width of [1440, 390]) {
       await expect(page.locator(ready).first()).toBeVisible();
       await page.evaluate(async () => {
         await document.fonts.ready;
-        await Promise.all([...document.querySelectorAll('img')].filter(image => image.loading !== 'lazy').map(image => image.decode()));
+        await Promise.all([...document.querySelectorAll('img')].map(image => { image.loading = 'eager'; return image.decode(); }));
         await Promise.all(document.getAnimations().filter(animation => animation.effect.getTiming().iterations !== Infinity).map(animation => animation.finished.catch(() => {})));
       });
       await expect(page.locator('.site-header')).toHaveCSS('background-color', 'rgb(27, 23, 20)');
@@ -149,8 +149,9 @@ test('cards lift smoothly, respect reduced motion, and keep collection artwork u
   const card = page.locator('.dev-card').first();
   await expect(card).toBeVisible();
   await expect(card).toHaveCSS('transition-property', 'transform, border-color, background-color');
-  await expect(card.locator('h2')).toHaveCSS('font-size', '21px');
+  await expect(card.locator('h2')).toHaveCSS('font-size', '28px');
   await card.hover();
+  await expect(card.locator('.dev-card-art img')).toHaveJSProperty('naturalWidth', 1536);
   await expect(card).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, -4)');
   await expect(card.locator('h2')).toHaveCSS('color', 'rgb(242, 203, 146)');
   await page.mouse.move(0, 0);
@@ -165,5 +166,25 @@ test('cards lift smoothly, respect reduced motion, and keep collection artwork u
     await expect(art).toHaveCSS('object-fit', 'contain');
     const bounds = await art.boundingBox();
     expect(bounds.width / bounds.height).toBeCloseTo(1.5, 2);
+  }
+});
+
+test('each prayer card uses its own full-resolution image across collections and related prayers', async ({ page }) => {
+  for (const path of ['/chalisas', '/bhajans', '/mantras', '/chalisas/hanuman-chalisa']) {
+    await page.goto(path);
+    const cards = page.locator('.dev-card');
+    await expect(cards.first()).toBeVisible();
+    const sources = [];
+    for (const card of await cards.all()) {
+      const slug = (await card.getAttribute('href')).split('/').pop();
+      const artwork = card.locator('img');
+      await expect(artwork).toHaveAttribute('src', `/devotional-artwork/${slug}.png`);
+      await expect(artwork).toHaveAttribute('loading', 'lazy');
+      await artwork.evaluate(async image => { image.loading = 'eager'; await image.decode(); });
+      await expect(artwork).toHaveJSProperty('naturalWidth', 1536);
+      await expect(artwork).toHaveJSProperty('naturalHeight', 1024);
+      sources.push(await artwork.getAttribute('src'));
+    }
+    expect(new Set(sources).size).toBe(sources.length);
   }
 });

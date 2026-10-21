@@ -4,13 +4,14 @@ import { ArrowDown, ArrowRight, BookOpen, CalendarDays, Sunrise } from 'lucide-r
 import SiteHeader from '../components/SiteHeader';
 import { api } from '../api/client';
 import durgaTemple from '../assets/landing/durga-temple.png';
+import individualArtwork from '../data/devotional-artwork.json';
 import '../landing.css';
 import '../journeys.css';
 
 const collections = [
-  { title: 'Hanuman Chalisa', hindi: 'हनुमान चालीसा', path: '/chalisas/hanuman-chalisa', category: 'Chalisas', browse: '/chalisas', image: '/journeys/hanuman.png', alt: 'Hanuman holding his gada in a temple landscape', description: 'A devotional hymn in praise of Hanuman.' },
-  { title: 'Achyutam Keshavam', hindi: 'अच्युतम् केशवम्', path: '/bhajans/achyutam-keshavam', category: 'Bhajans', browse: '/bhajans', image: '/journeys/krishna.png', alt: 'Krishna playing his flute beside a cow', description: 'A bhajan celebrating Krishna and his divine names.' },
-  { title: 'Mahamrityunjay Mantra', hindi: 'महामृत्युंजय मंत्र', path: '/mantras/mahamrityunjay-mantra', category: 'Mantras', browse: '/mantras', image: '/journeys/shiva.png', alt: 'Shiva meditating beside Nandi in the Himalayas', description: 'A sacred invocation to Shiva, also called Tryambaka.' },
+  { title: 'Hanuman Chalisa', hindi: 'हनुमान चालीसा', path: '/chalisas/hanuman-chalisa', category: 'Chalisas', browse: '/chalisas', image: individualArtwork['hanuman-chalisa']?.src || '/journeys/hanuman.png', alt: 'Illustration of a Hanuman shrine with a gada and flower offerings', description: 'A devotional hymn in praise of Hanuman.' },
+  { title: 'Achyutam Keshavam', hindi: 'अच्युतम् केशवम्', path: '/bhajans/achyutam-keshavam', category: 'Bhajans', browse: '/bhajans', image: individualArtwork['achyutam-keshavam']?.src || '/journeys/krishna.png', alt: 'Illustration of a flute-playing Krishna shrine', description: 'A bhajan celebrating Krishna and his divine names.' },
+  { title: 'Mahamrityunjay Mantra', hindi: 'महामृत्युंजय मंत्र', path: '/mantras/mahamrityunjay-mantra', category: 'Mantras', browse: '/mantras', image: individualArtwork['mahamrityunjay-mantra']?.src || '/journeys/shiva.png', alt: 'Illustration of a Shiva shrine with bilva-leaf offerings', description: 'A sacred invocation to Shiva, also called Tryambaka.' },
 ];
 const books = [
   { title: 'Bhagavad Gita', hindi: 'श्रीमद्भगवद्गीता', description: 'Teachings on action, devotion, and self-knowledge.' },

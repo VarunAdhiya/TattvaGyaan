@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "check:library": "node scripts/check-library.mjs",
+    "check:artwork": "node scripts/check-devotional-artwork.mjs",
     "prebuild": "npm run check:library",
     "build": "vite build",
     "lint": "oxlint",

@@ -1,0 +1,442 @@
+{
+  "hanuman-chalisa": {
+    "src": "/devotional-artwork/hanuman-chalisa.png",
+    "alt": "Devotional illustration for Hanuman Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "48fc09253868a5ebcd77334f18ba235c38932717c1a257abfa1508799f6bbafa"
+  },
+  "shiv-chalisa": {
+    "src": "/devotional-artwork/shiv-chalisa.png",
+    "alt": "Devotional illustration for Shiv Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "b93f28de0c928db0e06341d5dbec0749c8463dc2caafa94f9a4f98fe7f6021ec"
+  },
+  "ganesh-chalisa": {
+    "src": "/devotional-artwork/ganesh-chalisa.png",
+    "alt": "Devotional illustration for Ganesh Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "d3dcdfd657e6b47ce9c21c018bf96a8b93315c122d22a518115c8ec2f82faec8"
+  },
+  "durga-chalisa": {
+    "src": "/devotional-artwork/durga-chalisa.png",
+    "alt": "Devotional illustration for Durga Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "bcde1d3091700cea1f10cec0ae0a009b03a3245760be950dd0f654bf96f24ada"
+  },
+  "krishna-chalisa": {
+    "src": "/devotional-artwork/krishna-chalisa.png",
+    "alt": "Devotional illustration for Krishna Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "a139b2f99d14a48d57dce43c58bc0c615d5ce700e1ddf1fc942ac647056febd0"
+  },
+  "lakshmi-chalisa": {
+    "src": "/devotional-artwork/lakshmi-chalisa.png",
+    "alt": "Devotional illustration for Lakshmi Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "1b18b1db9621ab6702cc9ac24e5e9bbb274da2bc37bc83211b52afacb218affe"
+  },
+  "saraswati-chalisa": {
+    "src": "/devotional-artwork/saraswati-chalisa.png",
+    "alt": "Devotional illustration for Saraswati Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "85606b12ca9798fb5981d79e089d27b66f2d42dac61ade9932933b56ead3d1c0"
+  },
+  "ram-chalisa": {
+    "src": "/devotional-artwork/ram-chalisa.png",
+    "alt": "Devotional illustration for Ram Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "1ec46dab016ee9945b704c358dd3b5d1ab2a47f3e8fcb0e27c24f1fc80426f4e"
+  },
+  "vishnu-chalisa": {
+    "src": "/devotional-artwork/vishnu-chalisa.png",
+    "alt": "Devotional illustration for Vishnu Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "c7ac9127dc8bc6b691b5137265e65dfd5c1b459e431ff8587e929f1e89230b5f"
+  },
+  "sai-chalisa": {
+    "src": "/devotional-artwork/sai-chalisa.png",
+    "alt": "Devotional illustration for Sai Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "92473ad8230513c542976e6556cc96bcce08856c71f6fd08380a341a5a8cb4d7"
+  },
+  "bajrang-baan": {
+    "src": "/devotional-artwork/bajrang-baan.png",
+    "alt": "Devotional illustration for Bajrang Baan",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "c169af5d47f326a15cdb82316d8a710fc115d2e884ffba57a699f4d30d28cd39"
+  },
+  "shani-chalisa": {
+    "src": "/devotional-artwork/shani-chalisa.png",
+    "alt": "Devotional illustration for Shani Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "659ad0ad12a8cd06ef505fa89934112286b9b27c49bb4e8660109ce5da07c440"
+  },
+  "gayatri-chalisa": {
+    "src": "/devotional-artwork/gayatri-chalisa.png",
+    "alt": "Devotional illustration for Gayatri Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "06fcfc63f53bef34f27b8a2d343bacbf0f6753e4f224f55b68422ff2489c575c"
+  },
+  "surya-dev-chalisa": {
+    "src": "/devotional-artwork/surya-dev-chalisa.png",
+    "alt": "Devotional illustration for Surya Dev Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "737d33edb890bad36190726e24de22866fd10229aa92c37b2644c3e5ff7a786d"
+  },
+  "vaishno-devi-chalisa": {
+    "src": "/devotional-artwork/vaishno-devi-chalisa.png",
+    "alt": "Devotional illustration for Vaishno Devi Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "1f7b77c92ad12155108b049e6b6d00b85dd3c9512fa1634503a6d9ca5fa82024"
+  },
+  "kali-chalisa": {
+    "src": "/devotional-artwork/kali-chalisa.png",
+    "alt": "Devotional illustration for Kali Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "0f75184f0ca2ac18beeb2a616e47c9b2cb528ee164f7e3a4070f9bbcdab16a9f"
+  },
+  "radha-chalisa": {
+    "src": "/devotional-artwork/radha-chalisa.png",
+    "alt": "Devotional illustration for Radha Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "b3890afe0bbf0b6a990bb4c3e93b5a65211e14ca1dccc4b65a7ace63a2fdcff8"
+  },
+  "santoshi-mata-chalisa": {
+    "src": "/devotional-artwork/santoshi-mata-chalisa.png",
+    "alt": "Devotional illustration for Santoshi Mata Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "0754e75ee57e6bcd391f1d2cc0fe81cbbfeab89637179b0de1c2d31d28c8ef6d"
+  },
+  "bhairav-chalisa": {
+    "src": "/devotional-artwork/bhairav-chalisa.png",
+    "alt": "Devotional illustration for Bhairav Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "13aed57faf3c9ec1440efe357030439dc07d544b1de1a97b863629d3e75e6f12"
+  },
+  "navagraha-chalisa": {
+    "src": "/devotional-artwork/navagraha-chalisa.png",
+    "alt": "Devotional illustration for Navagraha Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "a154f97bd7f09622c33f7729c2e06befb58a115abd3e964383730e5c9af04381"
+  },
+  "ganga-chalisa": {
+    "src": "/devotional-artwork/ganga-chalisa.png",
+    "alt": "Devotional illustration for Ganga Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "302d857264abc8d31b8782219b0d0280e838402c6a8f96b1fff4e1bdfcfda0f9"
+  },
+  "narasimha-chalisa": {
+    "src": "/devotional-artwork/narasimha-chalisa.png",
+    "alt": "Devotional illustration for Narasimha Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "d6a623e836c33c7504b9c5140d1b0121668a51468e98ee2df931e9311cfb0aa0"
+  },
+  "parashurama-chalisa": {
+    "src": "/devotional-artwork/parashurama-chalisa.png",
+    "alt": "Devotional illustration for Parashurama Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "0b4d9a9dd26eb0957f2587414aea955a5fd3c4e7b3b7ceb9489491edca66416d"
+  },
+  "vishwakarma-chalisa": {
+    "src": "/devotional-artwork/vishwakarma-chalisa.png",
+    "alt": "Devotional illustration for Vishwakarma Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "054aad451aebff861cb2d96bb2d48eaf120bfa2c8ee5fada99926e9a41bed0b9"
+  },
+  "brahma-chalisa": {
+    "src": "/devotional-artwork/brahma-chalisa.png",
+    "alt": "Devotional illustration for Brahma Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "cbfca040fdf46d3e28feb3db5c7aa39555a02ca33f36ef2d790076ffa645b1ae"
+  },
+  "gopala-chalisa": {
+    "src": "/devotional-artwork/gopala-chalisa.png",
+    "alt": "Devotional illustration for Gopala Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "cad51fbb00d6bdf8db013a946d61042ce6e7fff262dfd9f0084c41f07e3aa71b"
+  },
+  "tulsi-chalisa": {
+    "src": "/devotional-artwork/tulsi-chalisa.png",
+    "alt": "Devotional illustration for Tulsi Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "b94092c75fd07ecdad832a5f544af6995ef74d95d30f3a34a5049c7a09214645"
+  },
+  "shitala-chalisa": {
+    "src": "/devotional-artwork/shitala-chalisa.png",
+    "alt": "Devotional illustration for Shitala Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "9537efac9239d56e6b96086d0759bcedb60abafaa1505d9e1a47b42bab0960ce"
+  },
+  "lalita-chalisa": {
+    "src": "/devotional-artwork/lalita-chalisa.png",
+    "alt": "Devotional illustration for Lalita Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "f22ace37979d0c410ba62de72d5723ae9f7725e6371b52dcbc8aae052bdf30c2"
+  },
+  "parvati-chalisa": {
+    "src": "/devotional-artwork/parvati-chalisa.png",
+    "alt": "Devotional illustration for Parvati Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "7b24d82e2f9e050800feb42bbc76d6585d7029bff8c19e6dc8915aad840a2678"
+  },
+  "annapurna-chalisa": {
+    "src": "/devotional-artwork/annapurna-chalisa.png",
+    "alt": "Devotional illustration for Annapurna Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "527df434ed3a003ff3d571f6b5c7ea4796fdd8c1d6e1c3ff138993722fd8419d"
+  },
+  "bagalamukhi-chalisa": {
+    "src": "/devotional-artwork/bagalamukhi-chalisa.png",
+    "alt": "Devotional illustration for Bagalamukhi Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "87e0db73b1eb9e98b0e1b545fc6229a1da05aa7c12683b4c534f33f58b2b6157"
+  },
+  "vindhyeshwari-chalisa": {
+    "src": "/devotional-artwork/vindhyeshwari-chalisa.png",
+    "alt": "Devotional illustration for Vindhyeshwari Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "bcd5f24e641b511fb71ffcf8e8e03d7ca65b1dec8d55248bbb18b2df73ce15bb"
+  },
+  "shyam-chalisa": {
+    "src": "/devotional-artwork/shyam-chalisa.png",
+    "alt": "Devotional illustration for Shyam Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "ceb9771f9cd56309ad056492bdee07dcbcd63aa10ed911c17cdfbdb807df60a7"
+  },
+  "ramdev-chalisa": {
+    "src": "/devotional-artwork/ramdev-chalisa.png",
+    "alt": "Devotional illustration for Ramdev Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "49628ef2dc8d9658fd01d46d4afb90f4e972557d9f43d103129f330fa5ebb481"
+  },
+  "gorakha-chalisa": {
+    "src": "/devotional-artwork/gorakha-chalisa.png",
+    "alt": "Devotional illustration for Gorakha Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "e47d512cacc731a9c8897320eac4b07c68a845d78fe08108634e1d0aad62b987"
+  },
+  "ravidas-chalisa": {
+    "src": "/devotional-artwork/ravidas-chalisa.png",
+    "alt": "Devotional illustration for Ravidas Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "1812ca957ad22b5dd8448c32ffe14fdf4949e0a3089c6ff61548f7b9e561cd23"
+  },
+  "mahavir-chalisa": {
+    "src": "/devotional-artwork/mahavir-chalisa.png",
+    "alt": "Devotional illustration for Mahavir Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "c4c6b69cc7b81e58836344185c580b5b5f3ed767ea3ec17622cba41ec5421061"
+  },
+  "batuka-bhairava-chalisa": {
+    "src": "/devotional-artwork/batuka-bhairava-chalisa.png",
+    "alt": "Devotional illustration for Batuka Bhairava Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "4806d0ac739562dcc6123f25249d644c3a323bd40541d0802b72c6ccc4e26443"
+  },
+  "kubera-chalisa": {
+    "src": "/devotional-artwork/kubera-chalisa.png",
+    "alt": "Devotional illustration for Kubera Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "e832e57caed8ea56de921ea285326bc275a45aff171c2f52b7db2cffec6bb4d4"
+  },
+  "giriraj-chalisa": {
+    "src": "/devotional-artwork/giriraj-chalisa.png",
+    "alt": "Devotional illustration for Giriraj Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "9d984f236192fb6d6c62689e910fd862f1eb99812caf5db739cd1b905cab3e92"
+  },
+  "narmada-chalisa": {
+    "src": "/devotional-artwork/narmada-chalisa.png",
+    "alt": "Devotional illustration for Narmada Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "0a82d97098355ffa54fdffa8ce6ff3c9838749957e7ff2fec4dff7ea359c6ee9"
+  },
+  "sharda-chalisa": {
+    "src": "/devotional-artwork/sharda-chalisa.png",
+    "alt": "Devotional illustration for Sharda Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "48f4437b15f3ece918f6ee2d5fb7e8f34befc44b8d72b448ff46966b7492f515"
+  },
+  "shakambhari-chalisa": {
+    "src": "/devotional-artwork/shakambhari-chalisa.png",
+    "alt": "Devotional illustration for Shakambhari Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "b41f0c3c2a689e3308425025e8b9c008e1f3b436a06d0299573aef9d4f3fa04c"
+  },
+  "mahalakshmi-chalisa": {
+    "src": "/devotional-artwork/mahalakshmi-chalisa.png",
+    "alt": "Devotional illustration for Mahalakshmi Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "7e08c7d0ca17c2cb542960e8b8c5c8a6365bd356f759d404b81e089611377c4f"
+  },
+  "balaji-chalisa": {
+    "src": "/devotional-artwork/balaji-chalisa.png",
+    "alt": "Devotional illustration for Balaji Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "10e6da3615813617b9d8a72be79e97cd31d2f343df12e00ab83ce225c6d4365c"
+  },
+  "jaharveer-chalisa": {
+    "src": "/devotional-artwork/jaharveer-chalisa.png",
+    "alt": "Devotional illustration for Jaharveer Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "2751b71e514ad66f2c3071471ee859eba57503e45440403ff12ab929ee701310"
+  },
+  "pitar-chalisa": {
+    "src": "/devotional-artwork/pitar-chalisa.png",
+    "alt": "Devotional illustration for Pitar Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "e0276c7b54b548d9161f204a1751ce03ca8338646d257bc067c0983e93db1cda"
+  },
+  "bhagavad-gita-chalisa": {
+    "src": "/devotional-artwork/bhagavad-gita-chalisa.png",
+    "alt": "Devotional illustration for Bhagavad Gita Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "f6b261aee9b5671b401555d4b2774e75b071359b0f63b911dcd7b52b082509c7"
+  },
+  "chitragupta-chalisa": {
+    "src": "/devotional-artwork/chitragupta-chalisa.png",
+    "alt": "Devotional illustration for Chitragupta Chalisa",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "5e097469718340514079ed5bbf55f50c20a091ddec70ac1931a31998b2a5dda4"
+  },
+  "raghupati-raghav": {
+    "src": "/devotional-artwork/raghupati-raghav.png",
+    "alt": "Devotional illustration for Raghupati Raghav Raja Ram",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "88413b07e14f702f8fed5deb3a7bf9e28dbbf747a77a5451758fea28248f5d79"
+  },
+  "vaishnav-jan-to": {
+    "src": "/devotional-artwork/vaishnav-jan-to.png",
+    "alt": "Devotional illustration for Vaishnav Jan To Tene Kahiye",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "5a09f0530ea829c81a320704701ade4521b04e9184254e1a1fc74f35be77b7c0"
+  },
+  "achyutam-keshavam": {
+    "src": "/devotional-artwork/achyutam-keshavam.png",
+    "alt": "Devotional illustration for Achyutam Keshavam",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "2d03f5586329b0c1eba4451e654033c20f1041f8fca6ec9960054ae878e58d6f"
+  },
+  "jai-radha-madhav": {
+    "src": "/devotional-artwork/jai-radha-madhav.png",
+    "alt": "Devotional illustration for Jai Radha Madhav",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "0794e054b5460eef85f588946875dfdefa24d6724ea68c3d145c2055f3b626be"
+  },
+  "mere-to-giridhar-gopal": {
+    "src": "/devotional-artwork/mere-to-giridhar-gopal.png",
+    "alt": "Devotional illustration for Mere To Giridhar Gopal",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "3d69b069c21f43692e81553af3473a7f784cb43fbfdb0945a7da8ddb9641058e"
+  }
+}
