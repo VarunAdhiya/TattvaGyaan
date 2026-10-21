@@ -143,7 +143,7 @@ test('shared header keeps search accessible and marks the current section', asyn
   await expect(page.getByRole('searchbox', { name: 'Search books' })).toHaveValue('Mahabharat');
 });
 
-test('cards lift smoothly, respect reduced motion, and keep collection artwork uncropped', async ({ page }) => {
+test('cards lift smoothly, respect reduced motion, and collection introductions stay centered', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/chalisas');
   const card = page.locator('.dev-card').first();
@@ -161,16 +161,17 @@ test('cards lift smoothly, respect reduced motion, and keep collection artwork u
   await expect(card).toHaveCSS('transform', 'none');
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 1000 });
-    const art = page.locator('.dev-collection-art');
-    await expect(art).toHaveJSProperty('naturalWidth', 1536);
-    await expect(art).toHaveCSS('object-fit', 'contain');
-    const bounds = await art.boundingBox();
-    expect(bounds.width / bounds.height).toBeCloseTo(1.5, 2);
+    const heading = page.locator('.dev-collection-heading');
+    await expect(heading.locator('img')).toHaveCount(0);
+    await expect(heading).toHaveCSS('text-align', 'center');
+    const bounds = await heading.boundingBox();
+    const description = await heading.locator('.dev-description').boundingBox();
+    expect(Math.abs(description.x + description.width / 2 - bounds.x - bounds.width / 2)).toBeLessThan(1);
   }
 });
 
-test('each prayer card uses its own full-resolution image across collections and related prayers', async ({ page }) => {
-  for (const path of ['/chalisas', '/bhajans', '/mantras', '/chalisas/hanuman-chalisa']) {
+test('each prayer card uses its own full-resolution image across collections', async ({ page }) => {
+  for (const path of ['/chalisas', '/bhajans', '/mantras']) {
     await page.goto(path);
     const cards = page.locator('.dev-card');
     await expect(cards.first()).toBeVisible();

@@ -16,3 +16,6 @@ and SHA-256 hashes are in `frontend/src/data/devotional-artwork.json`.
 After adding an image, run `node scripts/sync-devotional-artwork.mjs` from
 `frontend/`. Preserve the title, text, source attribution, and existing IDs of
 the prayer. Do not assume a general deity tag identifies its precise subject.
+
+Run `npm run check:artwork` to verify complete catalog coverage, unique file
+hashes, and original dimensions. This check also runs before production builds.

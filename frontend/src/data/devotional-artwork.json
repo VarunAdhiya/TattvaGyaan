@@ -157,7 +157,7 @@
     "kind": "generated-illustration",
     "width": 1536,
     "height": 1024,
-    "sha256": "a154f97bd7f09622c33f7729c2e06befb58a115abd3e964383730e5c9af04381"
+    "sha256": "4ea73fed77f0fd40221f4baa5bb10e950a2ce436e1335b1e682a54340f0f9573"
   },
   "ganga-chalisa": {
     "src": "/devotional-artwork/ganga-chalisa.png",
@@ -415,6 +415,14 @@
     "height": 1024,
     "sha256": "5a09f0530ea829c81a320704701ade4521b04e9184254e1a1fc74f35be77b7c0"
   },
+  "payoji-maine": {
+    "src": "/devotional-artwork/payoji-maine.png",
+    "alt": "Devotional illustration for Payoji Maine Ram Ratan Dhan Payo",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "eab9674ae10ca19b2ee2a198c7328931880ab9e60934a6b2224d69e98ffac318"
+  },
   "achyutam-keshavam": {
     "src": "/devotional-artwork/achyutam-keshavam.png",
     "alt": "Devotional illustration for Achyutam Keshavam",
@@ -422,6 +430,22 @@
     "width": 1536,
     "height": 1024,
     "sha256": "2d03f5586329b0c1eba4451e654033c20f1041f8fca6ec9960054ae878e58d6f"
+  },
+  "hare-krishna-dhun": {
+    "src": "/devotional-artwork/hare-krishna-dhun.png",
+    "alt": "Devotional illustration for Hare Krishna Hare Rama Dhun",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "87919ff121a7c49d28fdbf85cbebe1673937022da42418c546f0d2220944d0b9"
+  },
+  "shri-krishna-govind-hare-murari": {
+    "src": "/devotional-artwork/shri-krishna-govind-hare-murari.png",
+    "alt": "Devotional illustration for Shri Krishna Govind Hare Murari",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "20abe254bfec5084ce05f3a799906f16f7272d308a4f34fd4941d0090ae0bba4"
   },
   "jai-radha-madhav": {
     "src": "/devotional-artwork/jai-radha-madhav.png",
@@ -438,5 +462,773 @@
     "width": 1536,
     "height": 1024,
     "sha256": "3d69b069c21f43692e81553af3473a7f784cb43fbfdb0945a7da8ddb9641058e"
+  },
+  "ram-siya-ram": {
+    "src": "/devotional-artwork/ram-siya-ram.png",
+    "alt": "Devotional illustration for Ram Siya Ram",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "e38e6116ca977e0a9d32b15892bdce86bb3e58d2cd1f247f624ef19bd18293c4"
+  },
+  "mangal-bhavan-amangal-hari": {
+    "src": "/devotional-artwork/mangal-bhavan-amangal-hari.png",
+    "alt": "Devotional illustration for Mangal Bhavan Amangal Hari",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "8c450d01ef8f50f43daab9dff3bbc84a09aa303c9d33ee7d3e408bd79cd39b5d"
+  },
+  "hey-ram-hey-ram": {
+    "src": "/devotional-artwork/hey-ram-hey-ram.png",
+    "alt": "Devotional illustration for Hey Ram Hey Ram",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "e62fe4f8194b859ef2f0aa85285e588cefa374900e58bce1d940f5b345d201d3"
+  },
+  "bhaj-govindam": {
+    "src": "/devotional-artwork/bhaj-govindam.png",
+    "alt": "Devotional illustration for Bhaj Govindam Bhajan",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "d43cbd6e5bcd52cea39120add193398632c017251e9113d6627ecf072cb3b76c"
+  },
+  "om-namah-shivaya-dhun": {
+    "src": "/devotional-artwork/om-namah-shivaya-dhun.png",
+    "alt": "Devotional illustration for Om Namah Shivaya Dhun",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "b2473437e694f67978efaca9b3c8ed734234c43cb5742bd88e6730f6a6d2f0b5"
+  },
+  "sankat-mochan-naam-tiharo": {
+    "src": "/devotional-artwork/sankat-mochan-naam-tiharo.png",
+    "alt": "Devotional illustration for Sankat Mochan Naam Tiharo",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "767aa25733c5ba2e1219a8ab92d9295acbb716e93591e5ea74742c3b82c1d7cf"
+  },
+  "thumak-chalat-ramchandra": {
+    "src": "/devotional-artwork/thumak-chalat-ramchandra.png",
+    "alt": "Devotional illustration for Thumak Chalat Ramchandra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "64b90fb398031a1091e44299f29c253e9491bdad6127d369268fa967e0f88858"
+  },
+  "chadariya-jhini-re-jhini": {
+    "src": "/devotional-artwork/chadariya-jhini-re-jhini.png",
+    "alt": "Devotional illustration for Chadariya Jhini Re Jhini",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "f9cf02823ee136f259ec49edff6d1a9fb365de392b68f20152d01414ce879e29"
+  },
+  "main-nahin-makhan-khayo": {
+    "src": "/devotional-artwork/main-nahin-makhan-khayo.png",
+    "alt": "Devotional illustration for Main Nahin Makhan Khayo",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "e4e5d42c0db5ec351ac3d29d8007ca11479d399c49fdfe33b3718ac10665a2f4"
+  },
+  "pag-ghunghru-bandh": {
+    "src": "/devotional-artwork/pag-ghunghru-bandh.png",
+    "alt": "Devotional illustration for Pag Ghunghru Bandh Meera Nachi Re",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "652516f361a8c5c49e7e3b5ab24df404c6da721d82e26e4f7d0dfa54b63c2358"
+  },
+  "jai-jagannath": {
+    "src": "/devotional-artwork/jai-jagannath.png",
+    "alt": "Devotional illustration for Jai Jagannath",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "3e45b4d37f8061198dd75af147f0d745fd086f109c21e356a1545a999ba792c4"
+  },
+  "hari-om-tat-sat": {
+    "src": "/devotional-artwork/hari-om-tat-sat.png",
+    "alt": "Devotional illustration for Hari Om Tat Sat",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "a74ebacde9c8f77c8fef1c3eefd32d7a058cc13b3dfeb482e7094c98bb3139d0"
+  },
+  "tum-hi-ho-mata-pita": {
+    "src": "/devotional-artwork/tum-hi-ho-mata-pita.png",
+    "alt": "Devotional illustration for Tum Hi Ho Mata Pita",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "a94b9e94e5603299edd345e3f5f68f2b5e530ed339230b6ba0b65bf0c7b05d02"
+  },
+  "om-mangalam-omkar-mangalam": {
+    "src": "/devotional-artwork/om-mangalam-omkar-mangalam.png",
+    "alt": "Devotional illustration for Om Mangalam Omkar Mangalam",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "a6d5faad4ef9655a9deb6cba07fa14f499d33b6dc2b730308cd3dfe7f3f02b37"
+  },
+  "hari-sundar-nand-mukunda": {
+    "src": "/devotional-artwork/hari-sundar-nand-mukunda.png",
+    "alt": "Devotional illustration for Hari Sundar Nand Mukunda",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "a50337713ef6d4eb1f561797422710f03b40d357873666c2ef457ef852858db4"
+  },
+  "narayan-narayan-govind-hare": {
+    "src": "/devotional-artwork/narayan-narayan-govind-hare.png",
+    "alt": "Devotional illustration for Narayan Narayan Govind Hare",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "7e2584f640a7ee40ccc87f50b74433db128f4e5dfc2189e332d58c78576fd794"
+  },
+  "aisi-lagi-lagan": {
+    "src": "/devotional-artwork/aisi-lagi-lagan.png",
+    "alt": "Devotional illustration for Aisi Lagi Lagan",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "d056a159c535733c242244be742250cbf139723d3048c1b9a03a44fc995791f1"
+  },
+  "jo-bhaje-hari-ko-sada": {
+    "src": "/devotional-artwork/jo-bhaje-hari-ko-sada.png",
+    "alt": "Devotional illustration for Jo Bhaje Hari Ko Sada",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "b9c8f4da7810d35ada94caf686ac3db8b2d9267b6ee579d8a4acb3e05345303e"
+  },
+  "kanha-so-ja-zara": {
+    "src": "/devotional-artwork/kanha-so-ja-zara.png",
+    "alt": "Devotional illustration for Kanha So Ja Zara",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "67be15353776fd3409d78a14ff069703ffcd1d81f2f013e2577cc66447ec3f1b"
+  },
+  "shri-ram-jai-ram-dhun": {
+    "src": "/devotional-artwork/shri-ram-jai-ram-dhun.png",
+    "alt": "Devotional illustration for Shri Ram Jai Ram Dhun",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "65d2a1d5fcb343cafb7bf6d6262a3c8038baaad597b536f75210128ce867451a"
+  },
+  "sitaram-sitaram": {
+    "src": "/devotional-artwork/sitaram-sitaram.png",
+    "alt": "Devotional illustration for Sitaram Sitaram",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "c99eb218e8b9ffda2c0dbb1ff36f82ce2a92ac81f4ac767d7bb6936d42e81b71"
+  },
+  "jag-mein-sundar-hai-do-naam": {
+    "src": "/devotional-artwork/jag-mein-sundar-hai-do-naam.png",
+    "alt": "Devotional illustration for Jag Mein Sundar Hai Do Naam",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "3bf7afd8cc72d292a3e308254ba83574c9451fd38867fd7a07d178ca6c22e91b"
+  },
+  "ram-ayenge": {
+    "src": "/devotional-artwork/ram-ayenge.png",
+    "alt": "Devotional illustration for Ram Ayenge",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "d19ddaf871c38ff8ca3cffb03b6fcca8feac7266e73d2e6d643345f524206b9e"
+  },
+  "bam-bam-bhole": {
+    "src": "/devotional-artwork/bam-bam-bhole.png",
+    "alt": "Devotional illustration for Bam Bam Bhole",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "9450bd4826d2b703d465d958f8d3564181439f7e02e08c58fb85204634c1a659"
+  },
+  "shiv-shiv-shankar": {
+    "src": "/devotional-artwork/shiv-shiv-shankar.png",
+    "alt": "Devotional illustration for Shiv Shiv Shankar Bholenath",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "f804b133f84c09f0bb862e0217be67f0975ea984f06019a3e1b3ea757a234166"
+  },
+  "jai-bholenath": {
+    "src": "/devotional-artwork/jai-bholenath.png",
+    "alt": "Devotional illustration for Jai Bholenath",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "d983a757a5ef1dcdb95257662e526afedbc15d3bbdf643b65a3332e33d6f026a"
+  },
+  "bajrang-baan-bhajan": {
+    "src": "/devotional-artwork/bajrang-baan-bhajan.png",
+    "alt": "Devotional illustration for Bajrang Baan Bhajan",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "44b3505db13533d3abab9b24686651989102b6312016d4585e6f8fe2d25e2ee0"
+  },
+  "durge-durgat-bhari": {
+    "src": "/devotional-artwork/durge-durgat-bhari.png",
+    "alt": "Devotional illustration for Durge Durgat Bhari",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "1b4a7d4030a7b014a0431aa3d7acfda49431a86b51f77178379defcdc4186c33"
+  },
+  "jai-mata-di": {
+    "src": "/devotional-artwork/jai-mata-di.png",
+    "alt": "Devotional illustration for Jai Mata Di",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "c04da1ae9bdb32ccb3c9536be08cb73a5ce41325264b0352801c36111d84a990"
+  },
+  "bhavsagar-tarane-ke-liye": {
+    "src": "/devotional-artwork/bhavsagar-tarane-ke-liye.png",
+    "alt": "Devotional illustration for Bhavsagar Tarane Ke Liye",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "2c16bc08a886fcba63670c48e6d47932cbcdc227bc07f9be98ec3c26ebd8b8cd"
+  },
+  "sadho-dekho-jag-baurana": {
+    "src": "/devotional-artwork/sadho-dekho-jag-baurana.png",
+    "alt": "Devotional illustration for Sadho Dekho Jag Baurana",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "ccdef9f695f48f2c623d39201073657a506abd91d5fc347c7b14166ab1b5548c"
+  },
+  "akhiyan-hari-darshan-ki-pyasi": {
+    "src": "/devotional-artwork/akhiyan-hari-darshan-ki-pyasi.png",
+    "alt": "Devotional illustration for Akhiyan Hari Darshan Ki Pyasi",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "dbde8892f4d36b22a11447138f3abd0642400c061d717547e58a37e1048a1176"
+  },
+  "jai-jai-radha-raman": {
+    "src": "/devotional-artwork/jai-jai-radha-raman.png",
+    "alt": "Devotional illustration for Jai Jai Radha Raman Hari Bol",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "1872731914d76c5f8d1135acd9be2f2e9f154bbf6f1b09e57352a0918a61e4f5"
+  },
+  "sai-ram-sai-shyam": {
+    "src": "/devotional-artwork/sai-ram-sai-shyam.png",
+    "alt": "Devotional illustration for Sai Ram Sai Shyam",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "df3478353001d111c84858110efabab3f16db25d9221f4bb7aa53854e7c73012"
+  },
+  "chalo-man-ganga-yamuna-teer": {
+    "src": "/devotional-artwork/chalo-man-ganga-yamuna-teer.png",
+    "alt": "Devotional illustration for Chalo Man Ganga Yamuna Teer",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "a719bff01e6a134221688ea62559af600324dbdcc0223539d06609ba92deb72f"
+  },
+  "govind-bolo-hari-gopal-bolo": {
+    "src": "/devotional-artwork/govind-bolo-hari-gopal-bolo.png",
+    "alt": "Devotional illustration for Govind Bolo Hari Gopal Bolo",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "2e1502567f31cc65344c4801d39e52efbcb533203fab8976ae98e835b5257ee3"
+  },
+  "hare-rama-hare-krishna-extended": {
+    "src": "/devotional-artwork/hare-rama-hare-krishna-extended.png",
+    "alt": "Devotional illustration for Hare Rama Hare Krishna Extended",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "46193e2c7e34083f186bdaf1e7f123e233266745ddf0ed06661367d452ffce20"
+  },
+  "shri-ram-stuti": {
+    "src": "/devotional-artwork/shri-ram-stuti.png",
+    "alt": "Devotional illustration for Shri Ram Stuti",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "0bb9b392239776e60587c2ae85faa437026519cf53ca242169f3a5263c83305b"
+  },
+  "aarti-kunj-bihari-bhajan": {
+    "src": "/devotional-artwork/aarti-kunj-bihari-bhajan.png",
+    "alt": "Devotional illustration for Aarti Kunj Bihari Bhajan",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "f64500ee95222b225231d8036b5ab9f9f90c4f76a787d5a307097e2106f39f9a"
+  },
+  "radhe-radhe-govind": {
+    "src": "/devotional-artwork/radhe-radhe-govind.png",
+    "alt": "Devotional illustration for Radhe Radhe Govind",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "9c2807f1088866fe230446e65fa01f09415c0d19de4a65d4eb88d97d58ed5cc9"
+  },
+  "maiya-mori-main-nahin-makhan-khayo-extended": {
+    "src": "/devotional-artwork/maiya-mori-main-nahin-makhan-khayo-extended.png",
+    "alt": "Devotional illustration for Maiya Mori Main Nahin Makhan Khayo Extended",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "4d20015cde043fe54b8dd5eb98e99839d22b1afffbb4ade9b105e7887ec7b533"
+  },
+  "kabira-mana-nirmal-bhaya": {
+    "src": "/devotional-artwork/kabira-mana-nirmal-bhaya.png",
+    "alt": "Devotional illustration for Kabira Mana Nirmal Bhaya",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "8724bae5f6e064e6596844dec04cf7a539553a8b11e7614eb7ff36d815d8f111"
+  },
+  "gayatri-mantra": {
+    "src": "/devotional-artwork/gayatri-mantra.png",
+    "alt": "Devotional illustration for Gayatri Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "5be5ff754fb44afda2e83969f3b212477288f59bc9b5d63a52336b8ece2f8b98"
+  },
+  "mahamrityunjay-mantra": {
+    "src": "/devotional-artwork/mahamrityunjay-mantra.png",
+    "alt": "Devotional illustration for Mahamrityunjay Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "cd733029756d9a56e76cb0d70bc367e8c514b2e61e0dce90e09102a816faa974"
+  },
+  "om-namah-shivaya": {
+    "src": "/devotional-artwork/om-namah-shivaya.png",
+    "alt": "Devotional illustration for Om Namah Shivaya",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "677f08e4ca001b052f469bc6ba5c537de92698474c3fae9324c09824cd9db986"
+  },
+  "ganesh-mantra": {
+    "src": "/devotional-artwork/ganesh-mantra.png",
+    "alt": "Devotional illustration for Ganesh Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "a7a39e5f3d067d3629017d4a8d87b3490afb4a26d4fefbab66dd066a94218b01"
+  },
+  "vishnu-mantra": {
+    "src": "/devotional-artwork/vishnu-mantra.png",
+    "alt": "Devotional illustration for Shanti Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "7cb4f935b5688e972fa21c2696205b27d283d53f4c43b4e2b93c87c65ff68d0b"
+  },
+  "lakshmi-mantra": {
+    "src": "/devotional-artwork/lakshmi-mantra.png",
+    "alt": "Devotional illustration for Lakshmi Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "c074a265fa9bdd0cf9eb5989b5cfb53124949c3f10cad63f0125397a3b3593ce"
+  },
+  "hare-krishna-mahamantra": {
+    "src": "/devotional-artwork/hare-krishna-mahamantra.png",
+    "alt": "Devotional illustration for Hare Krishna Mahamantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "3361c40cc28abc45f65e1d261328793b4d99535f0ec46c141bfe605dab3e0e5f"
+  },
+  "om-namo-narayanaya": {
+    "src": "/devotional-artwork/om-namo-narayanaya.png",
+    "alt": "Devotional illustration for Om Namo Narayanaya",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "a5c942a317137e206782acd2d818ec336836d453a702ab241ced9758f95c11b3"
+  },
+  "om-namo-bhagavate-vasudevaya": {
+    "src": "/devotional-artwork/om-namo-bhagavate-vasudevaya.png",
+    "alt": "Devotional illustration for Om Namo Bhagavate Vasudevaya",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "c9350f487712916a16b4c1e808c13d7a23361a191f740f9e689ad628032e046f"
+  },
+  "om-gan-ganapataye-namaha": {
+    "src": "/devotional-artwork/om-gan-ganapataye-namaha.png",
+    "alt": "Devotional illustration for Om Gan Ganapataye Namaha",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "fd113fbb6c3b25db116553b7bac65eb6892872257176e96e8c263bbaed650297"
+  },
+  "durga-beej-mantra": {
+    "src": "/devotional-artwork/durga-beej-mantra.png",
+    "alt": "Devotional illustration for Durga Beej Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "a5c2a98bcb9b320dfa49ef6ba446276b0087a24ba00632349ac3d61a84bceee4"
+  },
+  "navarna-mantra": {
+    "src": "/devotional-artwork/navarna-mantra.png",
+    "alt": "Devotional illustration for Navarna Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "8f57475291a812963b8634911e7c8acec2a331a5e95e28e7d0e7e6964b0eced3"
+  },
+  "shani-mantra": {
+    "src": "/devotional-artwork/shani-mantra.png",
+    "alt": "Devotional illustration for Shani Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "ddb37d7246523124b55c3fa08db89e37c281dfcf2efc37b89cec4086999f9eaf"
+  },
+  "hanuman-mantra": {
+    "src": "/devotional-artwork/hanuman-mantra.png",
+    "alt": "Devotional illustration for Hanuman Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "c31c268df5aff9d28b1bd62ec201adebc5fcdce43f6578cae43dbe74d19a27c1"
+  },
+  "saraswati-beej-mantra": {
+    "src": "/devotional-artwork/saraswati-beej-mantra.png",
+    "alt": "Devotional illustration for Saraswati Beej Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "68ebfeb14da25c240a4a318fa7944d99feb46080d632f5fce1368fbc19670e43"
+  },
+  "kali-beej-mantra": {
+    "src": "/devotional-artwork/kali-beej-mantra.png",
+    "alt": "Devotional illustration for Kali Beej Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "3c1d1415c1585c9239e44a6b725ecdeed597cf7456e4ab0b762a48f534b3900a"
+  },
+  "navagraha-mantras": {
+    "src": "/devotional-artwork/navagraha-mantras.png",
+    "alt": "Devotional illustration for Navagraha Mantras",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "a3ff239e9c38a0eec285a8e6b45bb7abb5072d0013fa92d78af0475dd5a13f69"
+  },
+  "kubera-mantra": {
+    "src": "/devotional-artwork/kubera-mantra.png",
+    "alt": "Devotional illustration for Kubera Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "19c765d4fb100a9c3efff6fc45f2424edded38544ce34a89fc3ccf98b8359794"
+  },
+  "ram-mantra": {
+    "src": "/devotional-artwork/ram-mantra.png",
+    "alt": "Devotional illustration for Ram Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "36135f717769d92823ae31842e74c7734c764f0aa61f5a8ead08943d66b81b4e"
+  },
+  "krishna-beej-mantra": {
+    "src": "/devotional-artwork/krishna-beej-mantra.png",
+    "alt": "Devotional illustration for Krishna Beej Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "7b442465157829a092595fd7acaca26df337a04e91b03fd0a9265e071d866820"
+  },
+  "vakratunda-mahakaya": {
+    "src": "/devotional-artwork/vakratunda-mahakaya.png",
+    "alt": "Devotional illustration for Vakratunda Mahakaya",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "deb33891e3cd2a885c0d01e4b9343e20e4bab4aab7b7754472e446065038a8ff"
+  },
+  "shiva-gayatri-mantra": {
+    "src": "/devotional-artwork/shiva-gayatri-mantra.png",
+    "alt": "Devotional illustration for Shiva Gayatri Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "fb242963ce969ae72e3889bb856dad4d9ca3227b4ff95199c82535c571fa1ec9"
+  },
+  "ganesh-gayatri-mantra": {
+    "src": "/devotional-artwork/ganesh-gayatri-mantra.png",
+    "alt": "Devotional illustration for Ganesh Gayatri Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "3a0686a43be113e0ce584067729c403e116cd60c95e3d865ece0cab7232cf64f"
+  },
+  "hanuman-gayatri-mantra": {
+    "src": "/devotional-artwork/hanuman-gayatri-mantra.png",
+    "alt": "Devotional illustration for Hanuman Gayatri Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "9cb6538b318f40e7d1709f23a717d13c2e5b89ce1b92a4f37a9370085785a4ab"
+  },
+  "krishna-gayatri-mantra": {
+    "src": "/devotional-artwork/krishna-gayatri-mantra.png",
+    "alt": "Devotional illustration for Krishna Gayatri Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "0eaa5be3ad090d7cc16fcea2d7873b6f0552c34fbeac211ca8fa3bc72d9829b1"
+  },
+  "ram-gayatri-mantra": {
+    "src": "/devotional-artwork/ram-gayatri-mantra.png",
+    "alt": "Devotional illustration for Ram Gayatri Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "d71a4542e87856fc6bbfca803e55440ee5cd7909ebfdbdf84d4b1045f1e81429"
+  },
+  "lakshmi-gayatri-mantra": {
+    "src": "/devotional-artwork/lakshmi-gayatri-mantra.png",
+    "alt": "Devotional illustration for Lakshmi Gayatri Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "becc8a6f40126e1086aa7073746ab2d9f5bccd594fccdaf468f4b81e855385e8"
+  },
+  "durga-gayatri-mantra": {
+    "src": "/devotional-artwork/durga-gayatri-mantra.png",
+    "alt": "Devotional illustration for Durga Gayatri Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "df2e184dd58d3678f55f6322c7a3d7b1bfc0d3ff45bdd4b3d2d9c04a912c6a1f"
+  },
+  "saraswati-gayatri-mantra": {
+    "src": "/devotional-artwork/saraswati-gayatri-mantra.png",
+    "alt": "Devotional illustration for Saraswati Gayatri Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "229377566e7c1c37e5460a13b988e012460b0bd095d454fe91266bf05caa52c7"
+  },
+  "narasimha-gayatri-mantra": {
+    "src": "/devotional-artwork/narasimha-gayatri-mantra.png",
+    "alt": "Devotional illustration for Narasimha Gayatri Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "d68c2a5fdfdd77147b4711f9ed6eae2648fc440515648939e32e297e650eb362"
+  },
+  "surya-gayatri-mantra": {
+    "src": "/devotional-artwork/surya-gayatri-mantra.png",
+    "alt": "Devotional illustration for Surya Gayatri Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "d4408ade34ea8d89590b2e0368433e5f0a8b2cf691b9d1bb8d941f41bfd5dbea"
+  },
+  "rudra-mantra": {
+    "src": "/devotional-artwork/rudra-mantra.png",
+    "alt": "Devotional illustration for Rudra Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "9dbbc51f6d1bc19da059412272c30d1bc602fdbca8eaf345a9a0c70d165a530c"
+  },
+  "shiva-dhyana-mantra": {
+    "src": "/devotional-artwork/shiva-dhyana-mantra.png",
+    "alt": "Devotional illustration for Shiva Dhyana Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "222cde1621424074065260596716e1c9a3771eea86520421519cbcc646b98e7c"
+  },
+  "om-vishnave-namaha": {
+    "src": "/devotional-artwork/om-vishnave-namaha.png",
+    "alt": "Devotional illustration for Om Vishnave Namaha",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "b279931ff44b6bf0ee5370872c0f232be2d867a91ebe0e3da116af493d3f9dfa"
+  },
+  "om-tat-sat": {
+    "src": "/devotional-artwork/om-tat-sat.png",
+    "alt": "Devotional illustration for Om Tat Sat",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "502fd43f3ccd5536d6f6be13ffa4a9054e9d866b284a35a4a4e55ab9866c95c5"
+  },
+  "purna-mantra": {
+    "src": "/devotional-artwork/purna-mantra.png",
+    "alt": "Devotional illustration for Purna Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "237a78418e1e0ab63fb5d77e42869f768ccc9183a7300042a96fbb474e9d8dd2"
+  },
+  "narasimha-mantra": {
+    "src": "/devotional-artwork/narasimha-mantra.png",
+    "alt": "Devotional illustration for Narasimha Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "c10095e3fc8139b6b9333a15541210bbab802171724e04232d3fba206d8d9ce8"
+  },
+  "parashurama-mantra": {
+    "src": "/devotional-artwork/parashurama-mantra.png",
+    "alt": "Devotional illustration for Parashurama Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "2b09f18c71bb56a8af416a2e66497e179b0cb94ae14701950da0c0a0fb0e2303"
+  },
+  "dasha-mahavidya-mantras": {
+    "src": "/devotional-artwork/dasha-mahavidya-mantras.png",
+    "alt": "Devotional illustration for Dasha Mahavidya Mantras",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "c0fb816247004851199a3d559b09e4eef870200dda711a3c117cf2e861c7444a"
+  },
+  "surya-beej-mantra": {
+    "src": "/devotional-artwork/surya-beej-mantra.png",
+    "alt": "Devotional illustration for Surya Beej Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "28b0357e16fe949fb72d9189874550391254b5f1c6ca24f4085cb2760c55084f"
+  },
+  "chandra-beej-mantra": {
+    "src": "/devotional-artwork/chandra-beej-mantra.png",
+    "alt": "Devotional illustration for Chandra Beej Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "621063252c3d64187ba208107540c1ab718e1cb24f930188753e12cf76e6428f"
+  },
+  "mangal-beej-mantra": {
+    "src": "/devotional-artwork/mangal-beej-mantra.png",
+    "alt": "Devotional illustration for Mangal Beej Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "9aa87f6ebf723b9a7bd69d3b04d5388f045d463606713064decd257c95b1d404"
+  },
+  "budh-beej-mantra": {
+    "src": "/devotional-artwork/budh-beej-mantra.png",
+    "alt": "Devotional illustration for Budh Beej Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "3e69928bc104017a2e58635b9741ce96c3748e5b8dd3574f2a3f803064966f12"
+  },
+  "brihaspati-beej-mantra": {
+    "src": "/devotional-artwork/brihaspati-beej-mantra.png",
+    "alt": "Devotional illustration for Brihaspati Beej Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "2acedba953a25a0fdd5890079e66e6e4236ec4bc797e60841165780681df4521"
+  },
+  "shukra-beej-mantra": {
+    "src": "/devotional-artwork/shukra-beej-mantra.png",
+    "alt": "Devotional illustration for Shukra Beej Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "1bda27878631e8adae6955338642fd4737db002e611833bcb421429dbe4ff16d"
+  },
+  "rahu-beej-mantra": {
+    "src": "/devotional-artwork/rahu-beej-mantra.png",
+    "alt": "Devotional illustration for Rahu Beej Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "949c825bd9c0888ea66cd086054cc3c02a2f647f5489e58e19b26663a440cf25"
+  },
+  "ketu-beej-mantra": {
+    "src": "/devotional-artwork/ketu-beej-mantra.png",
+    "alt": "Devotional illustration for Ketu Beej Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "834316dd76d62087687b17c50e4633d5178573bf6e324a1ab6d96779066310bc"
+  },
+  "lakshmi-beej-mantra": {
+    "src": "/devotional-artwork/lakshmi-beej-mantra.png",
+    "alt": "Devotional illustration for Lakshmi Beej Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "6296880bae75d3451692717ee5abb78c7afd18426f5f3c0dee6fcc74d19e23b7"
+  },
+  "diwali-mantras": {
+    "src": "/devotional-artwork/diwali-mantras.png",
+    "alt": "Devotional illustration for Diwali Mantras",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "80bfeebb73843e40411e9f55f9e9d4c9b3d532e2c570c6861b55735f24226568"
+  },
+  "akshaya-tritiya-mantras": {
+    "src": "/devotional-artwork/akshaya-tritiya-mantras.png",
+    "alt": "Devotional illustration for Akshaya Tritiya Mantras",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "7e998670eeda5053e6cd2326c027ba00152be45f605750048e18490c43b78fa5"
+  },
+  "agni-gayatri": {
+    "src": "/devotional-artwork/agni-gayatri.png",
+    "alt": "Devotional illustration for Agni Gayatri",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "670a8ddd94f0d2ffa2551c5a2c320fa0a3b1ce60f0f8518a9c4a6938f3712920"
+  },
+  "indra-gayatri": {
+    "src": "/devotional-artwork/indra-gayatri.png",
+    "alt": "Devotional illustration for Indra Gayatri",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "93bae160bbcebe5c8d1acafe93e6354569f8c44feac8b87364af44d1c8067648"
+  },
+  "shiva-moola-mantra": {
+    "src": "/devotional-artwork/shiva-moola-mantra.png",
+    "alt": "Devotional illustration for Shiva Moola Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "1c31f59bf6f129b10ad5d726b8c629a7f970c1871801a7e5f0c25a1f93f70d21"
+  },
+  "kartikeya-mantra": {
+    "src": "/devotional-artwork/kartikeya-mantra.png",
+    "alt": "Devotional illustration for Kartikeya Mantra",
+    "kind": "generated-illustration",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "1e80fe2c19e2b85589623ab8550f7f7bd728553721c9544767499e3918fd672c"
   }
 }

@@ -34,13 +34,11 @@
 .site-mobile-nav { display: none; }
 .site-header-error { padding: 12px 5%; color: #ffc4b4; background: #47251f; }
 
-/* Complete illustrations give each collection an identity without competing with text. */
+/* Centered collection introductions keep the prayer cards within easy reach. */
 .sacred-app .dev-collection-heading {
-  display: grid;
-  grid-template-columns: 1.35fr 1fr;
-  gap: 48px;
-  padding: 0;
-  min-height: 270px;
+  display: block;
+  text-align: center;
+  padding: 40px 24px;
   background: transparent;
   border: 0;
   border-radius: 0;
@@ -49,8 +47,7 @@
 .sacred-app .dev-collection-heading::after { content: none; }
 .sacred-app .dev-collection-heading h1 { font-size: clamp(42px, 4.5vw, 58px); line-height: 1.05; margin-bottom: 12px; }
 .sacred-app .dev-collection-heading .dev-hindi-subtitle { color: #e4c28e; font-size: 23px; }
-.sacred-app .dev-collection-heading .dev-description { max-width: 50ch; margin-top: 20px; color: #cfc5b6; }
-.dev-collection-art { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: contain; border-radius: 12px; }
+.sacred-app .dev-collection-heading .dev-description { max-width: 65ch; margin: 20px auto 0; color: #cfc5b6; text-wrap: pretty; }
 .sacred-app .dev-page, .sacred-app .library-page { animation: none; }
 
 /* Illustrated devotional cards: artwork leads, warm manuscript typography follows. */
@@ -116,7 +113,6 @@
 }
 @media (max-width: 1000px) {
   .site-header-overlay { position: absolute; top: 0; width: 100%; }
-  .sacred-app .dev-collection-heading { gap: 28px; grid-template-columns: 1.1fr 1fr; }
 }
 @media (max-width: 700px) {
   .site-header-inner { width: 90%; min-height: 78px; gap: 10px; }
@@ -128,11 +124,10 @@
   .site-profile-link, .site-plans-link, .site-logout { display: none; }
   .site-icon-button, .site-menu-toggle { width: 40px; }
   .site-search-panel, .site-mobile-nav { padding: 18px; max-height: calc(100dvh - 90px); }
-  .sacred-app .dev-collection-heading { grid-template-columns: 1fr; gap: 24px; }
+  .sacred-app .dev-collection-heading { padding: 24px 0; margin-bottom: 24px; }
   .sacred-app .dev-collection-heading h1 { font-size: 42px; }
   .sacred-app .dev-collection-heading .dev-hindi-subtitle { font-size: 20px; }
   .sacred-app .dev-collection-heading .dev-description { margin-top: 14px; }
-  .dev-collection-art { max-width: 420px; justify-self: center; }
   .dev-card-body { padding: 22px 22px 18px; }
   .sacred-app .dev-card h2, .sacred-app .dashboard-prayer h3, .sacred-app .scripture-card h3 { font-size: 27px; }
 }

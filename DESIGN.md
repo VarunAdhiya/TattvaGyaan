@@ -77,7 +77,7 @@ spacing:
   grid-gap: "20px"
   mobile-panel: "24px"
   form-panel: "28px"
-  collection-header: "0; 48px column gap"
+  collection-header: "40px 24px; mobile 24px 0"
 components:
   auth-submit:
     backgroundColor: "{colors.auth-red}"
@@ -140,7 +140,7 @@ components:
 
 **Creative North Star: "The Temple Reading Sanctuary"**
 
-Warm charcoal and temple-stone surfaces frame cream text, gold accents and the supplied devotional artwork. Cormorant gives headings a quiet literary character; Hind keeps Hindi and interface controls approachable. Collection introductions pair clear titles with complete devotional illustrations; cards and sustained reading stay free of decoration.
+Warm charcoal and temple-stone surfaces frame cream text, gold accents and the supplied devotional artwork. Cormorant gives headings a quiet literary character; Hind keeps Hindi and interface controls approachable. Collection introductions center the title, Hindi subtitle, and description without header images. Descriptions are capped at 65ch; individual prayer cards retain their illustrations.
 
 The dashboard, collections, calendar and personal workspaces share one palette. Account pages retain their full-frame artwork and warm translucent controls. The book reader retains its calibrated typography and user-selected paper themes.
 
