@@ -77,6 +77,8 @@
 @keyframes compass-turn { to { transform: rotate(360deg); } }
 .world-fallback-scene { position: absolute; inset: 0; }
 .world-fallback-scene > img { width: 100%; height: 100%; object-fit: cover; object-position: 65% center; }
+.world-fallback-scene.is-tableau { background: #b4dcf0; }
+.world-fallback-scene.is-tableau > img { object-fit: contain; object-position: center 30%; padding: 100px 20px 220px; }
 .world-fallback-scene > p { position: absolute; top: 150px; right: 20px; max-width: 250px; padding: 12px; border-radius: 8px; color: #173b32; background: #fff6e3; font-size: 12px; }
 .game-art-dialog { margin: auto; padding: 0; width: min(1100px, 94vw); max-height: 94svh; border: 0; border-radius: 12px; background: #103f3a; color: #fff6e3; overflow: auto; }
 .game-art-dialog::backdrop { background: #041d19d9; }
@@ -157,9 +159,9 @@
   .game-map-intro h1 { font-size: 23px; margin-bottom: 6px; }
   .game-map-intro p { font-size: 12px; margin: 0; }
   .is-overview .sacred-world { bottom: 8%; }
-  .world-pin { padding: 4px 6px; gap: 4px; font-size: 9px; max-width: 106px; }
+  .world-pin { padding: 5px 4px; gap: 3px; font-size: 9px; width: calc((100vw - 80px) / 4); max-width: 78px; min-height: 44px; }
   .world-pin > span { width: 17px; height: 17px; flex-shrink: 0; font-size: 9px; }
-  .world-pin > strong { line-height: 1.2; max-width: 72px; }
+  .world-pin > strong { line-height: 1.2; min-width: 0; overflow-wrap: anywhere; }
   .world-fallback-scene > p { top: 150px; font-size: 10px; max-width: 180px; }
   .game-art-dialog > div { font-size: 12px; padding: 12px; }
 }

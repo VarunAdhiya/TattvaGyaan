@@ -31,3 +31,51 @@ camera-facing tableaux with organic contours inside the Three.js island world,
 and in the expanded illustration viewer. They are not historical photographs or
 fully modeled 3D characters. No external art or third-party model was used.
 Original scenic images above remain available as WebGL/texture fallbacks.
+
+`realistic/kailash.png` is a generated artistic interpretation of Mount Kailash,
+used as a distant mountain backdrop with transparent mist. Its prompt is in
+`realistic/kailash-prompt.json`. It replaces the small cone-shaped island peaks.
+
+## Krishna island scenes (22 October 2026)
+
+`krishna/` contains eight original transparent devotional tableaux and a distant
+Vrindavan–Yamuna riverbank backdrop, generated with the built-in image tool.
+Prompts and medium are recorded in `krishna/prompts.json`. These illustrations
+are artistic interpretations, displayed on the same curved surfaces as Ganesha;
+the figures are not fully modeled 3D characters.
+
+The scenes show the birth in Mathura, Yashoda and child Krishna in Gokul, the flute
+in Vrindavan, shelter beneath Govardhan, the family reunion after Kamsa's fall,
+Sudama's welcome in Dwarka, the Gita dialogue, and forgiveness of Jara at Prabhasa.
+Original short retellings and links to Bhagavata Purana and Bhagavad Gita chapters
+are in `src/data/krishnaJourney.js`. They cover selected episodes, not a complete
+biography or a single canonical chronology. The farewell is non-graphic and
+described as the close of Krishna's earthly lila in Vaishnava tradition.
+
+## Shiva, Hanuman and Ram (22 October 2026)
+
+`shiva/`, `hanuman/` and `ram/` each contain eight original photographic-style
+transparent devotional tableaux generated with the built-in image tool. The
+24 chapter prompts are preserved in `expanded-prompts.json`. Figures are shown
+on the existing curved island surfaces; they are not fully modeled characters.
+
+Shiva uses the existing Kailash horizon. Hanuman has a new Kishkindha-inspired
+forest backdrop, while Ram has an imaginative Ayodhya–Sarayu backdrop and a
+new scenic entrance image. These landscape prompts are recorded in
+`expanded-scenic-prompts.json`; they are artistic interpretations, not claims
+of historical or archaeological reconstruction.
+
+`src/data/epicJourneys.js` contains original short retellings and episode-level
+source links. Ramayana episodes were checked against the Sanskrit/English
+edition at valmikiramayan.net; the Uttara Kanda conclusions link to the
+corresponding Sanskrit and English chapters at ramayana.info. Shiva's scenes
+draw on the Shiva Purana translated by J. L. Shastri, Bhagavata Purana 8.7,
+the Ramayana's Ganga narrative, and the existing Amritapuri Ganesha account.
+The Met's Nataraja collection record supports the closing iconographic chapter.
+
+These are selected introductions, not exhaustive biographies or a universal
+chronology. Shiva's path begins with timeless presence; Hanuman's ends in his
+continuing service. Neither is assigned an invented death. Ram's closing chapter
+identifies the Uttara Kanda departure tradition. Difficult episodes are described
+briefly and illustrated without graphic injury. Translations and third-party
+artwork were not copied into these assets.

@@ -1,0 +1,246 @@
+// Original selected retellings, not quotations or an exhaustive chronology.
+// Chapter numbering and interpretations differ between Ramayana editions.
+const ramayana = (folder, chapter, stem, title) => ({
+  title: `Valmiki Ramayana · ${title}`,
+  url: `https://www.valmikiramayan.net/utf8/${folder}/sarga${chapter}/${stem}roman${chapter}.htm`,
+});
+const purana = (document, title) => ({
+  title: `Shiva Purana · ${title}`,
+  url: `https://www.wisdomlib.org/hinduism/book/shiva-purana-english/d/${document}.html`,
+});
+
+export const epicSources = {
+  'shiva-eternal': purana('doc225974', 'Rudra-samhita 1.6: Before creation'),
+  'shiva-sati': purana('doc226050', 'Rudra-samhita 2.30: Sati’s departure'),
+  'shiva-marriage': purana('doc226112', 'Rudra-samhita 3.48: The marriage'),
+  'shiva-ganga': ramayana('baala', 43, 'bala', 'Bala 43: Ganga’s descent'),
+  'shiva-neelkanth': { title: 'Bhagavata Purana · 8.7: Shiva and the cosmic poison', url: 'https://vedabase.io/en/library/sb/8/7/' },
+  'shiva-family': { title: 'Amritapuri · The birth of Ganesha', url: 'https://www.amritapuri.org/3714/ganesha.aum' },
+  'shiva-tripura': purana('doc226151', 'Rudra-samhita 5.10: Tripura'),
+  'shiva-nataraja': { title: 'The Metropolitan Museum of Art · Nataraja’s symbolism', url: 'https://www.metmuseum.org/art/collection/search/39328' },
+  'hanuman-origin': ramayana('kish', 66, 'kishkindha', 'Kishkindha 66: Hanuman’s childhood'),
+  'hanuman-meeting': ramayana('kish', 3, 'kishkindha', 'Kishkindha 3: The first meeting'),
+  'hanuman-ocean': ramayana('sundara', 1, 'sundara', 'Sundara 1: The ocean crossing'),
+  'hanuman-sita': ramayana('sundara', 36, 'sundara', 'Sundara 36: Ram’s ring'),
+  'hanuman-mountain': ramayana('yuddha', 101, 'yuddha', 'Yuddha 101: The healing herbs'),
+  'hanuman-homecoming': ramayana('yuddha', 128, 'yuddha', 'Yuddha 128: The coronation'),
+  'hanuman-devotion': { title: 'Valmiki Ramayana · Uttara 108: Hanuman’s promise', url: 'https://ramayana.info/story/uttara/108/' },
+  'ram-birth': ramayana('baala', 18, 'bala', 'Bala 18: The princes’ births'),
+  'ram-learning': ramayana('baala', 22, 'bala', 'Bala 22: Vishvamitra’s teaching'),
+  'ram-marriage': ramayana('baala', 73, 'bala', 'Bala 73: Sita and Ram’s marriage'),
+  'ram-exile': ramayana('ayodhya', 27, 'ayodhya', 'Ayodhya 27: Sita chooses the forest'),
+  'ram-alliance': ramayana('kish', 5, 'kishkindha', 'Kishkindha 5: Friendship with Sugriva'),
+  'ram-bridge': ramayana('yuddha', 22, 'yuddha', 'Yuddha 22: Nala’s bridge'),
+  'ram-ayodhya': ramayana('yuddha', 128, 'yuddha', 'Yuddha 128: Ram’s coronation'),
+  'ram-sarayu': { title: 'Valmiki Ramayana · Uttara 110: The Sarayu departure', url: 'https://ramayana.info/story/uttara/110/' },
+};
+
+const positions = [[9, 66], [21, 42], [33, 60], [45, 34], [57, 54], [69, 29], [81, 49], [92, 24]];
+function illustrate(deity, chapters) {
+  return chapters.map((chapter, index) => ({
+    ...chapter, position: positions[index],
+    image: `/journeys/${deity}/${chapter.id}.png`, alt: chapter.sceneAlt,
+    sceneImage: `/journeys/${deity}/${chapter.id}.png`,
+  }));
+}
+
+export const shivaLevels = illustrate('shiva', [
+  {
+    id: 'eternal', title: 'Before every beginning', hindi: 'अनादि महादेव', place: 'Kailash · Timeless stillness',
+    sceneAlt: 'Shiva meditates on a Himalayan rock with Nandi, a trident and a damaru beside him.',
+    story: 'Shaiva traditions revere Shiva as beginningless, beyond an ordinary human birth. We enter his sacred world in the stillness of Kailash, where the great yogi invites attention inward.',
+    insight: 'Stillness', reflection: 'Take one unhurried breath before beginning.',
+    detail: 'The Shiva Purana describes the divine before creation. This meditative scene introduces that timeless presence; the following episodes form a selected devotional path, not a dated biography.',
+    source: 'shiva-eternal',
+  },
+  {
+    id: 'sati', title: 'Love and loss', hindi: 'सती का संकल्प', place: 'Daksha’s sacrifice · A painful turning',
+    sceneAlt: 'Sati stands unharmed beside the ritual altar, confronting Daksha while priests look on.',
+    story: 'At Daksha’s sacrifice, Sati confronts the dishonour shown to Shiva. In the Purana’s telling, she gives up her body through yogic fire, and the episode brings grief and upheaval.',
+    insight: 'Dignity', reflection: 'Consider how to meet another person’s pain with care.',
+    detail: 'This is a difficult mythic episode, shown here before Sati’s death without depicting injury. The later Parvati tradition tells of the goddess’s return; versions differ in their details.',
+    source: 'shiva-sati',
+  },
+  {
+    id: 'marriage', title: 'Shiva and Shakti', hindi: 'शिव-पार्वती विवाह', place: 'Himalaya · A sacred wedding',
+    sceneAlt: 'Shiva and Parvati exchange garlands beside a wedding fire, accompanied by Himavan and Mena.',
+    story: 'Parvati’s devotion leads to her union with Shiva. In the Himalaya, her family welcomes their marriage, bringing the ascetic’s stillness and the goddess’s sustaining presence together.',
+    insight: 'Partnership', reflection: 'Value the different strengths someone brings to your life.',
+    detail: 'The Shiva Purana gives an extended account of Parvati’s resolve and the wedding rites. The scene depicts one moment from the ceremony, rather than all of its participants.',
+    source: 'shiva-marriage',
+  },
+  {
+    id: 'ganga', title: 'A river gently received', hindi: 'गंगा का अवतरण', place: 'The Himalayan heights · Ganga descends',
+    sceneAlt: 'Shiva receives Ganga in his matted hair while Bhagiratha kneels in prayer below.',
+    story: 'Bhagiratha seeks Ganga’s descent for his ancestors. Shiva receives her immense force in his matted hair and releases her waters, allowing the sacred river to flow toward the earth.',
+    insight: 'Restraint', reflection: 'How could you direct a strong feeling with gentleness?',
+    detail: 'Vishvamitra tells this story to Ram in the Bala Kanda. It is placed here for its theme of protective strength, not as a fixed date among Shiva’s other stories.',
+    source: 'shiva-ganga',
+  },
+  {
+    id: 'neelkanth', title: 'Compassion for the world', hindi: 'नीलकंठ महादेव', place: 'The cosmic ocean · A moment of protection',
+    sceneAlt: 'Shiva’s throat is deep blue as Parvati sits beside him and grateful devas offer their respects.',
+    story: 'The churning of the ocean releases a terrible poison before its treasures emerge. Shiva takes it into himself to protect living beings; his blue throat gives him the name Neelkanth.',
+    insight: 'Compassion', reflection: 'Use your capacity to ease a burden someone else carries.',
+    detail: 'Bhagavata Purana 8.7 describes Shiva’s act and Parvati’s confidence in him. This is a divine miracle in sacred narrative; the illustration shows its peaceful aftermath.',
+    source: 'shiva-neelkanth',
+  },
+  {
+    id: 'family', title: 'A new beginning for a son', hindi: 'गणेश का पुनर्जन्म', place: 'Kailash · The family reunited',
+    sceneAlt: 'Shiva and Parvati lovingly welcome elephant-headed Ganesha between them, with Nandi nearby.',
+    story: 'In a beloved origin story, a conflict ends with Parvati’s son losing his head. Shiva restores the boy with an elephant’s head and welcomes Ganesha into the divine family.',
+    insight: 'Restoration', reflection: 'Think of one relationship that could benefit from patient repair.',
+    detail: 'The artwork shows the reunion, without violence. Ganesha’s origin has several tellings; this is the same tradition explored in his own journey.',
+    source: 'shiva-family',
+  },
+  {
+    id: 'tripura', title: 'The fall of three cities', hindi: 'त्रिपुरांतक शिव', place: 'Tripura · The decisive arrow',
+    sceneAlt: 'Shiva draws his bow from a celestial chariot before three symbolic fortress towers.',
+    story: 'When the three fortified cities of Tripura align, Shiva releases the arrow that brings them down. As Tripurantaka, he appears as the power that ends a formidable dominion.',
+    insight: 'Clarity', reflection: 'Name a habit you are ready to change with steady effort.',
+    detail: 'The Shiva Purana describes a cosmic chariot and the destruction of the cities. The scene uses symbolic towers and omits casualties; the reflection is an invitation, not a literal translation.',
+    source: 'shiva-tripura',
+  },
+  {
+    id: 'nataraja', title: 'The dance that continues', hindi: 'नटराज का आनंद तांडव', place: 'The cosmic dance · Beyond an ending',
+    sceneAlt: 'Four-armed Shiva dances as Nataraja with drum, flame and blessing gesture within a ring of fire.',
+    story: 'As Nataraja, Shiva’s dance holds creation, transformation, and grace together. The drum, flame, and raised foot speak through sacred imagery; the journey closes in a presence beyond ordinary birth and death.',
+    insight: 'Renewal', reflection: 'Make room for a small, thoughtful new beginning.',
+    detail: 'This final chapter explores Nataraja’s iconography, documented by the Met’s curators. It is not a final event in Shiva’s life or a story of his death.',
+    source: 'shiva-nataraja',
+  },
+]);
+
+export const hanumanLevels = illustrate('hanuman', [
+  {
+    id: 'birth', title: 'Anjana’s blessing', hindi: 'अंजनी के लाल', place: 'The forest hills · A blessed beginning',
+    sceneAlt: 'Anjana cradles newborn Hanuman, wrapped in saffron cloth, while Kesari kneels beside them.',
+    story: 'Hanuman is welcomed as Anjana’s son, with Kesari as his father and a special bond to Vayu, the wind god. His origin prepares the way for extraordinary strength placed in the service of others.',
+    insight: 'Belonging', reflection: 'Remember the people whose care helped you grow.',
+    detail: 'In Kishkindha Kanda, Jambavan recalls Hanuman’s origins to awaken his confidence. Traditions tell his birth in different ways and associate it with different places.',
+    source: 'hanuman-origin',
+  },
+  {
+    id: 'sun', title: 'Reaching for the sun', hindi: 'बाल हनुमान की उड़ान', place: 'The morning sky · Childhood wonder',
+    sceneAlt: 'Child Hanuman leaps from a rocky ledge toward a brilliant golden sun, with his tail curving behind him.',
+    story: 'As a child, Hanuman sees the rising sun and reaches toward it as though it were ripe fruit. The story reveals his astonishing energy, long before he learns how it will serve a greater purpose.',
+    insight: 'Wonder', reflection: 'Let curiosity lead you toward something worth learning.',
+    detail: 'Jambavan’s account also tells of Indra’s thunderbolt, Vayu’s distress, and divine boons. The illustration depicts the early leap without the injury that follows.',
+    source: 'hanuman-origin',
+  },
+  {
+    id: 'meeting', title: 'A meeting with purpose', hindi: 'राम से प्रथम मिलन', place: 'Rishyamukha · Words of trust',
+    sceneAlt: 'Hanuman, in simple ascetic dress, greets Ram and Lakshmana with folded hands in the forest.',
+    story: 'Sent by Sugriva, Hanuman approaches Ram and Lakshmana near Rishyamukha. His thoughtful speech wins Ram’s regard, beginning a bond of trust that will shape the search for Sita.',
+    insight: 'Trust', reflection: 'Listen carefully before deciding how you can help.',
+    detail: 'The Ramayana says Hanuman first approaches in an ascetic disguise. This devotional image retains his recognisable vanara features while showing his simple dress.',
+    source: 'hanuman-meeting',
+  },
+  {
+    id: 'ocean', title: 'The leap of faith', hindi: 'सागर के पार', place: 'The ocean shore · Toward Lanka',
+    sceneAlt: 'Hanuman leaps from the coastal rocks, his body extended above a small burst of sea spray.',
+    story: 'Reminded of his strength, Hanuman sets out across the ocean to find Sita. He meets obstacles with courage and quick understanding, keeping Ram’s mission at the centre of his journey.',
+    insight: 'Courage', reflection: 'Take one considered step toward a task that feels daunting.',
+    detail: 'Sundara Kanda opens with this crossing and the encounters with Mainaka, Surasa, and Simhika. The scene captures the departure rather than compressing every encounter into one image.',
+    source: 'hanuman-ocean',
+  },
+  {
+    id: 'sita', title: 'A message of hope', hindi: 'सीता को राम का संदेश', place: 'Ashoka grove · A quiet assurance',
+    sceneAlt: 'Hanuman offers Ram’s small gold ring to Sita beneath an ashoka tree.',
+    story: 'In Lanka’s Ashoka grove, Hanuman finds Sita and offers Ram’s ring as a sign of trust. His message assures her that she has been found and that help is on its way.',
+    insight: 'Hope', reflection: 'Offer a truthful word of encouragement to someone waiting in uncertainty.',
+    detail: 'Sundara Kanda 36 describes the ring and their conversation. The ring is a token identifying the messenger; Sita’s courage and judgement remain central to the encounter.',
+    source: 'hanuman-sita',
+  },
+  {
+    id: 'mountain', title: 'Strength that restores', hindi: 'संजीवनी की खोज', place: 'From the mountain to Lanka · Before dawn',
+    sceneAlt: 'Hanuman returns with a medicinal mountaintop while Ram and a healer attend the reclining Lakshmana.',
+    story: 'When Lakshmana lies gravely wounded, Hanuman goes in search of healing herbs. Unable to identify them, he brings the mountaintop itself, allowing the healer to restore Lakshmana.',
+    insight: 'Resourcefulness', reflection: 'When one approach fails, look for another way to be useful.',
+    detail: 'The Ramayana contains more than one healing-mountain episode. This scene follows the later rescue of Lakshmana, with Sushena as healer, and depicts no wounds.',
+    source: 'hanuman-mountain',
+  },
+  {
+    id: 'homecoming', title: 'Honoured in Ayodhya', hindi: 'अयोध्या में सम्मान', place: 'Ayodhya · The royal homecoming',
+    sceneAlt: 'Sita presents a pearl necklace to Hanuman beside the seated Ram, with Lakshmana nearby.',
+    story: 'After the return to Ayodhya and Ram’s coronation, Sita honours Hanuman with a necklace. Amid royal celebration, his service is remembered with gratitude, and his humility remains unchanged.',
+    insight: 'Humility', reflection: 'Accept appreciation with grace, and remember those who helped you.',
+    detail: 'Yuddha Kanda 128 describes Sita giving Hanuman the necklace. The image presents that moment without adding the later popular story of him breaking its pearls.',
+    source: 'hanuman-homecoming',
+  },
+  {
+    id: 'devotion', title: 'Where Ram is remembered', hindi: 'चिरंजीवी रामभक्त', place: 'The sacred grove · Devotion continues',
+    sceneAlt: 'Hanuman sits in prayer beside a manuscript, a diya and his resting gada beneath a sacred tree.',
+    story: 'Hanuman’s path does not end with an ordinary death. In the Uttara Kanda tradition, he remains in the world while Ram’s story is told, a living image of devotion and steadfast service.',
+    insight: 'Service', reflection: 'Carry one lesson from this journey into a helpful action today.',
+    detail: 'This tradition underlies his reverence as a chiranjeevi, a long-living divine servant. The quiet grove is an artistic reflection on continuing devotion, not a recorded final location.',
+    source: 'hanuman-devotion',
+  },
+]);
+
+export const ramLevels = illustrate('ram', [
+  {
+    id: 'birth', title: 'Joy in Ayodhya', hindi: 'अयोध्या में राम जन्म', place: 'Ayodhya · A long-awaited joy',
+    sceneAlt: 'Kaushalya cradles newborn Ram as King Dasharatha kneels beside her among flowers and lamps.',
+    story: 'In Ayodhya, Kaushalya and Dasharatha welcome Ram after the king’s sacred rites. Alongside his brothers Bharata, Lakshmana, and Shatrughna, the prince grows within a family whose bonds will shape his path.',
+    insight: 'Gratitude', reflection: 'Pause with gratitude for a beginning that mattered to you.',
+    detail: 'Bala Kanda 18 recounts the princes’ births and early qualities. The illustration focuses on Ram with his parents rather than showing all four births together.',
+    source: 'ram-birth',
+  },
+  {
+    id: 'learning', title: 'Guided by a sage', hindi: 'विश्वामित्र की शिक्षा', place: 'The forest road · Learning to serve',
+    sceneAlt: 'The young Ram and Lakshmana listen to Vishvamitra beside a small ritual fire, their bows lowered.',
+    story: 'Ram and Lakshmana leave home with the sage Vishvamitra. His teaching prepares them for the challenges ahead, joining disciplined learning with the responsibility to protect his sacred work.',
+    insight: 'Discipline', reflection: 'Give a skill you value a little patient practice today.',
+    detail: 'Bala Kanda 22 describes their departure and the teachings called Bala and Atibala. The wider forest episodes show the princes putting their learning into action.',
+    source: 'ram-learning',
+  },
+  {
+    id: 'marriage', title: 'A promise in Mithila', hindi: 'सीता-राम विवाह', place: 'Mithila · Beside the sacred fire',
+    sceneAlt: 'Ram and Sita stand with garlands beside their wedding fire as King Janaka blesses the union.',
+    story: 'In Mithila, Ram and Sita are married with their families’ blessings. Beside the sacred fire, their shared path begins—a partnership that will face joy, separation, and difficult choices.',
+    insight: 'Commitment', reflection: 'Think of a promise you can honour through your actions.',
+    detail: 'Bala Kanda 73 describes the wedding rites and the marriages of Ram’s brothers. The scene centres on Sita and Ram with Janaka; it does not depict the earlier bow contest.',
+    source: 'ram-marriage',
+  },
+  {
+    id: 'exile', title: 'The forest path', hindi: 'वनवास का संकल्प', place: 'Beyond Ayodhya · Fourteen years of exile',
+    sceneAlt: 'Ram, Sita and Lakshmana walk together along a forest path in simple garments, without royal crowns.',
+    story: 'To uphold his father’s promise, Ram accepts fourteen years of exile. Sita insists on sharing the forest life, and Lakshmana accompanies them, leaving the comfort of Ayodhya behind.',
+    insight: 'Resolve', reflection: 'What helps you stay thoughtful when circumstances change?',
+    detail: 'The linked chapter gives Sita’s own insistence on joining Ram. The exile unfolds across many chapters; this scene represents their shared forest journey.',
+    source: 'ram-exile',
+  },
+  {
+    id: 'alliance', title: 'Friends in the search', hindi: 'सुग्रीव से मित्रता', place: 'Kishkindha · A bond beside the fire',
+    sceneAlt: 'Ram and Sugriva clasp hands beside a ritual flame as Hanuman and Lakshmana stand with them.',
+    story: 'After Ravana abducts Sita, Ram and Lakshmana search for her. Hanuman brings them to Sugriva, and an alliance of mutual help opens the way for the vanaras to join the search.',
+    insight: 'Friendship', reflection: 'Ask for help when you need it, and offer help with care.',
+    detail: 'Kishkindha Kanda 5 describes the friendship oath. The broader alliance also includes the conflict with Vali, an episode with moral complexities beyond this short introduction.',
+    source: 'ram-alliance',
+  },
+  {
+    id: 'bridge', title: 'A path across the sea', hindi: 'समुद्र पर सेतु', place: 'The southern shore · Toward Lanka',
+    sceneAlt: 'Ram, Hanuman and Nala watch vanaras carry stone and timber into a bridge across the water.',
+    story: 'With Sita located in Lanka, the ocean still lies between her and the rescuers. Under Nala’s direction, the vanaras build a bridge, turning a vast obstacle into a path through shared effort.',
+    insight: 'Cooperation', reflection: 'Notice what becomes possible when people work together.',
+    detail: 'Yuddha Kanda 22 describes the sea-god’s counsel and the construction with trees and rocks. The illustration does not add the later motif of names written on floating stones.',
+    source: 'ram-bridge',
+  },
+  {
+    id: 'ayodhya', title: 'The homecoming', hindi: 'राम का राज्याभिषेक', place: 'Ayodhya · A kingdom welcomes its king',
+    sceneAlt: 'Ram and Sita sit for the coronation as Vashishtha blesses them, with Bharata and Hanuman nearby.',
+    story: 'After the war in Lanka and Ravana’s defeat, Ram and Sita return to Ayodhya. Bharata welcomes his brother, and Ram’s coronation marks a return to the responsibilities of kingship.',
+    insight: 'Responsibility', reflection: 'Let a success deepen your care for the people around you.',
+    detail: 'This chapter focuses on the coronation, not every event of the return. The wider Ramayana also recounts Sita’s ordeal and later separation; their difficulties are not erased by this celebration.',
+    source: 'ram-ayodhya',
+  },
+  {
+    id: 'sarayu', title: 'By the quiet Sarayu', hindi: 'सरयू तट पर प्रस्थान', place: 'The Sarayu · The close of earthly lila',
+    sceneAlt: 'Ram stands peacefully at the Sarayu’s edge in simple garments as sages and devotees gather behind him.',
+    story: 'In the Uttara Kanda telling, Ram eventually approaches the Sarayu with those who follow him. His earthly lila closes in a return to his divine nature, while his story continues to invite reflection on dharma.',
+    insight: 'Reflection', reflection: 'Choose one act of integrity to carry beyond this journey.',
+    detail: 'This later episode follows further family trials and the lives of Lava and Kusha. Its place and interpretation vary across Ramayana traditions. The scene shows a peaceful approach to the river, without depicting death.',
+    source: 'ram-sarayu',
+  },
+]);

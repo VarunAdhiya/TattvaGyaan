@@ -20,8 +20,8 @@
 .journey-tools button { min-height: 40px; min-width: 40px; justify-content: center; color: var(--site-muted); }
 .journey-tools span { font-size: 13px; }
 .journey-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.journey-deity-select { display: flex; justify-content: center; gap: 16px; padding: 9px 24px 24px; }
-.journey-deity-select button { display: flex; align-items: center; gap: 12px; min-width: 180px; min-height: 68px; padding: 8px 14px 8px 8px; border: 1px solid var(--site-line); border-radius: 8px; background: var(--site-surface); text-align: left; transition: background .2s, border-color .2s; }
+.journey-deity-select { display: grid; grid-template-columns: repeat(5, minmax(0, 180px)); justify-content: center; gap: 16px; padding: 9px 24px 24px; }
+.journey-deity-select button { display: flex; align-items: center; gap: 12px; min-width: 0; min-height: 68px; padding: 8px 14px 8px 8px; border: 1px solid var(--site-line); border-radius: 8px; background: var(--site-surface); text-align: left; transition: background .2s, border-color .2s; }
 .journey-deity-select button:hover { border-color: #a53a26; background: var(--site-raised); }
 .journey-deity-select button[aria-pressed="true"] { background: #302820; color: #fff6e3; border-color: #302820; }
 .journey-deity-select img { width: 48px; height: 48px; border-radius: 5px; object-fit: cover; object-position: 68% 42%; }
@@ -143,7 +143,7 @@
   .divine-journeys .journey-scene { pointer-events: auto; }
 }
 @media (max-width: 1050px) {
-  .journey-deity-select button { min-width: 150px; }
+  .journey-deity-select button { gap: 8px; padding-inline: 6px; }
   .journey-entrance-copy { width: 52%; margin-left: 5%; }
   .journey-entrance h1 { font-size: 40px; }
   .journey-story { width: 49%; margin-left: 5%; }
@@ -160,9 +160,9 @@
   .journey-tools span { display: none; }
   .journey-tools button { min-width: 34px; }
   .journey-deity-select { gap: 8px; padding: 7px 16px 17px; }
-  .journey-deity-select button { min-width: 0; width: 25%; padding: 7px 4px; flex-direction: column; gap: 6px; text-align: center; }
+  .journey-deity-select button { min-width: 0; padding: 7px 2px; flex-direction: column; gap: 6px; text-align: center; }
   .journey-deity-select img { width: 40px; height: 40px; }
-  .journey-deity-select span { font-size: 13px; }
+  .journey-deity-select span { font-size: clamp(11px, 3.2vw, 13px); }
   .journey-deity-select small { font-size: 10px; }
   .journey-deity-select button > svg { display: none; }
   .journey-entrance { min-height: 790px; }

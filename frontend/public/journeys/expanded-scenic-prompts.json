@@ -1,0 +1,20 @@
+{
+  "generator": "image_gen",
+  "scenes": [
+    {
+      "deity": "hanuman",
+      "id": "backdrop",
+      "prompt": "Original photographic realistic panoramic 3:2 Kishkindha-inspired sacred forest skyline for a devotional 3D island world. Ancient rounded granite hills, green banyan and sal groves, a winding riverbank and a small stone shrine tucked into foliage, gentle dawn mist at the bottom. True transparent background outside organic landscape silhouette, NO sky rectangle, no figures, no text. Place ground riverbank line at about 62 percent image height, lower portion fades into transparent mist. Reverent natural Indian landscape, no cartoon, no mountain snow."
+    },
+    {
+      "deity": "ram",
+      "id": "backdrop",
+      "prompt": "Original photographic realistic panoramic 3:2 artistic ancient Ayodhya riverfront skyline for a devotional 3D island world. Warm sandstone royal pavilions and temple spires, green trees, broad old stone ghats beside the Sarayu, faint river mist. True transparent background outside organic skyline silhouette, NO sky rectangle, no figures, no text. Ground riverbank line at about 62 percent image height, lower portion fades into transparent mist. Serene golden morning, historically imaginative sacred scene, not a claim of archaeological reconstruction, no modern buildings, no cartoon."
+    },
+    {
+      "deity": "ram",
+      "id": "entrance",
+      "prompt": "Original photorealistic cinematic Hindu devotional illustration for a website journey introduction, landscape 3:2. Full scenic background of an imaginative ancient Ayodhya royal garden beside the Sarayu at warm golden dawn. On the RIGHT HALF of composition, Lord Ram with dignified lifelike adult Indian features, subtle blue skin, golden crown, yellow silk dhoti and a lowered curved bow stands with adult Sita in a modest red-gold sari. Hanuman with realistic vanara face and tawny fur kneels reverently at their side. Natural anatomy, traditional jewelry, no toy or cartoon, no text. LEFT HALF has quieter shaded trees and stone path, space for website copy. Temple pavilions and river recede softly in the background, whole figures in frame."
+    }
+  ]
+}

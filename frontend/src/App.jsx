@@ -37,14 +37,14 @@ function SiteFrame({ children }) {
 function SiteNavigation() {
   const { pathname, search } = useLocation();
   const { user } = useAuth();
-  if (user && pathname === '/journeys/ganesha' && new URLSearchParams(search).has('level')) return null;
+  if (user && /^\/journeys\/(ganesha|krishna|shiva|hanuman|ram)\/?$/.test(pathname) && new URLSearchParams(search).has('level')) return null;
   if (pathname === '/dashboard' && user) return null;
   return user && !pathname.startsWith('/reader/') ? <SiteHeader key={pathname} /> : <Navbar />;
 }
 
 function SiteFooter() {
   const { pathname, search } = useLocation();
-  return pathname === '/journeys/ganesha' && new URLSearchParams(search).has('level') ? null : <Footer />;
+  return /^\/journeys\/(ganesha|krishna|shiva|hanuman|ram)\/?$/.test(pathname) && new URLSearchParams(search).has('level') ? null : <Footer />;
 }
 
 function EntryRoute() {

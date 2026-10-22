@@ -1,0 +1,44 @@
+{
+  "medium": "AI-generated photographic-style devotional interpretations, transparent PNG tableaux on curved surfaces in a 3D world; not fully modeled characters or historical photographs.",
+  "generator": "image_gen",
+  "date": "2026-10-22",
+  "basePrompt": "Use case: historical-scene. Asset: one original photographic-style Hindu devotional tableau to be placed on a 3D island. Reverent cinematic realism, natural age-appropriate anatomy, dignified lifelike faces, detailed skin, authentic silk and jewelry, warm directional light, realistic stone and fabric. Krishna has subtle deep blue skin, dark wavy hair, yellow silk and a peacock feather appropriate to his age. No cartoon, no chibi, no toys, no plastic, no oversized heads. Landscape 3:2 composition, a compact group of full-length figures comfortably within the canvas, eye-level camera slightly above seated subjects. Isolate the entire tableau on true transparent background, preserving organic silhouettes, NO rectangular scene background, NO sky, NO framing walls or roof. Only an irregular small patch of earth/stone at the feet and the specified scene props. No text or watermark. All clothing modest traditional Indian attire. ",
+  "scenes": [
+    {
+      "file": "mathura-birth.png",
+      "prompt": "Krishna's birth in Mathura. Devaki, a graceful Indian mother in a muted crimson sari, sits on a low stone bench holding newborn Krishna wrapped modestly in yellow cloth in her arms. Vasudeva, an adult Indian father in simple cream dhoti, kneels beside them preparing a small woven basket to carry his son to safety. A few loose iron shackles on the floor and a little oil lamp indicate the prison; no walls or bars blocking subjects. Quiet midnight light, tenderness and hope, luminous newborn with TWO human arms, no adult crown on baby. Only these three people."
+    },
+    {
+      "file": "gokul.png",
+      "prompt": "Childhood in Gokul. Toddler Krishna, around three years old, subtle blue skin, natural toddler proportions, yellow dhoti and small peacock feather in hair, sits beside a clay butter pot with a little butter on his fingers. Yashoda in an indigo and russet sari kneels lovingly next to him, one hand gently on his shoulder. A brass milk vessel, churn and a little white calf evoke their pastoral home. Gentle affectionate daylight, no pranks involving danger, no other people. Earthy floor with a few flowers."
+    },
+    {
+      "file": "vrindavan.png",
+      "prompt": "The flute of Vrindavan. Youthful Krishna, a naturally proportioned young adult, stands in elegant tribhanga pose playing a bamboo flute, yellow dhoti, peacock-feather headdress and delicate garland. Two adult gopis in rich modest blue and rose saris listen quietly a little behind him, a realistic white cow rests nearby. A slim kadamba tree with restrained leaves and flowers rises behind the group, all branches within image. Small patch of grassy riverbank and lotus flowers. Peaceful golden afternoon, reverent devotional love, no sexual content."
+    },
+    {
+      "file": "govardhan.png",
+      "prompt": "Shelter beneath Govardhan. Young Krishna with yellow dhoti stands at center holding a rugged green rocky HILL ALOFT on the raised little finger of his LEFT hand. The hill forms a broad natural umbrella overhead; no architectural roof. A small group of four village people, including a mother comforting her clothed child and a cowherd, with a white cow and calf take shelter beneath. Show the complete hill and complete figures without cropping, compact wide composition. Muted rainy daylight with warm glow on the sheltered faces, wet rock texture, no storm background (transparent). Mythological miracle treated in cinematic photographic realism, not a toy model."
+    },
+    {
+      "file": "mathura-return.png",
+      "prompt": "Return to Mathura, after Kamsa's defeat. Young adult Krishna with natural deep blue skin and yellow dhoti and his fair-skinned brother Balarama in a blue dhoti tenderly free their elderly parents Devaki and Vasudeva from imprisonment. Krishna kneels opening a loose iron shackle at his father's wrist while Devaki reaches toward Balarama; expressions of relief and reunion. Only these four family members, a few open chains and a low stone bench. No Kamsa figure, no blood, no combat, no weapons, no corpses. Warm light falling on rough stone ground."
+    },
+    {
+      "file": "dwarka.png",
+      "prompt": "Friendship in Dwarka. Royal Krishna, mature youthful blue-skinned adult in fine yellow silk and ornate gold crown with peacock feather, kneels humbly washing the feet of his old friend Sudama in a brass basin. Sudama is a slender middle-aged Indian brahmin with a gentle lined face, simple worn ivory dhoti and sacred thread, sitting on an elegant low carved seat and holding a small cloth bundle of flattened rice. Rich rugs, a brass water vessel, scattered flowers, only these two people. Royal hospitality expressed through humility, soft luminous daylight, no palace walls or backdrop."
+    },
+    {
+      "file": "gita.png",
+      "prompt": "The Bhagavad Gita at Kurukshetra. Adult Lord Krishna, blue-skinned charioteer wearing a dignified gold crown with peacock feather and yellow silk, calmly teaches Arjuna with one hand raised in explanation. Arjuna, an adult Indian warrior in bronze-gold armor, kneels respectfully listening inside a stationary richly carved ancient wooden chariot; his bow rests lowered beside him, showing his pause before battle. Full chariot with visible large spoked wheels, compact enough to fit entire image, no horses required in this close tableau. Only these two figures, dry earth underneath, quiet dawn lighting, no fighting or casualties, no written scripture text."
+    },
+    {
+      "file": "prabhasa.png",
+      "prompt": "Krishna's compassionate farewell at Prabhasa. Krishna, serene blue-skinned adult in yellow silk and refined gold jewelry, sits beneath a small pippala (sacred fig) tree with heart-shaped leaves, one foot resting across the other leg. The hunter Jara, a humble adult Indian man in simple earth-toned garments, kneels a short distance away with folded hands in remorse; his bow is laid on the earth. Krishna gently reassures him with a compassionate open palm. This is the peaceful moment of forgiveness before his earthly departure. No visible wound, no arrow piercing flesh, no blood, no deathbed, no corpse. Twilight gold light, a few leaves on natural rocky soil, whole tree canopy and figures inside canvas."
+    }
+  ],
+  "backdrop": {
+    "file": "backdrop.png",
+    "prompt": "Original cinematic photorealistic devotional landscape asset, panoramic 3:2 image, true transparent background outside the landscape silhouette, no sky rectangle. A distant Vrindavan and Yamuna riverbank skyline: lush green kadamba and sacred fig groves, delicate old sandstone temple spires and river ghats at the center, soft atmospheric morning mist along the bottom. Natural organic uneven tree and temple silhouette above; lower half softly fading into transparent mist for compositing into a blue water 3D world. No people or gods, no snow, no mountains, no text, no border. Fine realistic foliage and warm sandstone, serene sacred North Indian riverside, not cartoon or low poly."
+  }
+}

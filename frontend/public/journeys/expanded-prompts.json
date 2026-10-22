@@ -1,0 +1,133 @@
+{
+  "generator": "image_gen",
+  "medium": "Original photographic-style devotional illustrations on transparent backgrounds, displayed as tableaux in a 3D world; not historical photographs or fully modeled characters.",
+  "basePrompt": "Original Hindu devotional tableau for an immersive 3D island journey. Cinematic photographic realism, dignified lifelike faces, believable anatomy, natural fabric and stone textures, traditional modest Indian clothing, reverent warm light. Landscape 3:2 composition. True transparent background with crisp organic cutout contours: NO rectangular backdrop, NO sky, NO colored haze around silhouettes, NO frame, NO roof. Entire figures and props within canvas, compact full-body composition, irregular small ground patch only. No text, no watermark, no cartoon, no chibi, no toy or plastic look. ",
+  "deities": {
+    "shiva": [
+      [
+        "eternal",
+        "Before every beginning",
+        "Lord Shiva is a dignified adult Indian ascetic with ash-blue skin, long dark matted hair in a topknot with crescent moon, three ash forehead lines and third eye, rudraksha beads, tiger-pattern wrap fully covering his lower body, a calm serpent around his neck. Shiva sits alone in profound meditation on a weathered Himalayan rock. Nandi, a realistic white bull, rests calmly beside him. A trident and damaru stand at the side. Small snow patches, no scenery behind. Quiet dawn. This is a timeless manifestation, not a birth scene."
+      ],
+      [
+        "sati",
+        "Love and loss",
+        "Lord Shiva is a dignified adult Indian ascetic with ash-blue skin, long dark matted hair in a topknot with crescent moon, three ash forehead lines and third eye, rudraksha beads, tiger-pattern wrap fully covering his lower body, a calm serpent around his neck. Sati, an adult Indian goddess in a modest saffron-red sari, stands with solemn dignity beside a low Vedic sacrificial fire altar. An older white-bearded king Daksha in ivory royal clothing stands a few paces away, and two seated priests look on. Depict the tense exchange BEFORE her death: Sati unharmed, no burning person, no self-harm, no corpse, no violence. Shiva is absent from this episode; do NOT depict him. A compact ritual scene on stone ground."
+      ],
+      [
+        "marriage",
+        "Shiva and Shakti",
+        "Lord Shiva is a dignified adult Indian ascetic with ash-blue skin, long dark matted hair in a topknot with crescent moon, three ash forehead lines and third eye, rudraksha beads, tiger-pattern wrap fully covering his lower body, a calm serpent around his neck. Shiva and adult goddess Parvati in a rich red bridal sari stand facing one another beside a SMALL sacred marriage fire, holding flower garlands. Parvati's father Himavan and mother Mena stand behind with a brass water pot, four people total. Himalayan wedding, tender respectful faces, no canopy or architecture, complete bodies and ground."
+      ],
+      [
+        "ganga",
+        "A river gently received",
+        "Lord Shiva is a dignified adult Indian ascetic with ash-blue skin, long dark matted hair in a topknot with crescent moon, three ash forehead lines and third eye, rudraksha beads, tiger-pattern wrap fully covering his lower body, a calm serpent around his neck. Shiva stands on a rocky ledge receiving a slender stream of clear water in his matted topknot; water flows gently down his hair onto rocks. King Bhagiratha, an adult Indian ascetic in saffron robes, kneels below with folded hands. The water expresses the descent of Ganga; no separate goddess figure, no sky or large mountains. Cool light, complete contained composition."
+      ],
+      [
+        "neelkanth",
+        "Compassion for the world",
+        "Lord Shiva is a dignified adult Indian ascetic with ash-blue skin, long dark matted hair in a topknot with crescent moon, three ash forehead lines and third eye, rudraksha beads, tiger-pattern wrap fully covering his lower body, a calm serpent around his neck. Shiva sits beside Parvati in a green and red sari. His throat is visibly deep indigo blue, his face serene, his open cupped palm extended after drinking the cosmic poison. Two crowned devas bow gratefully nearby. No cup containing household chemicals, no realistic injury, no distress or poison pouring into mouth. Depict the peaceful aftermath of the mythological miracle. Small coastal rock ground and brass lamp."
+      ],
+      [
+        "family",
+        "A new beginning for a son",
+        "Lord Shiva is a dignified adult Indian ascetic with ash-blue skin, long dark matted hair in a topknot with crescent moon, three ash forehead lines and third eye, rudraksha beads, tiger-pattern wrap fully covering his lower body, a calm serpent around his neck. Shiva and Parvati in a crimson sari sit together welcoming their restored elephant-headed young son Ganesha between them. Shiva gently rests a hand on his son's shoulder, Parvati lovingly holds Ganesha's hand. Ganesha wears a yellow dhoti and small gold crown. Realistic elephant features and respectful natural devotional anatomy, not a cute toy. Nandi rests at the side. No injuries, no violence. Only these three divine figures and the bull."
+      ],
+      [
+        "tripura",
+        "The fall of three cities",
+        "Lord Shiva is a dignified adult Indian ascetic with ash-blue skin, long dark matted hair in a topknot with crescent moon, three ash forehead lines and third eye, rudraksha beads, tiger-pattern wrap fully covering his lower body, a calm serpent around his neck. Shiva stands poised in a compact ancient carved chariot with large wheels, holding a bow drawn upward, serene resolve. Behind him three SMALL separate golden, silver and iron fortress towers in the air symbolize Tripura. Warm rays of sacred light link them; NO people in towers, no destruction casualties, no gore. Full chariot and figure visible, restrained cinematic mythological scale, no horses required, no rectangular setting."
+      ],
+      [
+        "nataraja",
+        "The dance that continues",
+        "Lord Shiva is a dignified adult Indian ascetic with ash-blue skin, long dark matted hair in a topknot with crescent moon, three ash forehead lines and third eye, rudraksha beads, tiger-pattern wrap fully covering his lower body, a calm serpent around his neck. Shiva as Nataraja performs a balanced classical dance with EXACTLY four anatomically clear arms: rear right holds small damaru, rear left small flame, front right blessing palm, front left gracefully pointing toward raised left foot. Right foot rests on a small symbolic dwarf of ignorance who is unharmed. A delicate freestanding ring of flame surrounds the dance, traditional iconographic object not a picture frame. Flowing hair, lifelike skin, fully clothed tiger wrap, small stone base. No other people."
+      ]
+    ],
+    "hanuman": [
+      [
+        "birth",
+        "Anjana’s blessing",
+        "Hanuman is a dignified divine vanara with a realistic expressive monkey-like face, tawny fur, strong natural humanoid anatomy and a long curved tail, red-orange dhoti and traditional gold ornaments. Never a cartoon monkey. The newborn Hanuman has natural baby vanara proportions, a gentle monkey-like face and tiny tail, wrapped modestly in saffron cloth in mother Anjana's arms. Anjana is a graceful Indian vanara woman with subtly simian features in a deep red sari, seated on a forest rock. Father Kesari, a dignified adult vanara in simple gold and cream attire, kneels beside them. Three family members only, a few forest plants on the ground, soft morning light. No adult crown or gada on baby."
+      ],
+      [
+        "sun",
+        "Reaching for the sun",
+        "Hanuman is a dignified divine vanara with a realistic expressive monkey-like face, tawny fur, strong natural humanoid anatomy and a long curved tail, red-orange dhoti and traditional gold ornaments. Never a cartoon monkey. Young child Hanuman, natural child proportions and realistic small vanara face, leaps upward from a rocky ledge toward a small brilliant golden sun-disc in the upper right. His tail curls behind, his saffron dhoti moves gently in the wind. The sun is a distant symbolic celestial light, not a fruit in his hand. Whole child and tail fully visible, no injury, no lightning strike, no sky background."
+      ],
+      [
+        "meeting",
+        "A meeting with purpose",
+        "Lord Ram is a dignified young adult Indian prince with subtle blue skin, dark hair, vertical tilak, natural proportions and a lowered curved bow. Lakshmana has natural warm brown skin, dark hair and a bow. Hanuman is a dignified divine vanara with a realistic expressive monkey-like face, tawny fur, strong natural humanoid anatomy and a long curved tail, red-orange dhoti and traditional gold ornaments. Never a cartoon monkey. Adult Hanuman in simple ascetic clothing, without a crown, greets Ram and Lakshmana with folded hands near a small forest rock and a few reeds. Ram and Lakshmana wear modest saffron forest garments and carry lowered bows, listening warmly. Three figures only, natural forest ground, no buildings. The moment of their first encounter near Rishyamukha."
+      ],
+      [
+        "ocean",
+        "The leap of faith",
+        "Hanuman is a dignified divine vanara with a realistic expressive monkey-like face, tawny fur, strong natural humanoid anatomy and a long curved tail, red-orange dhoti and traditional gold ornaments. Never a cartoon monkey. Adult Hanuman launches in a powerful graceful leap from a compact rocky coastal ledge, one arm extended toward his destination, tail trailing in an elegant arc. His expression is focused and courageous. Small sculptural blue-white sea spray beneath the rock, fully transparent outside it. Complete body within image, no buildings, no excessive gold costume, realistic red dhoti and fur."
+      ],
+      [
+        "sita",
+        "A message of hope",
+        "Hanuman is a dignified divine vanara with a realistic expressive monkey-like face, tawny fur, strong natural humanoid anatomy and a long curved tail, red-orange dhoti and traditional gold ornaments. Never a cartoon monkey. Hanuman kneels respectfully a few steps from adult Sita seated beneath a small ashoka tree, offering a small gold signet ring in his palm. Sita wears a simple faded ochre sari, dark braided hair and a solemn hopeful expression. She looks at the ring. Two figures only, modest clothing, flowers and leaves on earth, quiet moonlit illumination without a sky, no cage or prison bars."
+      ],
+      [
+        "mountain",
+        "Strength that restores",
+        "Hanuman is a dignified divine vanara with a realistic expressive monkey-like face, tawny fur, strong natural humanoid anatomy and a long curved tail, red-orange dhoti and traditional gold ornaments. Never a cartoon monkey. Hanuman carries a rugged small mountaintop covered in medicinal green plants on one upturned hand as he returns to help Lakshmana. Foreground Ram, blue-skinned adult in saffron forest clothes, kneels beside clothed adult Lakshmana reclining peacefully on a simple leaf bed; a grey-haired healer examines medicinal herbs. No wounds, blood or dead bodies. Four figures, compact full composition, hill and Hanuman complete, pre-dawn light."
+      ],
+      [
+        "homecoming",
+        "Honoured in Ayodhya",
+        "Lord Ram is a dignified young adult Indian prince with subtle blue skin, dark hair, vertical tilak, natural proportions and a lowered curved bow. Lakshmana has natural warm brown skin, dark hair and a bow. Hanuman is a dignified divine vanara with a realistic expressive monkey-like face, tawny fur, strong natural humanoid anatomy and a long curved tail, red-orange dhoti and traditional gold ornaments. Never a cartoon monkey. In Ayodhya after the homecoming, crowned adult Ram and adult Sita in a red and gold sari sit side by side on a low carved royal seat. Sita presents a pearl necklace to kneeling Hanuman, who receives it with humility. Lakshmana stands quietly beside them in royal clothes. Four people only, flowers and brass lamps on stone floor, no throne room walls, no canopy."
+      ],
+      [
+        "devotion",
+        "Where Ram is remembered",
+        "Hanuman is a dignified divine vanara with a realistic expressive monkey-like face, tawny fur, strong natural humanoid anatomy and a long curved tail, red-orange dhoti and traditional gold ornaments. Never a cartoon monkey. Hanuman sits humbly in meditation on a forest rock, eyes softly lowered, palms joined in devotion. A closed palm-leaf manuscript and a small glowing diya rest beside him, a gold gada laid harmlessly on the ground. A small sacred fig branch arches gently behind, full body and tail visible. Serene living presence, no funeral, no death scene, no written text."
+      ]
+    ],
+    "ram": [
+      [
+        "birth",
+        "Joy in Ayodhya",
+        "Queen Kaushalya, an adult Indian mother in a rich maroon silk sari, cradles newborn Ram wrapped in yellow cloth on a low carved seat. King Dasharatha, an older Indian king in cream-gold royal attire, kneels beside her with tender joy. Ram has subtle blue skin and natural baby proportions, no adult crown. Brass oil lamp, flowers and soft textiles on an irregular marble ground patch, no palace backdrop, three people only."
+      ],
+      [
+        "learning",
+        "Guided by a sage",
+        "Lord Ram is a dignified young adult Indian prince with subtle blue skin, dark hair, vertical tilak, natural proportions and a lowered curved bow. Lakshmana has natural warm brown skin, dark hair and a bow. Ram and Lakshmana as adolescent princes in modest saffron garments listen attentively to elderly sage Vishvamitra, a white-bearded Indian ascetic in ochre robes. The sage teaches with an open palm while Ram holds his bow lowered safely. A small sacred fire and kusa grass beside them evoke a forest hermitage without huts, roofs or walls. Respectful serious learning, three people."
+      ],
+      [
+        "marriage",
+        "A promise in Mithila",
+        "Lord Ram is a dignified young adult Indian prince with subtle blue skin, dark hair, vertical tilak, natural proportions and a lowered curved bow. Lakshmana has natural warm brown skin, dark hair and a bow. Adult Ram and adult Sita in traditional gold-yellow and red wedding silks stand beside a small sacred wedding fire holding flower garlands. Elderly King Janaka in ivory silk stands nearby, offering his daughter's hand in the traditional ceremony. Sita and Ram exchange gentle dignified looks. Three figures only, flower-strewn stone ground, Ram's bow rests to the side, no architecture or frame."
+      ],
+      [
+        "exile",
+        "The forest path",
+        "Lord Ram is a dignified young adult Indian prince with subtle blue skin, dark hair, vertical tilak, natural proportions and a lowered curved bow. Lakshmana has natural warm brown skin, dark hair and a bow. Ram, Sita and Lakshmana walk together along a small irregular forest path, wearing simple ochre and saffron exile garments with no royal crowns. Sita wears a modest ochre sari; Ram and Lakshmana carry lowered bows and quivers. One small banyan root and restrained foliage, complete feet and bodies, calm resolve, golden morning light. No huts."
+      ],
+      [
+        "alliance",
+        "Friends in the search",
+        "Lord Ram is a dignified young adult Indian prince with subtle blue skin, dark hair, vertical tilak, natural proportions and a lowered curved bow. Lakshmana has natural warm brown skin, dark hair and a bow. Hanuman is a dignified divine vanara with a realistic expressive monkey-like face, tawny fur, strong natural humanoid anatomy and a long curved tail, red-orange dhoti and traditional gold ornaments. Never a cartoon monkey. Ram and the adult vanara king Sugriva clasp hands beside a small ritual flame to seal their friendship. Hanuman stands between and slightly behind them as mediator, Lakshmana watches with a lowered bow. Ram and Lakshmana wear saffron forest clothing, Sugriva a red dhoti and modest gold crown. Four figures, rocky Kishkindha ground with a few green plants, no scenery backdrop."
+      ],
+      [
+        "bridge",
+        "A path across the sea",
+        "Lord Ram is a dignified young adult Indian prince with subtle blue skin, dark hair, vertical tilak, natural proportions and a lowered curved bow. Lakshmana has natural warm brown skin, dark hair and a bow. Hanuman is a dignified divine vanara with a realistic expressive monkey-like face, tawny fur, strong natural humanoid anatomy and a long curved tail, red-orange dhoti and traditional gold ornaments. Never a cartoon monkey. Ram stands on a rocky shoreline with Hanuman and the vanara builder Nala, watching two adult vanaras place rough stones and timber into the beginning of a bridge. A compact stone causeway extends diagonally a short distance over a small patch of realistic blue water. Ram's bow lowered, five figures total, teamwork, no written names on stones, no magical floating text, no battle or gore, full compact composition."
+      ],
+      [
+        "ayodhya",
+        "The homecoming",
+        "Lord Ram is a dignified young adult Indian prince with subtle blue skin, dark hair, vertical tilak, natural proportions and a lowered curved bow. Lakshmana has natural warm brown skin, dark hair and a bow. Hanuman is a dignified divine vanara with a realistic expressive monkey-like face, tawny fur, strong natural humanoid anatomy and a long curved tail, red-orange dhoti and traditional gold ornaments. Never a cartoon monkey. Crowned Ram and Sita sit together on a low ornate royal throne for their coronation in Ayodhya. Elderly sage Vashishtha in ivory robes pours a small stream of sacred water from a gold vessel in blessing, Bharata stands respectfully with joined hands, Hanuman kneels near the throne. Five figures total. Royal yellow and red silks, flowers and small brass lamps, no walls, no overhead roof, full visible bodies and seat."
+      ],
+      [
+        "sarayu",
+        "By the quiet Sarayu",
+        "Lord Ram is a dignified young adult Indian prince with subtle blue skin, dark hair, vertical tilak, natural proportions and a lowered curved bow. Lakshmana has natural warm brown skin, dark hair and a bow. A mature serene Lord Ram, still divine and youthful in appearance, stands at the edge of a small patch of river water wearing plain ivory and saffron garments, no armor and no weapons. Two elderly sages and two adult devotees stand respectfully several paces behind with folded hands. He gazes peacefully across the water before his final departure. No drowning, no submerged body, no corpse, no distress. Soft golden dusk, irregular stone river steps, true transparent background, only this compact riverside group."
+      ]
+    ]
+  }
+}

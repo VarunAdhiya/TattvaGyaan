@@ -7,3 +7,9 @@
 [37080442ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5173/@vite/client:1082
 [37589145ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=26c36979:15804
 [37589856ms] [WARNING] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead. @ http://localhost:5173/node_modules/.vite/deps/three.js?v=5b4b0e84:1747
+[37952965ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5173/@vite/client:1082
+[67413509ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=26c36979:15804
+[67415114ms] [WARNING] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead. @ http://localhost:5173/node_modules/.vite/deps/three.js?v=5b4b0e84:1747
+[67579010ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5173/@vite/client:1082
+[75924099ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=26c36979:15804
+[75925487ms] [WARNING] THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead. @ http://localhost:5173/node_modules/.vite/deps/three.js?v=5b4b0e84:1747

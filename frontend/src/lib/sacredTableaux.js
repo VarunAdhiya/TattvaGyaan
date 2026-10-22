@@ -1,10 +1,10 @@
 import * as THREE from 'three';
-import { ganeshaLevels } from '../data/divineJourneys';
+
 
 // Transparent, photographic-style artwork belongs to the island world, rather
 // than a framed picture. These are illustrated tableaux, not anatomical meshes.
 // Their organic silhouettes stay legible as the camera orbits the 3D terrain.
-export function createTableauBuilder({ mesh, material, geometryCache, materials, textures, onChange, isDisposed, anisotropy }) {
+export function createTableauBuilder({ levels, mesh, material, geometryCache, materials, textures, onChange, isDisposed, anisotropy }) {
   const loader = new THREE.TextureLoader();
   const stone = material('#b6a58a', { roughness: 1 });
   const darkStone = material('#756b5c', { roughness: 1 });
@@ -23,9 +23,9 @@ export function createTableauBuilder({ mesh, material, geometryCache, materials,
   geometryCache.set('devotional-tableau', relief);
 
   return function buildTableau(island, index) {
-    const level = ganeshaLevels[index];
+    const level = levels[index];
     const pivot = new THREE.Group();
-    pivot.position.set(-0.9, 0.7, 0);
+    pivot.position.set(0, 0.7, 0);
     pivot.name = `${level.id} devotional tableau`;
     island.add(pivot);
     const state = { ready: false, failed: false };
@@ -40,13 +40,13 @@ export function createTableauBuilder({ mesh, material, geometryCache, materials,
 
     // A low stone terrace and separate foreground lamps make the illustration
     // part of a place. No roof, wall, display frame, or cylindrical toy pedestal.
-    const terrace = mesh(island, 'CylinderGeometry', [6.4, 6.65, 0.18, 64], stone, -0.9, 0.59, 0);
+    const terrace = mesh(island, 'CylinderGeometry', [6.4, 6.65, 0.18, 64], stone, 0, 0.59, 0);
     terrace.scale.z = 0.77;
-    const edging = mesh(island, 'TorusGeometry', [6.2, 0.045, 8, 80], gold, -0.9, 0.7, 0);
+    const edging = mesh(island, 'TorusGeometry', [6.2, 0.045, 8, 80], gold, 0, 0.7, 0);
     edging.rotation.x = -Math.PI / 2;
     edging.scale.y = 0.77;
     for (let i = 0; i < 3; i++) {
-      const step = mesh(island, 'BoxGeometry', [4.2 + i * 0.4, 0.13, 0.55], darkStone, -0.9, 0.52 - i * 0.08, 5.1 + i * 0.52);
+      const step = mesh(island, 'BoxGeometry', [4.2 + i * 0.4, 0.13, 0.55], darkStone, 0, 0.52 - i * 0.08, 5.1 + i * 0.52);
       step.receiveShadow = true;
     }
 
@@ -57,27 +57,34 @@ export function createTableauBuilder({ mesh, material, geometryCache, materials,
       surface.map = loaded;
       surface.needsUpdate = true;
       const aspect = loaded.image.width / loaded.image.height;
-      const artWidth = 15.4;
-      const artHeight = artWidth / aspect;
       // Generated PNGs have different transparent margins. Ground the actual
       // silhouette on the terrace instead of letting that padding lift it up.
       const matte = document.createElement('canvas');
       matte.width = loaded.image.width; matte.height = loaded.image.height;
       const context = matte.getContext('2d', { willReadFrequently: true });
       let bottomPadding = 0;
+      let left = 0, right = matte.width - 1, top = 0, bottom = matte.height - 1;
       if (context) {
         context.drawImage(loaded.image, 0, 0);
         const pixels = context.getImageData(0, 0, matte.width, matte.height).data;
-        findGround: for (let y = matte.height - 1; y >= 0; y--) {
+        left = matte.width; right = 0; top = matte.height; bottom = 0;
+        for (let y = 0; y < matte.height; y += 2) {
           for (let x = 0; x < matte.width; x += 2) {
             if (pixels[(y * matte.width + x) * 4 + 3] >= 128) {
-              bottomPadding = (matte.height - 1 - y) / matte.height;
-              break findGround;
+              left = Math.min(left, x); right = Math.max(right, x);
+              top = Math.min(top, y); bottom = Math.max(bottom, y);
             }
           }
         }
+        if (right <= left) { left = 0; right = matte.width - 1; top = 0; bottom = matte.height - 1; }
+        bottomPadding = (matte.height - 1 - bottom) / matte.height;
       }
+      const visibleWidth = (right - left + 1) / matte.width;
+      const visibleHeight = (bottom - top + 1) / matte.height;
+      const artWidth = Math.min(12.6 / visibleWidth, 9.8 * aspect / visibleHeight);
+      const artHeight = artWidth / aspect;
       artwork.scale.set(artWidth, artHeight, artWidth);
+      artwork.position.x = -(0.5 * (left + right) / matte.width - 0.5) * artWidth;
       artwork.position.y = artHeight * (0.5 - bottomPadding) - 0.08;
       artwork.visible = true;
       state.ready = true;

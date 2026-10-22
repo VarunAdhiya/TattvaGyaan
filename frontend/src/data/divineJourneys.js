@@ -1,4 +1,9 @@
+import { krishnaLevels, krishnaSources } from './krishnaJourney';
+import { epicSources, hanumanLevels, ramLevels, shivaLevels } from './epicJourneys';
+
 export const journeySources = {
+  ...epicSources,
+  ...krishnaSources,
   birth: { title: 'Amritapuri · The birth and symbolism of Ganesha', url: 'https://www.amritapuri.org/3714/ganesha.aum' },
   wisdom: { title: 'Hindu American Foundation · Ganesha', url: 'https://www.hinduamerican.org/blog/5-things-to-know-about-ganesha/' },
   festival: { title: 'Hindu American Foundation · Ganesha Chaturthi', url: 'https://www.hinduamerican.org/blog/ganesha-chaturthi-the-day-to-celebrate-ganeshas-birth' },
@@ -32,6 +37,13 @@ export const deities = [
     description: 'Hanuman’s devotion to Rama unites courage with humility. Remembered for his service in the Ramayana, he inspires steadfastness, kindness, and strength used for others.',
     image: '/journeys/hanuman.png', alt: 'Hanuman with a golden gada in a peaceful sacred forest.',
     quality: 'Courage & service', prayer: '/chalisas/hanuman-chalisa',
+  },
+  {
+    id: 'ram', name: 'Ram', honorific: 'Shri Ram', hindi: 'श्री राम',
+    title: 'Walk the path of dharma.',
+    description: 'Meet the prince of Ayodhya whose journey with Sita, Lakshmana, and Hanuman invites reflection on duty, courage, friendship, and the choices that shape a life.',
+    image: '/journeys/ram/entrance.png', alt: 'Ram and Sita in an Ayodhya riverside garden, with Hanuman kneeling in devotion.',
+    quality: 'Dharma & compassion', prayer: '/bhajans?deity=Rama',
   },
 ];
 
@@ -111,3 +123,57 @@ export const ganeshaLevels = [
     source: 'festival', position: [92, 24],
   },
 ];
+
+export const journeyDefinitions = {
+  shiva: {
+    id: 'shiva', levels: shivaLevels, environment: 'kailash',
+    loading: 'Entering the stillness of Kailash…',
+    backdrop: '/journeys/realistic/kailash.png',
+    traditionNote: 'Eight selected stories and manifestations of Shiva. Shaiva traditions revere him as beginningless; this devotional path is not a birth-to-death biography or a fixed chronology. Tellings differ.',
+    completionImage: '/journeys/shiva.png',
+    completionAlt: 'Shiva in meditation at Kailash with Nandi and his trident nearby.',
+    finalThought: 'Carry the stillness of Kailash into a moment of patience, and let strength become compassion.',
+    invocation: 'हर हर महादेव',
+  },
+  hanuman: {
+    id: 'hanuman', levels: hanumanLevels, environment: 'kishkindha',
+    loading: 'Following the forest path into Hanuman’s world…',
+    backdrop: '/journeys/hanuman/backdrop.png', backdropY: 20,
+    traditionNote: 'Eight selected Hanuman stories, from Anjana’s blessing to continuing service. The Ramayana and later traditions vary; Hanuman is revered as a chiranjeevi, so this path does not invent an ordinary death.',
+    completionImage: '/journeys/hanuman.png',
+    completionAlt: 'Hanuman with his gada in a peaceful sacred forest.',
+    finalThought: 'The greatest strength becomes service. Let devotion take the form of one generous action today.',
+    invocation: 'जय हनुमान',
+  },
+  ram: {
+    id: 'ram', levels: ramLevels, environment: 'ayodhya',
+    loading: 'Opening the path from Ayodhya…',
+    backdrop: '/journeys/ram/backdrop.png', backdropY: 20,
+    traditionNote: 'Eight selected episodes from Ram’s life, from Ayodhya to the Sarayu departure in the Uttara Kanda tradition. This is an introduction, not the whole Ramayana; tellings, chapter numbers, and interpretations vary.',
+    completionImage: '/journeys/ram/entrance.png',
+    completionAlt: 'Ram and Sita beside the Sarayu in an Ayodhya garden, with Hanuman in devotion.',
+    finalThought: 'Dharma asks for attention as well as resolve. Carry these stories into choices made with honesty and care.',
+    invocation: 'जय श्री राम',
+  },
+  ganesha: {
+    id: 'ganesha', levels: ganeshaLevels, environment: 'kailash',
+    loading: 'Opening the gates of Kailash…',
+    backdrop: '/journeys/realistic/kailash.png',
+    traditionNote: 'An introduction to beloved Ganesha traditions, not an exhaustive biography. Tellings differ; the path moves from his origin stories toward continuing devotion.',
+    completionImage: '/journeys/river.png',
+    completionAlt: 'Warm lamps and Ganesha festival celebrations beside the river at sunset.',
+    finalThought: 'The festival image returns to the river. The invitation to wisdom, care, and new beginnings remains.',
+    invocation: 'गणपति बप्पा मोरया',
+  },
+  krishna: {
+    id: 'krishna', levels: krishnaLevels, environment: 'vrindavan',
+    loading: 'Following the Yamuna into Krishna’s world…',
+    backdrop: '/journeys/krishna/backdrop.png',
+    backdropY: 20,
+    traditionNote: 'Eight selected stories from Krishna’s earthly lila, from Mathura to Prabhasa. This is an introduction, not an exhaustive biography or fixed chronology; Hindu tellings and interpretations vary.',
+    completionImage: '/journeys/krishna.png',
+    completionAlt: 'Krishna playing his flute beside a cow in a peaceful Vrindavan garden.',
+    finalThought: 'From a mother’s care to a friend’s welcome and a moment of forgiveness, let devotion become kindness in your own life.',
+    invocation: 'जय श्री कृष्ण',
+  },
+};
