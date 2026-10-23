@@ -60,6 +60,7 @@ export const api = {
   logout: () => request('/auth/logout', { method: 'POST' }),
   getCurrentUser: () => request('/auth/me'),
   getProfile: () => request('/auth/profile'),
+  getProfileActivity: (signal) => request('/auth/profile/activity', { signal }),
   updateProfile: (profileData) => request('/auth/profile', { method: 'PATCH', body: profileData }),
 
   // Religions & Scriptures

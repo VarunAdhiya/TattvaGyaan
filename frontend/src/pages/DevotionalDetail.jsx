@@ -30,15 +30,16 @@ export default function DevotionalDetail({ category }) {
     {!result || error ? <DevotionalState loading={!error} error={error} onRetry={() => setRetry(r => r + 1)} /> : <>
       <header className="dev-detail-heading"><h1>{result.text.title}</h1><p lang="hi" className="dev-hindi-subtitle">{result.text.titleHindi}</p><p className="dev-detail-meta">{section.title} · {result.text.deity}</p></header>
       <div className="dev-detail-layout">
-        <article className="dev-prayer">
+        <article className="dev-prayer dev-scroll-prayer">
           {result.text.contentStatus === 'source_text' ? <>
             <div className="dev-reader-toolbar">
               <div className="dev-language" role="group" aria-label="Prayer language"><button aria-pressed={language === 'hindi'} onClick={() => setLanguage('hindi')}>हिन्दी</button><button aria-pressed={language === 'transliteration'} onClick={() => setLanguage('transliteration')}>Transliteration</button></div>
               <div className="dev-reader-actions"><button aria-label="Decrease text size" disabled={fontSize <= 18} onClick={() => setFontSize(size => size - 2)}><Minus size={16} /></button><span aria-label={`Text size ${fontSize}`}>Aa</span><button aria-label="Increase text size" disabled={fontSize >= 34} onClick={() => setFontSize(size => size + 2)}><Plus size={16} /></button><button aria-pressed={reading} aria-label="Reading mode" onClick={() => setReading(value => !value)}>{reading ? <Minimize2 size={18} /> : <Maximize2 size={18} />}</button></div>
             </div>
-            <div className="dev-prayer-text" lang={language === 'hindi' ? 'hi' : 'hi-Latn'} style={{ fontSize }}>
-              <span className="dev-prayer-om" aria-hidden="true">ॐ</span>
-              {result.text[language].split(/\n\n+/).map((verse, i) => <p key={i}>{verse}</p>)}
+            <div className="dev-scroll-paper">
+              <div className="dev-prayer-text" lang={language === 'hindi' ? 'hi' : 'hi-Latn'} style={{ fontSize }}>
+                {result.text[language].split(/\n\n+/).map((verse, i) => <p key={i}>{verse}</p>)}
+              </div>
             </div>
           </> : <div className="dev-source-only"><h2>Lyrics unavailable</h2><p>This bhajan is listed in the collection, but its lyrics are not available in TattvaGyaan.</p></div>}
         </article>

@@ -15,9 +15,9 @@ export const loginSchema = z.object({
 });
 
 export const updateProfileSchema = z.object({
-  displayName: z.string().min(1).max(100).optional(),
-  preferredLang: z.string().optional(),
-});
+  displayName: z.string().trim().min(1, 'Enter your display name').max(100, 'Use 100 characters or fewer').optional(),
+  preferredLang: z.enum(['en', 'hi', 'mr', 'sa', 'ar', 'ur', 'pa']).optional(),
+}).strict().refine(data => Object.keys(data).length > 0, 'Choose a profile field to update');
 
 export const forgotPasswordSchema = z.object({
   email: z.string().email('Invalid email address'),

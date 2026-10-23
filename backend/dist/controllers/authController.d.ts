@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthRequest } from '../middleware/auth';
 export declare class AuthController {
+    activity(req: AuthRequest, res: Response, next: NextFunction): Promise<void>;
     register(req: Request, res: Response, next: NextFunction): Promise<void>;
     login(req: Request, res: Response, next: NextFunction): Promise<void>;
     logout(req: Request, res: Response): Promise<void>;

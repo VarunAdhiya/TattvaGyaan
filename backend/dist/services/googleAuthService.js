@@ -55,9 +55,9 @@ class GoogleAuthService {
         if (linked)
             return { user: linked, linkRequired: false };
         // A matching email alone is not sufficient proof of ownership of an existing app account.
-        const existing = await prisma_1.default.user.findFirst({ where: { email: { equals: identity.email, mode: 'insensitive' } }, select: { id: true } });
+        const existing = await prisma_1.default.user.findFirst({ where: { email: { equals: identity.email, mode: 'insensitive' } }, select: { id: true, email: true } });
         if (existing)
-            return { user: null, linkRequired: true };
+            return { user: null, linkRequired: true, linkEmail: existing.email };
         try {
             const user = await prisma_1.default.user.create({ data: { googleSub: identity.sub, email: identity.email,
                     username: 'google_' + (0, node_crypto_1.randomBytes)(9).toString('hex'), displayName: identity.name || identity.email.split('@')[0],

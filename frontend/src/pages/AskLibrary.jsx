@@ -2,15 +2,17 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, Loader2 } from 'lucide-react';
 import { api } from '../api/client';
+import { useAuth } from '../context/AuthContext';
 import '../library-ai.css';
 
 export default function AskLibrary() {
+  const { user } = useAuth();
   const [catalog, setCatalog] = useState(null);
   const [catalogError, setCatalogError] = useState('');
   const [revision, setRevision] = useState(0);
   const [question, setQuestion] = useState('');
   const [editionId, setEditionId] = useState('');
-  const [responseLang, setResponseLang] = useState('hi');
+  const [responseLang, setResponseLang] = useState(user?.preferredLang === 'en' ? 'en' : 'hi');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [result, setResult] = useState(null);

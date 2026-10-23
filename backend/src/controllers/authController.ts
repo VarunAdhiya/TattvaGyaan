@@ -4,8 +4,15 @@ import { AuthRequest } from '../middleware/auth';
 import { createUserSession } from '../services/sessionService';
 import { googleAuthService } from '../services/googleAuthService';
 import { AppError } from '../middleware/errorHandler';
+import { profileService } from '../services/profileService';
 
 export class AuthController {
+  async activity(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      res.setHeader('Cache-Control', 'no-store');
+      res.json(await profileService.activity(req.userId!));
+    } catch (error) { next(error); }
+  }
   async register(req: Request, res: Response, next: NextFunction) {
     try {
       const user = await authService.register(req.body);

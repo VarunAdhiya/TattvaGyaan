@@ -24,16 +24,16 @@ export declare const explainSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     responseLang: string;
     style: "simple" | "detailed" | "scholarly";
-    editionId?: string | undefined;
-    sectionId?: string | undefined;
     passageId?: string | undefined;
+    sectionId?: string | undefined;
+    editionId?: string | undefined;
     selectedText?: string | undefined;
     question?: string | undefined;
     conversationId?: string | undefined;
 }, {
-    editionId?: string | undefined;
-    sectionId?: string | undefined;
     passageId?: string | undefined;
+    sectionId?: string | undefined;
+    editionId?: string | undefined;
     selectedText?: string | undefined;
     question?: string | undefined;
     responseLang?: string | undefined;
@@ -54,17 +54,17 @@ export declare const askQuestionSchema: z.ZodObject<{
     question: string;
     responseLang: string;
     style: "simple" | "detailed" | "scholarly";
-    editionId?: string | undefined;
-    sectionId?: string | undefined;
     passageId?: string | undefined;
+    sectionId?: string | undefined;
+    editionId?: string | undefined;
     selectedText?: string | undefined;
     chapterKey?: string | undefined;
     conversationId?: string | undefined;
 }, {
     question: string;
-    editionId?: string | undefined;
-    sectionId?: string | undefined;
     passageId?: string | undefined;
+    sectionId?: string | undefined;
+    editionId?: string | undefined;
     selectedText?: string | undefined;
     responseLang?: string | undefined;
     style?: "simple" | "detailed" | "scholarly" | undefined;
@@ -77,13 +77,13 @@ export declare const summarizeSchema: z.ZodObject<{
     sectionId: z.ZodString;
     responseLang: z.ZodDefault<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    editionId: string;
     sectionId: string;
+    editionId: string;
     responseLang: string;
     chapterKey?: string | undefined;
 }, {
-    editionId: string;
     sectionId: string;
+    editionId: string;
     responseLang?: string | undefined;
     chapterKey?: string | undefined;
 }>;

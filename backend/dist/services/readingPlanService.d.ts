@@ -8,11 +8,11 @@ export declare class ReadingPlanService {
     }): Promise<{
         items: {
             id: string;
-            sortOrder: number;
             sectionId: string;
+            sortOrder: number;
+            completed: boolean;
             dayNumber: number;
             passageIds: string[];
-            completed: boolean;
             completedAt: Date | null;
             estimatedMinutes: number | null;
             rationale: string | null;
@@ -23,9 +23,9 @@ export declare class ReadingPlanService {
         createdAt: Date;
         updatedAt: Date;
         userId: string;
-        status: string;
-        title: string;
         editionId: string;
+        title: string;
+        status: string;
         targetDays: number;
         startDate: Date;
         endDate: Date;
@@ -39,11 +39,11 @@ export declare class ReadingPlanService {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                slug: string;
-                description: string | null;
                 title: string;
+                slug: string;
                 religionId: string;
                 originalLang: string;
+                description: string | null;
                 summary: string | null;
                 themes: string[];
                 searchText: string;
@@ -53,8 +53,8 @@ export declare class ReadingPlanService {
         } & {
             id: string;
             createdAt: Date;
-            scriptureId: string;
             title: string;
+            scriptureId: string;
             language: string;
             script: string | null;
             translator: string | null;
@@ -70,11 +70,11 @@ export declare class ReadingPlanService {
         completionPercentage: number;
         items: {
             id: string;
-            sortOrder: number;
             sectionId: string;
+            sortOrder: number;
+            completed: boolean;
             dayNumber: number;
             passageIds: string[];
-            completed: boolean;
             completedAt: Date | null;
             estimatedMinutes: number | null;
             rationale: string | null;
@@ -84,9 +84,9 @@ export declare class ReadingPlanService {
         createdAt: Date;
         updatedAt: Date;
         userId: string;
-        status: string;
-        title: string;
         editionId: string;
+        title: string;
+        status: string;
         targetDays: number;
         startDate: Date;
         endDate: Date;
@@ -95,11 +95,11 @@ export declare class ReadingPlanService {
     }>;
     completePlanItem(itemId: string, userId: string, completed: boolean): Promise<{
         id: string;
-        sortOrder: number;
         sectionId: string;
+        sortOrder: number;
+        completed: boolean;
         dayNumber: number;
         passageIds: string[];
-        completed: boolean;
         completedAt: Date | null;
         estimatedMinutes: number | null;
         rationale: string | null;
@@ -113,9 +113,9 @@ export declare class ReadingPlanService {
         createdAt: Date;
         updatedAt: Date;
         userId: string;
-        status: string;
-        title: string;
         editionId: string;
+        title: string;
+        status: string;
         targetDays: number;
         startDate: Date;
         endDate: Date;

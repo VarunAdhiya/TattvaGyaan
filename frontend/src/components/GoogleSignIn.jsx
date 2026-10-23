@@ -1,4 +1,4 @@
-import googleMark from '../assets/google-sign-in.svg';
+import googleMark from '../assets/google-sign-in-dark.svg';
 
 export default function GoogleSignIn({ google, disabled = false }) {
   return <div className="google-auth">

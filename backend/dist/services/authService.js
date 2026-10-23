@@ -70,16 +70,20 @@ class AuthService {
                 displayName: true,
                 preferredLang: true,
                 createdAt: true,
+                updatedAt: true,
+                googleSub: true,
+                passwordHash: true,
             },
         });
         if (!user)
             throw new errorHandler_1.AppError('User not found', 404);
-        return user;
+        const { googleSub, passwordHash, ...profile } = user;
+        return { ...profile, signInMethods: { google: Boolean(googleSub), password: Boolean(passwordHash) } };
     }
     async updateProfile(userId, data) {
-        return prisma_1.default.user.update({
+        await prisma_1.default.user.update({
             where: { id: userId },
-            data,
+            data: { displayName: data.displayName, preferredLang: data.preferredLang },
             select: {
                 id: true,
                 email: true,
@@ -89,6 +93,7 @@ class AuthService {
                 createdAt: true,
             },
         });
+        return this.getProfile(userId);
     }
 }
 exports.AuthService = AuthService;

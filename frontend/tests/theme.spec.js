@@ -55,6 +55,7 @@ test.beforeEach(async ({ page }) => {
     const url = new URL(route.request().url());
     const path = url.pathname;
     if (path === '/api/auth/me' || path === '/api/auth/profile') return route.fulfill({ json: { user } });
+    if (path === '/api/auth/profile/activity') return route.fulfill({ json: { stats: { booksOpened: 0, bookmarks: 0, notes: 0, completedPlans: 0 }, books: [] } });
     if (path === '/api/scriptures') return route.fulfill({ json: { scriptures, pagination: { total: 3, totalPages: 1 } } });
     if (path.startsWith('/api/scriptures/')) return route.fulfill({ json: { scripture: scriptures[0] } });
     if (path === '/api/devotionals/calendar') return route.fulfill({ json: { days: snapshot.days.filter(day => day.date.startsWith('2026-10')), availableFrom: '2026-01-01', availableTo: '2026-12-31' } });
@@ -80,7 +81,7 @@ for (const width of [1440, 390]) {
       ['/library', '.scripture-card'], ['/chalisas', '.dev-card'], ['/bhajans', '.dev-card'],
       ['/mantras', '.dev-card'], ['/chalisas/hanuman-chalisa', '.dev-prayer-text'],
       ['/calendar?year=2026&month=10', '.dev-calendar-day'], ['/scripture/book-0', '.scripture-detail-page'],
-      ['/reading-plans', '.sacred-page'], ['/profile', '.profile-statistics'], ['/journeys/ganesha', '.journey-entrance'],
+      ['/reading-plans', '.sacred-page'], ['/profile', '.profile-totals'], ['/journeys/ganesha', '.journey-entrance'],
     ];
     for (const [path, ready] of routes) {
       await page.goto(path);

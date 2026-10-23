@@ -6,11 +6,11 @@ export declare class RAGService {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    slug: string;
-                    description: string | null;
                     title: string;
+                    slug: string;
                     religionId: string;
                     originalLang: string;
+                    description: string | null;
                     summary: string | null;
                     themes: string[];
                     searchText: string;
@@ -20,8 +20,8 @@ export declare class RAGService {
             } & {
                 id: string;
                 createdAt: Date;
-                scriptureId: string;
                 title: string;
+                scriptureId: string;
                 language: string;
                 script: string | null;
                 translator: string | null;
@@ -37,63 +37,63 @@ export declare class RAGService {
         } & {
             id: string;
             createdAt: Date;
-            slug: string;
             sortOrder: number;
-            title: string;
-            parentId: string | null;
             editionId: string;
+            parentId: string | null;
+            title: string;
+            slug: string;
             level: number;
         };
     } & {
         id: string;
         createdAt: Date;
-        sortOrder: number;
         sectionId: string;
         reference: string;
         text: string;
         sourceNotes: string | null;
         wordCount: number;
+        sortOrder: number;
     })[]>;
     getContextForPassage(passageId: string, contextSize?: number): Promise<{
         target: {
             section: {
                 id: string;
                 createdAt: Date;
-                slug: string;
                 sortOrder: number;
-                title: string;
-                parentId: string | null;
                 editionId: string;
+                parentId: string | null;
+                title: string;
+                slug: string;
                 level: number;
             };
         } & {
             id: string;
             createdAt: Date;
-            sortOrder: number;
             sectionId: string;
             reference: string;
             text: string;
             sourceNotes: string | null;
             wordCount: number;
+            sortOrder: number;
         };
         context: {
             id: string;
             createdAt: Date;
-            sortOrder: number;
             sectionId: string;
             reference: string;
             text: string;
             sourceNotes: string | null;
             wordCount: number;
+            sortOrder: number;
         }[];
         section: {
             id: string;
             createdAt: Date;
-            slug: string;
             sortOrder: number;
-            title: string;
-            parentId: string | null;
             editionId: string;
+            parentId: string | null;
+            title: string;
+            slug: string;
             level: number;
         };
     } | null>;

@@ -1,266 +1,109 @@
-import React, { useState, useEffect } from 'react';
+﻿import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, BookOpen, Bookmark, Check, Flower2, Loader2, NotebookPen, RefreshCw, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../api/client';
-import { User, Book, Clock, Calendar, Target, Award } from 'lucide-react';
+import '../profile.css';
+
+const LEGACY_LANGUAGES = { mr: 'Marathi', sa: 'Sanskrit', ar: 'Arabic', ur: 'Urdu', pa: 'Punjabi' };
+function dateLabel(value) {
+  const date = new Date(value);
+  return value && !Number.isNaN(date.getTime()) ? date.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }) : null;
+}
+const toDraft = user => ({ displayName: user.displayName || '', preferredLang: user.preferredLang || 'hi' });
 
 export default function ProfilePage() {
-  const { user, updateProfile } = useAuth();
-  const [isEditing, setIsEditing] = useState(false);
-  const [profile, setProfile] = useState({
-    displayName: '',
-    preferredLang: 'en'
-  });
-  const [stats, setStats] = useState({
-    totalReadingTime: 0,
-    scriptsRead: 0,
-    readingPlansCompleted: 0,
-    bookmarksCount: 0,
-    notesCount: 0
-  });
-  const [loading, setLoading] = useState(true);
+  const { updateProfile } = useAuth();
+  const [account, setAccount] = useState(null);
+  const [draft, setDraft] = useState(null);
+  const [activity, setActivity] = useState(null);
+  const [accountError, setAccountError] = useState('');
+  const [activityError, setActivityError] = useState('');
+  const [revision, setRevision] = useState(0);
+  const [activityRevision, setActivityRevision] = useState(0);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    async function loadProfile() {
-      try {
-        const [profileRes, plansRes, bookmarksRes, notesRes] = await Promise.allSettled([
-          api.getProfile(),
-          api.getReadingPlans(),
-          api.getBookmarks(),
-          api.getNotes()
-        ]);
+    let active = true;
+    api.getProfile().then(({ user }) => {
+      if (active) { setAccount(user); setDraft(toDraft(user)); }
+    }).catch(error => { if (active) setAccountError(error.message || 'Your account could not be loaded.'); });
+    return () => { active = false; };
+  }, [revision]);
+  useEffect(() => {
+    const controller = new AbortController();
+    api.getProfileActivity(controller.signal).then(data => {
+      if (!controller.signal.aborted) setActivity(data);
+    }).catch(error => { if (!controller.signal.aborted) setActivityError(error.message || 'Your reading activity could not be loaded.'); });
+    return () => controller.abort();
+  }, [activityRevision]);
 
-        const profileData = profileRes.status === 'fulfilled' ? profileRes.value : {};
-        const readingPlans = plansRes.status === 'fulfilled' ? plansRes.value : { plans: [] };
-        const bookmarks = bookmarksRes.status === 'fulfilled' ? bookmarksRes.value : { bookmarks: [] };
-        const notes = notesRes.status === 'fulfilled' ? notesRes.value : { notes: [] };
-
-        const userData = profileData.user || profileData || user || {};
-
-        setProfile({
-          displayName: userData.displayName || user?.displayName || '',
-          preferredLang: userData.preferredLang || user?.preferredLang || 'en'
-        });
-
-        // Calculate stats
-        const plansList = readingPlans.plans || [];
-        const completedPlans = plansList.filter(p => p.status === 'completed').length;
-        const totalUniqueScriptures = new Set(plansList.map(p => p.edition?.scriptureId).filter(Boolean)).size;
-
-        setStats({
-          totalReadingTime: plansList.reduce((acc, p) => acc + (p.minutesPerDay || 20), 0),
-          scriptsRead: totalUniqueScriptures || plansList.length,
-          readingPlansCompleted: completedPlans,
-          bookmarksCount: bookmarks.bookmarks?.length || 0,
-          notesCount: notes.notes?.length || 0
-        });
-      } catch (error) {
-        console.error('Failed to load profile:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    if (user) {
-      loadProfile();
-    } else {
-      setLoading(false);
-    }
-  }, [user]);
-
-  const handleSave = async () => {
-    setSaving(true);
+  const dirty = account && draft && (draft.displayName.trim() !== (account.displayName || '') || draft.preferredLang !== account.preferredLang);
+  useEffect(() => {
+    if (!dirty) return;
+    const warn = event => { event.preventDefault(); event.returnValue = ''; };
+    window.addEventListener('beforeunload', warn);
+    return () => window.removeEventListener('beforeunload', warn);
+  }, [dirty]);
+  function edit(field, value) { setDraft(current => ({ ...current, [field]: value })); setSaved(false); setSaveError(''); }
+  async function save(event) {
+    event.preventDefault();
+    if (saving || !dirty) return;
+    if (!draft.displayName.trim()) { setSaveError('Enter a display name before saving.'); return; }
+    setSaving(true); setSaveError(''); setSaved(false);
     try {
-      await updateProfile(profile);
-      setIsEditing(false);
-    } catch (error) {
-      console.error('Failed to update profile:', error);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleCancel = () => {
-    setProfile({
-      displayName: user?.displayName || '',
-      preferredLang: user?.preferredLang || 'en'
-    });
-    setIsEditing(false);
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-800"></div>
-      </div>
-    );
+      const user = await updateProfile({ displayName: draft.displayName.trim(), preferredLang: draft.preferredLang });
+      setAccount(user); setDraft(toDraft(user)); setSaved(true);
+    } catch (error) { setSaveError(error.details?.map(item => item.message).join('. ') || error.message || 'Could not save your profile. Please try again.'); }
+    finally { setSaving(false); }
   }
 
-  return (
-    <div className="sacred-page profile-page max-w-4xl mx-auto px-4 py-8">
-      <div className="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
-        {/* Header */}
-        <div className="profile-header px-6 py-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-amber-800 rounded-full flex items-center justify-center text-white text-xl font-semibold">
-                {user?.displayName?.charAt(0) || user?.username?.charAt(0) || 'U'}
-              </div>
-              <div>
-                <h1 className="text-2xl font-serif font-bold text-stone-900">
-                  {user?.displayName || user?.username}
-                </h1>
-                <p className="text-stone-600">{user?.email}</p>
-              </div>
-            </div>
-            <button
-              onClick={() => setIsEditing(!isEditing)}
-              className="px-4 py-2 text-amber-800 hover:bg-amber-100 rounded-lg transition-colors"
-            >
-              {isEditing ? 'Cancel' : 'Edit Profile'}
-            </button>
-          </div>
-        </div>
-
-        {/* Profile Details */}
-        <div className="p-6">
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Profile Info */}
-            <div className="space-y-6">
-              <h2 className="text-lg font-serif font-semibold text-stone-900 flex items-center">
-                <User className="w-5 h-5 mr-2 text-amber-800" />
-                Profile Information
-              </h2>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-1">
-                    Display Name
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={profile.displayName}
-                      onChange={(e) => setProfile(prev => ({ ...prev, displayName: e.target.value }))}
-                      className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-                      placeholder="Enter your display name"
-                    />
-                  ) : (
-                    <p className="text-stone-900">{profile.displayName || 'Not set'}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-1">
-                    Email
-                  </label>
-                  <p className="text-stone-600">{user?.email}</p>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-1">
-                    Username
-                  </label>
-                  <p className="text-stone-600">{user?.username}</p>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-1">
-                    Preferred Language
-                  </label>
-                  {isEditing ? (
-                    <select
-                      value={profile.preferredLang}
-                      onChange={(e) => setProfile(prev => ({ ...prev, preferredLang: e.target.value }))}
-                      className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-                    >
-                      <option value="en">English</option>
-                      <option value="hi">हिन्दी (Hindi)</option>
-                      <option value="mr">मराठी (Marathi)</option>
-                      <option value="sa">संस्कृत (Sanskrit)</option>
-                      <option value="ar">العربية (Arabic)</option>
-                      <option value="ur">اردو (Urdu)</option>
-                      <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
-                    </select>
-                  ) : (
-                    <p className="text-stone-900">
-                      {{
-                        en: 'English',
-                        hi: 'हिन्दी (Hindi)',
-                        mr: 'मराठी (Marathi)',
-                        sa: 'संस्कृत (Sanskrit)',
-                        ar: 'العربية (Arabic)',
-                        ur: 'اردو (Urdu)',
-                        pa: 'ਪੰਜਾਬੀ (Punjabi)'
-                      }[profile.preferredLang] || profile.preferredLang}
-                    </p>
-                  )}
-                </div>
-
-                {isEditing && (
-                  <div className="flex space-x-3 pt-4">
-                    <button
-                      onClick={handleSave}
-                      disabled={saving}
-                      className="px-4 py-2 bg-amber-800 text-white rounded-lg hover:bg-amber-900 transition-colors disabled:opacity-50"
-                    >
-                      {saving ? 'Saving...' : 'Save Changes'}
-                    </button>
-                    <button
-                      onClick={handleCancel}
-                      className="px-4 py-2 text-stone-600 hover:bg-stone-100 rounded-lg transition-colors"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Reading Statistics */}
-            <div className="space-y-6">
-              <h2 className="text-lg font-serif font-semibold text-stone-900 flex items-center">
-                <Award className="w-5 h-5 mr-2 text-amber-800" />
-                Reading Statistics
-              </h2>
-
-              <div className="profile-statistics grid grid-cols-2 gap-4">
-                <div className="bg-amber-50 rounded-lg p-4 text-center">
-                  <Target className="w-8 h-8 text-amber-800 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-amber-900">{stats.readingPlansCompleted}</div>
-                  <div className="text-sm text-amber-700">Plans Completed</div>
-                </div>
-
-                <div className="bg-blue-50 rounded-lg p-4 text-center">
-                  <Book className="w-8 h-8 text-blue-800 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-blue-900">{stats.bookmarksCount}</div>
-                  <div className="text-sm text-blue-700">Bookmarks</div>
-                </div>
-
-                <div className="bg-green-50 rounded-lg p-4 text-center">
-                  <Calendar className="w-8 h-8 text-green-800 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-green-900">{stats.notesCount}</div>
-                  <div className="text-sm text-green-700">Notes Created</div>
-                </div>
-
-                <div className="bg-amber-50 rounded-lg p-4 text-center">
-                  <Clock className="w-8 h-8 text-amber-800 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-amber-900">{stats.scriptsRead}</div>
-                  <div className="text-sm text-amber-700">Scriptures Read</div>
-                </div>
-              </div>
-
-              <div className="bg-stone-50 rounded-lg p-4">
-                <h3 className="font-medium text-stone-900 mb-2">Account Details</h3>
-                <div className="space-y-1 text-sm text-stone-600">
-                  <p>Member since: {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Recently joined'}</p>
-                  <p>Last updated: {user?.updatedAt ? new Date(user.updatedAt).toLocaleDateString() : 'Active now'}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  return <div className="profile-sanctuary">
+    <header className="profile-intro"><div><h1>My profile</h1><p>Your account, your reflections, your reading journey.</p></div><Link className="profile-text-link" to="/library">Return to the library <ArrowRight size={18} /></Link></header>
+    <div className="profile-columns">
+      <section className="profile-account" aria-labelledby="account-heading" aria-busy={!account && !accountError}>
+        {!account ? accountError ? <div className="profile-feedback" role="alert"><h2 id="account-heading">Account unavailable</h2><p>{accountError}</p><button className="profile-secondary" onClick={() => { setAccountError(''); setRevision(value => value + 1); }}><RefreshCw size={16} /> Retry account</button></div>
+          : <p className="profile-loading" role="status"><Loader2 size={20} /> Loading your account…</p>
+          : <>
+            <div className="profile-identity"><div className="profile-avatar" aria-hidden="true"><Flower2 size={35} strokeWidth={1.3} /></div><div><h2 id="account-heading">{account.displayName || account.username}</h2>{dateLabel(account.createdAt) && <p>Member since {dateLabel(account.createdAt)}</p>}</div></div>
+            <form onSubmit={save} aria-label="Profile settings">
+              <h3>Account & preferences</h3>
+              <label htmlFor="profile-name">Display name</label>
+              <input id="profile-name" autoComplete="name" maxLength={100} required value={draft.displayName} disabled={saving} onChange={event => edit('displayName', event.target.value)} aria-describedby="profile-name-help" />
+              <p id="profile-name-help" className="profile-help">How your name appears across TattvaGyaan.</p>
+              <dl className="profile-details"><div><dt>Email address</dt><dd>{account.email}</dd></div><div><dt>Username</dt><dd>{account.username}</dd></div></dl>
+              <label htmlFor="profile-language">Preferred language</label>
+              <select id="profile-language" value={draft.preferredLang} disabled={saving} onChange={event => edit('preferredLang', event.target.value)} aria-describedby="profile-language-help">
+                <option value="hi">हिन्दी (Hindi)</option><option value="en">English</option>
+                {!['hi', 'en'].includes(account.preferredLang) && <option value={account.preferredLang}>{LEGACY_LANGUAGES[account.preferredLang] || account.preferredLang} (previous preference)</option>}
+              </select>
+              <p id="profile-language-help" className="profile-help">Hindi or English sets the default language for new AI explanations. Original book text stays in its source language.</p>
+              <div className="profile-save-actions"><button className="profile-primary" disabled={saving || !dirty} type="submit">{saving ? <Loader2 size={17} className="profile-spin" /> : <Check size={17} />}{saving ? 'Saving…' : 'Save changes'}</button>
+                {dirty && <button type="button" className="profile-secondary" disabled={saving} onClick={() => { setDraft(toDraft(account)); setSaveError(''); setSaved(false); }}>Cancel</button>}</div>
+              {saveError && <p className="profile-feedback profile-error" role="alert">{saveError}</p>}
+              <p className="profile-save-status" role="status">{saved ? 'Your profile has been saved.' : dirty ? 'You have unsaved changes.' : dateLabel(account.updatedAt) ? `Last updated ${dateLabel(account.updatedAt)}` : ''}</p>
+            </form>
+            <div className="profile-sign-in"><ShieldCheck size={21} /><div><h3>Sign-in methods</h3><p>{account.signInMethods?.google && account.signInMethods?.password ? 'Google and email with password' : account.signInMethods?.google ? 'Google account' : account.signInMethods?.password ? 'Email with password' : 'Unavailable'}</p><span>Your bookmarks and notes stay with this account.</span></div></div>
+          </>}
+      </section>
+      <section className="profile-journal" aria-labelledby="journal-heading" aria-busy={!activity && !activityError}>
+        <div className="profile-section-heading"><div><h2 id="journal-heading">Your reading journal</h2><p>A place for the words you return to.</p></div><BookOpen size={28} strokeWidth={1.3} aria-hidden="true" /></div>
+        {!activity ? activityError ? <div className="profile-feedback" role="alert"><p>We couldn’t load your saved reading. Your account settings are still available.</p><button className="profile-secondary" onClick={() => { setActivityError(''); setActivityRevision(value => value + 1); }}><RefreshCw size={16} /> Retry reading activity</button></div>
+          : <p className="profile-loading" role="status"><Loader2 size={20} /> Loading your saved reading…</p>
+          : <>
+            <dl className="profile-totals">{[[activity.stats.booksOpened, 'Books opened'], [activity.stats.bookmarks, 'Bookmarks'], [activity.stats.notes, 'Notes'], [activity.stats.completedPlans, 'Plans completed']].map(([count, label]) => <div key={label}><dt>{label}</dt><dd>{count}</dd></div>)}</dl>
+            <div className="profile-books-heading"><h3>Your books</h3><span>Bookmarks & notes, kept together by book</span></div>
+            {!activity.books.length ? <div className="profile-empty"><BookOpen size={38} strokeWidth={1.2} /><h3>Your next chapter starts here.</h3><p>Open a book to begin. Saved reading, bookmarks, and notes will appear here as you go.</p><Link className="profile-primary" to="/library">Explore the library <ArrowRight size={17} /></Link></div>
+              : <ul className="profile-books">{activity.books.map(book => <li key={book.scriptureId}>
+                <div className="profile-book-copy"><h4>{book.title}</h4><p>{book.lastReadAt ? `Last opened ${dateLabel(book.lastReadAt)}` : 'Saved in your library'}</p><div className="profile-book-counts"><span><Bookmark size={14} />{book.bookmarks} {book.bookmarks === 1 ? 'bookmark' : 'bookmarks'}</span><span><NotebookPen size={14} />{book.notes} {book.notes === 1 ? 'note' : 'notes'}</span></div></div>
+                <Link className="profile-book-link" to={`/reader/${encodeURIComponent(book.scriptureId)}/${encodeURIComponent(book.editionId)}`} aria-label={`Open ${book.title}`}>{book.lastReadAt ? 'Continue reading' : 'Open book'}<ArrowRight size={18} /></Link>
+                {book.percentage !== null && <div className="profile-book-progress"><progress max="100" value={book.percentage} aria-label={`${book.title} saved position`} /><span>{Math.round(book.percentage)}% saved position</span></div>}
+              </li>)}</ul>}
+            <Link className="profile-plans" to="/reading-plans"><div><h3>Make time for your reading</h3><p>Visit your plans and continue at your own pace.</p></div><span>Reading plans <ArrowRight size={18} /></span></Link>
+          </>}
+      </section>
     </div>
-  );
+  </div>;
 }

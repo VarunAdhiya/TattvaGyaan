@@ -31,15 +31,21 @@ export declare const loginSchema: z.ZodObject<{
     password: string;
     connectGoogle?: boolean | undefined;
 }>;
-export declare const updateProfileSchema: z.ZodObject<{
+export declare const updateProfileSchema: z.ZodEffects<z.ZodObject<{
     displayName: z.ZodOptional<z.ZodString>;
-    preferredLang: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
+    preferredLang: z.ZodOptional<z.ZodEnum<["en", "hi", "mr", "sa", "ar", "ur", "pa"]>>;
+}, "strict", z.ZodTypeAny, {
     displayName?: string | undefined;
-    preferredLang?: string | undefined;
+    preferredLang?: "en" | "hi" | "mr" | "sa" | "ar" | "ur" | "pa" | undefined;
 }, {
     displayName?: string | undefined;
-    preferredLang?: string | undefined;
+    preferredLang?: "en" | "hi" | "mr" | "sa" | "ar" | "ur" | "pa" | undefined;
+}>, {
+    displayName?: string | undefined;
+    preferredLang?: "en" | "hi" | "mr" | "sa" | "ar" | "ur" | "pa" | undefined;
+}, {
+    displayName?: string | undefined;
+    preferredLang?: "en" | "hi" | "mr" | "sa" | "ar" | "ur" | "pa" | undefined;
 }>;
 export declare const forgotPasswordSchema: z.ZodObject<{
     email: z.ZodString;

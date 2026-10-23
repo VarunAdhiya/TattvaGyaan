@@ -4,8 +4,8 @@ import { devotionalFilterSchema } from '../validators/devotionalSchema';
 export declare function listDevotionals(filter: z.infer<typeof devotionalFilterSchema>): Promise<{
     texts: {
         id: string;
-        slug: string;
         title: string;
+        slug: string;
         contentStatus: string;
         category: string;
         deity: string;
@@ -43,8 +43,8 @@ export declare function getDevotional(category: string, slug: string): Promise<{
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        slug: string;
         title: string;
+        slug: string;
         contentStatus: string;
         category: string;
         deity: string;
@@ -59,8 +59,8 @@ export declare function getDevotional(category: string, slug: string): Promise<{
     };
     related: {
         id: string;
-        slug: string;
         title: string;
+        slug: string;
         contentStatus: string;
         category: string;
         deity: string;

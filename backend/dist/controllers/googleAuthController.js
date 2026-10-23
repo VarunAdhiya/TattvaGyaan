@@ -12,7 +12,7 @@ class GoogleAuthController {
     status(req, res) {
         res.setHeader('Cache-Control', 'no-store');
         const pending = req.session.googleLink;
-        res.json({ enabled: googleAuthService_1.googleAuthService.enabled(), linkEmail: pending && pending.expires > Date.now() ? pending.email : null });
+        res.json({ enabled: googleAuthService_1.googleAuthService.enabled(), linkEmail: pending && pending.expires > Date.now() ? pending.accountEmail || pending.email : null });
     }
     async start(req, res, next) {
         const intent = req.query.intent === 'register' ? 'register' : 'login';
@@ -50,7 +50,7 @@ class GoogleAuthController {
             const identity = await googleAuthService_1.googleAuthService.identity(req.query.code, flow);
             const result = await googleAuthService_1.googleAuthService.resolve(identity);
             if (result.linkRequired) {
-                req.session.googleLink = { ...identity, expires: Date.now() + googleAuthService_1.GOOGLE_FLOW_TTL };
+                req.session.googleLink = { ...identity, accountEmail: result.linkEmail, expires: Date.now() + googleAuthService_1.GOOGLE_FLOW_TTL };
                 await (0, sessionService_1.saveSession)(req);
                 return res.redirect(frontend('/login?google=link_required'));
             }

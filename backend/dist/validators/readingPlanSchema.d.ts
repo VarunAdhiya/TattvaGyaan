@@ -6,14 +6,14 @@ export declare const createReadingPlanSchema: z.ZodObject<{
     minutesPerDay: z.ZodOptional<z.ZodNumber>;
     startDate: z.ZodOptional<z.ZodUnion<[z.ZodLiteral<"">, z.ZodString]>>;
 }, "strip", z.ZodTypeAny, {
-    title: string;
     editionId: string;
+    title: string;
     targetDays: number;
     startDate?: string | undefined;
     minutesPerDay?: number | undefined;
 }, {
-    title: string;
     editionId: string;
+    title: string;
     targetDays: number;
     startDate?: string | undefined;
     minutesPerDay?: number | undefined;
@@ -22,10 +22,10 @@ export declare const updateReadingPlanSchema: z.ZodObject<{
     status: z.ZodOptional<z.ZodEnum<["active", "paused", "completed", "cancelled"]>>;
     targetDays: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    status?: "cancelled" | "completed" | "active" | "paused" | undefined;
+    status?: "completed" | "cancelled" | "active" | "paused" | undefined;
     targetDays?: number | undefined;
 }, {
-    status?: "cancelled" | "completed" | "active" | "paused" | undefined;
+    status?: "completed" | "cancelled" | "active" | "paused" | undefined;
     targetDays?: number | undefined;
 }>;
 export declare const completePlanItemSchema: z.ZodObject<{

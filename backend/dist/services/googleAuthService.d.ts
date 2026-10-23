@@ -18,6 +18,7 @@ declare module 'express-session' {
         googleFlow?: GoogleFlow;
         googleLink?: GoogleIdentity & {
             expires: number;
+            accountEmail?: string;
         };
     }
 }
@@ -41,9 +42,11 @@ export declare class GoogleAuthService {
             createdAt: Date;
         };
         linkRequired: boolean;
+        linkEmail?: undefined;
     } | {
         user: null;
         linkRequired: boolean;
+        linkEmail: string;
     }>;
     link(userId: string, identity: GoogleIdentity & {
         expires: number;

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Flame, X, BookOpen, ScrollText, Copy, Check, ArrowRight, AlertCircle } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { api } from '../api/client';
+import { useAuth } from '../context/AuthContext';
 import '../ai-assistant.css';
 
 const TABS = [
@@ -12,8 +13,9 @@ const EMPTY = { content: '', error: '', loading: false, lang: 'hi' };
 const MARKDOWN_ELEMENTS = ['p', 'strong', 'em', 'blockquote', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'br', 'hr', 'code', 'pre'];
 
 export default function AIAssistantDrawer({ isOpen, onClose, edition, selectedPassage, sectionToSummarize }) {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState(selectedPassage ? 'explain' : 'summarize');
-  const [responseLang, setResponseLang] = useState('hi');
+  const [responseLang, setResponseLang] = useState(user?.preferredLang === 'en' ? 'en' : 'hi');
   const [style, setStyle] = useState('simple');
   const [question, setQuestion] = useState('');
   const [results, setResults] = useState({ explain: EMPTY, summarize: EMPTY });

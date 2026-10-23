@@ -148,13 +148,13 @@
 .google-auth { margin-bottom: 22px; }
 .auth-route .auth-panel .google-auth-button {
   display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 100%; min-height: 48px; padding: 3px 12px; border: 1px solid #747775;
-  border-radius: 4px; background: #fff; color: #1f1f1f;
+  width: 100%; min-height: 48px; padding: 3px 12px; border: 1px solid #deb77b80;
+  border-radius: 4px; background: #281b16b3; color: #fff4df;
   font: 500 15px/1.4 Arial, sans-serif; cursor: pointer;
   transition: background 150ms;
 }
 .google-auth-button img { width: 40px; height: 40px; flex: none; }
-.auth-route .auth-panel .google-auth-button:hover:not(:disabled) { background: #f2f2f2; }
+.auth-route .auth-panel .google-auth-button:hover:not(:disabled) { background: #281b16ed; border-color: #ffcf86; }
 .auth-route .auth-panel .google-auth-button:disabled { cursor: not-allowed; opacity: .65; }
 .google-auth-button:focus-visible { outline: 2px solid #ffd18b; outline-offset: 4px; }
 .google-auth-message { margin: 14px 0; font-size: 14px; line-height: 1.7; color: #fff0d8; }

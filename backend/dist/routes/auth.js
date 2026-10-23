@@ -15,6 +15,7 @@ router.post('/login', (0, validate_1.validate)(authSchema_1.loginSchema), authCo
 router.post('/logout', authController_1.authController.logout);
 router.get('/me', auth_1.optionalAuth, authController_1.authController.me);
 router.get('/profile', auth_1.requireAuth, authController_1.authController.getProfile);
+router.get('/profile/activity', auth_1.requireAuth, authController_1.authController.activity);
 router.patch('/profile', auth_1.requireAuth, (0, validate_1.validate)(authSchema_1.updateProfileSchema), authController_1.authController.updateProfile);
 exports.default = router;
 //# sourceMappingURL=auth.js.map

@@ -26,6 +26,7 @@ import './auth.css';
 // Route-specific themes must follow the shared sacred theme.
 import './dashboard-theme.css';
 import './interface-polish.css';
+import './devotional-scroll.css';
 
 function SiteFrame({ children }) {
   const { pathname } = useLocation();

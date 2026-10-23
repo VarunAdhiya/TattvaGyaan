@@ -5,7 +5,17 @@ const authService_1 = require("../services/authService");
 const sessionService_1 = require("../services/sessionService");
 const googleAuthService_1 = require("../services/googleAuthService");
 const errorHandler_1 = require("../middleware/errorHandler");
+const profileService_1 = require("../services/profileService");
 class AuthController {
+    async activity(req, res, next) {
+        try {
+            res.setHeader('Cache-Control', 'no-store');
+            res.json(await profileService_1.profileService.activity(req.userId));
+        }
+        catch (error) {
+            next(error);
+        }
+    }
     async register(req, res, next) {
         try {
             const user = await authService_1.authService.register(req.body);
