@@ -49,6 +49,7 @@ backend/data/transcription-drafts/
 backend/data/transcription-ocr/
 backend/data/source-pdfs/
 backend/data/ocr-models/
+backend/data/embedding-models/
 backend/.venv-ocr/
 __pycache__/
 frontend/test-results/

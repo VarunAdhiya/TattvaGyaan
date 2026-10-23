@@ -127,7 +127,8 @@ test('shared header keeps search accessible and marks the current section', asyn
   await page.goto('/mantras');
   await expect(page.locator('.site-header')).toHaveCount(1);
   const navigation = page.getByRole('navigation', { name: 'Main navigation' });
-  await expect(navigation.getByRole('link')).toHaveCount(6);
+  await expect(navigation.getByRole('link')).toHaveCount(7);
+  await expect(navigation.getByRole('link', { name: 'Ask the library', exact: true })).toHaveAttribute('href', '/ask');
   await expect(navigation.getByRole('link', { name: 'Mantras', exact: true })).toHaveAttribute('aria-current', 'page');
   await page.getByRole('button', { name: 'Search scriptures' }).click();
   const search = page.getByRole('textbox', { name: 'Search library' });

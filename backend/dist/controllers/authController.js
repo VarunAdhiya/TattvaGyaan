@@ -2,11 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authController = exports.AuthController = void 0;
 const authService_1 = require("../services/authService");
+const sessionService_1 = require("../services/sessionService");
+const googleAuthService_1 = require("../services/googleAuthService");
+const errorHandler_1 = require("../middleware/errorHandler");
 class AuthController {
     async register(req, res, next) {
         try {
             const user = await authService_1.authService.register(req.body);
-            req.session.userId = user.id;
+            await (0, sessionService_1.createUserSession)(req, user.id);
             res.status(201).json({ user });
         }
         catch (err) {
@@ -16,7 +19,12 @@ class AuthController {
     async login(req, res, next) {
         try {
             const user = await authService_1.authService.login(req.body.email, req.body.password);
-            req.session.userId = user.id;
+            if (req.body.connectGoogle) {
+                if (!req.session.googleLink)
+                    throw new errorHandler_1.AppError('Start Google sign-in again before connecting your account.', 401);
+                await googleAuthService_1.googleAuthService.link(user.id, req.session.googleLink);
+            }
+            await (0, sessionService_1.createUserSession)(req, user.id);
             res.json({ user });
         }
         catch (err) {

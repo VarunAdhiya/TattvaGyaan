@@ -7,6 +7,7 @@ const { AppError } = require('../dist/middleware/errorHandler');
 
 const originalFetch = global.fetch;
 const originalConfig = { ...config.gemini };
+const originalProvider = config.aiProvider;
 let requests;
 
 function mockResponse(body, status = 200) {
@@ -21,12 +22,14 @@ function chat() {
 }
 
 beforeEach(() => {
+  config.aiProvider = 'gemini';
   requests = [];
   Object.assign(config.gemini, { apiKey: 'test-key', model: 'test-model', timeoutMs: 90000 });
   mockResponse({ candidates: [{ content: { parts: [{ text: 'An explanation.' }] }, finishReason: 'STOP' }] });
 });
 
 afterEach(() => {
+  config.aiProvider = originalProvider;
   global.fetch = originalFetch;
   Object.assign(config.gemini, originalConfig);
 });

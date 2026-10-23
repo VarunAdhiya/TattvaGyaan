@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import AuthScenery from '../components/AuthScenery';
 import AuthPanelHeading from '../components/AuthPanelHeading';
+import GoogleSignIn from '../components/GoogleSignIn';
+import useGoogleAuth from '../lib/useGoogleAuth';
 import { useAuth } from '../context/AuthContext';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 
@@ -15,6 +17,7 @@ function Register() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { register } = useAuth();
+  const google = useGoogleAuth('register');
 
   const validatePassword = () => {
     if (password.length < 8) return 'Password must be at least 8 characters';
@@ -57,6 +60,7 @@ function Register() {
       <AuthScenery register />
       <div className="auth-panel w-full max-w-md">
         <AuthPanelHeading register />
+        <GoogleSignIn google={google} disabled={loading} />
 
         {/* Error Alert */}
         {error && (
@@ -175,7 +179,7 @@ function Register() {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={loading || !passwordsMatch}
+            disabled={loading || google.redirecting || !passwordsMatch}
             className="w-full bg-gradient-to-r from-amber-700 to-amber-900 text-amber-50 py-2.5 rounded-lg font-medium hover:from-amber-800 hover:to-amber-950 disabled:from-stone-400 disabled:to-stone-500 transition-all shadow-xs disabled:shadow-none"
           >
             {loading ? 'Creating Account...' : 'Create Account'}

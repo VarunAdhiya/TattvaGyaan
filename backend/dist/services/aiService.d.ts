@@ -4,6 +4,23 @@ type ChatMessage = {
 };
 export declare class AIService {
     private generate;
+    private generateGroq;
+    answerLibrary(question: string, responseLang: string, sources: {
+        id: string;
+        title: string;
+        edition: string;
+        reference: string;
+        text: string;
+        status: string;
+    }[]): Promise<{
+        content: string;
+        model: string;
+        usage: {
+            prompt_tokens: number;
+            completion_tokens: number;
+            total_tokens: number;
+        } | undefined;
+    }>;
     analyzeReadingPace(params: {
         title: string;
         language: string;

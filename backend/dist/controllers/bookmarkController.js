@@ -6,11 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.bookmarkController = exports.BookmarkController = void 0;
 const prisma_1 = __importDefault(require("../lib/prisma"));
 const errorHandler_1 = require("../middleware/errorHandler");
+const annotationSchema_1 = require("../validators/annotationSchema");
 class BookmarkController {
     async getAll(req, res, next) {
         try {
+            const { scriptureId } = annotationSchema_1.annotationQuerySchema.parse(req.query);
             const bookmarks = await prisma_1.default.bookmark.findMany({
-                where: { userId: req.userId },
+                where: { userId: req.userId, ...(scriptureId ? { passage: { section: { edition: { scriptureId } } } } : {}) },
                 include: {
                     passage: {
                         include: {

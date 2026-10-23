@@ -12,6 +12,7 @@ exports.registerSchema = zod_1.z.object({
 exports.loginSchema = zod_1.z.object({
     email: zod_1.z.string().email('Invalid email address'),
     password: zod_1.z.string().min(1, 'Password is required'),
+    connectGoogle: zod_1.z.boolean().optional(),
 });
 exports.updateProfileSchema = zod_1.z.object({
     displayName: zod_1.z.string().min(1).max(100).optional(),

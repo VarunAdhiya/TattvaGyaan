@@ -26,6 +26,8 @@ const search_1 = __importDefault(require("./routes/search"));
 const ai_1 = __importDefault(require("./routes/ai"));
 const devotionals_1 = __importDefault(require("./routes/devotionals"));
 const app = (0, express_1.default)();
+if (config_1.config.nodeEnv === 'production')
+    app.set('trust proxy', 1);
 // Security
 app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)({
@@ -52,7 +54,8 @@ app.use((0, express_session_1.default)({
         secure: config_1.config.nodeEnv === 'production',
         httpOnly: true,
         maxAge: config_1.config.session.maxAge,
-        sameSite: config_1.config.nodeEnv === 'production' ? 'strict' : 'lax',
+        // OAuth returns through a top-level GET from Google; Strict would lose its state cookie.
+        sameSite: 'lax',
     },
 }));
 // Routes

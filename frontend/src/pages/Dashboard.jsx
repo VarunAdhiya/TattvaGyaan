@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { api } from '../api/client';
 import ScriptureCard from '../components/ScriptureCard';
 import { Loader2, Search, X } from 'lucide-react';
@@ -38,6 +38,7 @@ export default function Dashboard() {
         <div>
           <h1 className="text-3xl font-serif font-bold text-stone-900">Scripture Library</h1>
           <p className="text-stone-600 text-sm mt-1">Explore Hindi editions, their sources, and available chapters.</p>
+          <Link to="/ask" className="library-ask-link">Ask a question about the books →</Link>
         </div>
         <div className="relative w-full md:w-80">
           <Search className="w-4 h-4 absolute left-3 top-3 text-stone-400" />

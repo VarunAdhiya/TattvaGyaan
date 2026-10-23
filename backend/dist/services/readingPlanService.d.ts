@@ -22,10 +22,10 @@ export declare class ReadingPlanService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        userId: string;
         status: string;
         title: string;
         editionId: string;
-        userId: string;
         targetDays: number;
         startDate: Date;
         endDate: Date;
@@ -83,10 +83,10 @@ export declare class ReadingPlanService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        userId: string;
         status: string;
         title: string;
         editionId: string;
-        userId: string;
         targetDays: number;
         startDate: Date;
         endDate: Date;
@@ -112,10 +112,10 @@ export declare class ReadingPlanService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        userId: string;
         status: string;
         title: string;
         editionId: string;
-        userId: string;
         targetDays: number;
         startDate: Date;
         endDate: Date;

@@ -1,12 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 import { authService } from '../services/authService';
 import { AuthRequest } from '../middleware/auth';
+import { createUserSession } from '../services/sessionService';
+import { googleAuthService } from '../services/googleAuthService';
+import { AppError } from '../middleware/errorHandler';
 
 export class AuthController {
   async register(req: Request, res: Response, next: NextFunction) {
     try {
       const user = await authService.register(req.body);
-      (req.session as any).userId = user.id;
+      await createUserSession(req, user.id);
       res.status(201).json({ user });
     } catch (err) {
       next(err);
@@ -16,7 +19,11 @@ export class AuthController {
   async login(req: Request, res: Response, next: NextFunction) {
     try {
       const user = await authService.login(req.body.email, req.body.password);
-      (req.session as any).userId = user.id;
+      if (req.body.connectGoogle) {
+        if (!req.session.googleLink) throw new AppError('Start Google sign-in again before connecting your account.', 401);
+        await googleAuthService.link(user.id, req.session.googleLink);
+      }
+      await createUserSession(req, user.id);
       res.json({ user });
     } catch (err) {
       next(err);

@@ -2,10 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const authController_1 = require("../controllers/authController");
+const googleAuthController_1 = require("../controllers/googleAuthController");
 const validate_1 = require("../middleware/validate");
 const auth_1 = require("../middleware/auth");
 const authSchema_1 = require("../validators/authSchema");
 const router = (0, express_1.Router)();
+router.get('/google/status', googleAuthController_1.googleAuthController.status);
+router.get('/google/start', googleAuthController_1.googleAuthController.start);
+router.get('/google/callback', googleAuthController_1.googleAuthController.callback);
 router.post('/register', (0, validate_1.validate)(authSchema_1.registerSchema), authController_1.authController.register);
 router.post('/login', (0, validate_1.validate)(authSchema_1.loginSchema), authController_1.authController.login);
 router.post('/logout', authController_1.authController.logout);

@@ -4,6 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import { AlertCircle } from 'lucide-react';
 import AuthScenery from '../components/AuthScenery';
 import AuthPanelHeading from '../components/AuthPanelHeading';
+import GoogleSignIn from '../components/GoogleSignIn';
+import useGoogleAuth from '../lib/useGoogleAuth';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -12,6 +14,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
+  const google = useGoogleAuth('login');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +22,7 @@ function Login() {
     setLoading(true);
 
     try {
-      await login({ email, password });
+      await login({ email: google.linkEmail || email, password, connectGoogle: Boolean(google.linkEmail) });
       navigate('/dashboard');
     } catch (err) {
       setError(err.message || 'Failed to log in');
@@ -33,6 +36,7 @@ function Login() {
       <AuthScenery />
       <div className="auth-panel w-full max-w-md">
         <AuthPanelHeading />
+        <GoogleSignIn google={google} disabled={loading} />
 
         {/* Error Alert */}
         {error && (
@@ -53,7 +57,8 @@ function Login() {
               id="email"
               autoComplete="email"
               type="email"
-              value={email}
+              value={google.linkEmail || email}
+              readOnly={Boolean(google.linkEmail)}
               onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full px-4 py-2.5 border border-stone-200 rounded-lg bg-stone-50/50 text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:bg-white focus:border-amber-300 transition-all text-sm"
@@ -81,10 +86,10 @@ function Login() {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || google.redirecting}
             className="w-full bg-gradient-to-r from-amber-700 to-amber-900 text-amber-50 py-2.5 rounded-lg font-medium hover:from-amber-800 hover:to-amber-950 disabled:from-stone-400 disabled:to-stone-500 transition-all shadow-xs disabled:shadow-none"
           >
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? 'Signing in...' : google.linkEmail ? 'Sign in and connect Google' : 'Sign In'}
           </button>
 
           {/* Divider */}

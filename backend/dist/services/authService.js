@@ -44,7 +44,7 @@ class AuthService {
     }
     async login(email, password) {
         const user = await prisma_1.default.user.findUnique({ where: { email } });
-        if (!user) {
+        if (!user || !user.passwordHash) {
             throw new errorHandler_1.AppError('Invalid email or password', 401);
         }
         const valid = await argon2_1.default.verify(user.passwordHash, password);

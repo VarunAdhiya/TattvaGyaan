@@ -145,6 +145,21 @@
   background: transparent;
   box-shadow: none;
 }
+.google-auth { margin-bottom: 22px; }
+.auth-route .auth-panel .google-auth-button {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; min-height: 48px; padding: 3px 12px; border: 1px solid #747775;
+  border-radius: 4px; background: #fff; color: #1f1f1f;
+  font: 500 15px/1.4 Arial, sans-serif; cursor: pointer;
+  transition: background 150ms;
+}
+.google-auth-button img { width: 40px; height: 40px; flex: none; }
+.auth-route .auth-panel .google-auth-button:hover:not(:disabled) { background: #f2f2f2; }
+.auth-route .auth-panel .google-auth-button:disabled { cursor: not-allowed; opacity: .65; }
+.google-auth-button:focus-visible { outline: 2px solid #ffd18b; outline-offset: 4px; }
+.google-auth-message { margin: 14px 0; font-size: 14px; line-height: 1.7; color: #fff0d8; }
+.google-auth-divider { display: flex; align-items: center; gap: 14px; margin: 22px 0 0; color: #ead3b6; font-size: 13px; }
+.google-auth-divider::before, .google-auth-divider::after { content: ''; height: 1px; flex: 1; background: #deb77b50; }
 .auth-route .auth-panel label { color: #fff0d8; font-size: 15px; margin-bottom: 8px; }
 .auth-route .auth-panel input {
   min-height: 54px;

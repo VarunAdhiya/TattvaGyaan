@@ -43,7 +43,8 @@ model User {
   id             String    @id @default(uuid())
   email          String    @unique
   username       String    @unique
-  passwordHash   String    @map("password_hash")
+  passwordHash   String?   @map("password_hash")
+  googleSub      String?   @unique @map("google_sub")
   displayName    String?   @map("display_name")
   preferredLang  String    @default("en") @map("preferred_lang")
   createdAt      DateTime  @default(now()) @map("created_at")
@@ -55,6 +56,7 @@ model User {
   highlights        Highlight[]
   notes             Note[]
   chatConversations ChatConversation[]
+  libraryAnswers LibraryAnswer[]
 
   @@map("users")
 }
@@ -162,6 +164,7 @@ model ScripturePassage {
   bookmarks  Bookmark[]
   highlights Highlight[]
   notes      Note[]
+  searchChunks PassageSearchChunk[]
 
   @@index([sectionId, sortOrder])
   @@index([sectionId, sortOrder, id])
@@ -292,4 +295,36 @@ model ChatMessage {
   conversation ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
   @@map("chat_messages")
+}
+
+// Search segments point to unchanged original passages. Embeddings use pgvector
+// through parameterized SQL; Prisma manages the remaining metadata.
+model PassageSearchChunk {
+  id String @id
+  passageId String @map("passage_id")
+  sourceHash String @map("source_hash")
+  model String
+  startOffset Int @map("start_offset")
+  endOffset Int @map("end_offset")
+  text String
+  embedding Unsupported("vector(384)")
+  createdAt DateTime @default(now()) @map("created_at")
+  passage ScripturePassage @relation(fields: [passageId], references: [id], onDelete: Cascade)
+
+  @@index([passageId, model])
+  @@map("passage_search_chunks")
+}
+
+model LibraryAnswer {
+  id String @id @default(uuid())
+  userId String @map("user_id")
+  question String
+  responseLang String @map("response_lang")
+  editionId String? @map("edition_id")
+  result Json
+  createdAt DateTime @default(now()) @map("created_at")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("library_answers")
 }

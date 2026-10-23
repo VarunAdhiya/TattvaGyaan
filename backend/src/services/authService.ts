@@ -46,7 +46,7 @@ export class AuthService {
 
   async login(email: string, password: string) {
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) {
+    if (!user || !user.passwordHash) {
       throw new AppError('Invalid email or password', 401);
     }
 

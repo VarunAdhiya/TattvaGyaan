@@ -38,6 +38,8 @@ export const api = {
   getDevotional: (category, slug, signal) => request(`/devotionals/${category}/${encodeURIComponent(slug)}`, { signal }),
   getCalendarMonth: (year, month, signal) => request(`/devotionals/calendar?${new URLSearchParams({ year, month })}`, { signal }),
   // Auth
+  getGoogleAuthStatus: (signal) => request('/auth/google/status', { signal }),
+  startGoogleSignIn: (intent) => window.location.assign(`${API_BASE}/auth/google/start?intent=${intent === 'register' ? 'register' : 'login'}`),
   register: (userData) => request('/auth/register', {
     method: 'POST',
     body: {
@@ -52,6 +54,7 @@ export const api = {
     body: {
       email: credentials.email,
       password: credentials.password,
+      connectGoogle: Boolean(credentials.connectGoogle),
     }
   }),
   logout: () => request('/auth/logout', { method: 'POST' }),
@@ -116,11 +119,11 @@ export const api = {
   completePlanItem: (itemId, completed) => request(`/reading-plans/items/${itemId}/complete`, { method: 'PATCH', body: { completed } }),
 
   // Bookmarks, Notes & Highlights
-  getBookmarks: () => request('/bookmarks'),
+  getBookmarks: (scriptureId) => request('/bookmarks' + (scriptureId ? '?scriptureId=' + encodeURIComponent(scriptureId) : '')),
   addBookmark: (passageId, label) => request('/bookmarks', { method: 'POST', body: { passageId, label } }),
   removeBookmark: (id) => request(`/bookmarks/${id}`, { method: 'DELETE' }),
 
-  getNotes: () => request('/notes'),
+  getNotes: (scriptureId) => request('/notes' + (scriptureId ? '?scriptureId=' + encodeURIComponent(scriptureId) : '')),
   addNote: (passageId, content) => request('/notes', { method: 'POST', body: { passageId, content } }),
   updateNote: (id, content) => request(`/notes/${id}`, { method: 'PATCH', body: { content } }),
   removeNote: (id) => request(`/notes/${id}`, { method: 'DELETE' }),
@@ -138,6 +141,10 @@ export const api = {
   searchScriptures: (q) => request(`/search/scriptures?q=${encodeURIComponent(q)}`),
 
   // AI Assistant
+  getLibraryAICatalog: (signal) => request('/ai/library/catalog', { signal }),
+  askLibrary: (body, signal) => request('/ai/library/ask', { method: 'POST', body, signal }),
+  getLibraryAIHistory: (signal) => request('/ai/library/history', { signal }),
+  clearLibraryAIHistory: () => request('/ai/library/history', { method: 'DELETE' }),
   explainPassage: (aiData, signal) => request('/ai/explain', { method: 'POST', body: aiData, signal }),
   summarizeSection: (summaryData, signal) => request('/ai/summarize', { method: 'POST', body: summaryData, signal }),
   chatAI: (chatData) => request('/ai/chat', { method: 'POST', body: chatData }),

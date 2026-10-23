@@ -17,6 +17,7 @@ import DevotionalCollection from './pages/DevotionalCollection';
 import DevotionalDetail from './pages/DevotionalDetail';
 import HinduCalendar from './pages/HinduCalendar';
 import LandingPage from './pages/LandingPage';
+import AskLibrary from './pages/AskLibrary';
 const DivineJourneys = React.lazy(() => import('./pages/DivineJourneys'));
 import './devotionals.css';
 import './sacred-theme.css';
@@ -79,6 +80,7 @@ function App() {
               <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
               <Route path="/dashboard" element={<ProtectedRoute><LandingPage /></ProtectedRoute>} />
               <Route path="/library" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/ask" element={<ProtectedRoute><AskLibrary /></ProtectedRoute>} />
               <Route path="/scripture/:scriptureId" element={<ProtectedRoute><ScriptureDetail /></ProtectedRoute>} />
               <Route path="/reader/:scriptureId/:editionId" element={<ProtectedRoute><ReaderPage /></ProtectedRoute>} />
               <Route path="/reading-plans" element={<ProtectedRoute><ReadingPlansPage /></ProtectedRoute>} />

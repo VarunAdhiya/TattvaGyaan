@@ -1,4 +1,17 @@
 import { z } from 'zod';
+export declare const libraryQuestionSchema: z.ZodObject<{
+    question: z.ZodString;
+    responseLang: z.ZodDefault<z.ZodEnum<["hi", "en"]>>;
+    editionId: z.ZodOptional<z.ZodString>;
+}, "strict", z.ZodTypeAny, {
+    question: string;
+    responseLang: "en" | "hi";
+    editionId?: string | undefined;
+}, {
+    question: string;
+    editionId?: string | undefined;
+    responseLang?: "en" | "hi" | undefined;
+}>;
 export declare const explainSchema: z.ZodObject<{
     passageId: z.ZodOptional<z.ZodString>;
     selectedText: z.ZodOptional<z.ZodString>;

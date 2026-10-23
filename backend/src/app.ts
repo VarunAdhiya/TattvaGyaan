@@ -22,6 +22,7 @@ import aiRoutes from './routes/ai';
 import devotionalRoutes from './routes/devotionals';
 
 const app = express();
+if (config.nodeEnv === 'production') app.set('trust proxy', 1);
 
 // Security
 app.use(helmet());
@@ -51,7 +52,8 @@ app.use(session({
     secure: config.nodeEnv === 'production',
     httpOnly: true,
     maxAge: config.session.maxAge,
-    sameSite: config.nodeEnv === 'production' ? 'strict' : 'lax',
+    // OAuth returns through a top-level GET from Google; Strict would lose its state cookie.
+    sameSite: 'lax',
   },
 }));
 

@@ -27,7 +27,7 @@ export function AuthProvider({ children }) {
   const login = async (credentials) => {
     setError(null);
     try {
-      const res = await api.login({ email: credentials.email, password: credentials.password });
+      const res = await api.login({ email: credentials.email, password: credentials.password, connectGoogle: credentials.connectGoogle });
       setUser(res.user);
       return res.user;
     } catch (err) {

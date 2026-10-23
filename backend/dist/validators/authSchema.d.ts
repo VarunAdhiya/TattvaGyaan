@@ -21,12 +21,15 @@ export declare const registerSchema: z.ZodObject<{
 export declare const loginSchema: z.ZodObject<{
     email: z.ZodString;
     password: z.ZodString;
+    connectGoogle: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
     email: string;
     password: string;
+    connectGoogle?: boolean | undefined;
 }, {
     email: string;
     password: string;
+    connectGoogle?: boolean | undefined;
 }>;
 export declare const updateProfileSchema: z.ZodObject<{
     displayName: z.ZodOptional<z.ZodString>;

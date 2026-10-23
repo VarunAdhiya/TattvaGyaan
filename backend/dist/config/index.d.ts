@@ -1,4 +1,15 @@
 export declare const config: {
+    google: {
+        clientId: string;
+        clientSecret: string;
+        redirectUri: string;
+    };
+    aiProvider: string;
+    groq: {
+        apiKey: string;
+        model: string;
+        timeoutMs: number;
+    };
     port: number;
     nodeEnv: string;
     database: {

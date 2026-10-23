@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, Bookmark, MessageSquare, Pencil, Trash2, X, List, Sparkles, ChevronLeft, ChevronRight, Maximize2, Flower2 } from 'lucide-react';
+import { BookOpen, Bookmark, MessageSquare, X, List, Sparkles, ChevronLeft, ChevronRight, Maximize2, Flower2 } from 'lucide-react';
 import { api } from '../api/client';
 import { buildReaderPages, spreadStart } from '../lib/readerPages';
 import useBookFlip from '../lib/useBookFlip';
@@ -9,6 +9,7 @@ import useMahabharataLayout from '../lib/useMahabharataLayout';
 import useReaderContents from '../lib/useReaderContents';
 import ProsePage from './ProsePage';
 import BookStand from './BookStand';
+import ReaderNotebook, { ReaderNoteEditor } from './ReaderNotebook';
 import '../mahabharata-reader.css';
 
 // No gesture handlers on scripture text: native selection, scrolling and buttons
@@ -34,6 +35,7 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
   const [notes, setNotes] = useState([]);
   const [annotationError, setAnnotationError] = useState('');
   const [annotationRetry, setAnnotationRetry] = useState(0);
+  const [annotationLoading, setAnnotationLoading] = useState(true);
   const [noteEditor, setNoteEditor] = useState(null);
   const [noteContent, setNoteContent] = useState('');
   const [busy, setBusy] = useState(null);
@@ -106,11 +108,15 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
 
   useEffect(() => {
     let active = true;
-    Promise.all([api.getBookmarks(), api.getNotes()]).then(([bm, nt]) => {
+    // Track a new remote annotation request, including explicit retries.
+    // eslint-disable-next-line react/set-state-in-effect
+    setAnnotationLoading(true);
+    Promise.all([api.getBookmarks(edition.scriptureId), api.getNotes(edition.scriptureId)]).then(([bm, nt]) => {
       if (active) { setAnnotationError(''); setBookmarks(bm.bookmarks || []); setNotes(nt.notes || []); }
-    }).catch(error => { if (active) setAnnotationError(error.message || 'Unable to load notes and bookmarks.'); });
+    }).catch(error => { if (active) setAnnotationError(error.message || 'Unable to load notes and bookmarks.'); })
+      .finally(() => { if (active) setAnnotationLoading(false); });
     return () => { active = false; };
-  }, [edition.id, annotationRetry]);
+  }, [edition.id, edition.scriptureId, annotationRetry]);
 
   useEffect(() => {
     if (!initialPassageId || !contentsReady) return;
@@ -179,7 +185,7 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
 
   useEffect(() => {
     const onKey = event => {
-      if (event.key === 'Escape') { setDrawer(null); setNoteEditor(null); return; }
+      if (event.key === 'Escape') { if (!busyRef.current) { setDrawer(null); setNoteEditor(null); } return; }
       if (drawer || noteEditor || document.querySelector('[data-ai-drawer]') ||
           event.target.closest('input, textarea, select, button, [contenteditable="true"]') ||
           window.getSelection()?.toString()) return;
@@ -268,6 +274,14 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
     });
   }
 
+  function deleteSavedItem(item, panel) {
+    runAction(item.id, async () => {
+      if (panel === 'notes') { await api.removeNote(item.id); setNotes(items => items.filter(note => note.id !== item.id)); }
+      else { await api.removeBookmark(item.id); setBookmarks(items => items.filter(bookmark => bookmark.id !== item.id)); }
+      setNotice(panel === 'notes' ? 'Note deleted' : 'Bookmark removed');
+    });
+  }
+
   const buttonClass = 'inline-flex items-center gap-1.5 rounded-lg px-3 py-2 hover:bg-black/10 focus-visible:ring-2 focus-visible:ring-amber-600 disabled:opacity-40';
 
   return (
@@ -275,11 +289,11 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
       style={bookLayout ? { '--book-height': `${bookLayout.pageHeight}px`, '--book-padding': `${bookLayout.padding}px`,
         '--book-page-width': `${bookLayout.width + bookLayout.padding * 2}px`,
         '--book-content-height': `${bookLayout.height}px`, '--book-font-size': `${fontSize}px` } : undefined}>
-      <header className={reflowProse ? 'mahabharata-toolbar' : 'flex flex-wrap items-center justify-between gap-2 border-b p-3 text-sm'}>
-        <div className={reflowProse ? 'mahabharata-library-tools' : 'flex flex-wrap gap-1'}>
-          <button className={buttonClass} onClick={() => setDrawer('contents')}><List size={16} />Contents</button>
-          <button className={buttonClass} onClick={() => setDrawer('bookmarks')}><Bookmark size={16} />Bookmarks <span className="reader-saved-count">{bookmarks.length}</span></button>
-          <button className={buttonClass} onClick={() => setDrawer('notes')}><MessageSquare size={16} />Notes <span className="reader-saved-count">{notes.length}</span></button>
+      <header className={'reader-study-toolbar ' + (reflowProse ? 'mahabharata-toolbar' : 'flex flex-wrap items-center justify-between gap-2 border-b p-3 text-sm')}>
+        <div className="reader-study-tools" role="group" aria-label="Tools for this book">
+          <button aria-expanded={drawer === 'contents'} aria-controls={drawer === 'contents' ? 'reader-notebook' : undefined} onClick={() => setDrawer('contents')}><List size={17} />Contents</button>
+          <button aria-expanded={drawer === 'bookmarks'} aria-controls={drawer === 'bookmarks' ? 'reader-notebook' : undefined} onClick={() => setDrawer('bookmarks')}><Bookmark size={17} />Bookmarks <span className="reader-saved-count">{bookmarks.length}</span></button>
+          <button aria-expanded={drawer === 'notes'} aria-controls={drawer === 'notes' ? 'reader-notebook' : undefined} onClick={() => setDrawer('notes')}><MessageSquare size={17} />Notes <span className="reader-saved-count">{notes.length}</span></button>
         </div>
         {reflowProse ? <div className="mahabharata-title">
           <div className="mahabharata-title-line"><Flower2 size={23} strokeWidth={1.4} aria-hidden="true" /><h1 lang="hi">{edition.scripture?.title || edition.title}</h1><Flower2 size={23} strokeWidth={1.4} aria-hidden="true" /></div>
@@ -390,10 +404,10 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
         <button aria-label="Next" className={buttonClass} disabled={start + visibleIndices.length >= pages.length}
           onClick={() => goToPage(start + visibleIndices.length)}><span className="hidden sm:inline">Next</span><ChevronRight size={16} /></button>
       </footer>
-      {drawer && <div className="reader-overlay" role="presentation" onClick={() => setDrawer(null)}>
+      {drawer === 'passage' && <div className="reader-overlay" role="presentation" onClick={() => setDrawer(null)}>
         <aside role="dialog" aria-modal="true" aria-label={drawer} className="reader-drawer" onClick={event => event.stopPropagation()}>
           <div className="flex justify-between items-center mb-5"><h2 className="text-xl capitalize">{drawer}</h2><button autoFocus aria-label="Close panel" className={buttonClass} onClick={() => setDrawer(null)}><X size={20} /></button></div>
-          {drawer === 'passage' && toolPassage ? <>
+          {toolPassage && <>
             <label htmlFor="book-tool-passage" className="block mb-2">Passage on this page</label>
             <select id="book-tool-passage" className="reader-control border rounded p-2 w-full mb-4" value={toolPassage.id}
               onChange={event => setToolPassage(toolPassages.find(passage => passage.id === event.target.value))}>
@@ -408,36 +422,15 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
             </div>
             <p className="font-indic whitespace-pre-wrap leading-loose">{toolPassage.text}</p>
             {toolPassage.sourceNotes && <details className="mt-5 text-sm"><summary>Source notes</summary><p className="mt-2">{toolPassage.sourceNotes}</p></details>}
-          </> : drawer === 'contents' ? contents.map(section => <button key={section.id} disabled={section.pageIndex < 0} className="block w-full text-left border-b py-3 disabled:opacity-50" onClick={() => goToSection(section)}>{section.title} · {section.pageIndex >= 0 ? section.pageIndex + 1 : 'Unavailable'}</button>)
-            : (drawer === 'notes' ? notes : bookmarks).length === 0 ? <p>No {drawer} saved yet.</p>
-            : (drawer === 'notes' ? notes : bookmarks).map(item => <div key={item.id} className="reader-saved-item">
-                <button className="reader-saved-link" onClick={() => jumpToPassage(item.passageId, item.passage)}>
-                  <span className="reader-saved-reference">{item.passage?.reference || item.label || 'Passage'}</span>
-                  {item.passage?.section?.edition?.scripture?.title && <span className="reader-saved-book">{item.passage.section.edition.scripture.title}</span>}
-                  <span className="reader-saved-excerpt font-indic" lang={item.passage?.section?.edition?.language || edition.language}
-                    dir={item.passage?.section?.edition?.textDirection || edition.textDirection || 'ltr'}>{item.passage?.text || 'Open passage to read the verse.'}</span>
-                  {drawer === 'notes' && <span className="reader-saved-note"><span className="reader-saved-note-label">Your note</span>{item.content}</span>}
-                  <span className="reader-saved-open">Go to passage <ChevronRight size={14} aria-hidden="true" /></span>
-                </button>
-              <div className="reader-saved-actions">
-                {drawer === 'notes' && <button aria-label="Edit Note" className={buttonClass} onClick={() => editNote(item.passage || { id: item.passageId }, item)}><Pencil size={16} /></button>}
-                <button aria-label={drawer === 'notes' ? 'Delete Note' : 'Delete Bookmark'} disabled={Boolean(busy)} className={buttonClass} onClick={() => runAction(item.id, async () => {
-                  if (drawer === 'notes') { await api.removeNote(item.id); setNotes(items => items.filter(note => note.id !== item.id)); }
-                  else { await api.removeBookmark(item.id); setBookmarks(items => items.filter(bookmark => bookmark.id !== item.id)); }
-                  setNotice(drawer === 'notes' ? 'Note deleted' : 'Bookmark removed');
-                })}><Trash2 size={16} /></button>
-              </div>
-            </div>)}
+          </>}
         </aside>
       </div>}
-      {noteEditor && <div className="reader-overlay">
-        <form role="dialog" aria-modal="true" aria-label="Edit private note" className="reader-note-editor" onSubmit={saveNote}>
-          <div className="flex items-center justify-between mb-4"><h2>Note · {noteEditor.passage.reference}</h2><button type="button" aria-label="Close note" onClick={() => setNoteEditor(null)}><X size={20} /></button></div>
-          <label htmlFor="reader-note" className="sr-only">Note text</label>
-          <textarea id="reader-note" autoFocus required maxLength={10000} value={noteContent} onChange={event => setNoteContent(event.target.value)} className="reader-control w-full min-h-40 border rounded p-3" />
-          <button type="submit" disabled={Boolean(busy) || !noteContent.trim()} className={buttonClass}>{busy === 'note' ? 'Saving…' : 'Save note'}</button>
-        </form>
-      </div>}
+      {drawer && drawer !== 'passage' && <ReaderNotebook panel={drawer} onPanelChange={setDrawer} onClose={() => setDrawer(null)}
+        edition={edition} contents={contents} currentPage={currentPage} bookmarks={bookmarks} notes={notes}
+        loading={annotationLoading} error={annotationError} onRetry={() => setAnnotationRetry(value => value + 1)} busy={Boolean(busy)}
+        onSection={goToSection} onPassage={jumpToPassage} onEdit={editNote} onDelete={deleteSavedItem} />}
+      {noteEditor && <ReaderNoteEditor editor={noteEditor} edition={edition} content={noteContent} onContentChange={setNoteContent}
+        onClose={() => setNoteEditor(null)} onSave={saveNote} busy={Boolean(busy)} />}
       {notice && <div role="status" className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[70] bg-stone-900 text-white rounded-xl shadow-xl p-4 max-w-[90vw]">{notice}</div>}
     </div>
   );

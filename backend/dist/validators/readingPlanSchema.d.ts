@@ -22,10 +22,10 @@ export declare const updateReadingPlanSchema: z.ZodObject<{
     status: z.ZodOptional<z.ZodEnum<["active", "paused", "completed", "cancelled"]>>;
     targetDays: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    status?: "completed" | "active" | "paused" | "cancelled" | undefined;
+    status?: "cancelled" | "completed" | "active" | "paused" | undefined;
     targetDays?: number | undefined;
 }, {
-    status?: "completed" | "active" | "paused" | "cancelled" | undefined;
+    status?: "cancelled" | "completed" | "active" | "paused" | undefined;
     targetDays?: number | undefined;
 }>;
 export declare const completePlanItemSchema: z.ZodObject<{

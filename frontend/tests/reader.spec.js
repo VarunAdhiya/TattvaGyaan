@@ -15,7 +15,7 @@ function passage(section, index) {
 }
 
 async function mockReader(page, bookSections = sections) {
-  const state = { ai: [], pageRequests: [], bookmarks: [], notes: [{ id: 'note-1', passageId: 'passage-3-4', content: 'Saved reflection', passage: passage(3, 4) }] };
+  const state = { ai: [], pageRequests: [], annotationScopes: [], bookmarks: [], notes: [{ id: 'note-1', passageId: 'passage-3-4', content: 'Saved reflection', passage: passage(3, 4) }] };
   await page.route(url => url.pathname.startsWith('/api/'), async route => {
     const url = new URL(route.request().url());
     const pathname = url.pathname;
@@ -38,10 +38,22 @@ async function mockReader(page, bookSections = sections) {
         const bookmark = { ...input, id: 'bookmark-new' };
         state.bookmarks.push(bookmark);
         body = { bookmark };
-      } else body = { bookmarks: state.bookmarks };
+      } else {
+        state.annotationScopes.push(url.searchParams.get('scriptureId'));
+        body = { bookmarks: state.bookmarks.filter(item => !url.searchParams.get('scriptureId') || (item.passage?.section?.edition?.scriptureId || edition.scriptureId) === url.searchParams.get('scriptureId')) };
+      }
     } else if (pathname.startsWith('/api/bookmarks/')) {
       state.bookmarks = []; body = {};
-    } else if (pathname === '/api/notes') body = { notes: state.notes };
+    } else if (pathname === '/api/notes') {
+      if (method === 'POST') {
+        const input = route.request().postDataJSON();
+        const note = { ...input, id: 'note-new' };
+        state.notes.push(note); body = { note };
+      } else {
+        state.annotationScopes.push(url.searchParams.get('scriptureId'));
+        body = { notes: state.notes.filter(item => !url.searchParams.get('scriptureId') || (item.passage?.section?.edition?.scriptureId || edition.scriptureId) === url.searchParams.get('scriptureId')) };
+      }
+    }
     else if (pathname === '/api/notes/note-1') {
       if (method === 'DELETE') { state.notes = []; body = {}; }
       else { state.notes[0].content = route.request().postDataJSON().content; body = { note: state.notes[0] }; }
@@ -118,12 +130,19 @@ test('dragging text does not turn pages and sends only the selection to AI', asy
   await expect(page.getByText('Explanation of the selected source only.')).toBeVisible();
   expect(state.ai.at(-1).selectedText).toBe(selected);
   expect(state.ai.at(-1).passageId).toBe('passage-0-0');
-  await page.getByRole('button', { name: 'Ask Questions' }).click();
-  await page.getByPlaceholder('Ask follow-up question...').fill('Summarize this selection');
-  await page.getByPlaceholder('Ask follow-up question...').press('Enter');
-  await expect.poll(() => state.ai.at(-1).endpoint).toBe('/api/ai/chat');
+  await expect(page.getByRole('tab')).toHaveCount(2);
+  await expect(page.getByText('Ask Questions', { exact: true })).toHaveCount(0);
+  await page.getByLabel('Response language').selectOption('en');
+  await expect(page.getByLabel('Response language').locator('option')).toHaveCount(2);
+  await page.getByLabel('Explanation style').selectOption('detailed');
+  await page.getByLabel('What would you like to understand?').fill('Summarize this selection');
+  await page.getByRole('button', { name: 'Explain passage', exact: true }).click();
+  await expect.poll(() => state.ai.at(-1).question).toBe('Summarize this selection');
+  expect(state.ai.at(-1).endpoint).toBe('/api/ai/explain');
   expect(state.ai.at(-1).selectedText).toBe(selected);
-  expect(state.ai.at(-1).sectionId).toBe('section-0');
+  expect(state.ai.at(-1).passageId).toBe('passage-0-0');
+  expect(state.ai.at(-1).responseLang).toBe('en');
+  expect(state.ai.at(-1).style).toBe('detailed');
 });
 
 test('notes navigate to a paragraph; pencil edits and trash deletes without navigation', async ({ page }) => {
@@ -214,18 +233,25 @@ test('long contents flow across pages without scrolling and retain every chapter
   await expect(page.locator('#text-passage-44-0')).toBeVisible();
 });
 
-test('selected section summary and follow-up chat retain section context', async ({ page }) => {
+test('selected section summary retains context when changing language and switching tabs', async ({ page }) => {
   const state = await mockReader(page);
   await page.goto('/reader/book-test/edition-test?page=50');
   await page.getByRole('button', { name: 'Summarize Section', exact: true }).first().click();
   await expect(page.getByText('Explanation of the selected source only.')).toBeVisible();
   expect(state.ai.at(-1).sectionId).toBe('section-3');
-  await page.getByRole('button', { name: 'Ask Questions' }).click();
-  await page.getByPlaceholder('Ask follow-up question...').fill('Summarize this section');
-  await page.getByPlaceholder('Ask follow-up question...').press('Enter');
-  await expect.poll(() => state.ai.at(-1).endpoint).toBe('/api/ai/chat');
+  await page.getByLabel('Response language').selectOption('en');
+  await page.getByRole('button', { name: 'Generate Section Summary' }).click();
+  await expect.poll(() => state.ai.at(-1).responseLang).toBe('en');
+  expect(state.ai.at(-1).endpoint).toBe('/api/ai/summarize');
   expect(state.ai.at(-1).sectionId).toBe('section-3');
   expect(state.ai.at(-1).passageId).toBeUndefined();
+  await page.getByRole('tab', { name: 'Passage Explanation' }).click();
+  await expect(page.getByText('Select a passage in the reader to explore its meaning.')).toBeVisible();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.getByRole('tab', { name: 'Section Summary' })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByText('Explanation of the selected source only.')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
 });
 
 test('keyboard arrows in the page field never turn a page', async ({ page }) => {
@@ -234,6 +260,104 @@ test('keyboard arrows in the page field never turn a page', async ({ page }) => 
   await page.getByLabel('Page', { exact: true }).focus();
   await page.keyboard.press('ArrowRight');
   await expect(page.getByRole('article', { name: 'Page 3', exact: true })).toBeVisible();
+});
+
+test('book tools keep saved items scoped to the current book and contents opens from the left', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  const state = await mockReader(page);
+  const otherPassage = { ...passage(0, 0), id: 'other-passage', section: { edition: { ...edition, scriptureId: 'another-book' } } };
+  state.notes.push({ id: 'other-note', passageId: otherPassage.id, content: 'A reflection from another book', passage: otherPassage });
+  state.bookmarks.push({ id: 'other-bookmark', passageId: otherPassage.id, passage: otherPassage });
+  await page.goto('/reader/book-test/edition-test?page=3');
+  await expect(page.getByRole('button', { name: 'Notes 1', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Bookmarks 0', exact: true })).toBeVisible();
+  expect(state.annotationScopes.length).toBeGreaterThanOrEqual(2);
+  expect(state.annotationScopes.every(id => id === 'book-test')).toBe(true);
+  await page.getByRole('button', { name: 'Contents', exact: true }).click();
+  const panel = page.getByRole('dialog', { name: 'contents', exact: true });
+  await expect(panel.getByRole('heading', { name: 'Reader test book' })).toBeVisible();
+  await expect.poll(async () => (await panel.boundingBox()).x).toBe(0);
+  await expect(panel.getByText('Currently reading')).toBeVisible();
+  await page.screenshot({ path: 'test-results/book-contents-panel-desktop.png' });
+  await panel.getByLabel('Search contents').fill('section 4');
+  await expect(panel.locator('.notebook-contents button')).toHaveCount(1);
+  await panel.locator('.notebook-contents button').click();
+  await expect(panel).toHaveCount(0);
+  await expect(page.getByLabel('Page', { exact: true })).toHaveValue('48');
+  await page.getByRole('button', { name: 'Notes 1', exact: true }).click();
+  await expect(page.getByText('A reflection from another book')).toHaveCount(0);
+  await expect(page.getByText('Saved reflection', { exact: true })).toBeVisible();
+  await page.getByLabel('Search notes').fill('not found');
+  await expect(page.getByText('No matches in this book.')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('button', { name: 'Notes 1', exact: true })).toBeFocused();
+});
+
+test('new sticky notes save with their passage and editor fits on mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const state = await mockReader(page);
+  await page.goto('/reader/book-test/edition-test?page=3');
+  await page.locator('#passage-passage-0-0').getByRole('button', { name: 'Add or edit note' }).click();
+  const editor = page.getByRole('dialog', { name: 'Edit private note' });
+  await editor.getByLabel('Note text').fill('Pause and reflect on this passage.\nA second thought to revisit.');
+  expect(await editor.evaluate(node => node.scrollWidth <= node.clientWidth)).toBe(true);
+  await page.screenshot({ path: 'test-results/sticky-note-editor-mobile.png' });
+  await editor.getByRole('button', { name: 'Save note' }).click();
+  await expect(editor).toHaveCount(0);
+  expect(state.notes.at(-1).passageId).toBe('passage-0-0');
+  await page.getByRole('button', { name: 'Notes 2', exact: true }).click();
+  await expect(page.locator('.notebook-sticky')).toHaveCount(2);
+  await expect(page.getByText('Pause and reflect on this passage.', { exact: false })).toBeVisible();
+  expect(await page.locator('.reader-notebook').evaluate(node => node.scrollWidth <= node.clientWidth)).toBe(true);
+  await page.screenshot({ path: 'test-results/sticky-notes-mobile.png' });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.screenshot({ path: 'test-results/sticky-notes-desktop.png' });
+});
+
+for (const width of [1440, 390]) {
+  test(`Gyaan Deep renders safe formatted responses and fits at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await mockReader(page);
+    const content = '## सरल व्याख्या\n\nयह व्याख्या **चुने हुए पाठ** के संदर्भ में है।\n\n> मूल पाठ को ध्यान से पढ़ें।\n\n- पहला विचार\n- दूसरा विचार\n\n<script>window.unsafeMarkdown = true</script>\n\n![external image](https://example.com/image.png)';
+    await page.route('**/api/ai/explain', route => route.fulfill({ json: { content } }));
+    await page.goto('/reader/book-test/edition-test?page=3');
+    await page.locator('#passage-passage-0-0').getByRole('button', { name: 'Ask AI', exact: true }).click();
+    const drawer = page.getByRole('dialog', { name: /Gyaan Deep/ });
+    await expect(drawer.getByRole('heading', { name: 'सरल व्याख्या' })).toBeVisible();
+    await expect(drawer.locator('.gyaan-prose strong')).toHaveText('चुने हुए पाठ');
+    await expect(drawer.locator('.gyaan-prose li')).toHaveCount(2);
+    await expect(drawer.locator('.gyaan-prose img, .gyaan-prose script')).toHaveCount(0);
+    expect(await page.evaluate(() => window.unsafeMarkdown)).toBeUndefined();
+    expect(await drawer.evaluate(node => node.scrollWidth <= node.clientWidth)).toBe(true);
+    await expect(drawer.getByLabel('Response language').locator('option')).toHaveText(['हिंदी · Hindi', 'English']);
+    await page.screenshot({ path: `test-results/gyaan-deep-${width}.png` });
+    await page.getByRole('button', { name: 'Close Gyaan Deep' }).click();
+    await expect(drawer).toHaveCount(0);
+    await expect(page.getByLabel('Page', { exact: true })).toHaveValue('3');
+  });
+}
+
+test('Gyaan Deep can retry a failed explanation and keeps tab results separate', async ({ page }) => {
+  await mockReader(page);
+  let shouldFail = true;
+  await page.route('**/api/ai/explain', async route => {
+    await route.fulfill(shouldFail
+      ? { status: 503, json: { error: 'The AI service is temporarily unavailable.' } }
+      : { json: { content: 'Recovered explanation.' } });
+  });
+  await page.goto('/reader/book-test/edition-test?page=3');
+  await page.locator('#passage-passage-0-0').getByRole('button', { name: 'Ask AI', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('We couldn’t prepare this response');
+  shouldFail = false;
+  await page.getByRole('button', { name: 'Explain passage', exact: true }).click();
+  await expect(page.getByText('Recovered explanation.')).toBeVisible();
+  await page.getByRole('tab', { name: 'Section Summary' }).click();
+  await expect(page.getByText('Recovered explanation.')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Generate Section Summary' }).click();
+  await expect(page.getByText('Explanation of the selected source only.')).toBeVisible();
+  await page.getByRole('tab', { name: 'Passage Explanation' }).click();
+  await expect(page.getByText('Recovered explanation.')).toBeVisible();
 });
 
 test('reader deep links resolve a passage that was not downloaded', async ({ page }) => {

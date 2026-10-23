@@ -2,12 +2,14 @@ import { Request, Response, NextFunction } from 'express';
 import prisma from '../lib/prisma';
 import { AuthRequest } from '../middleware/auth';
 import { AppError } from '../middleware/errorHandler';
+import { annotationQuerySchema } from '../validators/annotationSchema';
 
 export class BookmarkController {
   async getAll(req: AuthRequest, res: Response, next: NextFunction) {
     try {
+      const { scriptureId } = annotationQuerySchema.parse(req.query);
       const bookmarks = await prisma.bookmark.findMany({
-        where: { userId: req.userId! },
+        where: { userId: req.userId!, ...(scriptureId ? { passage: { section: { edition: { scriptureId } } } } : {}) },
         include: {
           passage: {
             include: {

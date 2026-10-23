@@ -1,7 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.summarizeSchema = exports.askQuestionSchema = exports.explainSchema = void 0;
+exports.summarizeSchema = exports.askQuestionSchema = exports.explainSchema = exports.libraryQuestionSchema = void 0;
 const zod_1 = require("zod");
+exports.libraryQuestionSchema = zod_1.z.object({
+    question: zod_1.z.string().trim().min(3).max(1000),
+    responseLang: zod_1.z.enum(['hi', 'en']).default('hi'),
+    editionId: zod_1.z.string().min(1).max(100).optional(),
+}).strict();
 exports.explainSchema = zod_1.z.object({
     passageId: zod_1.z.string().optional(),
     selectedText: zod_1.z.string().trim().min(1).max(5000).optional(),

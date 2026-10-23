@@ -3,7 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { ArrowRight, BookMarked, BookOpen, LogOut, Menu, Search, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const sections = [['Library', '/library'], ['Chalisas', '/chalisas'], ['Bhajans', '/bhajans'], ['Mantras', '/mantras'], ['Calendar', '/calendar'], ['Journeys', '/journeys']];
+const sections = [['Library', '/library'], ['Ask the library', '/ask'], ['Chalisas', '/chalisas'], ['Bhajans', '/bhajans'], ['Mantras', '/mantras'], ['Calendar', '/calendar'], ['Journeys', '/journeys']];
 
 export default function SiteHeader({ overlay = false }) {
   const { user, logout } = useAuth();

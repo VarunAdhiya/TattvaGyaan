@@ -6,11 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.noteController = exports.NoteController = void 0;
 const prisma_1 = __importDefault(require("../lib/prisma"));
 const errorHandler_1 = require("../middleware/errorHandler");
+const annotationSchema_1 = require("../validators/annotationSchema");
 class NoteController {
     async getAll(req, res, next) {
         try {
+            const { scriptureId } = annotationSchema_1.annotationQuerySchema.parse(req.query);
             const notes = await prisma_1.default.note.findMany({
-                where: { userId: req.userId },
+                where: { userId: req.userId, ...(scriptureId ? { passage: { section: { edition: { scriptureId } } } } : {}) },
                 include: {
                     passage: {
                         include: {

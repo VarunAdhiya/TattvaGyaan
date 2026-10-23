@@ -1,5 +1,11 @@
 import { z } from 'zod';
 
+export const libraryQuestionSchema = z.object({
+  question: z.string().trim().min(3).max(1000),
+  responseLang: z.enum(['hi', 'en']).default('hi'),
+  editionId: z.string().min(1).max(100).optional(),
+}).strict();
+
 export const explainSchema = z.object({
   passageId: z.string().optional(),
   selectedText: z.string().trim().min(1).max(5000).optional(),
