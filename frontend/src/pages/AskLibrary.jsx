@@ -73,7 +73,7 @@ export default function AskLibrary() {
       <div className="library-ai-controls">
         <div className="library-ai-field"><label htmlFor="library-scope">Search in</label><select id="library-scope" value={editionId} onChange={e => setEditionId(e.target.value)} disabled={busy || !catalog}>
           <option value="">All available books</option>
-          {catalog?.editions.map(edition => <option key={edition.id} value={edition.id}>{edition.scripture.title}</option>)}
+          {catalog?.editions.map(edition => <option key={edition.id} value={edition.id}>{['ramayana', 'ramayan'].includes(edition.scripture.slug) || /^ramayan(a)?$/i.test(edition.scripture.title) ? 'रामायण' : edition.scripture.title}</option>)}
         </select></div>
         <div className="library-ai-field"><label htmlFor="library-language">Answer language</label><select id="library-language" value={responseLang} onChange={e => setResponseLang(e.target.value)} disabled={busy}>
           <option value="hi">हिन्दी</option><option value="en">English</option>

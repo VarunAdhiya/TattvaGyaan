@@ -42,7 +42,7 @@ async function checkPages(page) {
 async function chapter(page,title) {
   const section=sections.find(s=>s.title===title);
   await page.getByRole('button',{ name:'Contents',exact:true }).click();
-  await page.getByRole('button',{ name:new RegExp('^'+title+' ·') }).click();
+  await page.getByRole('button',{ name:new RegExp('^'+title) }).click();
   await ready(page.locator(`.reader-visible-page [data-passage-id="${section.passages[0].id}"]`)).toBeVisible();
   await checkPages(page);
 }
@@ -85,6 +85,10 @@ test('Ramayan keeps selected text, annotations, summaries and saved positions at
   await page.getByRole('button',{ name:'Summarize Section',exact:true }).click();await expect(page.getByText('Ramayan test explanation.')).toBeVisible();
   expect(state.ai.at(-1)).toMatchObject({ editionId:'ramayan',sectionId:sections.find(s=>s.title==='सीता का जन्म').id });
   await page.reload();await chapter(page,'सीता का जन्म');await page.getByRole('button',{ name:'Passage tools',exact:true }).click();
+  await page.screenshot({ path: 'test-results/passage-mobile.png' });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.screenshot({ path: 'test-results/passage-desktop.png' });
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole('button',{ name:'Bookmark verse' }).click();await page.getByRole('button',{ name:'Add or edit note' }).click();
   await page.getByLabel('Note text').fill('Ramayan reading note');await page.getByRole('button',{ name:'Save note' }).click();await page.keyboard.press('Escape');
   expect(state.notes[0].passageId).toBe(state.bookmarks[0].passageId);

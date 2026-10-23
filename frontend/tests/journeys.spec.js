@@ -55,18 +55,13 @@ test('all illustrated chapters are open, neighbouring islands persist, and navig
   expect(errors).toEqual([]);
 });
 
-test('water moves, pause freezes the scene, and dragging changes the 3D view', async ({ page }) => {
+test('water moves and dragging changes the 3D view', async ({ page }) => {
   test.setTimeout(60000);
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/journeys/ganesha?level=7');
   const world = await settled(page);
   const firstTime = await world.getAttribute('data-water-time');
   await expect.poll(() => world.getAttribute('data-water-time')).not.toBe(firstTime);
-  await page.getByRole('button', { name: 'Pause scene motion' }).click();
-  await expect(world).toHaveAttribute('data-motion', 'paused');
-  const pausedTime = await world.getAttribute('data-water-time');
-  await page.waitForTimeout(200);
-  await expect(world).toHaveAttribute('data-water-time', pausedTime);
   const cameraBefore = await world.getAttribute('data-camera-position');
   await page.mouse.move(460, 420);
   await page.mouse.down();
@@ -75,8 +70,6 @@ test('water moves, pause freezes the scene, and dragging changes the 3D view', a
   await expect.poll(() => world.getAttribute('data-camera-position')).not.toBe(cameraBefore);
   await expect(world).toHaveAttribute('data-visible-islands', '8');
   await capture(page, 'sculpture-orbit');
-  await page.getByRole('button', { name: 'Enable scene motion' }).click();
-  await expect.poll(() => world.getAttribute('data-water-time')).not.toBe(pausedTime);
 });
 
 test('mobile chapters, map, sources and browser history remain usable with reduced motion', async ({ page }) => {
@@ -100,10 +93,6 @@ test('mobile chapters, map, sources and browser history remain usable with reduc
   await capture(page, 'sculpture-map-mobile');
   await page.getByRole('button', { name: `Level 8: ${titles[7]}`, exact: true }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(titles[7]);
-  await page.getByRole('button', { name: 'View illustration' }).click();
-  await expect(page.locator('.game-art-dialog')).toBeVisible();
-  await page.getByRole('button', { name: 'Close scene' }).click();
-  await expect(page.getByRole('button', { name: 'View illustration' })).toBeFocused();
 });
 
 test('no WebGL and unavailable storage still allow direct chapter navigation', async ({ page }) => {
@@ -155,7 +144,7 @@ test('Krishna has eight distinct scenes, linked sources, open navigation and a c
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(krishnaTitles[index]);
     await settled(page);
     await expect(world).toHaveAttribute('data-visible-islands', '8');
-    scenes.add(await page.locator('.game-art-dialog img').getAttribute('src'));
+    scenes.add(await world.getAttribute('data-chapter'));
     await page.getByRole('button', { name: 'Reflection & story source' }).click();
     await expect(page.locator('.game-story-details a').first()).toHaveAttribute('href', /^https:\/\/vedabase.io\/en\/library\//);
     await page.getByRole('button', { name: 'Reflection & story source' }).click();
@@ -191,7 +180,7 @@ test('switching deities keeps their saved chapters separate, including a reload'
   expect(saves[1].completed).toEqual(['mathura-birth', 'govardhan']);
 });
 
-test('Krishna mobile map, history, illustration and reduced motion work together', async ({ page }) => {
+test('Krishna mobile map, history and reduced motion work together', async ({ page }) => {
   test.setTimeout(90000);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -210,10 +199,6 @@ test('Krishna mobile map, history, illustration and reduced motion work together
   await capture(page, 'krishna-map-mobile');
   await page.getByRole('button', { name: 'Visit Hope in the darkness', exact: true }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(krishnaTitles[0]);
-  await page.getByRole('button', { name: 'View illustration' }).click();
-  await expect(page.locator('.game-art-dialog')).toBeVisible();
-  await page.getByRole('button', { name: 'Close scene' }).click();
-  await expect(page.getByRole('button', { name: 'View illustration' })).toBeFocused();
 });
 
 for (const deity of ['shiva', 'hanuman', 'ram']) {
@@ -235,7 +220,7 @@ for (const deity of ['shiva', 'hanuman', 'ram']) {
       await settled(page);
       await expect(world).toHaveAttribute('data-visible-islands', '8');
       await expect(world).toHaveAttribute('data-chapter', chapter.id);
-      await expect(page.locator('.game-art-dialog img')).toHaveAttribute('src', chapter.sceneImage);
+      await expect(page.locator('.journey-sr-only').first()).toContainText(chapter.sceneAlt);
       await page.getByRole('button', { name: 'Reflection & story source' }).click();
       await expect(page.locator('.game-story-details a').first()).toHaveAttribute('href', /^https:\/\//);
       await page.getByRole('button', { name: 'Reflection & story source' }).click();
@@ -267,10 +252,6 @@ for (const deity of ['shiva', 'hanuman', 'ram']) {
     await settled(page);
     await expect(page.locator('.world-pin:visible')).toHaveCount(8);
     await page.getByRole('button', { name: `Visit ${journey.levels[7].title}`, exact: true }).click();
-    await page.getByRole('button', { name: 'View illustration' }).click();
-    await expect(page.locator('.game-art-dialog')).toBeVisible();
-    await page.getByRole('button', { name: 'Close scene' }).click();
-    await expect(page.getByRole('button', { name: 'View illustration' })).toBeFocused();
     await page.reload();
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(journey.levels[7].title);
   });
@@ -291,6 +272,8 @@ test('all five deity choices fit on a small phone and retain independent progres
     expect(bounds.x + bounds.width).toBeLessThanOrEqual(320);
     expect(bounds.height).toBeGreaterThanOrEqual(44);
     await choice.click();
+    await expect(page).toHaveURL(new RegExp(`/journeys/${id}$`));
+    await expect(choice).toHaveAttribute('aria-pressed', 'true');
     await page.getByRole('button', { name: 'Enter the journey', exact: true }).click();
     await page.getByRole('button', { name: `Level ${index + 2}: ${journeyDefinitions[id].levels[index + 1].title}`, exact: true }).click();
     await page.getByRole('link', { name: 'All deities' }).click();

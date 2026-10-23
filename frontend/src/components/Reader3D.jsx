@@ -9,6 +9,7 @@ import useMahabharataLayout from '../lib/useMahabharataLayout';
 import useReaderContents from '../lib/useReaderContents';
 import ProsePage from './ProsePage';
 import BookStand from './BookStand';
+import ReaderPassagePanel from './ReaderPassagePanel';
 import ReaderNotebook, { ReaderNoteEditor } from './ReaderNotebook';
 import '../mahabharata-reader.css';
 
@@ -404,27 +405,11 @@ export default function Reader3D({ edition, sections, initialPageIndex = 1, init
         <button aria-label="Next" className={buttonClass} disabled={start + visibleIndices.length >= pages.length}
           onClick={() => goToPage(start + visibleIndices.length)}><span className="hidden sm:inline">Next</span><ChevronRight size={16} /></button>
       </footer>
-      {drawer === 'passage' && <div className="reader-overlay" role="presentation" onClick={() => setDrawer(null)}>
-        <aside role="dialog" aria-modal="true" aria-label={drawer} className="reader-drawer" onClick={event => event.stopPropagation()}>
-          <div className="flex justify-between items-center mb-5"><h2 className="text-xl capitalize">{drawer}</h2><button autoFocus aria-label="Close panel" className={buttonClass} onClick={() => setDrawer(null)}><X size={20} /></button></div>
-          {toolPassage && <>
-            <label htmlFor="book-tool-passage" className="block mb-2">Passage on this page</label>
-            <select id="book-tool-passage" className="reader-control border rounded p-2 w-full mb-4" value={toolPassage.id}
-              onChange={event => setToolPassage(toolPassages.find(passage => passage.id === event.target.value))}>
-              {toolPassages.map(passage => <option key={passage.id} value={passage.id}>{passage.reference} · {passage.text.slice(0, 45).replace(/\s+/g, ' ')}…</option>)}
-            </select>
-            <div className="flex flex-wrap gap-2 mb-4">
-              <button className={buttonClass} disabled={Boolean(busy) || Boolean(annotationError)}
-                aria-label={bookmarks.some(item => item.passageId === toolPassage.id) ? 'Remove bookmark' : 'Bookmark verse'}
-                aria-pressed={bookmarks.some(item => item.passageId === toolPassage.id)} onClick={() => toggleBookmark(toolPassage)}><Bookmark size={16} />Bookmark</button>
-              <button className={buttonClass} aria-label="Add or edit note" onClick={() => editNote(toolPassage, notes.find(item => item.passageId === toolPassage.id))}><MessageSquare size={16} />Note</button>
-              <button className={buttonClass} onClick={() => { setDrawer(null); onAskAI(toolPassage); }}><Sparkles size={16} />Ask AI</button>
-            </div>
-            <p className="font-indic whitespace-pre-wrap leading-loose">{toolPassage.text}</p>
-            {toolPassage.sourceNotes && <details className="mt-5 text-sm"><summary>Source notes</summary><p className="mt-2">{toolPassage.sourceNotes}</p></details>}
-          </>}
-        </aside>
-      </div>}
+      {drawer === 'passage' && <ReaderPassagePanel edition={edition} passage={toolPassage} passages={toolPassages}
+        onSelect={setToolPassage} onClose={() => setDrawer(null)} bookmarks={bookmarks}
+        busy={Boolean(busy) || Boolean(annotationError)} onBookmark={toggleBookmark}
+        onNote={() => editNote(toolPassage, notes.find(item => item.passageId === toolPassage.id))}
+        onAsk={() => { setDrawer(null); onAskAI(toolPassage); }} />}
       {drawer && drawer !== 'passage' && <ReaderNotebook panel={drawer} onPanelChange={setDrawer} onClose={() => setDrawer(null)}
         edition={edition} contents={contents} currentPage={currentPage} bookmarks={bookmarks} notes={notes}
         loading={annotationLoading} error={annotationError} onRetry={() => setAnnotationRetry(value => value + 1)} busy={Boolean(busy)}

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Check, ChevronDown, Compass, Expand, Flower2, Map, Move, Pause, Play, Volume2, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, ChevronDown, Compass, Flower2, Map } from 'lucide-react';
 import { journeySources } from '../data/divineJourneys';
 import '../journey-game.css';
 
@@ -45,30 +45,23 @@ function SacredWorld({ journey, current, overview, still, layoutKey, onChoose, o
   </div>;
 }
 
-export default function JourneyGame({ deity, journey, current, visited, still, setStill, visit, finish, ringBell, audioStatus, saveError }) {
+export default function JourneyGame({ deity, journey, current, visited, still, visit, finish, saveError }) {
   const [overview, setOverview] = useState(false);
   const [travelling, setTravelling] = useState(false);
   const [details, setDetails] = useState(false);
-  const [artOpen, setArtOpen] = useState(false);
   const title = useRef(null);
-  const artDialog = useRef(null);
-  const artButton = useRef(null);
   const levels = journey.levels;
   const last = levels.length - 1;
   const level = levels[current];
   const source = journeySources[level.source];
 
-  function choose(index) { setOverview(false); setDetails(false); setArtOpen(false); visit(index); }
+  function choose(index) { setOverview(false); setDetails(false); visit(index); }
   useEffect(() => {
     title.current?.focus({ preventScroll: true });
   }, [current]);
   useEffect(() => {
-    if (artOpen) artDialog.current?.showModal();
-    else artDialog.current?.close();
-  }, [artOpen]);
-  useEffect(() => {
     function keydown(event) {
-      if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.target.closest?.('input, textarea, select, summary, dialog') || artOpen) return;
+      if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.target.closest?.('input, textarea, select, summary, dialog')) return;
       if (event.key === 'ArrowRight' && current < last) { event.preventDefault(); choose(current + 1); }
       if (event.key === 'ArrowLeft' && current > 0) { event.preventDefault(); choose(current - 1); }
       if (event.key === 'Escape') { setOverview(false); setDetails(false); }
@@ -76,26 +69,19 @@ export default function JourneyGame({ deity, journey, current, visited, still, s
     window.addEventListener('keydown', keydown);
     return () => window.removeEventListener('keydown', keydown);
   });
-  function closeArt() { setArtOpen(false); artButton.current?.focus(); }
+
 
   return <section className={`journey-game ${overview ? 'is-overview' : ''} ${still ? 'is-still' : ''}`} aria-label={`${deity.name} interactive journey`}>
-    <SacredWorld journey={journey} current={current} overview={overview} still={still || artOpen} layoutKey={details} onChoose={choose} onTravel={setTravelling} />
+    <SacredWorld journey={journey} current={current} overview={overview} still={still} layoutKey={details} onChoose={choose} onTravel={setTravelling} />
     <header className="game-header">
       <Link className="game-home" to={`/journeys/${deity.id}`}><ArrowLeft size={18} /><span>All deities</span></Link>
       <div className="game-brand"><Flower2 size={22} /><span>{deity.name}’s world<small lang="hi">{deity.hindi} की यात्रा</small></span></div>
       <div className="game-tools">
         <button onClick={() => setOverview(value => !value)} aria-label={overview ? 'Return to chapter' : 'Explore world map'} aria-pressed={overview}><Map size={18} /><span>{overview ? 'Return' : 'World map'}</span></button>
-        <button onClick={ringBell} aria-label="Ring temple bell"><Volume2 size={18} /></button>
-        <button onClick={() => setStill(value => !value)} aria-label={still ? 'Enable scene motion' : 'Pause scene motion'} aria-pressed={still}>{still ? <Play size={18} /> : <Pause size={18} />}</button>
       </div>
     </header>
-    <p className="journey-sr-only" role="status">{audioStatus}</p>
     <div className="game-location" aria-live="polite"><span className={travelling ? 'is-travelling' : ''} /><span>{overview ? `${levels.length} sacred places. Choose where to go.` : travelling ? `Travelling to ${level.title}…` : level.place}</span></div>
     {overview ? <div className="game-map-intro"><h1>Follow your curiosity.</h1><p>Choose an island or any chapter below.<br />Every part of the journey is open to you.</p></div> : <>
-      <div className="game-scene-actions">
-        <span><Move size={15} />Drag to explore in 3D</span>
-        <button ref={artButton} onClick={() => setArtOpen(true)}><Expand size={16} />View illustration</button>
-      </div>
       <svg className="game-story-tether" aria-hidden="true"><path data-world-leader /></svg>
       <article className="game-story" data-world-story key={level.id}>
         <div className="game-story-heading"><span className="game-level-number">{String(current + 1).padStart(2, '0')}</span><span lang="hi">{level.hindi}</span><span className="game-visited"><Check size={12} />Visited</span></div>
@@ -113,10 +99,6 @@ export default function JourneyGame({ deity, journey, current, visited, still, s
       <div className="game-trail-summary"><Compass size={16} /><span>{visited.length} / {levels.length} explored</span><small>{saveError ? 'Saving unavailable' : 'Saved on this browser'}</small></div>
       <ol>{levels.map((item, index) => <li key={item.id}><button onClick={() => choose(index)} aria-label={`Level ${index + 1}: ${item.title}`} aria-current={current === index ? 'step' : undefined} className={visited.includes(item.id) ? 'was-visited' : ''}><span>{visited.includes(item.id) ? <Check size={13} /> : index + 1}</span><strong>{item.title}</strong></button></li>)}</ol>
     </nav>
-    <dialog ref={artDialog} className="game-art-dialog" onCancel={event => { event.preventDefault(); closeArt(); }} onClick={event => { if (event.target === event.currentTarget) closeArt(); }}>
-      <button className="game-art-close" onClick={closeArt} aria-label="Close scene"><X size={22} /></button>
-      <img src={level.sceneImage} alt={level.sceneAlt} />
-      <div><strong>{level.title}</strong><span>{level.place}</span></div>
-    </dialog>
+
   </section>;
 }

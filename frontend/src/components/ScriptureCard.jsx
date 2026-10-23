@@ -1,10 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { CheckCircle2, Clock, Globe, ArrowRight, BookOpen } from 'lucide-react';
+import { Clock, Globe, ArrowRight, BookOpen } from 'lucide-react';
 
 export default function ScriptureCard({ scripture }) {
-  const isComplete = scripture.availabilityStatus === 'complete';
-  const isPartial = scripture.availabilityStatus === 'partial';
 
   return (
     <div className="scripture-card bg-white rounded-2xl border border-stone-200/90 p-6 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between group relative overflow-hidden hover:border-amber-400">
@@ -14,27 +12,6 @@ export default function ScriptureCard({ scripture }) {
         <div className="flex items-center justify-between text-xs">
           <span className="px-2.5 py-1 rounded-md bg-amber-100/70 text-amber-900 font-medium font-serif border border-amber-200/50">
             {scripture.religion?.name || 'Scripture'}
-          </span>
-
-          <span
-            className={`px-2.5 py-1 rounded-full font-medium flex items-center gap-1 ${
-              isComplete
-                ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                : isPartial
-                ? 'bg-amber-100 text-amber-800 border border-amber-200'
-                : 'bg-stone-100 text-stone-600 border border-stone-200'
-            }`}
-          >
-            {isComplete ? (
-              <>
-                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                <span>Complete</span>
-              </>
-            ) : isPartial ? (
-              <span>Partial</span>
-            ) : (
-              <span>Metadata Only</span>
-            )}
           </span>
         </div>
 

@@ -182,10 +182,6 @@ export default function ScriptureDetail() {
                         <div className="text-xs text-stone-500 mt-1">
                           Hindi text
                         </div>
-                        <div className="text-xs mt-1 text-amber-800">
-                          {selectedEdition.contentStatus === 'draft' ? `Draft text · ${selectedEdition.expectedPassages} passages · Not fully proofread`
-                            : selectedEdition.contentStatus === 'complete' ? `Complete · ${selectedEdition.expectedPassages} passages` : 'Partial text'}
-                        </div>
                       </div>
                   </div>
 

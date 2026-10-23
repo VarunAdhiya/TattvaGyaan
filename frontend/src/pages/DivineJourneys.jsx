@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Check, Flower2, Map, Mountain, Pause, Play, RotateCcw, Volume2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Flower2, Map, Mountain, RotateCcw } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { deities, journeyDefinitions } from '../data/divineJourneys';
 import { readJourneyProgress } from '../lib/journeyProgress';
@@ -56,9 +56,7 @@ function JourneyExperience({ userId }) {
   const storageKey = `tattvagyaan:journey:v1:${userId}:${deityId}`;
   const [progress, setProgress] = useState(() => readJourneyProgress(storageKey, levels || []));
   const [saveError, setSaveError] = useState(false);
-  const [still, setStill] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  const [audioStatus, setAudioStatus] = useState('');
-  const audio = useRef(null);
+  const [still] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const title = useRef(null);
   const requestedLevel = Number(params.get('level'));
   const exploring = Boolean(journey) && params.has('level');
@@ -95,7 +93,6 @@ function JourneyExperience({ userId }) {
       return { current, completed: previous.completed.includes(id) ? previous.completed : [...previous.completed, id] };
     });
   }, [current, exploring, levels]);
-  useEffect(() => () => { if (audio.current) void audio.current.close(); }, []);
   useEffect(() => {
     const next = levels?.[current + 1];
     if (exploring && next) { const preload = new Image(); preload.src = next.sceneImage; }
@@ -106,40 +103,15 @@ function JourneyExperience({ userId }) {
     setProgress(previous => ({ ...previous, current: next }));
     setParams({ level: String(next + 1) });
   }
-  async function ringBell() {
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContext) { setAudioStatus('Temple bell is unavailable in this browser.'); return; }
-      if (!audio.current) audio.current = new AudioContext();
-      await audio.current.resume();
-      const now = audio.current.currentTime;
-      [440, 880, 1188, 1760].forEach((frequency, index) => {
-        const oscillator = audio.current.createOscillator();
-        const gain = audio.current.createGain();
-        oscillator.frequency.value = frequency;
-        gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(0.07 / (index + 1), now + 0.015);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 3);
-        oscillator.connect(gain); gain.connect(audio.current.destination);
-        oscillator.start(now); oscillator.stop(now + 3.1);
-      });
-      setAudioStatus('Temple bell sounded.');
-    } catch { setAudioStatus('Temple bell could not play. You can continue in silence.'); }
-  }
-
   if (!deity) return <section className="journey-not-found"><h1>Choose a divine journey</h1><p>This deity is not in the collection yet.</p><Link to="/journeys/ganesha">Meet Ganesha <ArrowRight size={18} /></Link></section>;
-  if (exploring && !complete) return <JourneyGame deity={deity} journey={journey} current={current} visited={progress.completed} still={still} setStill={setStill} visit={visit} finish={() => setParams({ complete: '1' })} ringBell={ringBell} audioStatus={audioStatus} saveError={saveError} />;
+  if (exploring && !complete) return <JourneyGame deity={deity} journey={journey} current={current} visited={progress.completed} still={still} visit={visit} finish={() => setParams({ complete: '1' })} saveError={saveError} />;
 
   return <div className={`divine-journeys ${still ? 'journey-still' : ''}`}>
     <div className="journey-topline">
       <Link to={exploring || complete ? `/journeys/${deity.id}` : '/dashboard'}><ArrowLeft size={16} />{exploring || complete ? 'Choose a deity' : 'Back to home'}</Link>
       <span>Divine Journeys</span>
-      <div className="journey-tools">
-        <button onClick={ringBell} aria-label="Ring temple bell" title="Ring temple bell"><Volume2 size={18} /><span>Temple bell</span></button>
-        <button onClick={() => setStill(value => !value)} aria-label={still ? 'Enable scene motion' : 'Pause scene motion'} aria-pressed={still} title={still ? 'Enable scene motion' : 'Pause scene motion'}>{still ? <Play size={17} /> : <Pause size={17} />}</button>
-      </div>
+
     </div>
-    <p className="journey-sr-only" role="status">{audioStatus}</p>
     {!exploring && !complete && <>
       <div className="journey-deity-select" role="group" aria-label="Choose a deity">
         {deities.map(item => <button key={item.id} aria-pressed={item.id === deity.id} onClick={() => navigate(`/journeys/${item.id}`)}><img src={item.image} alt="" /><span>{item.name}<small lang="hi">{item.hindi}</small></span>{item.id === deity.id && <Check size={16} />}</button>)}

@@ -1,34 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { BookOpen, Bookmark, StickyNote, List, Search, X, Pencil, Trash2, ArrowRight, ChevronRight } from 'lucide-react';
 import '../reader-notebook.css';
+import useDialogFocus from '../lib/useDialogFocus';
 
 const PANELS = [{ id: 'contents', label: 'Contents', Icon: List }, { id: 'bookmarks', label: 'Bookmarks', Icon: Bookmark }, { id: 'notes', label: 'Notes', Icon: StickyNote }];
 const PAPER = ['#f2dfa5', '#edc9b5', '#e5d5c5'];
 const paperFor = id => PAPER[Array.from(id || '').reduce((sum, letter) => sum + letter.charCodeAt(0), 0) % PAPER.length];
 
-function useDialogFocus(ref) {
-  useEffect(() => {
-    const previous = document.activeElement;
-    const node = ref.current;
-    const oldOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    node.querySelector('[data-panel-close]')?.focus({ preventScroll: true });
-    const trap = event => {
-      if (event.key !== 'Tab') return;
-      const items = [...node.querySelectorAll('button:not(:disabled), input, textarea, select, [tabindex="0"]')]
-        .filter(item => item.getClientRects().length);
-      if (!items.length) return;
-      if (event.shiftKey && document.activeElement === items[0]) { event.preventDefault(); items.at(-1).focus(); }
-      else if (!event.shiftKey && document.activeElement === items.at(-1)) { event.preventDefault(); items[0].focus(); }
-    };
-    node.addEventListener('keydown', trap);
-    return () => {
-      node.removeEventListener('keydown', trap);
-      document.body.style.overflow = oldOverflow;
-      if (previous?.isConnected) previous.focus({ preventScroll: true });
-    };
-  }, [ref]);
-}
 
 export default function ReaderNotebook({ panel, onPanelChange, onClose, edition, contents, currentPage,
   bookmarks, notes, loading, error, onRetry, busy, onSection, onPassage, onEdit, onDelete }) {

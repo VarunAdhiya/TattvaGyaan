@@ -96,3 +96,24 @@
   .reader-note-sheet { padding: 22px; max-height: calc(100dvh - 28px); }
 }
 @media (prefers-reduced-motion: reduce) { .reader-notebook { animation: none; } .reader-study-tools button { transition: none; } }
+.passage-overlay { justify-content: flex-end; }
+.passage-panel { animation: none; box-shadow: -16px 0 48px #0004; }
+.passage-panel .notebook-header { border-bottom: 1px solid #594a37; }
+.passage-tools { flex: none; padding-bottom: 16px; }
+.passage-tools label { display: block; margin-bottom: 8px; font-size: 14px; color: #d5c7b3; }
+.passage-tools select { width: 100%; min-width: 0; min-height: 48px; padding: 10px 12px; border: 1px solid #958064; border-radius: 6px; background: #24201b; color: #f5ead8; font: inherit; text-overflow: ellipsis; }
+.passage-tools select:focus-visible, .passage-source summary:focus-visible { outline: 2px solid #e9bc77; outline-offset: 3px; }
+.passage-actions { display: flex; flex: none; gap: 8px; padding: 0 26px 18px; border-bottom: 1px solid #594a37; }
+.passage-actions button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 8px 10px; border: 0; border-radius: 6px; background: transparent; color: #d5c7b3; }
+.passage-actions button:hover, .passage-actions button[aria-pressed='true'] { color: #e9bc77; background: #302820; }
+.passage-body { padding-top: 24px; }
+.passage-text { margin: 0; color: #f5ead8; font-size: 18px; line-height: 1.95; white-space: pre-wrap; overflow-wrap: anywhere; }
+.passage-source { margin-top: 28px; padding-top: 18px; border-top: 1px solid #594a37; color: #d5c7b3; font-size: 14px; }
+.passage-source summary { cursor: pointer; color: #e9bc77; }
+.passage-source p { margin-top: 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (max-width: 380px) { .passage-actions { gap: 2px; padding-inline: 16px; } .passage-actions button { padding-inline: 8px; } }
+@media (max-width: 380px) {
+  .reader-study-tools { flex-wrap: wrap; min-width: 0; }
+  .reader-study-tools button { flex: 1 1 auto; }
+  .reader-typeset > .mahabharata-toolbar { grid-template-columns: minmax(0, 1fr); }
+}
