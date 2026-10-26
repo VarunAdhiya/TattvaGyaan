@@ -21,5 +21,4 @@ for (const text of catalog) {
   assert.ok(item.width >= 1024 && item.height >= 768, `Undersized artwork: ${text.slug}`);
   assert.ok(Math.abs(item.width / item.height - 1.5) < .01, `Unexpected framing: ${text.slug}`);
 }
-
 console.log(`Verified ${catalog.length} distinct, full-resolution devotional illustrations.`);
