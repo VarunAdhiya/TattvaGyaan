@@ -4,6 +4,7 @@ exports.embeddingService = exports.EMBEDDING_DIMENSIONS = exports.EMBEDDING_MODE
 exports.vectorLiteral = vectorLiteral;
 const node_worker_threads_1 = require("node:worker_threads");
 const node_path_1 = require("node:path");
+const node_os_1 = require("node:os");
 const errorHandler_1 = require("../middleware/errorHandler");
 // Pin both index and query identity. Updating this requires rag:index again.
 exports.EMBEDDING_REVISION = '761b726dd34fb83930e26aab4e9ac3899aa1fa78';
@@ -27,7 +28,7 @@ class EmbeddingService {
             throw new errorHandler_1.AppError('Library search is busy. Please try again shortly.', 429);
         if (!this.worker) {
             const worker = new node_worker_threads_1.Worker((0, node_path_1.resolve)(__dirname, '../../runtime/embedding-worker.mjs'), {
-                workerData: { cacheDir: (0, node_path_1.resolve)(__dirname, '../../data/embedding-models'), revision: exports.EMBEDDING_REVISION },
+                workerData: { cacheDir: process.env.VERCEL ? (0, node_path_1.resolve)((0, node_os_1.tmpdir)(), 'tattvagyaan-embedding-models') : (0, node_path_1.resolve)(__dirname, '../../data/embedding-models'), revision: exports.EMBEDDING_REVISION },
             });
             this.worker = worker;
             worker.on('message', ({ id, vectors, error }) => {

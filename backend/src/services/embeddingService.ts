@@ -1,5 +1,6 @@
 import { Worker } from 'node:worker_threads';
 import { resolve } from 'node:path';
+import { tmpdir } from 'node:os';
 import { AppError } from '../middleware/errorHandler';
 
 // Pin both index and query identity. Updating this requires rag:index again.
@@ -24,7 +25,7 @@ class EmbeddingService {
     if (texts.length > 8 || this.pending.size >= 16) throw new AppError('Library search is busy. Please try again shortly.', 429);
     if (!this.worker) {
       const worker = new Worker(resolve(__dirname, '../../runtime/embedding-worker.mjs'), {
-        workerData: { cacheDir: resolve(__dirname, '../../data/embedding-models'), revision: EMBEDDING_REVISION },
+        workerData: { cacheDir: process.env.VERCEL ? resolve(tmpdir(), 'tattvagyaan-embedding-models') : resolve(__dirname, '../../data/embedding-models'), revision: EMBEDDING_REVISION },
       });
       this.worker = worker;
       worker.on('message', ({ id, vectors, error }) => {

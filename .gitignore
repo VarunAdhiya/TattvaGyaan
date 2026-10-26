@@ -2,6 +2,7 @@
 .env
 .env.local
 .env.*.local
+.vercel/
 
 # Dependencies
 node_modules/
@@ -60,3 +61,5 @@ tmp/pdfs/manusmriti-reader/
 tmp/pdfs/ramayan-reader/
 tmp/devotionals/
 .impeccable/review/
+.vercel
+.env*
